@@ -9,7 +9,7 @@ import { NODE_STYLES, getNodeColor } from '@/lib/graph/node-styles';
 import { LINK_STYLES, getLinkColor } from '@/lib/graph/link-styles';
 import { getNeighborIds, applyFilters } from '@/lib/graph/filters';
 import { setGraphRef } from '@/lib/graph/graph-ref';
-import { GraphNode, GraphLink, NodeType } from '@/lib/graph/types';
+import { GraphNode, GraphLink, NodeType, StepMeta } from '@/lib/graph/types';
 import * as THREE from 'three';
 import SpriteText from 'three-spritetext';
 
@@ -194,6 +194,34 @@ export default function GraphScene() {
     sprite.padding = 1;
     sprite.borderRadius = 2;
     group.add(sprite);
+
+    // Owner badge for step nodes (AI / Human / Shared)
+    if (node.type === 'step' && node.meta) {
+      const stepMeta = node.meta as StepMeta;
+      const ownerLabels: Record<string, string> = {
+        agent: '\uD83E\uDD16 AI',
+        human: '\uD83D\uDC64 Human',
+        shared: '\uD83E\uDD1D Shared',
+      };
+      const ownerColors: Record<string, string> = {
+        agent: 'rgba(155,122,204,0.85)',
+        human: 'rgba(91,158,207,0.85)',
+        shared: 'rgba(201,160,78,0.85)',
+      };
+      const ownerText = ownerLabels[stepMeta.owner];
+      if (ownerText) {
+        const ownerSprite = new SpriteText(ownerText);
+        ownerSprite.color = isDimmed ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.9)';
+        ownerSprite.textHeight = Math.max(1.5, size * 0.4);
+        ownerSprite.position.y = -(size + 3 + Math.max(2, size * 0.6) + 1.5);
+        ownerSprite.fontFace = 'system-ui, -apple-system, sans-serif';
+        ownerSprite.fontWeight = '500';
+        ownerSprite.backgroundColor = isDimmed ? 'rgba(0,0,0,0.15)' : (ownerColors[stepMeta.owner] || 'rgba(0,0,0,0.4)');
+        ownerSprite.padding = 0.8;
+        ownerSprite.borderRadius = 1.5;
+        group.add(ownerSprite);
+      }
+    }
 
     return group;
   }, [hoveredNode, selectedNode, highlightedNodeIds, neighborSet, hasHighlights, geometries]);
