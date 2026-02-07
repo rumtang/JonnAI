@@ -5,8 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { usePresentationStore } from '@/lib/store/presentation-store';
 import { useGraphStore } from '@/lib/store/graph-store';
 import { getGraphRef } from '@/lib/graph/graph-ref';
-import { ChevronLeft, ChevronRight, Play, Pause } from 'lucide-react';
-import linearProcessData from '@/data/linear-process.json';
+import { ChevronLeft, ChevronRight, Play, Pause, Compass } from 'lucide-react';
 import { GraphNode, GraphLink } from '@/lib/graph/types';
 
 // ─── Process Chart Layout ────────────────────────────────────
@@ -69,6 +68,7 @@ export default function PresentationController() {
     steps,
     isPlaying,
     mode,
+    setMode,
     nextStep,
     prevStep,
     goToStep,
@@ -84,9 +84,17 @@ export default function PresentationController() {
     highlightLinksByTypes,
     clearHighlights,
     resetFilters,
+    loadFullGraph,
   } = useGraphStore();
 
   const currentStep = steps[currentStepIndex];
+
+  const exitToExplore = useCallback(() => {
+    clearHighlights();
+    resetFilters();
+    setMode('explore');
+    loadFullGraph();
+  }, [clearHighlights, resetFilters, setMode, loadFullGraph]);
 
   // Fly camera to the position defined in the current presentation step
   const moveCamera = useCallback((step: typeof currentStep) => {
@@ -106,72 +114,10 @@ export default function PresentationController() {
     if (mode !== 'guided') return;
 
     switch (action) {
-      case 'fade-in':
-        if (linearGraphData) {
-          setGraphData({ ...linearGraphData });
-        }
-        break;
-
       case 'show-linear': {
         if (linearGraphData) {
           setGraphData({ ...linearGraphData });
         }
-        break;
-      }
-
-      case 'show-agents': {
-        if (!linearGraphData) break;
-        const agentNodes: GraphNode[] = linearProcessData.agents.map(agent => ({
-          id: agent.id,
-          type: 'agent' as const,
-          label: agent.label,
-          description: `AI agent for ${agent.parentStep.replace('ls-', '')} phase`,
-          group: 'AI Agents',
-          val: 5,
-          fx: linearProcessData.steps.find(s => s.id === agent.parentStep)?.x ?? 0,
-          fy: -60,
-          fz: 0,
-        }));
-        const agentLinks: GraphLink[] = linearProcessData.agents.map(agent => ({
-          source: agent.parentStep,
-          target: agent.id,
-          type: 'performs' as const,
-          particles: 2,
-        }));
-        setGraphData({
-          nodes: [...(linearGraphData.nodes), ...agentNodes],
-          links: [...(linearGraphData.links), ...agentLinks],
-        });
-        break;
-      }
-
-      case 'show-cross-links': {
-        if (!linearGraphData) break;
-        const agentNodes: GraphNode[] = linearProcessData.agents.map(agent => ({
-          id: agent.id,
-          type: 'agent' as const,
-          label: agent.label,
-          description: `AI agent for ${agent.parentStep.replace('ls-', '')} phase`,
-          group: 'AI Agents',
-          val: 5,
-          fx: linearProcessData.steps.find(s => s.id === agent.parentStep)?.x ?? 0,
-          fy: -60,
-          fz: 0,
-        }));
-        const agentLinks: GraphLink[] = linearProcessData.agents.map(agent => ({
-          source: agent.parentStep,
-          target: agent.id,
-          type: 'performs' as const,
-        }));
-        const crossLinks: GraphLink[] = [
-          { source: 'ls-measure', target: 'ls-brief', type: 'returns-to' as const, particles: 3 },
-          { source: 'ls-measure', target: 'ls-creation', type: 'flows-to' as const, particles: 3 },
-          { source: 'ls-review', target: 'ls-creation', type: 'returns-to' as const, particles: 2 },
-        ];
-        setGraphData({
-          nodes: [...linearGraphData.nodes, ...agentNodes],
-          links: [...linearGraphData.links, ...agentLinks, ...crossLinks],
-        });
         break;
       }
 
@@ -392,6 +338,16 @@ export default function PresentationController() {
           className="p-2 rounded-full glass-panel text-muted-foreground hover:text-foreground disabled:opacity-30 disabled:cursor-not-allowed transition-all"
         >
           <ChevronRight className="w-5 h-5" />
+        </button>
+
+        {/* Exit to Explore */}
+        <button
+          onClick={exitToExplore}
+          className="flex items-center gap-1.5 px-3 py-2 rounded-full glass-panel text-muted-foreground hover:text-[#9B7ACC] transition-all text-xs font-medium"
+          title="Exit to free explore mode"
+        >
+          <Compass className="w-4 h-4" />
+          <span>Explore</span>
         </button>
       </motion.div>
 
