@@ -41,7 +41,7 @@ export default function NodeDetailPanel() {
           animate={{ x: 0, opacity: 1 }}
           exit={{ x: 400, opacity: 0 }}
           transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-          className="fixed right-0 top-0 h-full w-96 z-50 bg-black/80 backdrop-blur-2xl border-l border-white/10 overflow-y-auto"
+          className="fixed right-0 top-0 h-full w-96 z-50 glass-panel rounded-l-2xl overflow-y-auto"
         >
           <div className="p-6">
             {/* Header */}
@@ -54,19 +54,19 @@ export default function NodeDetailPanel() {
                   {NODE_STYLES[selectedNode.type]?.emoji}
                 </div>
                 <div>
-                  <h2 className="text-lg font-semibold text-white">{selectedNode.label}</h2>
+                  <h2 className="text-lg font-semibold text-foreground">{selectedNode.label}</h2>
                   <Badge variant="outline" className="text-xs mt-1" style={{ borderColor: NODE_STYLES[selectedNode.type]?.color + '60', color: NODE_STYLES[selectedNode.type]?.color }}>
                     {selectedNode.type}
                   </Badge>
                 </div>
               </div>
-              <button onClick={handleClose} className="p-1 rounded-lg hover:bg-white/10 text-slate-400 hover:text-white transition-colors">
+              <button onClick={handleClose} className="p-1 rounded-lg hover:bg-accent text-muted-foreground hover:text-foreground transition-colors">
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             {/* Description */}
-            <p className="text-sm text-slate-300 mb-6">{selectedNode.description}</p>
+            <p className="text-sm text-muted-foreground mb-6">{selectedNode.description}</p>
 
             {/* Type-specific metadata */}
             <div className="space-y-4 mb-6">
@@ -78,7 +78,7 @@ export default function NodeDetailPanel() {
 
             {/* Connections */}
             <div>
-              <h3 className="text-sm font-semibold text-slate-200 mb-3">
+              <h3 className="text-sm font-semibold text-foreground mb-3">
                 Connections ({connectedNodes.length})
               </h3>
               <div className="space-y-2">
@@ -90,7 +90,7 @@ export default function NodeDetailPanel() {
                         selectNode(conn.node);
                       }
                     }}
-                    className="w-full flex items-center gap-3 p-2 rounded-lg hover:bg-white/5 transition-colors text-left"
+                    className="w-full flex items-center gap-3 p-2 rounded-lg hover:bg-accent/10 transition-colors text-left"
                   >
                     <div
                       className="w-6 h-6 rounded flex items-center justify-center text-xs"
@@ -99,8 +99,8 @@ export default function NodeDetailPanel() {
                       {NODE_STYLES[conn.node!.type]?.emoji}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm text-slate-200 truncate">{conn.node!.label}</p>
-                      <p className="text-xs text-slate-500">
+                      <p className="text-sm text-foreground truncate">{conn.node!.label}</p>
+                      <p className="text-xs text-muted-foreground">
                         {conn.direction === 'outgoing' ? '\u2192' : '\u2190'} {conn.linkType.replace(/-/g, ' ')}
                       </p>
                     </div>
@@ -118,9 +118,9 @@ export default function NodeDetailPanel() {
 function MetaRow({ label, value }: { label: string; value: string | undefined }) {
   if (!value) return null;
   return (
-    <div className="flex items-center justify-between py-1.5 border-b border-white/5">
-      <span className="text-xs text-slate-500">{label}</span>
-      <span className="text-xs text-slate-200">{value}</span>
+    <div className="flex items-center justify-between py-1.5 border-b border-border">
+      <span className="text-xs text-muted-foreground">{label}</span>
+      <span className="text-xs text-foreground">{value}</span>
     </div>
   );
 }
@@ -129,16 +129,16 @@ function renderStepMeta(meta?: StepMeta) {
   if (!meta) return null;
 
   const ownerColors: Record<string, string> = {
-    agent: 'text-purple-400 border-purple-500/30',
-    human: 'text-cyan-400 border-cyan-500/30',
-    shared: 'text-amber-400 border-amber-500/30',
+    agent: 'text-[#9B7ACC] border-[#9B7ACC]/30',
+    human: 'text-[#5B9ECF] border-[#5B9ECF]/30',
+    shared: 'text-[#C9A04E] border-[#C9A04E]/30',
   };
 
   return (
     <>
       <MetaRow label="Phase" value={meta.phase} />
-      <div className="flex items-center justify-between py-1.5 border-b border-white/5">
-        <span className="text-xs text-slate-500">Owner</span>
+      <div className="flex items-center justify-between py-1.5 border-b border-border">
+        <span className="text-xs text-muted-foreground">Owner</span>
         <Badge variant="outline" className={`text-xs ${ownerColors[meta.owner] || ''}`}>
           {meta.owner === 'agent' ? `AI: ${meta.agentName || 'Agent'}` : meta.owner === 'human' ? 'Human' : 'Shared'}
         </Badge>
@@ -146,10 +146,10 @@ function renderStepMeta(meta?: StepMeta) {
       <MetaRow label="Est. Time" value={meta.estimatedTime} />
       {meta.inputs && meta.inputs.length > 0 && (
         <div className="mt-2">
-          <p className="text-xs text-slate-500 mb-1">Inputs:</p>
+          <p className="text-xs text-muted-foreground mb-1">Inputs:</p>
           <div className="flex flex-wrap gap-1">
             {meta.inputs.map(inp => (
-              <Badge key={inp} variant="outline" className="text-xs border-blue-500/30 text-blue-300">
+              <Badge key={inp} variant="outline" className="text-xs border-[#5B9ECF]/30 text-[#5B9ECF]">
                 {inp}
               </Badge>
             ))}
@@ -158,10 +158,10 @@ function renderStepMeta(meta?: StepMeta) {
       )}
       {meta.outputs && meta.outputs.length > 0 && (
         <div className="mt-2">
-          <p className="text-xs text-slate-500 mb-1">Outputs:</p>
+          <p className="text-xs text-muted-foreground mb-1">Outputs:</p>
           <div className="flex flex-wrap gap-1">
             {meta.outputs.map(out => (
-              <Badge key={out} variant="outline" className="text-xs border-green-500/30 text-green-300">
+              <Badge key={out} variant="outline" className="text-xs border-[#6B9E6B]/30 text-[#6B9E6B]">
                 {out}
               </Badge>
             ))}
@@ -179,16 +179,16 @@ function renderGateMeta(meta?: GateMeta) {
       <MetaRow label="Gate Type" value={meta.gateType.replace(/-/g, ' ')} />
       <MetaRow label="Reviewer" value={meta.reviewer} />
       {meta.autoPassCriteria && <MetaRow label="Auto-pass" value={meta.autoPassCriteria} />}
-      <div className="mt-3 p-3 rounded-lg bg-red-500/10 border border-red-500/20">
-        <p className="text-xs text-red-400 font-semibold mb-1">Escalation Trigger</p>
-        <p className="text-sm text-red-200">{meta.escalationTrigger}</p>
+      <div className="mt-3 p-3 rounded-lg bg-[#D4856A]/10 border border-[#D4856A]/20">
+        <p className="text-xs text-[#D4856A] font-semibold mb-1">Escalation Trigger</p>
+        <p className="text-sm text-foreground">{meta.escalationTrigger}</p>
       </div>
       {meta.decisions && meta.decisions.length > 0 && (
         <div className="mt-2">
-          <p className="text-xs text-slate-500 mb-1">Possible Decisions:</p>
+          <p className="text-xs text-muted-foreground mb-1">Possible Decisions:</p>
           <div className="flex flex-wrap gap-1">
             {meta.decisions.map(d => (
-              <Badge key={d} variant="outline" className="text-xs border-red-500/30 text-red-300">
+              <Badge key={d} variant="outline" className="text-xs border-[#D4856A]/30 text-[#D4856A]">
                 {d}
               </Badge>
             ))}
@@ -207,10 +207,10 @@ function renderAgentMeta(meta?: AgentMeta) {
       <MetaRow label="Autonomy" value={meta.autonomy} />
       {meta.tools && meta.tools.length > 0 && (
         <div className="mt-2">
-          <p className="text-xs text-slate-500 mb-1">Tools:</p>
+          <p className="text-xs text-muted-foreground mb-1">Tools:</p>
           <div className="flex flex-wrap gap-1">
             {meta.tools.map(tool => (
-              <Badge key={tool} variant="outline" className="text-xs border-purple-500/30 text-purple-300">
+              <Badge key={tool} variant="outline" className="text-xs border-[#9B7ACC]/30 text-[#9B7ACC]">
                 {tool}
               </Badge>
             ))}

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Playfair_Display } from "next/font/google";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -12,8 +12,14 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const playfair = Playfair_Display({
+  variable: "--font-playfair",
+  subsets: ["latin"],
+  weight: ["400", "600", "700"],
+});
+
 export const metadata: Metadata = {
-  title: "Organizational Digital Twin — Knowledge Graph",
+  title: "Organizational Intelligence Layer",
   description: "Interactive 3D visualization of why semantic knowledge layers matter more than linear AI agent deployment",
 };
 
@@ -23,11 +29,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[#050510] text-slate-200`}
+        className={`${geistSans.variable} ${geistMono.variable} ${playfair.variable} antialiased text-foreground relative`}
       >
-        {children}
+        <div className="crystalline-bg">
+          <div className="gradient-orb-1" />
+          <div className="gradient-orb-2" />
+          <div className="gradient-orb-3" />
+        </div>
+        <div className="relative z-10">{children}</div>
       </body>
     </html>
   );

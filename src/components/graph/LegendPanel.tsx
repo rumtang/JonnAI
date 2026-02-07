@@ -23,10 +23,10 @@ export default function LegendPanel() {
       className="fixed bottom-4 left-4 z-50"
     >
       {legendVisible ? (
-        <div className="bg-black/60 backdrop-blur-xl border border-white/10 rounded-xl p-3 shadow-xl">
+        <div className="glass-panel rounded-xl p-3 shadow-xl">
           <button
             onClick={toggleLegend}
-            className="text-xs text-slate-500 hover:text-slate-300 mb-2 transition-colors"
+            className="text-xs text-muted-foreground hover:text-foreground mb-2 transition-colors"
           >
             Hide Legend
           </button>
@@ -37,7 +37,7 @@ export default function LegendPanel() {
                   className="w-2.5 h-2.5 rounded-full"
                   style={{ backgroundColor: NODE_STYLES[item.type]?.color }}
                 />
-                <span className="text-xs text-slate-400">{item.label}</span>
+                <span className="text-xs text-foreground/70">{item.label}</span>
               </div>
             ))}
           </div>
@@ -45,7 +45,7 @@ export default function LegendPanel() {
       ) : (
         <button
           onClick={toggleLegend}
-          className="px-3 py-1.5 rounded-lg bg-black/60 backdrop-blur-xl border border-white/10 text-xs text-slate-400 hover:text-white transition-all"
+          className="px-3 py-1.5 rounded-lg glass-panel text-xs text-muted-foreground hover:text-foreground transition-all"
         >
           Legend
         </button>

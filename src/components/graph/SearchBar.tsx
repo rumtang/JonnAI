@@ -71,17 +71,17 @@ export default function SearchBar() {
       className="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-80"
     >
       <div className="relative">
-        <div className="flex items-center bg-black/60 backdrop-blur-xl border border-white/10 rounded-xl px-3 py-2">
-          <Search className="w-4 h-4 text-slate-500 mr-2 flex-shrink-0" />
+        <div className="flex items-center glass-panel rounded-xl px-3 py-2">
+          <Search className="w-4 h-4 text-muted-foreground mr-2 flex-shrink-0" />
           <input
             ref={inputRef}
             value={query}
             onChange={handleChange}
-            placeholder="Search nodes... (\u2318K)"
-            className="bg-transparent text-sm text-slate-200 placeholder:text-slate-500 outline-none w-full"
+            placeholder="Search nodes... (⌘K)"
+            className="bg-transparent text-sm text-foreground placeholder:text-muted-foreground outline-none w-full"
           />
           {query && (
-            <button onClick={handleClear} className="text-slate-500 hover:text-white ml-2">
+            <button onClick={handleClear} className="text-muted-foreground hover:text-foreground ml-2">
               <X className="w-3.5 h-3.5" />
             </button>
           )}
@@ -93,13 +93,13 @@ export default function SearchBar() {
               initial={{ opacity: 0, y: -5 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -5 }}
-              className="absolute top-full mt-2 w-full bg-black/80 backdrop-blur-2xl border border-white/10 rounded-xl overflow-hidden shadow-2xl"
+              className="absolute top-full mt-2 w-full glass-panel rounded-xl overflow-hidden shadow-2xl"
             >
               {results.map(node => (
                 <button
                   key={node.id}
                   onClick={() => handleSelect(node)}
-                  className="w-full flex items-center gap-3 px-3 py-2.5 hover:bg-white/5 transition-colors text-left"
+                  className="w-full flex items-center gap-3 px-3 py-2.5 hover:bg-accent/10 transition-colors text-left"
                 >
                   <div
                     className="w-6 h-6 rounded flex items-center justify-center text-xs flex-shrink-0"
@@ -108,8 +108,8 @@ export default function SearchBar() {
                     {NODE_STYLES[node.type]?.emoji}
                   </div>
                   <div className="min-w-0">
-                    <p className="text-sm text-slate-200 truncate">{node.label}</p>
-                    <p className="text-xs text-slate-500 truncate">{node.type.replace(/-/g, ' ')}</p>
+                    <p className="text-sm text-foreground truncate">{node.label}</p>
+                    <p className="text-xs text-muted-foreground truncate">{node.type.replace(/-/g, ' ')}</p>
                   </div>
                 </button>
               ))}
