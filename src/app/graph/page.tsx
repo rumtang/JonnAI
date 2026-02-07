@@ -107,8 +107,10 @@ export default function GraphPage() {
 
   return (
     <>
-      {/* Main 3D Graph */}
-      <GraphScene />
+      {/* Main 3D Graph — fills the layout, sits above crystalline bg */}
+      <div className="absolute inset-0 z-10">
+        <GraphScene />
+      </div>
 
       {/* UI Overlays */}
       <ModeToggle />
