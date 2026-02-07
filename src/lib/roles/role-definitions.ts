@@ -112,6 +112,51 @@ export const ROLE_DEFINITIONS: RoleDefinition[] = [
       keyInsight: 'You do not have a gate, but your influence is everywhere. Every agent that uses Content Strategy or Audience Personas is executing your vision. Your leverage is multiplicative.',
     },
   },
+  {
+    id: 'marketing-ops',
+    title: 'Marketing Ops',
+    description: 'Owns the operational backbone: scheduling, distribution, and the optimization feedback loop.',
+    ownedSteps: ['schedule-publish', 'distribute', 'optimize'],
+    reviewedGates: ['performance-review'],
+    relatedAgents: ['performance-agent'],
+    relatedInputs: ['analytics-data', 'content-strategy'],
+    narrative: {
+      today: 'You keep the machine running. You manage the publication calendar, coordinate distribution across channels, and close the loop when content underperforms. Your work is the connective tissue between strategy and results.',
+      future: 'AI agents handle real-time distribution decisions and performance monitoring. You shift from execution to orchestration — designing the operational rules that agents follow, not clicking the buttons yourself.',
+      teamSupport: 'The Performance Analyst agent feeds you continuous data. Analytics dashboards surface what needs attention. The Content Director sends you approved briefs with clear timelines. You turn strategy into delivery.',
+      keyInsight: 'The optimize step is your superpower. When performance data triggers a re-brief, you are the one who decides whether to tweak the existing content or restart the pipeline. That operational judgment scales the entire system.',
+    },
+  },
+  {
+    id: 'consumer-insights',
+    title: 'Consumer Insights',
+    description: 'Owns audience understanding and ensures every piece of content is grounded in real customer data.',
+    ownedSteps: ['research-insights'],
+    reviewedGates: [],
+    relatedAgents: ['research-agent'],
+    relatedInputs: ['audience-personas', 'analytics-data', 'content-strategy'],
+    narrative: {
+      today: 'You are the voice of the customer inside the content pipeline. You build audience personas, analyze behavioral data, and ensure briefs are grounded in what real people actually need and want.',
+      future: 'AI agents synthesize audience data at scale, but they still need your frameworks. You shift from gathering insights to curating them — defining which audience signals matter and which are noise.',
+      teamSupport: 'The Research Agent uses your personas and analytics data to generate brief-ready insights. The Content Strategist builds on your audience models. Every agent downstream inherits your understanding of the customer.',
+      keyInsight: 'Your audience personas are the most-used input in the entire graph. Every agent and most human roles reference them. When your personas are sharp, the whole system produces more relevant content. When they drift, everything drifts.',
+    },
+  },
+  {
+    id: 'consulting-dd',
+    title: 'Consulting (Due Diligence)',
+    description: 'External advisory role providing independent review across quality, brand, and strategic alignment gates.',
+    ownedSteps: [],
+    reviewedGates: ['quality-check', 'brand-review', 'stakeholder-signoff'],
+    relatedAgents: ['writer-agent', 'seo-agent'],
+    relatedInputs: ['brand-guide', 'content-strategy', 'audience-personas'],
+    narrative: {
+      today: 'You provide an independent lens. You review content at multiple gates — quality, brand, and stakeholder — to ensure nothing reaches market that could damage the brand or misalign with strategy. Your value is objectivity.',
+      future: 'AI handles routine compliance checks. Your role sharpens to the high-stakes reviews: sensitive topics, new market entries, brand pivots, and executive-visibility content. You become the trusted advisor for the exceptions, not the routine.',
+      teamSupport: 'The Brand Manager flags issues before they reach you. The quality-check gate pre-screens for technical problems. You see content that has already passed two filters — your time is spent on judgment calls, not catching typos.',
+      keyInsight: 'You sit across three gates — that is unusual in this system. Most roles own one gate. Your cross-cutting view means you see patterns that specialists miss: a brand drift that the Brand Manager normalized, a quality trend that the Editor overlooked. That perspective is your unique value.',
+    },
+  },
 ];
 
 // Quick lookup by role ID
