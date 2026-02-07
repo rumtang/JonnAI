@@ -173,29 +173,69 @@ function renderStepMeta(meta?: StepMeta) {
   );
 }
 
+function getDecisionIcon(decision: string): string {
+  const d = decision.toLowerCase();
+  if (d === 'approve' || d === 'pass' || d === 'archive') return '\u2705';
+  if (d === 'revise') return '\u21A9\uFE0F';
+  if (d.startsWith('escalate')) return '\uD83D\uDEA8';
+  if (d === 'hold') return '\u23F8\uFE0F';
+  if (d === 'optimize' || d === 'iterate') return '\uD83D\uDD04';
+  return '\u26AA';
+}
+
+function getDecisionStyle(decision: string): string {
+  const d = decision.toLowerCase();
+  if (d === 'approve' || d === 'pass' || d === 'archive') return 'border-emerald-500/30 bg-emerald-500/5 text-emerald-400';
+  if (d === 'revise') return 'border-amber-500/30 bg-amber-500/5 text-amber-400';
+  if (d.startsWith('escalate')) return 'border-red-500/30 bg-red-500/5 text-red-400';
+  if (d === 'hold') return 'border-slate-400/30 bg-slate-400/5 text-slate-400';
+  if (d === 'optimize' || d === 'iterate') return 'border-sky-500/30 bg-sky-500/5 text-sky-400';
+  return 'border-white/10 bg-white/5 text-slate-300';
+}
+
 function renderGateMeta(meta?: GateMeta) {
   if (!meta) return null;
   return (
     <>
-      <MetaRow label="Gate Type" value={meta.gateType.replace(/-/g, ' ')} />
-      <MetaRow label="Reviewer" value={meta.reviewer} />
-      {meta.autoPassCriteria && <MetaRow label="Auto-pass" value={meta.autoPassCriteria} />}
-      <div className="mt-3 p-3 rounded-lg bg-[#D4856A]/10 border border-[#D4856A]/20">
-        <p className="text-xs text-[#D4856A] font-semibold mb-1">Escalation Trigger</p>
-        <p className="text-sm text-foreground">{meta.escalationTrigger}</p>
+      {/* Reviewer — prominent at top */}
+      <div className="p-3 rounded-lg bg-white/5 border border-white/10 mb-3">
+        <p className="text-xs text-muted-foreground mb-1">Reviewed by</p>
+        <p className="text-sm font-semibold text-foreground">{meta.reviewer}</p>
       </div>
+
+      <MetaRow label="Gate Type" value={meta.gateType.replace(/-/g, ' ')} />
+
+      {/* Auto-pass criteria */}
+      {meta.autoPassCriteria && (
+        <div className="p-3 rounded-lg bg-emerald-500/5 border border-emerald-500/20 mt-3">
+          <p className="text-xs text-emerald-400 font-semibold mb-1">{'\u2705'} Auto-pass Criteria</p>
+          <p className="text-sm text-slate-200">{meta.autoPassCriteria}</p>
+        </div>
+      )}
+
+      {/* Decision paths */}
       {meta.decisions && meta.decisions.length > 0 && (
-        <div className="mt-2">
-          <p className="text-xs text-muted-foreground mb-1">Possible Decisions:</p>
-          <div className="flex flex-wrap gap-1">
+        <div className="mt-4">
+          <p className="text-xs font-semibold text-muted-foreground mb-2">Decision Paths</p>
+          <div className="space-y-1.5">
             {meta.decisions.map(d => (
-              <Badge key={d} variant="outline" className="text-xs border-[#D4856A]/30 text-[#D4856A]">
-                {d}
-              </Badge>
+              <div
+                key={d}
+                className={`flex items-center gap-2.5 px-3 py-2 rounded-lg border ${getDecisionStyle(d)}`}
+              >
+                <span className="text-base leading-none">{getDecisionIcon(d)}</span>
+                <span className="text-sm font-medium">{d}</span>
+              </div>
             ))}
           </div>
         </div>
       )}
+
+      {/* Escalation trigger — warning box */}
+      <div className="mt-4 p-3 rounded-lg bg-red-500/10 border border-red-500/30">
+        <p className="text-xs text-red-400 font-semibold mb-1">{'\uD83D\uDEA8'} Escalation Trigger</p>
+        <p className="text-sm text-slate-200">{meta.escalationTrigger}</p>
+      </div>
     </>
   );
 }
