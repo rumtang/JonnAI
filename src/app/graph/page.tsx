@@ -9,7 +9,7 @@ import SearchBar from '@/components/graph/SearchBar';
 import ZoomControls from '@/components/graph/ZoomControls';
 import PresentationController from '@/components/presentation/PresentationController';
 import ModeToggle from '@/components/graph/ModeToggle';
-import ContactImporter from '@/components/contacts/ContactImporter';
+
 import { useGraphStore } from '@/lib/store/graph-store';
 import { usePresentationStore } from '@/lib/store/presentation-store';
 import seedGraphData from '@/data/seed-graph.json';
@@ -18,12 +18,12 @@ import presentationStepsData from '@/data/presentation-steps.json';
 import { GraphData, GraphNode, GraphLink, PresentationStep } from '@/lib/graph/types';
 
 function buildLinearGraphData(): GraphData {
-  const nodes: GraphNode[] = linearProcessData.steps.map((step, i) => ({
+  const nodes: GraphNode[] = linearProcessData.steps.map((step) => ({
     id: step.id,
-    type: 'process-step' as const,
+    type: 'step' as const,
     label: step.label,
     description: step.description,
-    group: 'Linear Process',
+    group: 'Content Lifecycle',
     val: 8,
     fx: step.x,
     fy: 0,
@@ -31,7 +31,6 @@ function buildLinearGraphData(): GraphData {
   }));
 
   const links: GraphLink[] = [];
-  // Connect steps linearly
   for (let i = 0; i < linearProcessData.steps.length - 1; i++) {
     links.push({
       source: linearProcessData.steps[i].id,
@@ -52,8 +51,8 @@ function buildLinearWithAgentsData(): GraphData {
     id: agent.id,
     type: 'agent' as const,
     label: agent.label,
-    description: `AI agent for ${agent.parentStep}`,
-    group: 'Agents',
+    description: `AI agent for ${agent.parentStep.replace('ls-', '')} phase`,
+    group: 'AI Agents',
     val: 5,
     fx: linearProcessData.steps.find(s => s.id === agent.parentStep)?.x ?? 0,
     fy: -60,
@@ -63,7 +62,7 @@ function buildLinearWithAgentsData(): GraphData {
   const agentLinks: GraphLink[] = linearProcessData.agents.map(agent => ({
     source: agent.parentStep,
     target: agent.id,
-    type: 'manages' as const,
+    type: 'performs' as const,
     particles: 2,
   }));
 
@@ -126,7 +125,6 @@ export default function GraphPage() {
       )}
 
       <NodeDetailPanel />
-      <ContactImporter />
     </>
   );
 }

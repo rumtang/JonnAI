@@ -90,7 +90,7 @@ export default function GraphScene() {
   // Custom node rendering
   const nodeThreeObject = useCallback((node: GraphNode) => {
     const group = new THREE.Group();
-    const style = NODE_STYLES[node.type] || NODE_STYLES.task;
+    const style = NODE_STYLES[node.type] || NODE_STYLES.step;
     const size = (node.val || style.baseSize) * 0.8;
 
     // Determine if this node should be highlighted or dimmed

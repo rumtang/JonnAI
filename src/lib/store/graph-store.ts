@@ -1,18 +1,16 @@
 import { create } from 'zustand';
-import { GraphData, GraphNode, GraphLink, NodeType, LinkType, PersonMeta, ParsedContact } from '../graph/types';
+import { GraphData, GraphNode, GraphLink, NodeType, LinkType } from '../graph/types';
 import { getNeighborIds } from '../graph/filters';
 import { v4 as uuid } from 'uuid';
 
 // All NodeType values for default visibility
 const ALL_NODE_TYPES: NodeType[] = [
-  'person', 'task', 'data-source', 'decision', 'agent',
-  'knowledge-artifact', 'external-touchpoint', 'process-step',
+  'step', 'gate', 'agent', 'input',
 ];
 
 const ALL_LINK_TYPES: LinkType[] = [
-  'reports-to', 'collaborates-with', 'depends-on', 'feeds-into',
-  'escalates-to', 'informed-by', 'monitors', 'manages',
-  'produces', 'consumes', 'linear-flow',
+  'flows-to', 'reviews', 'escalates-to', 'uses',
+  'performs', 'returns-to', 'linear-flow',
 ];
 
 interface GraphState {
@@ -49,11 +47,12 @@ interface GraphState {
   toggleLinkTypeVisibility: (type: LinkType) => void;
   setSearchQuery: (query: string) => void;
   resetFilters: () => void;
-  addPersonNode: (contact: ParsedContact, role: string, department: string, humanRoleEvolution?: string) => void;
   loadLinearView: () => void;
   loadFullGraph: () => void;
   highlightByType: (type: NodeType) => void;
+  highlightByTypes: (types: NodeType[]) => void;
   highlightLinksByType: (linkType: LinkType) => void;
+  highlightLinksByTypes: (linkTypes: LinkType[]) => void;
 }
 
 export const useGraphStore = create<GraphState>((set, get) => ({
@@ -76,7 +75,6 @@ export const useGraphStore = create<GraphState>((set, get) => ({
 
   selectNode: (node) => {
     if (node) {
-      // Compute neighbors so highlights update automatically
       const { graphData } = get();
       const neighborIds = getNeighborIds(node.id, graphData.links);
       set({
@@ -128,39 +126,6 @@ export const useGraphStore = create<GraphState>((set, get) => ({
     highlightedLinkIndices: new Set(),
   }),
 
-  addPersonNode: (contact, role, department, humanRoleEvolution) => {
-    const state = get();
-    const newNode: GraphNode = {
-      id: `contact-${uuid()}`,
-      type: 'person',
-      label: contact.name,
-      description: `${role} — ${department}`,
-      group: department,
-      val: 5,
-      meta: {
-        role,
-        department,
-        email: contact.email,
-        phone: contact.phone,
-        isContact: true,
-        humanRoleEvolution,
-      } as PersonMeta,
-    };
-    const updatedData = {
-      nodes: [...state.graphData.nodes, newNode],
-      links: [...state.graphData.links],
-    };
-    set({ graphData: updatedData });
-    if (state.fullGraphData) {
-      set({
-        fullGraphData: {
-          nodes: [...state.fullGraphData.nodes, newNode],
-          links: [...state.fullGraphData.links],
-        },
-      });
-    }
-  },
-
   loadLinearView: () => {
     const state = get();
     if (state.linearGraphData) {
@@ -185,11 +150,32 @@ export const useGraphStore = create<GraphState>((set, get) => ({
     set({ highlightedNodeIds: ids });
   },
 
+  // Highlight nodes matching any of the given types (no overwrite race)
+  highlightByTypes: (types) => {
+    const state = get();
+    const ids = new Set(
+      state.graphData.nodes
+        .filter(n => types.includes(n.type))
+        .map(n => n.id)
+    );
+    set({ highlightedNodeIds: ids });
+  },
+
   highlightLinksByType: (linkType) => {
     const state = get();
     const indices = new Set<number>();
     state.graphData.links.forEach((link, i) => {
       if (link.type === linkType) indices.add(i);
+    });
+    set({ highlightedLinkIndices: indices });
+  },
+
+  // Highlight links matching any of the given types
+  highlightLinksByTypes: (linkTypes) => {
+    const state = get();
+    const indices = new Set<number>();
+    state.graphData.links.forEach((link, i) => {
+      if (linkTypes.includes(link.type)) indices.add(i);
     });
     set({ highlightedLinkIndices: indices });
   },
