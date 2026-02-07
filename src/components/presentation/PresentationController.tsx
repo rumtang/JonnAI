@@ -9,6 +9,60 @@ import { ChevronLeft, ChevronRight, Play, Pause } from 'lucide-react';
 import linearProcessData from '@/data/linear-process.json';
 import { GraphNode, GraphLink } from '@/lib/graph/types';
 
+// ─── Process Chart Layout ────────────────────────────────────
+// Positions 12 step nodes in 5 phase columns for a traditional
+// left-to-right process chart feel on slides 2-3.
+const PROCESS_CHART_LAYOUT: Record<string, { fx: number; fy: number; fz: number }> = {
+  // Brief column (x = -400)
+  'receive-request':   { fx: -400, fy:  80, fz: 0 },
+  'research-insights': { fx: -400, fy:   0, fz: 0 },
+  'write-brief':       { fx: -400, fy: -80, fz: 0 },
+  // Creation column (x = -200)
+  'draft-content':     { fx: -200, fy:  40, fz: 0 },
+  'seo-optimization':  { fx: -200, fy: -40, fz: 0 },
+  // Review column (x = 0)
+  'brand-compliance':  { fx:    0, fy:  40, fz: 0 },
+  'final-edit':        { fx:    0, fy: -40, fz: 0 },
+  // Publish column (x = 200)
+  'schedule-publish':  { fx:  200, fy:  40, fz: 0 },
+  'distribute':        { fx:  200, fy: -40, fz: 0 },
+  // Measure column (x = 400)
+  'track-performance': { fx:  400, fy:  80, fz: 0 },
+  'generate-report':   { fx:  400, fy:   0, fz: 0 },
+  'optimize':          { fx:  400, fy: -80, fz: 0 },
+};
+
+// Sequential step-to-step flows (no gates, no feedback loops)
+const PROCESS_CHART_LINKS: Array<[string, string]> = [
+  ['receive-request',   'research-insights'],
+  ['research-insights', 'write-brief'],
+  ['write-brief',       'draft-content'],
+  ['draft-content',     'seo-optimization'],
+  ['seo-optimization',  'brand-compliance'],
+  ['brand-compliance',  'final-edit'],
+  ['final-edit',        'schedule-publish'],
+  ['schedule-publish',  'distribute'],
+  ['distribute',        'track-performance'],
+  ['track-performance', 'generate-report'],
+  ['generate-report',   'optimize'],
+];
+
+// Agent positions below their primary phase column
+const AGENT_CHART_POSITIONS: Record<string, { fx: number; fy: number; fz: number }> = {
+  'research-agent':    { fx: -400, fy: -180, fz: 0 },
+  'writer-agent':      { fx: -250, fy: -180, fz: 0 },
+  'seo-agent':         { fx: -150, fy: -180, fz: 0 },
+  'performance-agent': { fx:  400, fy: -180, fz: 0 },
+};
+
+// One primary performs link per agent
+const AGENT_PRIMARY_LINKS: Array<[string, string]> = [
+  ['research-agent',    'research-insights'],
+  ['writer-agent',      'draft-content'],
+  ['seo-agent',         'seo-optimization'],
+  ['performance-agent', 'track-performance'],
+];
+
 export default function PresentationController() {
   const {
     currentStepIndex,
@@ -117,6 +171,66 @@ export default function PresentationController() {
         setGraphData({
           nodes: [...linearGraphData.nodes, ...agentNodes],
           links: [...linearGraphData.links, ...agentLinks, ...crossLinks],
+        });
+        break;
+      }
+
+      case 'show-process-chart': {
+        if (!fullGraphData) break;
+        // Filter to step nodes only, pin them in process chart columns
+        const stepNodes: GraphNode[] = fullGraphData.nodes
+          .filter(n => n.type === 'step')
+          .map(n => {
+            const pos = PROCESS_CHART_LAYOUT[n.id];
+            if (!pos) return { ...n };
+            return { ...n, fx: pos.fx, fy: pos.fy, fz: pos.fz };
+          });
+        // Build sequential step-to-step links (no gates)
+        const stepLinks: GraphLink[] = PROCESS_CHART_LINKS.map(([src, tgt]) => ({
+          source: src,
+          target: tgt,
+          type: 'flows-to' as const,
+          particles: 2,
+        }));
+        setGraphData({ nodes: stepNodes, links: stepLinks });
+        break;
+      }
+
+      case 'show-process-with-agents': {
+        if (!fullGraphData) break;
+        // Step nodes pinned in process chart columns
+        const pcStepNodes: GraphNode[] = fullGraphData.nodes
+          .filter(n => n.type === 'step')
+          .map(n => {
+            const pos = PROCESS_CHART_LAYOUT[n.id];
+            if (!pos) return { ...n };
+            return { ...n, fx: pos.fx, fy: pos.fy, fz: pos.fz };
+          });
+        // Agent nodes pinned below their phase columns
+        const pcAgentNodes: GraphNode[] = fullGraphData.nodes
+          .filter(n => n.type === 'agent')
+          .map(n => {
+            const pos = AGENT_CHART_POSITIONS[n.id];
+            if (!pos) return { ...n };
+            return { ...n, fx: pos.fx, fy: pos.fy, fz: pos.fz };
+          });
+        // Step-to-step links
+        const pcStepLinks: GraphLink[] = PROCESS_CHART_LINKS.map(([src, tgt]) => ({
+          source: src,
+          target: tgt,
+          type: 'flows-to' as const,
+          particles: 2,
+        }));
+        // Agent performs links
+        const pcAgentLinks: GraphLink[] = AGENT_PRIMARY_LINKS.map(([src, tgt]) => ({
+          source: src,
+          target: tgt,
+          type: 'performs' as const,
+          particles: 2,
+        }));
+        setGraphData({
+          nodes: [...pcStepNodes, ...pcAgentNodes],
+          links: [...pcStepLinks, ...pcAgentLinks],
         });
         break;
       }

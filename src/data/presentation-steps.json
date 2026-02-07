@@ -1,8 +1,8 @@
 [
   {
-    "id": "step-1-lifecycle",
-    "title": "The Content Production Lifecycle",
-    "narration": "Welcome to the organizational intelligence layer. What you are about to see is a map of how content actually gets produced — not the slide-deck version, but the real graph of steps, agents, gates, and data flows. Let's start with the simple view.",
+    "id": "step-1-pipeline",
+    "title": "The Content Pipeline",
+    "narration": "Most teams present their content workflow as a clean five-stage pipeline. Brief, Creation, Review, Publish, Measure. This is the slide-deck version.",
     "cameraPosition": { "x": 0, "y": 0, "z": 800 },
     "cameraLookAt": { "x": 0, "y": 0, "z": 0 },
     "cameraTransitionMs": 2000,
@@ -11,31 +11,31 @@
     "duration": 0
   },
   {
-    "id": "step-2-linear",
-    "title": "The Linear View",
-    "narration": "Here is the simplified pipeline. Brief flows to Creation, Creation flows to Review, Review to Publish, and Publish to Measure. Clean. Sequential. Easy to understand.",
-    "cameraPosition": { "x": 0, "y": 80, "z": 700 },
+    "id": "step-2-process-chart",
+    "title": "The Detailed Process",
+    "narration": "Zoom in and each phase has multiple activities. Three steps in Brief alone. This is the process chart you would find in the team's operational documentation — structured, sequential, reassuring.",
+    "cameraPosition": { "x": 0, "y": 0, "z": 900 },
     "cameraLookAt": { "x": 0, "y": 0, "z": 0 },
     "cameraTransitionMs": 2500,
     "graphState": "linear",
-    "action": "show-linear",
+    "action": "show-process-chart",
     "duration": 0
   },
   {
     "id": "step-3-agents",
     "title": "Where AI Agents Fit",
-    "narration": "AI agents accelerate specific phases. A Research Agent powers the Brief phase. A Content Writer and SEO Optimizer handle Creation. A Performance Analyst drives Measurement. But not every phase needs an agent.",
-    "cameraPosition": { "x": 0, "y": 40, "z": 350 },
-    "cameraLookAt": { "x": 0, "y": 0, "z": 0 },
-    "cameraTransitionMs": 1500,
+    "narration": "AI agents plug into specific steps. A Research Agent powers insights. A Content Writer drafts. An SEO Optimizer polishes for search. A Performance Analyst measures results. Four agents, each mapped to a phase.",
+    "cameraPosition": { "x": 0, "y": -30, "z": 1000 },
+    "cameraLookAt": { "x": 0, "y": -30, "z": 0 },
+    "cameraTransitionMs": 2000,
     "graphState": "linear",
-    "action": "show-agents",
+    "action": "show-process-with-agents",
     "duration": 0
   },
   {
     "id": "step-4-reality",
     "title": "The Real Complexity",
-    "narration": "In practice, content production is not linear. Drafts loop back for revision. Performance data feeds into new briefs. Brand reviews can escalate to stakeholder sign-off. The process is a graph, not a pipeline.",
+    "narration": "But this pipeline is a fiction. In reality, gates create checkpoints. Inputs ground decisions. Feedback loops send work back for revision. The neat columns dissolve into a living system.",
     "cameraPosition": { "x": 200, "y": 200, "z": 700 },
     "cameraLookAt": { "x": 0, "y": 0, "z": 0 },
     "cameraTransitionMs": 3500,
@@ -44,20 +44,7 @@
     "duration": 0
   },
   {
-    "id": "step-5-gates",
-    "title": "Human-in-the-Loop Gates",
-    "narration": "Gates are the critical checkpoints. Brief Approval, Quality Check, Brand Review, Stakeholder Sign-off, and Performance Review. Each gate has criteria for auto-pass and clear escalation triggers. This is where human judgment stays in the loop.",
-    "cameraPosition": { "x": -200, "y": 120, "z": 350 },
-    "cameraLookAt": { "x": 0, "y": 0, "z": 0 },
-    "cameraTransitionMs": 2500,
-    "graphState": "full-graph",
-    "action": "highlight-knowledge-layer",
-    "filterNodeTypes": ["gate"],
-    "highlightLinkTypes": ["reviews", "escalates-to", "returns-to"],
-    "duration": 0
-  },
-  {
-    "id": "step-6-inputs",
+    "id": "step-5-inputs",
     "title": "What Agents Are Grounded In",
     "narration": "Agents do not operate in a vacuum. They draw on the Brand Voice Guide, Content Strategy, Audience Personas, Analytics Data, and SEO Tools. This reference layer is what makes agent output consistent and contextualized rather than generic.",
     "cameraPosition": { "x": 150, "y": -60, "z": 300 },
@@ -67,6 +54,19 @@
     "action": "show-agents-grounded",
     "filterNodeTypes": ["agent", "input"],
     "highlightLinkTypes": ["uses"],
+    "duration": 0
+  },
+  {
+    "id": "step-6-gates",
+    "title": "Human-in-the-Loop Gates",
+    "narration": "Gates are the critical checkpoints. Brief Approval, Quality Check, Brand Review, Stakeholder Sign-off, and Performance Review. Each gate has criteria for auto-pass and clear escalation triggers. This is where human judgment stays in the loop.",
+    "cameraPosition": { "x": -200, "y": 120, "z": 350 },
+    "cameraLookAt": { "x": 0, "y": 0, "z": 0 },
+    "cameraTransitionMs": 2500,
+    "graphState": "full-graph",
+    "action": "highlight-knowledge-layer",
+    "filterNodeTypes": ["gate"],
+    "highlightLinkTypes": ["reviews", "escalates-to", "returns-to"],
     "duration": 0
   },
   {
