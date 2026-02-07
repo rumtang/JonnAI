@@ -27,14 +27,14 @@ export default function ModeToggle() {
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.5 }}
-      className="fixed top-4 right-4 z-50 flex items-center gap-1 p-1 rounded-full bg-black/60 backdrop-blur-xl border border-white/10"
+      className="fixed top-4 right-4 z-50 flex items-center gap-1 p-1 rounded-full glass-panel"
     >
       <button
         onClick={() => handleModeChange('guided')}
         className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
           mode === 'guided'
-            ? 'bg-cyan-500/20 text-cyan-300 shadow-lg shadow-cyan-500/10'
-            : 'text-slate-400 hover:text-slate-200'
+            ? 'bg-[#C9A04E]/20 text-[#C9A04E] shadow-lg shadow-[#C9A04E]/10'
+            : 'text-muted-foreground hover:text-foreground'
         }`}
       >
         Guided Tour
@@ -43,8 +43,8 @@ export default function ModeToggle() {
         onClick={() => handleModeChange('explore')}
         className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
           mode === 'explore'
-            ? 'bg-purple-500/20 text-purple-300 shadow-lg shadow-purple-500/10'
-            : 'text-slate-400 hover:text-slate-200'
+            ? 'bg-[#9B7ACC]/20 text-[#9B7ACC] shadow-lg shadow-[#9B7ACC]/10'
+            : 'text-muted-foreground hover:text-foreground'
         }`}
       >
         Explore

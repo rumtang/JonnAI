@@ -1,10 +1,10 @@
 import { NodeType, NodeStyleConfig } from './types';
 
 export const NODE_STYLES: Record<NodeType, NodeStyleConfig> = {
-  step:  { color: '#3b82f6', geometry: 'sphere',       baseSize: 5, emoji: '▶' },
-  gate:  { color: '#ef4444', geometry: 'dodecahedron', baseSize: 6, emoji: '!' },
-  agent: { color: '#8b5cf6', geometry: 'torus',        baseSize: 5, emoji: '✦' },
-  input: { color: '#f59e0b', geometry: 'box',          baseSize: 4, emoji: 'i' },
+  step:  { color: '#5B9ECF', geometry: 'icosahedron', baseSize: 5, emoji: '▶' },
+  gate:  { color: '#D4856A', geometry: 'icosahedron', baseSize: 6, emoji: '!' },
+  agent: { color: '#9B7ACC', geometry: 'icosahedron', baseSize: 5, emoji: '✦' },
+  input: { color: '#C9A04E', geometry: 'icosahedron', baseSize: 4, emoji: 'i' },
 };
 
 export function getNodeColor(type: NodeType): string {

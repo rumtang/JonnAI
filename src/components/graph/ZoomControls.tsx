@@ -15,12 +15,11 @@ export default function ZoomControls() {
 
     const camera = fg.camera();
     const { x, y, z } = camera.position;
-    // Scale distance from origin by zoom factor
     const scale = direction === 'in' ? 1 - ZOOM_FACTOR : 1 + ZOOM_FACTOR;
 
     fg.cameraPosition(
       { x: x * scale, y: y * scale, z: z * scale },
-      undefined, // keep current lookAt
+      undefined,
       400,
     );
   }, []);
@@ -54,7 +53,7 @@ export default function ZoomControls() {
           key={label}
           onClick={onClick}
           title={label}
-          className="p-2.5 rounded-xl bg-black/60 backdrop-blur-xl border border-white/10 text-slate-300 hover:text-white transition-all hover:bg-white/10"
+          className="p-2.5 rounded-xl glass-panel text-muted-foreground hover:text-foreground transition-all"
         >
           <Icon className="w-4 h-4" />
         </button>

@@ -77,7 +77,6 @@ export default function PresentationController() {
       }
 
       case 'show-agents': {
-        // Add agents below the linear steps
         if (!linearGraphData) break;
         const agentNodes: GraphNode[] = linearProcessData.agents.map(agent => ({
           id: agent.id,
@@ -104,7 +103,6 @@ export default function PresentationController() {
       }
 
       case 'show-cross-links': {
-        // Show the linear view with cross-connections (feedback loops)
         if (!linearGraphData) break;
         const agentNodes: GraphNode[] = linearProcessData.agents.map(agent => ({
           id: agent.id,
@@ -122,7 +120,6 @@ export default function PresentationController() {
           target: agent.id,
           type: 'performs' as const,
         }));
-        // Cross-connections showing feedback loops
         const crossLinks: GraphLink[] = [
           { source: 'ls-measure', target: 'ls-brief', type: 'returns-to' as const, particles: 3 },
           { source: 'ls-measure', target: 'ls-creation', type: 'flows-to' as const, particles: 3 },
@@ -136,7 +133,6 @@ export default function PresentationController() {
       }
 
       case 'explode': {
-        // Load the full graph
         clearHighlights();
         resetFilters();
         if (fullGraphData) {
@@ -219,12 +215,12 @@ export default function PresentationController() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -20, scale: 0.95 }}
             transition={{ duration: 0.4 }}
-            className="bg-black/70 backdrop-blur-2xl border border-white/10 rounded-2xl p-6 shadow-2xl"
+            className="glass-panel rounded-2xl p-6 shadow-2xl"
           >
-            <h2 className="text-lg font-semibold text-cyan-300 mb-2">
+            <h2 className="text-lg font-semibold text-primary mb-2 font-[family-name:var(--font-playfair)]">
               {currentStep.title}
             </h2>
-            <p className="text-slate-300 text-sm leading-relaxed">
+            <p className="text-muted-foreground text-sm leading-relaxed">
               {currentStep.narration}
             </p>
           </motion.div>
@@ -242,23 +238,23 @@ export default function PresentationController() {
         <button
           onClick={prevStep}
           disabled={currentStepIndex === 0}
-          className="p-2 rounded-full bg-black/60 backdrop-blur-xl border border-white/10 text-slate-300 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+          className="p-2 rounded-full glass-panel text-muted-foreground hover:text-foreground disabled:opacity-30 disabled:cursor-not-allowed transition-all"
         >
           <ChevronLeft className="w-5 h-5" />
         </button>
 
         {/* Step dots */}
-        <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-black/60 backdrop-blur-xl border border-white/10">
+        <div className="flex items-center gap-2 px-4 py-2 rounded-full glass-panel">
           {steps.map((step, i) => (
             <button
               key={step.id}
               onClick={() => goToStep(i)}
               className={`w-2 h-2 rounded-full transition-all duration-300 ${
                 i === currentStepIndex
-                  ? 'w-6 bg-cyan-400'
+                  ? 'w-6 bg-[#C9A04E]'
                   : i < currentStepIndex
-                  ? 'bg-cyan-400/50'
-                  : 'bg-slate-600'
+                  ? 'bg-[#C9A04E]/50'
+                  : 'bg-muted-foreground/30'
               }`}
             />
           ))}
@@ -267,7 +263,7 @@ export default function PresentationController() {
         {/* Play/Pause */}
         <button
           onClick={toggleAutoPlay}
-          className="p-2 rounded-full bg-black/60 backdrop-blur-xl border border-white/10 text-slate-300 hover:text-white transition-all"
+          className="p-2 rounded-full glass-panel text-muted-foreground hover:text-foreground transition-all"
         >
           {isPlaying ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5" />}
         </button>
@@ -276,14 +272,14 @@ export default function PresentationController() {
         <button
           onClick={nextStep}
           disabled={currentStepIndex === steps.length - 1}
-          className="p-2 rounded-full bg-black/60 backdrop-blur-xl border border-white/10 text-slate-300 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+          className="p-2 rounded-full glass-panel text-muted-foreground hover:text-foreground disabled:opacity-30 disabled:cursor-not-allowed transition-all"
         >
           <ChevronRight className="w-5 h-5" />
         </button>
       </motion.div>
 
       {/* Step counter */}
-      <div className="fixed bottom-6 right-4 z-50 text-xs text-slate-500 font-mono">
+      <div className="fixed bottom-6 right-4 z-50 text-xs text-muted-foreground font-mono">
         {currentStepIndex + 1} / {steps.length}
       </div>
     </>

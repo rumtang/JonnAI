@@ -13,8 +13,20 @@ import { GraphNode, GraphLink, NodeType } from '@/lib/graph/types';
 import * as THREE from 'three';
 import SpriteText from 'three-spritetext';
 
+// Memoized color cache to avoid re-creating THREE.Color per render
+const colorCache = new Map<string, THREE.Color>();
+function getCachedColor(hex: string): THREE.Color {
+  let c = colorCache.get(hex);
+  if (!c) {
+    c = new THREE.Color(hex);
+    colorCache.set(hex, c);
+  }
+  return c;
+}
+
 export default function GraphScene() {
   const fgRef = useRef<any>(null);
+  const rotationRef = useRef<number | null>(null);
 
   const {
     graphData,
@@ -61,81 +73,124 @@ export default function GraphScene() {
     cylinder: new THREE.CylinderGeometry(0.8, 0.8, 1.2, 16),
   }), []);
 
-  // Setup bloom post-processing on mount and share graph ref for zoom controls
+  // Setup renderer, lighting, and slow rotation on mount
   useEffect(() => {
     if (!fgRef.current) return;
 
     const fg = fgRef.current;
     setGraphRef(fg);
 
-    // Try to configure renderer (may fail if renderer not ready)
     const timer = setTimeout(() => {
       try {
         const renderer = fg.renderer?.();
         if (renderer) {
+          // Transparent canvas so CSS animated background shows through
+          renderer.setClearColor(0x000000, 0);
           renderer.toneMapping = THREE.ACESFilmicToneMapping;
-          renderer.toneMappingExposure = 1.2;
+          renderer.toneMappingExposure = 1.0;
         }
-      } catch (e) {
-        // Renderer not available yet, that's ok
+
+        const scene = fg.scene?.();
+        if (scene) {
+          // Warm key light from top-right
+          const keyLight = new THREE.DirectionalLight(0xfff5e6, 0.8);
+          keyLight.position.set(100, 150, 100);
+          scene.add(keyLight);
+
+          // Cool fill light from bottom-left
+          const fillLight = new THREE.DirectionalLight(0xe6f2ff, 0.4);
+          fillLight.position.set(-100, -80, -50);
+          scene.add(fillLight);
+
+          // Base ambient illumination
+          const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+          scene.add(ambientLight);
+
+          // Inner glow point light
+          const pointLight = new THREE.PointLight(0xffeaa7, 0.3, 200);
+          pointLight.position.set(0, 0, 0);
+          scene.add(pointLight);
+        }
+      } catch {
+        // Renderer/scene not available yet
       }
     }, 500);
 
+    // Slow scene rotation when no node is hovered/selected
+    const animate = () => {
+      rotationRef.current = requestAnimationFrame(animate);
+      try {
+        const scene = fg.scene?.();
+        if (scene) {
+          scene.rotation.y += 0.0002;
+        }
+      } catch {
+        // Scene not ready
+      }
+    };
+    rotationRef.current = requestAnimationFrame(animate);
+
     return () => {
       clearTimeout(timer);
+      if (rotationRef.current !== null) {
+        cancelAnimationFrame(rotationRef.current);
+      }
       setGraphRef(null);
     };
   }, []);
 
-  // Custom node rendering
+  // Custom node rendering with crystalline materials
   const nodeThreeObject = useCallback((node: GraphNode) => {
     const group = new THREE.Group();
     const style = NODE_STYLES[node.type] || NODE_STYLES.step;
     const size = (node.val || style.baseSize) * 0.8;
 
-    // Determine if this node should be highlighted or dimmed
     const isSelected = selectedNode && selectedNode.id === node.id;
     const isHighlighted = highlightedNodeIds.has(node.id) ||
                           (hoveredNode && neighborSet.has(node.id));
     const isDimmed = hasHighlights && !isHighlighted && !isSelected &&
                      !(hoveredNode && hoveredNode.id === node.id);
 
-    // Get geometry
-    const geometry = geometries[style.geometry] || geometries.sphere;
+    const geometry = geometries[style.geometry] || geometries.icosahedron;
 
-    // Create material with glow
-    const color = new THREE.Color(style.color);
-    const material = new THREE.MeshLambertMaterial({
+    // Crystalline MeshPhysicalMaterial with clearcoat
+    const color = getCachedColor(style.color);
+    const material = new THREE.MeshPhysicalMaterial({
       color: color,
+      metalness: 0.3,
+      roughness: 0.15,
+      clearcoat: 0.8,
+      clearcoatRoughness: 0.1,
       transparent: true,
-      opacity: isDimmed ? 0.25 : 0.9,
-      emissive: color,
-      emissiveIntensity: isHighlighted ? 0.8 : 0.25,
+      opacity: isDimmed ? 0.35 : 0.95,
+      emissive: isHighlighted ? color : new THREE.Color(0x000000),
+      emissiveIntensity: isHighlighted ? 0.3 : 0,
     });
 
     const mesh = new THREE.Mesh(geometry, material);
     mesh.scale.setScalar(size);
     group.add(mesh);
 
-    // Add outer glow sprite
+    // Soft glow sprite with additive blending
     const spriteMaterial = new THREE.SpriteMaterial({
       map: createGlowTexture(style.color),
       transparent: true,
-      opacity: isDimmed ? 0.05 : (isHighlighted ? 0.5 : 0.15),
+      opacity: isDimmed ? 0.04 : (isHighlighted ? 0.30 : 0.12),
       depthWrite: false,
+      blending: THREE.AdditiveBlending,
     });
     const glowSprite = new THREE.Sprite(spriteMaterial);
     glowSprite.scale.setScalar(size * 4);
     group.add(glowSprite);
 
-    // Add text label
+    // Text label — dark charcoal on warm cream pill
     const sprite = new SpriteText(node.label);
-    sprite.color = isDimmed ? 'rgba(255,255,255,0.3)' : 'rgba(255,255,255,0.85)';
+    sprite.color = isDimmed ? 'rgba(40,40,50,0.35)' : 'rgba(40,40,50,0.90)';
     sprite.textHeight = Math.max(2, size * 0.6);
     sprite.position.y = -(size + 3);
     sprite.fontFace = 'system-ui, -apple-system, sans-serif';
-    sprite.fontWeight = '500';
-    sprite.backgroundColor = isDimmed ? 'rgba(5,5,16,0.3)' : 'rgba(5,5,16,0.6)';
+    sprite.fontWeight = '600';
+    sprite.backgroundColor = isDimmed ? 'rgba(250,248,245,0.3)' : 'rgba(250,248,245,0.85)';
     sprite.padding = 1;
     sprite.borderRadius = 2;
     group.add(sprite);
@@ -143,7 +198,7 @@ export default function GraphScene() {
     return group;
   }, [hoveredNode, selectedNode, highlightedNodeIds, neighborSet, hasHighlights, geometries]);
 
-  // Handle node click - fly camera to node
+  // Handle node click - fly camera to node (cinematic 2500ms)
   const handleNodeClick = useCallback((node: GraphNode) => {
     selectNode(node);
     setDetailPanelOpen(true);
@@ -154,14 +209,14 @@ export default function GraphScene() {
       fgRef.current.cameraPosition(
         { x: node.x * distRatio, y: node.y * distRatio, z: node.z * distRatio },
         node,
-        2000
+        2500
       );
     }
   }, [selectNode, setDetailPanelOpen]);
 
-  // Handle node hover - highlight neighbors (but don't override selection)
+  // Handle node hover
   const handleNodeHover = useCallback((node: GraphNode | null) => {
-    if (selectedNode) return; // Selection owns highlights — ignore hover
+    if (selectedNode) return;
     hoverNode(node || null);
     if (node) {
       const neighbors = getNeighborIds(node.id, graphData.links);
@@ -178,7 +233,7 @@ export default function GraphScene() {
     clearHighlights();
   }, [selectNode, setDetailPanelOpen, clearHighlights]);
 
-  // Link color accessor
+  // Link color accessor — warm gray for dimmed links
   const linkColor = useCallback((link: GraphLink) => {
     const linkType = link.type;
     const baseColor = getLinkColor(linkType);
@@ -189,14 +244,14 @@ export default function GraphScene() {
 
     if (hoveredNode) {
       if (neighborSet.has(sourceId) && neighborSet.has(targetId)) return baseColor;
-      return 'rgba(255,255,255,0.06)';
+      return 'rgba(160,150,140,0.15)';
     }
 
     if (highlightedNodeIds.has(sourceId) || highlightedNodeIds.has(targetId)) {
       return baseColor;
     }
 
-    return 'rgba(255,255,255,0.06)';
+    return 'rgba(160,150,140,0.15)';
   }, [hasHighlights, hoveredNode, neighborSet, highlightedNodeIds]);
 
   // Link width accessor
@@ -224,31 +279,28 @@ export default function GraphScene() {
 
   if (!filteredGraphData || filteredGraphData.nodes.length === 0) {
     return (
-      <div className="flex items-center justify-center w-full h-full bg-[#050510]">
-        <p className="text-slate-500 font-mono text-sm">No data loaded</p>
+      <div className="flex items-center justify-center w-full h-full">
+        <p className="text-muted-foreground font-mono text-sm">No data loaded</p>
       </div>
     );
   }
 
-  // Cast accessors to any to satisfy react-force-graph-3d's generic constraints.
-  // The library's internal NodeObject/LinkObject types don't align with our strict
-  // GraphNode/GraphLink interfaces, but runtime behavior is identical.
   return (
     <ForceGraph3D
       ref={fgRef}
       graphData={filteredGraphData as any}
-      backgroundColor="#050510"
+      backgroundColor="rgba(0,0,0,0)"
       nodeThreeObject={nodeThreeObject as any}
       nodeThreeObjectExtend={false}
       nodeVal={((node: any) => node.val || 4) as any}
       linkColor={linkColor as any}
       linkWidth={linkWidth as any}
-      linkOpacity={0.4}
+      linkOpacity={0.6}
       linkCurvature={0.1}
       linkCurveRotation={0}
       linkDirectionalParticles={linkParticles as any}
-      linkDirectionalParticleSpeed={0.005}
-      linkDirectionalParticleWidth={1.5}
+      linkDirectionalParticleSpeed={0.008}
+      linkDirectionalParticleWidth={2.0}
       linkDirectionalParticleColor={((link: any) => getLinkColor(link.type)) as any}
       onNodeClick={handleNodeClick as any}
       onNodeHover={handleNodeHover as any}
