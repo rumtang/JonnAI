@@ -13,7 +13,7 @@ export default function SearchBar() {
   const [query, setQuery] = useState('');
   const [isOpen, setIsOpen] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
-  const { graphData, setSearchQuery, selectNode, setHighlightedNodeIds } = useGraphStore();
+  const { graphData, setSearchQuery, selectNode, setHighlightedNodeIds, visibleNodeTypes } = useGraphStore();
   const { setDetailPanelOpen } = useUIStore();
 
   const debouncedSearch = useMemo(
@@ -25,9 +25,10 @@ export default function SearchBar() {
     if (!query.trim()) return [];
     const q = query.toLowerCase();
     return graphData.nodes
+      .filter(n => visibleNodeTypes.has(n.type))
       .filter(n => n.label.toLowerCase().includes(q) || n.description.toLowerCase().includes(q))
       .slice(0, 8);
-  }, [query, graphData.nodes]);
+  }, [query, graphData.nodes, visibleNodeTypes]);
 
   const handleSelect = useCallback((node: GraphNode) => {
     selectNode(node);

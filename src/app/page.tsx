@@ -26,7 +26,7 @@ export default function Home() {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.3 }}
+          transition={{ delay: 0.1 }}
           className="mb-6"
         >
           <span className="px-4 py-1.5 rounded-full text-xs font-medium glass-panel text-primary">
@@ -38,7 +38,7 @@ export default function Home() {
         <motion.h1
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4, duration: 0.6 }}
+          transition={{ delay: 0.15, duration: 0.6 }}
           className="text-5xl md:text-6xl font-bold mb-6 leading-tight font-[family-name:var(--font-playfair)]"
         >
           <span className="text-foreground">The Organizational</span>
@@ -52,7 +52,7 @@ export default function Home() {
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.6 }}
+          transition={{ delay: 0.25 }}
           className="text-lg text-muted-foreground mb-12 max-w-xl mx-auto leading-relaxed"
         >
           Why building a semantic knowledge layer matters more than bolting AI agents onto linear processes.
@@ -63,7 +63,7 @@ export default function Home() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.8 }}
+          transition={{ delay: 0.35 }}
           className="flex flex-col sm:flex-row items-center justify-center gap-4"
         >
           <button
@@ -99,7 +99,7 @@ export default function Home() {
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 1.2 }}
+          transition={{ delay: 0.5 }}
           className="text-xs text-muted-foreground/50 mt-16"
         >
           Built with Next.js, Three.js, and react-force-graph-3d

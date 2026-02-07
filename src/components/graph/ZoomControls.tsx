@@ -5,8 +5,8 @@ import { motion } from 'framer-motion';
 import { ZoomIn, ZoomOut, Maximize2 } from 'lucide-react';
 import { getGraphRef } from '@/lib/graph/graph-ref';
 
-const ZOOM_FACTOR = 0.3;
-const FIT_ALL_DISTANCE = 350;
+const ZOOM_FACTOR = 0.5;
+const FIT_ALL_DISTANCE = 500;
 
 export default function ZoomControls() {
   const zoom = useCallback((direction: 'in' | 'out') => {

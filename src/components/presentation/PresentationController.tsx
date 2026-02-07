@@ -14,6 +14,7 @@ export default function PresentationController() {
     currentStepIndex,
     steps,
     isPlaying,
+    mode,
     nextStep,
     prevStep,
     goToStep,
@@ -46,26 +47,14 @@ export default function PresentationController() {
     fg.cameraPosition(pos, lookAt, ms);
   }, []);
 
-  // Execute step action + camera when step changes
-  useEffect(() => {
-    if (!currentStep) return;
-    executeStepAction(currentStep.action);
-    moveCamera(currentStep);
-
-    const timer = setTimeout(() => {
-      setTransitioning(false);
-    }, currentStep.cameraTransitionMs || 2000);
-
-    return () => clearTimeout(timer);
-  }, [currentStepIndex, currentStep]);
-
   const executeStepAction = useCallback((action?: string) => {
     if (!action) return;
+    if (mode !== 'guided') return;
 
     switch (action) {
       case 'fade-in':
         if (linearGraphData) {
-          setGraphData({ nodes: [], links: [] });
+          setGraphData({ ...linearGraphData });
         }
         break;
 
@@ -167,7 +156,21 @@ export default function PresentationController() {
         resetFilters();
         break;
     }
-  }, [linearGraphData, fullGraphData, setGraphData, clearHighlights, resetFilters, highlightByTypes, highlightLinksByTypes]);
+  }, [mode, linearGraphData, fullGraphData, setGraphData, clearHighlights, resetFilters, highlightByTypes, highlightLinksByTypes]);
+
+  // Execute step action + camera when step changes
+  useEffect(() => {
+    if (!currentStep) return;
+    if (mode !== 'guided') return;
+    executeStepAction(currentStep.action);
+    moveCamera(currentStep);
+
+    const timer = setTimeout(() => {
+      setTransitioning(false);
+    }, currentStep.cameraTransitionMs || 2000);
+
+    return () => clearTimeout(timer);
+  }, [currentStepIndex, currentStep, mode, executeStepAction, moveCamera, setTransitioning]);
 
   // Keyboard navigation
   useEffect(() => {

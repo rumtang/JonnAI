@@ -94,7 +94,7 @@
 
 /* ── Glass panel utility ── */
 .glass-panel {
-  background: oklch(0.98 0.005 65 / 60%);
+  background: oklch(0.98 0.005 65 / 80%);
   backdrop-filter: blur(24px) saturate(150%);
   -webkit-backdrop-filter: blur(24px) saturate(150%);
   border: 1px solid oklch(0.85 0.08 45 / 40%);

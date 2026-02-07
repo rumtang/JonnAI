@@ -41,7 +41,8 @@ export default function NodeDetailPanel() {
           animate={{ x: 0, opacity: 1 }}
           exit={{ x: 400, opacity: 0 }}
           transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-          className="fixed right-0 top-0 h-full w-96 z-50 glass-panel rounded-l-2xl overflow-y-auto"
+          onWheel={(e) => e.stopPropagation()}
+          className="fixed right-0 top-14 h-[calc(100vh-3.5rem)] w-96 z-50 glass-panel rounded-l-2xl overflow-y-auto"
         >
           <div className="p-6">
             {/* Header */}
