@@ -6,7 +6,7 @@ import { usePresentationStore } from '@/lib/store/presentation-store';
 import { useGraphStore } from '@/lib/store/graph-store';
 import { getGraphRef } from '@/lib/graph/graph-ref';
 import { ChevronLeft, ChevronRight, Play, Pause, Compass } from 'lucide-react';
-import { GraphNode, GraphLink } from '@/lib/graph/types';
+import { GraphNode, GraphLink, StepMeta } from '@/lib/graph/types';
 
 // ─── Process Chart Layout ────────────────────────────────────
 // Positions 12 step nodes in 5 phase columns for a traditional
@@ -85,6 +85,7 @@ export default function PresentationController() {
     clearHighlights,
     resetFilters,
     loadFullGraph,
+    setHighlightedNodeIds,
   } = useGraphStore();
 
   const currentStep = steps[currentStepIndex];
@@ -215,8 +216,33 @@ export default function PresentationController() {
         clearHighlights();
         resetFilters();
         break;
+
+      case 'show-role-overview': {
+        // Highlight step nodes with human or shared ownership, dim agent-only steps
+        clearHighlights();
+        if (!fullGraphData) break;
+        const humanStepIds = new Set(
+          fullGraphData.nodes
+            .filter(n => {
+              if (n.type !== 'step') return false;
+              const meta = n.meta as StepMeta | undefined;
+              return meta?.owner === 'human' || meta?.owner === 'shared';
+            })
+            .map(n => n.id)
+        );
+        setHighlightedNodeIds(humanStepIds);
+        break;
+      }
+
+      case 'show-team-connections': {
+        // Highlight gates and human review/escalation connections
+        clearHighlights();
+        highlightByTypes(['gate', 'step']);
+        highlightLinksByTypes(['reviews', 'returns-to', 'escalates-to']);
+        break;
+      }
     }
-  }, [mode, linearGraphData, fullGraphData, setGraphData, clearHighlights, resetFilters, highlightByTypes, highlightLinksByTypes]);
+  }, [mode, linearGraphData, fullGraphData, setGraphData, clearHighlights, resetFilters, highlightByTypes, highlightLinksByTypes, setHighlightedNodeIds]);
 
   // Execute step action + camera when step changes
   useEffect(() => {

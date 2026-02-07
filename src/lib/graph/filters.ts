@@ -1,5 +1,14 @@
 import { GraphData, GraphNode, GraphLink, NodeType, LinkType } from './types';
 
+// Extract source and target IDs from a link, handling both string and object forms.
+// This pattern was duplicated across NodeDetailPanel, GraphScene, and filters —
+// centralizing it here prevents drift.
+export function getLinkEndpointIds(link: GraphLink): { sourceId: string; targetId: string } {
+  const sourceId = typeof link.source === 'object' ? (link.source as GraphNode).id : link.source;
+  const targetId = typeof link.target === 'object' ? (link.target as GraphNode).id : link.target;
+  return { sourceId, targetId };
+}
+
 export function applyFilters(
   fullData: GraphData,
   visibleNodeTypes: Set<NodeType>,

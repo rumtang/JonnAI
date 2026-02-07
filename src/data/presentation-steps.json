@@ -92,5 +92,30 @@
     "graphState": "full-graph",
     "action": "full-reveal",
     "duration": 0
+  },
+  {
+    "id": "step-9-your-role",
+    "title": "Your Role in the Future",
+    "narration": "As AI agents take on more production work, human roles do not disappear — they shift. The steps you own today become the judgment calls that agents cannot make. Every human-owned or shared step in this graph is a point where your expertise, creativity, or authority is irreplaceable.",
+    "cameraPosition": { "x": 0, "y": 100, "z": 600 },
+    "cameraLookAt": { "x": 0, "y": 0, "z": 0 },
+    "cameraTransitionMs": 2500,
+    "graphState": "full-graph",
+    "action": "show-role-overview",
+    "filterNodeTypes": ["step"],
+    "duration": 0
+  },
+  {
+    "id": "step-10-team-connections",
+    "title": "How Your Team Supports the Vision",
+    "narration": "No role works alone. The Content Director's brief feeds the Editor's review. The Brand Manager's escalation reaches the VP. The Analytics Lead's performance data loops back to a new brief. Gates are where roles meet — the human collaboration layer that holds the system together.",
+    "cameraPosition": { "x": -100, "y": 150, "z": 450 },
+    "cameraLookAt": { "x": 0, "y": 0, "z": 0 },
+    "cameraTransitionMs": 2500,
+    "graphState": "full-graph",
+    "action": "show-team-connections",
+    "filterNodeTypes": ["gate", "step"],
+    "highlightLinkTypes": ["reviews", "returns-to", "escalates-to"],
+    "duration": 0
   }
 ]
