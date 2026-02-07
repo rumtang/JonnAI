@@ -135,12 +135,3 @@ export interface CameraConfig {
   ms: number;
 }
 
-// ─── Contacts (legacy, kept for ContactImporter) ─────────────
-
-export interface ParsedContact {
-  name: string;
-  email?: string;
-  phone?: string;
-  title?: string;
-  company?: string;
-}
