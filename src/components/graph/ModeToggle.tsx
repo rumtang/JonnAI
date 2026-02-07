@@ -2,25 +2,57 @@
 
 import { usePresentationStore } from '@/lib/store/presentation-store';
 import { useGraphStore } from '@/lib/store/graph-store';
+import { useCampaignStore } from '@/lib/store/campaign-store';
 import { motion } from 'framer-motion';
+
+type Mode = 'guided' | 'explore' | 'campaign';
 
 export default function ModeToggle() {
   const { mode, setMode, reset } = usePresentationStore();
-  const { loadFullGraph, loadLinearView, resetFilters, clearHighlights } = useGraphStore();
+  const { loadFullGraph, loadLinearView, resetFilters, clearHighlights, clearNavigation } = useGraphStore();
+  const { startCampaign, endCampaign, resetCampaign } = useCampaignStore();
 
-  const handleModeChange = (newMode: 'guided' | 'explore') => {
+  const handleModeChange = (newMode: Mode) => {
     if (newMode === mode) return;
     setMode(newMode);
     clearHighlights();
     resetFilters();
+    clearNavigation();
 
     if (newMode === 'guided') {
+      endCampaign();
       reset();
       loadLinearView();
-    } else {
+    } else if (newMode === 'explore') {
+      endCampaign();
       loadFullGraph();
+    } else if (newMode === 'campaign') {
+      resetCampaign();
+      loadFullGraph();
+      startCampaign();
     }
   };
+
+  const modes: { key: Mode; label: string; activeColor: string; activeBg: string }[] = [
+    {
+      key: 'guided',
+      label: 'Guided Tour',
+      activeColor: '#C9A04E',
+      activeBg: 'bg-[#C9A04E]/20',
+    },
+    {
+      key: 'explore',
+      label: 'Explore',
+      activeColor: '#9B7ACC',
+      activeBg: 'bg-[#9B7ACC]/20',
+    },
+    {
+      key: 'campaign',
+      label: 'Campaign',
+      activeColor: '#4CAF50',
+      activeBg: 'bg-[#4CAF50]/20',
+    },
+  ];
 
   return (
     <motion.div
@@ -29,26 +61,20 @@ export default function ModeToggle() {
       transition={{ delay: 0.5 }}
       className="fixed top-4 right-4 z-50 flex items-center gap-1 p-1 rounded-full glass-panel"
     >
-      <button
-        onClick={() => handleModeChange('guided')}
-        className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
-          mode === 'guided'
-            ? 'bg-[#C9A04E]/20 text-[#C9A04E] shadow-lg shadow-[#C9A04E]/10'
-            : 'text-muted-foreground hover:text-foreground'
-        }`}
-      >
-        Guided Tour
-      </button>
-      <button
-        onClick={() => handleModeChange('explore')}
-        className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
-          mode === 'explore'
-            ? 'bg-[#9B7ACC]/20 text-[#9B7ACC] shadow-lg shadow-[#9B7ACC]/10'
-            : 'text-muted-foreground hover:text-foreground'
-        }`}
-      >
-        Explore
-      </button>
+      {modes.map(({ key, label, activeColor, activeBg }) => (
+        <button
+          key={key}
+          onClick={() => handleModeChange(key)}
+          className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
+            mode === key
+              ? `${activeBg} shadow-lg`
+              : 'text-muted-foreground hover:text-foreground'
+          }`}
+          style={mode === key ? { color: activeColor, boxShadow: `0 4px 12px ${activeColor}15` } : undefined}
+        >
+          {label}
+        </button>
+      ))}
     </motion.div>
   );
 }

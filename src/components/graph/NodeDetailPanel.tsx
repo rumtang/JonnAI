@@ -3,18 +3,46 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { useGraphStore } from '@/lib/store/graph-store';
 import { useUIStore } from '@/lib/store/ui-store';
+import { navigateToNode } from '@/lib/utils/camera-navigation';
 import { NODE_STYLES } from '@/lib/graph/node-styles';
 import { Badge } from '@/components/ui/badge';
-import { X } from 'lucide-react';
+import { X, ArrowRight } from 'lucide-react';
 import { GraphNode, StepMeta, GateMeta, AgentMeta, InputMeta } from '@/lib/graph/types';
+import NavigationBreadcrumb from './NavigationBreadcrumb';
 
 export default function NodeDetailPanel() {
-  const { selectedNode, graphData, selectNode } = useGraphStore();
+  const {
+    selectedNode,
+    graphData,
+    selectNode,
+    pushNavigation,
+    flashLink,
+  } = useGraphStore();
   const { detailPanelOpen, setDetailPanelOpen } = useUIStore();
 
   const handleClose = () => {
     selectNode(null);
     setDetailPanelOpen(false);
+  };
+
+  // Navigate to a connected node — camera + panel + breadcrumb
+  const handleConnectionClick = (targetNode: GraphNode) => {
+    if (!selectedNode) return;
+
+    // Push current node to breadcrumb trail (if not already there)
+    pushNavigation(selectedNode);
+
+    // Flash the link between current and target
+    flashLink(selectedNode.id, targetNode.id);
+
+    // Push target node to trail
+    pushNavigation(targetNode);
+
+    // Update selection (triggers highlight recalc in store)
+    selectNode(targetNode);
+
+    // Animate camera to target node
+    navigateToNode(targetNode, { distance: 120, duration: 1000 });
   };
 
   // Find connected nodes
@@ -45,6 +73,9 @@ export default function NodeDetailPanel() {
           className="fixed right-0 top-14 h-[calc(100vh-3.5rem)] w-96 z-50 glass-panel rounded-l-2xl overflow-y-auto"
         >
           <div className="p-6">
+            {/* Breadcrumb navigation */}
+            <NavigationBreadcrumb />
+
             {/* Header */}
             <div className="flex items-start justify-between mb-6">
               <div className="flex items-center gap-3">
@@ -88,10 +119,12 @@ export default function NodeDetailPanel() {
                     key={i}
                     onClick={() => {
                       if (conn.node) {
-                        selectNode(conn.node);
+                        handleConnectionClick(conn.node);
                       }
                     }}
-                    className="w-full flex items-center gap-3 p-2 rounded-lg hover:bg-accent/10 transition-colors text-left"
+                    className="group w-full flex items-center gap-3 p-2 rounded-lg
+                               hover:bg-accent/20 transition-all duration-200 text-left
+                               border border-transparent hover:border-white/10"
                   >
                     <div
                       className="w-6 h-6 rounded flex items-center justify-center text-xs"
@@ -105,6 +138,9 @@ export default function NodeDetailPanel() {
                         {conn.direction === 'outgoing' ? '\u2192' : '\u2190'} {conn.linkType.replace(/-/g, ' ')}
                       </p>
                     </div>
+                    {/* Arrow icon appears on hover */}
+                    <ArrowRight className="w-4 h-4 text-muted-foreground/0 group-hover:text-muted-foreground
+                                           transition-all duration-200 shrink-0" />
                   </button>
                 ))}
               </div>

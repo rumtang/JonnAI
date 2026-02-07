@@ -27,6 +27,12 @@ interface GraphState {
   highlightedNodeIds: Set<string>;
   highlightedLinkIndices: Set<number>;
 
+  // Navigation history (breadcrumb trail for connection navigation)
+  navigationHistory: GraphNode[];
+
+  // Temporarily highlighted link (for connection click animation)
+  flashingLinkKey: string | null;
+
   // Filters
   visibleNodeTypes: Set<NodeType>;
   visibleLinkTypes: Set<LinkType>;
@@ -52,6 +58,15 @@ interface GraphState {
   highlightByTypes: (types: NodeType[]) => void;
   highlightLinksByType: (linkType: LinkType) => void;
   highlightLinksByTypes: (linkTypes: LinkType[]) => void;
+
+  // Navigation history actions
+  pushNavigation: (node: GraphNode) => void;
+  navigateBack: () => GraphNode | null;
+  navigateToBreadcrumb: (index: number) => GraphNode | null;
+  clearNavigation: () => void;
+
+  // Link flash action
+  flashLink: (sourceId: string, targetId: string) => void;
 }
 
 export const useGraphStore = create<GraphState>((set, get) => ({
@@ -63,6 +78,8 @@ export const useGraphStore = create<GraphState>((set, get) => ({
   hoveredNode: null,
   highlightedNodeIds: new Set(),
   highlightedLinkIndices: new Set(),
+  navigationHistory: [],
+  flashingLinkKey: null,
   visibleNodeTypes: new Set(ALL_NODE_TYPES),
   visibleLinkTypes: new Set(ALL_LINK_TYPES),
   searchQuery: '',
@@ -177,5 +194,50 @@ export const useGraphStore = create<GraphState>((set, get) => ({
       if (linkTypes.includes(link.type)) indices.add(i);
     });
     set({ highlightedLinkIndices: indices });
+  },
+
+  // Navigation history — breadcrumb trail for connection clicks
+  pushNavigation: (node) => {
+    const state = get();
+    const history = [...state.navigationHistory];
+    // Don't push if it's the same as the last node
+    if (history.length > 0 && history[history.length - 1].id === node.id) return;
+    history.push(node);
+    // Keep only the last 8 entries
+    if (history.length > 8) history.shift();
+    set({ navigationHistory: history });
+  },
+
+  navigateBack: () => {
+    const state = get();
+    if (state.navigationHistory.length < 2) return null;
+    const history = [...state.navigationHistory];
+    history.pop(); // Remove current
+    const previousNode = history[history.length - 1];
+    set({ navigationHistory: history });
+    return previousNode;
+  },
+
+  navigateToBreadcrumb: (index) => {
+    const state = get();
+    if (index < 0 || index >= state.navigationHistory.length) return null;
+    const targetNode = state.navigationHistory[index];
+    // Truncate history to that point
+    const history = state.navigationHistory.slice(0, index + 1);
+    set({ navigationHistory: history });
+    return targetNode;
+  },
+
+  clearNavigation: () => set({ navigationHistory: [] }),
+
+  // Briefly highlight a link between two nodes (for connection click animation)
+  flashLink: (sourceId, targetId) => {
+    const key = `${sourceId}--${targetId}`;
+    set({ flashingLinkKey: key });
+    setTimeout(() => {
+      // Only clear if it's still the same flash
+      const current = get().flashingLinkKey;
+      if (current === key) set({ flashingLinkKey: null });
+    }, 1500);
   },
 }));

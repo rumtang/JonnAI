@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useRef } from 'react';
 import ForceGraph3D from './ForceGraph3DWrapper';
 import { useGraphStore } from '@/lib/store/graph-store';
 import { usePresentationStore } from '@/lib/store/presentation-store';
+import { useCampaignStore } from '@/lib/store/campaign-store';
 import { useUIStore } from '@/lib/store/ui-store';
 import { NODE_STYLES } from '@/lib/graph/node-styles';
 import { LINK_STYLES, getLinkColor } from '@/lib/graph/link-styles';
@@ -40,10 +41,24 @@ export default function GraphScene() {
     visibleNodeTypes,
     visibleLinkTypes,
     searchQuery,
+    flashingLinkKey,
+    pushNavigation,
   } = useGraphStore();
 
   const { mode } = usePresentationStore();
+  const { isActive: campaignActive, currentNodeId: campaignNodeId, visitedNodes: campaignVisited } = useCampaignStore();
   const { setDetailPanelOpen } = useUIStore();
+
+  // In campaign mode, build sets for highlighting
+  const campaignVisitedSet = useMemo(
+    () => new Set(campaignActive ? campaignVisited : []),
+    [campaignActive, campaignVisited]
+  );
+  // Neighbors of the current campaign node (agents, inputs connected to it)
+  const campaignNeighborSet = useMemo(() => {
+    if (!campaignActive) return new Set<string>();
+    return getNeighborIds(campaignNodeId, graphData.links);
+  }, [campaignActive, campaignNodeId, graphData.links]);
 
   // Apply node/link type filters and search query
   const filteredGraphData = useMemo(
@@ -143,11 +158,19 @@ export default function GraphScene() {
     const style = NODE_STYLES[node.type] || NODE_STYLES.step;
     const size = (node.val || style.baseSize) * 0.8;
 
+    // Campaign mode visual state
+    const isCampaignCurrent = campaignActive && node.id === campaignNodeId;
+    const isCampaignVisited = campaignActive && campaignVisitedSet.has(node.id);
+    const isCampaignNeighbor = campaignActive && campaignNeighborSet.has(node.id);
+
     const isSelected = selectedNode && selectedNode.id === node.id;
     const isHighlighted = highlightedNodeIds.has(node.id) ||
-                          (hoveredNode && neighborSet.has(node.id));
-    const isDimmed = hasHighlights && !isHighlighted && !isSelected &&
-                     !(hoveredNode && hoveredNode.id === node.id);
+                          (hoveredNode && neighborSet.has(node.id)) ||
+                          isCampaignCurrent || isCampaignVisited || isCampaignNeighbor;
+    const isDimmed = campaignActive
+      ? (!isCampaignCurrent && !isCampaignVisited && !isCampaignNeighbor)
+      : (hasHighlights && !isHighlighted && !isSelected &&
+         !(hoveredNode && hoveredNode.id === node.id));
 
     const geometry = geometries[style.geometry] || geometries.icosahedron;
 
@@ -171,15 +194,42 @@ export default function GraphScene() {
 
     // Soft glow sprite with additive blending
     const spriteMaterial = new THREE.SpriteMaterial({
-      map: createGlowTexture(style.color),
+      map: createGlowTexture(isCampaignCurrent ? '#4CAF50' : style.color),
       transparent: true,
-      opacity: isDimmed ? 0.04 : (isHighlighted ? 0.30 : 0.12),
+      opacity: isDimmed ? 0.04 : (isCampaignCurrent ? 0.45 : isHighlighted ? 0.30 : 0.12),
       depthWrite: false,
       blending: THREE.AdditiveBlending,
     });
     const glowSprite = new THREE.Sprite(spriteMaterial);
-    glowSprite.scale.setScalar(size * 4);
+    glowSprite.scale.setScalar(isCampaignCurrent ? size * 6 : size * 4);
     group.add(glowSprite);
+
+    // Campaign current-node ring indicator
+    if (isCampaignCurrent) {
+      const ringGeom = new THREE.RingGeometry(size * 1.3, size * 1.6, 32);
+      const ringMat = new THREE.MeshBasicMaterial({
+        color: 0x4CAF50,
+        transparent: true,
+        opacity: 0.7,
+        side: THREE.DoubleSide,
+      });
+      const ring = new THREE.Mesh(ringGeom, ringMat);
+      group.add(ring);
+    }
+
+    // Campaign visited node — subtle green tint on glow
+    if (isCampaignVisited && !isCampaignCurrent) {
+      const visitedGlow = new THREE.SpriteMaterial({
+        map: createGlowTexture('#4CAF50'),
+        transparent: true,
+        opacity: 0.15,
+        depthWrite: false,
+        blending: THREE.AdditiveBlending,
+      });
+      const visitedSprite = new THREE.Sprite(visitedGlow);
+      visitedSprite.scale.setScalar(size * 3);
+      group.add(visitedSprite);
+    }
 
     // Text label — dark charcoal on warm cream pill
     const sprite = new SpriteText(node.label);
@@ -222,11 +272,12 @@ export default function GraphScene() {
     }
 
     return group;
-  }, [hoveredNode, selectedNode, highlightedNodeIds, neighborSet, hasHighlights, geometries]);
+  }, [hoveredNode, selectedNode, highlightedNodeIds, neighborSet, hasHighlights, geometries, campaignActive, campaignNodeId, campaignVisitedSet, campaignNeighborSet]);
 
   // Handle node click - fly camera to node (cinematic 2500ms)
   const handleNodeClick = useCallback((node: GraphNode) => {
     selectNode(node);
+    pushNavigation(node);
     setDetailPanelOpen(true);
 
     if (fgRef.current && node.x !== undefined && node.y !== undefined && node.z !== undefined) {
@@ -238,7 +289,7 @@ export default function GraphScene() {
         2500
       );
     }
-  }, [selectNode, setDetailPanelOpen]);
+  }, [selectNode, pushNavigation, setDetailPanelOpen]);
 
   // Handle node hover
   const handleNodeHover = useCallback((node: GraphNode | null) => {
@@ -259,14 +310,33 @@ export default function GraphScene() {
     clearHighlights();
   }, [selectNode, setDetailPanelOpen, clearHighlights]);
 
-  // Link color accessor — warm gray for dimmed links
+  // Link color accessor — warm gray for dimmed links, bright white for flashing links
   const linkColor = useCallback((link: GraphLink) => {
     const linkType = link.type;
     const baseColor = getLinkColor(linkType);
-    if (!hasHighlights) return baseColor;
 
     const sourceId = typeof link.source === 'object' ? (link.source as GraphNode).id : link.source;
     const targetId = typeof link.target === 'object' ? (link.target as GraphNode).id : link.target;
+
+    // Flash effect — bright highlight on the link being navigated
+    if (flashingLinkKey) {
+      const fwd = `${sourceId}--${targetId}`;
+      const rev = `${targetId}--${sourceId}`;
+      if (flashingLinkKey === fwd || flashingLinkKey === rev) {
+        return '#ffffff';
+      }
+    }
+
+    // Campaign mode — highlight traversed flows-to links in green
+    if (campaignActive) {
+      const bothVisited = campaignVisitedSet.has(sourceId) && campaignVisitedSet.has(targetId);
+      if (bothVisited && linkType === 'flows-to') return '#4CAF50';
+      // Links to/from campaign neighbors (agents, inputs) stay visible
+      if (campaignNeighborSet.has(sourceId) && campaignNeighborSet.has(targetId)) return baseColor;
+      return 'rgba(160,150,140,0.08)';
+    }
+
+    if (!hasHighlights) return baseColor;
 
     if (hoveredNode) {
       if (neighborSet.has(sourceId) && neighborSet.has(targetId)) return baseColor;
@@ -278,12 +348,23 @@ export default function GraphScene() {
     }
 
     return 'rgba(160,150,140,0.15)';
-  }, [hasHighlights, hoveredNode, neighborSet, highlightedNodeIds]);
+  }, [hasHighlights, hoveredNode, neighborSet, highlightedNodeIds, flashingLinkKey, campaignActive, campaignVisitedSet, campaignNeighborSet]);
 
   // Link width accessor
   const linkWidth = useCallback((link: GraphLink) => {
     const style = LINK_STYLES[link.type];
     const base = style?.width ?? 0.5;
+
+    // Widen the flashing link during connection navigation
+    if (flashingLinkKey) {
+      const sourceId = typeof link.source === 'object' ? (link.source as GraphNode).id : link.source;
+      const targetId = typeof link.target === 'object' ? (link.target as GraphNode).id : link.target;
+      const fwd = `${sourceId}--${targetId}`;
+      const rev = `${targetId}--${sourceId}`;
+      if (flashingLinkKey === fwd || flashingLinkKey === rev) {
+        return base * 3;
+      }
+    }
 
     if (!hasHighlights) return base;
 
@@ -295,7 +376,7 @@ export default function GraphScene() {
     }
 
     return base * 0.3;
-  }, [hasHighlights, hoveredNode, neighborSet]);
+  }, [hasHighlights, hoveredNode, neighborSet, flashingLinkKey]);
 
   // Link particles
   const linkParticles = useCallback((link: GraphLink) => {
@@ -335,7 +416,7 @@ export default function GraphScene() {
       d3AlphaDecay={0.02}
       warmupTicks={100}
       cooldownTicks={300}
-      enableNodeDrag={mode === 'explore'}
+      enableNodeDrag={mode === 'explore' && !campaignActive}
       showNavInfo={false}
     />
   );

@@ -2,13 +2,13 @@ import { create } from 'zustand';
 import { PresentationStep } from '../graph/types';
 
 interface PresentationState {
-  mode: 'guided' | 'explore';
+  mode: 'guided' | 'explore' | 'campaign';
   currentStepIndex: number;
   steps: PresentationStep[];
   isPlaying: boolean;
   isTransitioning: boolean;
 
-  setMode: (mode: 'guided' | 'explore') => void;
+  setMode: (mode: 'guided' | 'explore' | 'campaign') => void;
   setSteps: (steps: PresentationStep[]) => void;
   nextStep: () => void;
   prevStep: () => void;
