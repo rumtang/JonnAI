@@ -5,11 +5,11 @@ import ForceGraph3D from './ForceGraph3DWrapper';
 import { useGraphStore } from '@/lib/store/graph-store';
 import { usePresentationStore } from '@/lib/store/presentation-store';
 import { useUIStore } from '@/lib/store/ui-store';
-import { NODE_STYLES, getNodeColor } from '@/lib/graph/node-styles';
+import { NODE_STYLES } from '@/lib/graph/node-styles';
 import { LINK_STYLES, getLinkColor } from '@/lib/graph/link-styles';
 import { getNeighborIds, applyFilters } from '@/lib/graph/filters';
 import { setGraphRef } from '@/lib/graph/graph-ref';
-import { GraphNode, GraphLink, NodeType, StepMeta } from '@/lib/graph/types';
+import { GraphNode, GraphLink, StepMeta } from '@/lib/graph/types';
 import * as THREE from 'three';
 import SpriteText from 'three-spritetext';
 
@@ -33,11 +33,9 @@ export default function GraphScene() {
     selectedNode,
     hoveredNode,
     highlightedNodeIds,
-    highlightedLinkIndices,
     selectNode,
     hoverNode,
     setHighlightedNodeIds,
-    setHighlightedLinkIndices,
     clearHighlights,
     visibleNodeTypes,
     visibleLinkTypes,

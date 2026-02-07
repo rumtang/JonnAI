@@ -1,7 +1,6 @@
 import { create } from 'zustand';
-import { GraphData, GraphNode, GraphLink, NodeType, LinkType } from '../graph/types';
+import { GraphData, GraphNode, NodeType, LinkType } from '../graph/types';
 import { getNeighborIds } from '../graph/filters';
-import { v4 as uuid } from 'uuid';
 
 // All NodeType values for default visibility
 const ALL_NODE_TYPES: NodeType[] = [

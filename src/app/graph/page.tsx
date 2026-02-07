@@ -44,34 +44,6 @@ function buildLinearGraphData(): GraphData {
   return { nodes, links };
 }
 
-function buildLinearWithAgentsData(): GraphData {
-  const base = buildLinearGraphData();
-
-  const agentNodes: GraphNode[] = linearProcessData.agents.map(agent => ({
-    id: agent.id,
-    type: 'agent' as const,
-    label: agent.label,
-    description: `AI agent for ${agent.parentStep.replace('ls-', '')} phase`,
-    group: 'AI Agents',
-    val: 5,
-    fx: linearProcessData.steps.find(s => s.id === agent.parentStep)?.x ?? 0,
-    fy: -60,
-    fz: 0,
-  }));
-
-  const agentLinks: GraphLink[] = linearProcessData.agents.map(agent => ({
-    source: agent.parentStep,
-    target: agent.id,
-    type: 'performs' as const,
-    particles: 2,
-  }));
-
-  return {
-    nodes: [...base.nodes, ...agentNodes],
-    links: [...base.links, ...agentLinks],
-  };
-}
-
 export default function GraphPage() {
   const { setGraphData, setFullGraphData, setLinearGraphData } = useGraphStore();
   const { setSteps, mode, setMode } = usePresentationStore();
