@@ -8,6 +8,7 @@ import { useUIStore } from '@/lib/store/ui-store';
 import { NODE_STYLES, getNodeColor } from '@/lib/graph/node-styles';
 import { LINK_STYLES, getLinkColor } from '@/lib/graph/link-styles';
 import { getNeighborIds, applyFilters } from '@/lib/graph/filters';
+import { setGraphRef } from '@/lib/graph/graph-ref';
 import { GraphNode, GraphLink, NodeType } from '@/lib/graph/types';
 import * as THREE from 'three';
 import SpriteText from 'three-spritetext';
@@ -60,11 +61,12 @@ export default function GraphScene() {
     cylinder: new THREE.CylinderGeometry(0.8, 0.8, 1.2, 16),
   }), []);
 
-  // Setup bloom post-processing on mount
+  // Setup bloom post-processing on mount and share graph ref for zoom controls
   useEffect(() => {
     if (!fgRef.current) return;
 
     const fg = fgRef.current;
+    setGraphRef(fg);
 
     // Try to configure renderer (may fail if renderer not ready)
     const timer = setTimeout(() => {
@@ -79,7 +81,10 @@ export default function GraphScene() {
       }
     }, 500);
 
-    return () => clearTimeout(timer);
+    return () => {
+      clearTimeout(timer);
+      setGraphRef(null);
+    };
   }, []);
 
   // Custom node rendering
