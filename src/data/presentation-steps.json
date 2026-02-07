@@ -1,0 +1,96 @@
+[
+  {
+    "id": "step-1-lifecycle",
+    "title": "The Content Production Lifecycle",
+    "narration": "Every piece of content follows a lifecycle: Brief, Creation, Review, Publish, and Measure. Five phases, each with distinct activities and handoffs. Most teams think of this as a clean linear pipeline.",
+    "cameraPosition": { "x": 0, "y": 0, "z": 1200 },
+    "cameraLookAt": { "x": 0, "y": 0, "z": 0 },
+    "cameraTransitionMs": 2000,
+    "graphState": "linear",
+    "action": "fade-in",
+    "duration": 0
+  },
+  {
+    "id": "step-2-linear",
+    "title": "The Linear View",
+    "narration": "Here is the simplified pipeline. Brief flows to Creation, Creation flows to Review, Review to Publish, and Publish to Measure. Clean. Sequential. Easy to understand.",
+    "cameraPosition": { "x": 0, "y": 80, "z": 500 },
+    "cameraLookAt": { "x": 0, "y": 0, "z": 0 },
+    "cameraTransitionMs": 2500,
+    "graphState": "linear",
+    "action": "show-linear",
+    "duration": 0
+  },
+  {
+    "id": "step-3-agents",
+    "title": "Where AI Agents Fit",
+    "narration": "AI agents accelerate specific phases. A Research Agent powers the Brief phase. A Content Writer and SEO Optimizer handle Creation. A Performance Analyst drives Measurement. But not every phase needs an agent.",
+    "cameraPosition": { "x": 0, "y": 40, "z": 350 },
+    "cameraLookAt": { "x": 0, "y": 0, "z": 0 },
+    "cameraTransitionMs": 1500,
+    "graphState": "linear",
+    "action": "show-agents",
+    "duration": 0
+  },
+  {
+    "id": "step-4-reality",
+    "title": "The Real Complexity",
+    "narration": "In practice, content production is not linear. Drafts loop back for revision. Performance data feeds into new briefs. Brand reviews can escalate to stakeholder sign-off. The process is a graph, not a pipeline.",
+    "cameraPosition": { "x": 200, "y": 200, "z": 700 },
+    "cameraLookAt": { "x": 0, "y": 0, "z": 0 },
+    "cameraTransitionMs": 3500,
+    "graphState": "full-graph",
+    "action": "explode",
+    "duration": 0
+  },
+  {
+    "id": "step-5-gates",
+    "title": "Human-in-the-Loop Gates",
+    "narration": "Gates are the critical checkpoints. Brief Approval, Quality Check, Brand Review, Stakeholder Sign-off, and Performance Review. Each gate has criteria for auto-pass and clear escalation triggers. This is where human judgment stays in the loop.",
+    "cameraPosition": { "x": -200, "y": 120, "z": 350 },
+    "cameraLookAt": null,
+    "cameraTransitionMs": 2500,
+    "graphState": "full-graph",
+    "action": "highlight-knowledge-layer",
+    "filterNodeTypes": ["gate"],
+    "highlightLinkTypes": ["reviews", "escalates-to", "returns-to"],
+    "duration": 0
+  },
+  {
+    "id": "step-6-inputs",
+    "title": "What Agents Are Grounded In",
+    "narration": "Agents do not operate in a vacuum. They draw on the Brand Voice Guide, Content Strategy, Audience Personas, Analytics Data, and SEO Tools. This reference layer is what makes agent output consistent and contextualized rather than generic.",
+    "cameraPosition": { "x": 150, "y": -60, "z": 300 },
+    "cameraLookAt": null,
+    "cameraTransitionMs": 2500,
+    "graphState": "full-graph",
+    "action": "show-agents-grounded",
+    "filterNodeTypes": ["agent", "input"],
+    "highlightLinkTypes": ["uses"],
+    "duration": 0
+  },
+  {
+    "id": "step-7-escalation",
+    "title": "When Work Escalates",
+    "narration": "When a gate fails, work flows back for revision or escalates to a higher authority. A brand score below threshold sends content back to compliance. Performance failure can trigger a full re-brief. These feedback loops are what makes the system self-correcting.",
+    "cameraPosition": { "x": -120, "y": 180, "z": 300 },
+    "cameraLookAt": null,
+    "cameraTransitionMs": 2500,
+    "graphState": "full-graph",
+    "action": "show-human-roles",
+    "filterNodeTypes": ["gate", "step"],
+    "highlightLinkTypes": ["returns-to", "escalates-to"],
+    "duration": 0
+  },
+  {
+    "id": "step-8-explore",
+    "title": "Explore the Full Picture",
+    "narration": "This is the complete content production graph. Steps, gates, agents, and inputs, all connected by clear data flows and escalation paths. Click any node to explore its connections. This is what it means to design AI into a workflow, not bolt it on.",
+    "cameraPosition": { "x": 0, "y": 50, "z": 550 },
+    "cameraLookAt": { "x": 0, "y": 0, "z": 0 },
+    "cameraTransitionMs": 3000,
+    "graphState": "full-graph",
+    "action": "full-reveal",
+    "duration": 0
+  }
+]

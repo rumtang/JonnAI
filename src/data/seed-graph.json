@@ -1,0 +1,451 @@
+{
+  "nodes": [
+    {
+      "id": "receive-request",
+      "type": "step",
+      "label": "Receive Request",
+      "description": "Intake client or stakeholder content request and define initial scope",
+      "group": "Brief",
+      "val": 5,
+      "meta": {
+        "phase": "Brief",
+        "owner": "human",
+        "estimatedTime": "30 min",
+        "inputs": ["Client brief", "Campaign objectives"],
+        "outputs": ["Scoped request"]
+      }
+    },
+    {
+      "id": "research-insights",
+      "type": "step",
+      "label": "Research & Insights",
+      "description": "Gather audience data, competitive intel, and trending topics to inform the brief",
+      "group": "Brief",
+      "val": 5,
+      "meta": {
+        "phase": "Brief",
+        "owner": "agent",
+        "agentName": "Research Agent",
+        "estimatedTime": "15 min",
+        "inputs": ["Audience Personas", "Analytics Data", "Content Strategy"],
+        "outputs": ["Research summary", "Keyword opportunities", "Competitive gaps"]
+      }
+    },
+    {
+      "id": "write-brief",
+      "type": "step",
+      "label": "Write Brief",
+      "description": "Create a structured content brief with objectives, audience, key messages, and format",
+      "group": "Brief",
+      "val": 5,
+      "meta": {
+        "phase": "Brief",
+        "owner": "shared",
+        "agentName": "Content Writer",
+        "estimatedTime": "20 min",
+        "inputs": ["Research summary", "Content Strategy", "Brand Voice Guide"],
+        "outputs": ["Content brief"]
+      }
+    },
+    {
+      "id": "draft-content",
+      "type": "step",
+      "label": "Draft Content",
+      "description": "Write the first draft based on the approved brief and brand voice guidelines",
+      "group": "Creation",
+      "val": 6,
+      "meta": {
+        "phase": "Creation",
+        "owner": "agent",
+        "agentName": "Content Writer",
+        "estimatedTime": "15 min",
+        "inputs": ["Approved brief", "Brand Voice Guide", "Audience Personas"],
+        "outputs": ["Draft article"]
+      }
+    },
+    {
+      "id": "seo-optimization",
+      "type": "step",
+      "label": "SEO Optimization",
+      "description": "Optimize draft for search: keywords, meta descriptions, headings, internal links",
+      "group": "Creation",
+      "val": 5,
+      "meta": {
+        "phase": "Creation",
+        "owner": "agent",
+        "agentName": "SEO Optimizer",
+        "estimatedTime": "10 min",
+        "inputs": ["Draft article", "SEO Tools", "Analytics Data"],
+        "outputs": ["SEO-optimized draft"]
+      }
+    },
+    {
+      "id": "brand-compliance",
+      "type": "step",
+      "label": "Check Brand Compliance",
+      "description": "Validate content against brand guidelines for tone, terminology, and messaging",
+      "group": "Review",
+      "val": 5,
+      "meta": {
+        "phase": "Review",
+        "owner": "agent",
+        "agentName": "Content Writer",
+        "estimatedTime": "5 min",
+        "inputs": ["SEO-optimized draft", "Brand Voice Guide"],
+        "outputs": ["Compliance report", "Flagged issues"]
+      }
+    },
+    {
+      "id": "final-edit",
+      "type": "step",
+      "label": "Final Edit",
+      "description": "Human editor refines content for narrative flow, nuance, and final polish",
+      "group": "Review",
+      "val": 5,
+      "meta": {
+        "phase": "Review",
+        "owner": "human",
+        "estimatedTime": "30 min",
+        "inputs": ["Brand-approved draft", "Compliance report"],
+        "outputs": ["Final content"]
+      }
+    },
+    {
+      "id": "schedule-publish",
+      "type": "step",
+      "label": "Schedule & Publish",
+      "description": "Set publication date, configure CMS, and push content live",
+      "group": "Publish",
+      "val": 5,
+      "meta": {
+        "phase": "Publish",
+        "owner": "shared",
+        "estimatedTime": "10 min",
+        "inputs": ["Final content", "Content calendar"],
+        "outputs": ["Published content"]
+      }
+    },
+    {
+      "id": "distribute",
+      "type": "step",
+      "label": "Distribute Content",
+      "description": "Push content across channels: social, email, syndication, paid amplification",
+      "group": "Publish",
+      "val": 5,
+      "meta": {
+        "phase": "Publish",
+        "owner": "shared",
+        "estimatedTime": "15 min",
+        "inputs": ["Published content", "Channel strategy"],
+        "outputs": ["Distribution confirmations"]
+      }
+    },
+    {
+      "id": "track-performance",
+      "type": "step",
+      "label": "Track Performance",
+      "description": "Monitor engagement, traffic, conversions, and social signals in real time",
+      "group": "Measure",
+      "val": 5,
+      "meta": {
+        "phase": "Measure",
+        "owner": "agent",
+        "agentName": "Performance Analyst",
+        "estimatedTime": "Continuous",
+        "inputs": ["Analytics Data", "Published content"],
+        "outputs": ["Performance metrics"]
+      }
+    },
+    {
+      "id": "generate-report",
+      "type": "step",
+      "label": "Generate Report",
+      "description": "Compile performance data into an actionable report with recommendations",
+      "group": "Measure",
+      "val": 5,
+      "meta": {
+        "phase": "Measure",
+        "owner": "agent",
+        "agentName": "Performance Analyst",
+        "estimatedTime": "10 min",
+        "inputs": ["Performance metrics", "Analytics Data", "Content Strategy"],
+        "outputs": ["Performance report"]
+      }
+    },
+    {
+      "id": "optimize",
+      "type": "step",
+      "label": "Optimize Content",
+      "description": "Update headlines, CTAs, distribution mix, or repurpose based on performance data",
+      "group": "Measure",
+      "val": 5,
+      "meta": {
+        "phase": "Measure",
+        "owner": "shared",
+        "estimatedTime": "20 min",
+        "inputs": ["Performance report", "Original content"],
+        "outputs": ["Optimized content", "Iteration brief"]
+      }
+    },
+
+    {
+      "id": "brief-approval",
+      "type": "gate",
+      "label": "Brief Approval",
+      "description": "Content lead reviews the brief for clarity, feasibility, and strategic alignment",
+      "group": "Brief",
+      "val": 6,
+      "meta": {
+        "gateType": "approval",
+        "reviewer": "Content Director",
+        "autoPassCriteria": "All required fields complete and strategy score above 80%",
+        "escalationTrigger": "Brief requires new audience segment or unplanned budget",
+        "decisions": ["Approve", "Revise", "Escalate"]
+      }
+    },
+    {
+      "id": "quality-check",
+      "type": "gate",
+      "label": "Quality Check",
+      "description": "Automated quality gate checking readability, factual accuracy, and SEO score",
+      "group": "Creation",
+      "val": 6,
+      "meta": {
+        "gateType": "quality-check",
+        "reviewer": "Content Writer Agent + Content Lead",
+        "autoPassCriteria": "Readability score > 70, SEO score > 85, no factual flags",
+        "escalationTrigger": "Factual claim flagged or readability below 50",
+        "decisions": ["Pass", "Revise", "Escalate to Editor"]
+      }
+    },
+    {
+      "id": "brand-review",
+      "type": "gate",
+      "label": "Brand Review",
+      "description": "Check content against brand guidelines; agent flags issues, human approves exceptions",
+      "group": "Review",
+      "val": 7,
+      "meta": {
+        "gateType": "quality-check",
+        "reviewer": "Brand Manager",
+        "autoPassCriteria": "Brand compliance score above 90%",
+        "escalationTrigger": "Brand score below 70% or new tone requested",
+        "decisions": ["Approve", "Revise", "Escalate"]
+      }
+    },
+    {
+      "id": "stakeholder-signoff",
+      "type": "gate",
+      "label": "Stakeholder Sign-off",
+      "description": "Final human approval before publication, checking strategic alignment and legal compliance",
+      "group": "Publish",
+      "val": 7,
+      "meta": {
+        "gateType": "approval",
+        "reviewer": "VP Marketing or Client",
+        "escalationTrigger": "Sensitive topic, legal risk, or executive-visibility content",
+        "decisions": ["Approve", "Revise", "Hold", "Escalate"]
+      }
+    },
+    {
+      "id": "performance-review",
+      "type": "gate",
+      "label": "Performance Review",
+      "description": "Evaluate content performance against KPIs; decide whether to optimize, iterate, or archive",
+      "group": "Measure",
+      "val": 6,
+      "meta": {
+        "gateType": "quality-check",
+        "reviewer": "Analytics Lead",
+        "autoPassCriteria": "Meets 80% of target KPIs within first 7 days",
+        "escalationTrigger": "Performance below 50% of target or negative sentiment detected",
+        "decisions": ["Archive", "Optimize", "Iterate", "Escalate"]
+      }
+    },
+
+    {
+      "id": "research-agent",
+      "type": "agent",
+      "label": "Research Agent",
+      "description": "Gathers audience data, competitive intelligence, and trending topics to inform briefs",
+      "group": "AI Agents",
+      "val": 5,
+      "meta": {
+        "capability": "Synthesizes market research, audience insights, and competitive data into actionable briefs",
+        "autonomy": "supervised",
+        "tools": ["Audience analytics", "Competitive tracker", "Trend monitor", "Keyword explorer"]
+      }
+    },
+    {
+      "id": "writer-agent",
+      "type": "agent",
+      "label": "Content Writer",
+      "description": "Drafts blog posts, social copy, and email content based on briefs and brand voice",
+      "group": "AI Agents",
+      "val": 6,
+      "meta": {
+        "capability": "Generates marketing content from structured briefs while maintaining brand voice consistency",
+        "autonomy": "supervised",
+        "tools": ["Brand voice checker", "Readability analyzer", "Plagiarism detector", "Tone calibrator"]
+      }
+    },
+    {
+      "id": "seo-agent",
+      "type": "agent",
+      "label": "SEO Optimizer",
+      "description": "Optimizes content for search with keyword placement, meta tags, and structure improvements",
+      "group": "AI Agents",
+      "val": 5,
+      "meta": {
+        "capability": "Applies SEO best practices to maximize organic visibility without compromising readability",
+        "autonomy": "supervised",
+        "tools": ["SEO scorer", "Keyword density analyzer", "SERP simulator", "Internal link mapper"]
+      }
+    },
+    {
+      "id": "performance-agent",
+      "type": "agent",
+      "label": "Performance Analyst",
+      "description": "Tracks content performance metrics and generates actionable optimization reports",
+      "group": "AI Agents",
+      "val": 5,
+      "meta": {
+        "capability": "Monitors content KPIs in real time and produces data-driven optimization recommendations",
+        "autonomy": "supervised",
+        "tools": ["Analytics dashboard", "Attribution modeler", "A/B test analyzer", "Sentiment tracker"]
+      }
+    },
+
+    {
+      "id": "brand-guide",
+      "type": "input",
+      "label": "Brand Voice Guide",
+      "description": "Rules for tone, style, terminology, and messaging across all content",
+      "group": "Reference",
+      "val": 4,
+      "meta": {
+        "inputType": "reference",
+        "source": "Brand team — internal documentation",
+        "refreshRate": "Quarterly"
+      }
+    },
+    {
+      "id": "content-strategy",
+      "type": "input",
+      "label": "Content Strategy",
+      "description": "Editorial calendar, topic pillars, audience priorities, and channel mix",
+      "group": "Reference",
+      "val": 4,
+      "meta": {
+        "inputType": "reference",
+        "source": "Content Director — strategic planning",
+        "refreshRate": "Monthly"
+      }
+    },
+    {
+      "id": "analytics-data",
+      "type": "input",
+      "label": "Analytics Data",
+      "description": "Traffic, engagement, conversion, and attribution data from GA4, HubSpot, and social APIs",
+      "group": "Data",
+      "val": 4,
+      "meta": {
+        "inputType": "data",
+        "source": "GA4, HubSpot, Social APIs",
+        "refreshRate": "Real-time"
+      }
+    },
+    {
+      "id": "audience-personas",
+      "type": "input",
+      "label": "Audience Personas",
+      "description": "Detailed profiles of target audience segments with needs, behaviors, and preferences",
+      "group": "Reference",
+      "val": 4,
+      "meta": {
+        "inputType": "reference",
+        "source": "Product Marketing — customer research",
+        "refreshRate": "Quarterly"
+      }
+    },
+    {
+      "id": "seo-tools",
+      "type": "input",
+      "label": "SEO Tools",
+      "description": "Keyword data, SERP analysis, backlink profiles, and technical audit tools",
+      "group": "Tools",
+      "val": 4,
+      "meta": {
+        "inputType": "tool",
+        "source": "SEMrush, Ahrefs, Google Search Console",
+        "refreshRate": "Daily"
+      }
+    }
+  ],
+
+  "links": [
+    { "source": "receive-request",    "target": "research-insights",   "type": "flows-to" },
+    { "source": "research-insights",  "target": "write-brief",         "type": "flows-to" },
+    { "source": "write-brief",        "target": "brief-approval",      "type": "flows-to" },
+    { "source": "brief-approval",     "target": "draft-content",       "type": "flows-to" },
+    { "source": "draft-content",      "target": "seo-optimization",    "type": "flows-to" },
+    { "source": "seo-optimization",   "target": "quality-check",       "type": "flows-to" },
+    { "source": "quality-check",      "target": "brand-compliance",    "type": "flows-to" },
+    { "source": "brand-compliance",   "target": "brand-review",        "type": "flows-to" },
+    { "source": "brand-review",       "target": "final-edit",          "type": "flows-to" },
+    { "source": "final-edit",         "target": "stakeholder-signoff", "type": "flows-to" },
+    { "source": "stakeholder-signoff","target": "schedule-publish",    "type": "flows-to" },
+    { "source": "schedule-publish",   "target": "distribute",          "type": "flows-to" },
+    { "source": "distribute",         "target": "track-performance",   "type": "flows-to" },
+    { "source": "track-performance",  "target": "generate-report",     "type": "flows-to" },
+    { "source": "generate-report",    "target": "performance-review",  "type": "flows-to" },
+    { "source": "performance-review", "target": "optimize",            "type": "flows-to" },
+    { "source": "optimize",           "target": "draft-content",       "type": "flows-to" },
+
+    { "source": "brief-approval",      "target": "write-brief",         "type": "reviews" },
+    { "source": "quality-check",       "target": "seo-optimization",    "type": "reviews" },
+    { "source": "brand-review",        "target": "brand-compliance",    "type": "reviews" },
+    { "source": "stakeholder-signoff", "target": "final-edit",          "type": "reviews" },
+    { "source": "performance-review",  "target": "generate-report",     "type": "reviews" },
+
+    { "source": "brand-review",        "target": "stakeholder-signoff", "type": "escalates-to" },
+    { "source": "performance-review",  "target": "receive-request",     "type": "escalates-to" },
+    { "source": "quality-check",       "target": "brand-review",        "type": "escalates-to" },
+
+    { "source": "brief-approval",      "target": "write-brief",        "type": "returns-to" },
+    { "source": "quality-check",       "target": "draft-content",      "type": "returns-to" },
+    { "source": "brand-review",        "target": "brand-compliance",   "type": "returns-to" },
+    { "source": "stakeholder-signoff", "target": "final-edit",         "type": "returns-to" },
+    { "source": "performance-review",  "target": "optimize",           "type": "returns-to" },
+
+    { "source": "research-insights",  "target": "analytics-data",      "type": "uses" },
+    { "source": "research-insights",  "target": "audience-personas",   "type": "uses" },
+    { "source": "research-insights",  "target": "content-strategy",    "type": "uses" },
+    { "source": "write-brief",        "target": "content-strategy",    "type": "uses" },
+    { "source": "write-brief",        "target": "brand-guide",         "type": "uses" },
+    { "source": "draft-content",      "target": "brand-guide",         "type": "uses" },
+    { "source": "draft-content",      "target": "audience-personas",   "type": "uses" },
+    { "source": "seo-optimization",   "target": "seo-tools",           "type": "uses" },
+    { "source": "seo-optimization",   "target": "analytics-data",      "type": "uses" },
+    { "source": "brand-compliance",   "target": "brand-guide",         "type": "uses" },
+    { "source": "track-performance",  "target": "analytics-data",      "type": "uses" },
+    { "source": "generate-report",    "target": "analytics-data",      "type": "uses" },
+    { "source": "generate-report",    "target": "content-strategy",    "type": "uses" },
+
+    { "source": "research-agent",     "target": "analytics-data",      "type": "uses" },
+    { "source": "research-agent",     "target": "audience-personas",   "type": "uses" },
+    { "source": "writer-agent",       "target": "brand-guide",         "type": "uses" },
+    { "source": "writer-agent",       "target": "content-strategy",    "type": "uses" },
+    { "source": "seo-agent",          "target": "seo-tools",           "type": "uses" },
+    { "source": "seo-agent",          "target": "analytics-data",      "type": "uses" },
+    { "source": "performance-agent",  "target": "analytics-data",      "type": "uses" },
+
+    { "source": "research-agent",     "target": "research-insights",   "type": "performs" },
+    { "source": "writer-agent",       "target": "write-brief",         "type": "performs" },
+    { "source": "writer-agent",       "target": "draft-content",       "type": "performs" },
+    { "source": "writer-agent",       "target": "brand-compliance",    "type": "performs" },
+    { "source": "seo-agent",          "target": "seo-optimization",    "type": "performs" },
+    { "source": "performance-agent",  "target": "track-performance",   "type": "performs" },
+    { "source": "performance-agent",  "target": "generate-report",     "type": "performs" }
+  ]
+}
