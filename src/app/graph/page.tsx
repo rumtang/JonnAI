@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import GraphScene from '@/components/graph/GraphScene';
 import NodeDetailPanel from '@/components/graph/NodeDetailPanel';
 import GraphControls from '@/components/graph/GraphControls';
@@ -11,10 +11,14 @@ import PresentationController from '@/components/presentation/PresentationContro
 import ModeToggle from '@/components/graph/ModeToggle';
 import CampaignPanel from '@/components/graph/CampaignMode/CampaignPanel';
 import CampaignSummary from '@/components/graph/CampaignMode/CampaignSummary';
+import RoleInsightPanel from '@/components/graph/RoleMode/RoleInsightPanel';
+import RolePicker from '@/components/graph/RoleMode/RolePicker';
+import RoleSelectorButton from '@/components/graph/RoleMode/RoleSelectorButton';
 
 import { useGraphStore } from '@/lib/store/graph-store';
 import { usePresentationStore } from '@/lib/store/presentation-store';
 import { useCampaignStore } from '@/lib/store/campaign-store';
+import { useRoleInsightStore } from '@/lib/store/role-insight-store';
 import { navigateToNode } from '@/lib/utils/camera-navigation';
 import seedGraphData from '@/data/seed-graph.json';
 import linearProcessData from '@/data/linear-process.json';
@@ -54,8 +58,11 @@ export default function GraphPage() {
   const setFullGraphData = useGraphStore(s => s.setFullGraphData);
   const setLinearGraphData = useGraphStore(s => s.setLinearGraphData);
   const selectNode = useGraphStore(s => s.selectNode);
+  const selectedNode = useGraphStore(s => s.selectedNode);
   const { setSteps, mode, setMode } = usePresentationStore();
   const campaignActive = useCampaignStore(s => s.isActive);
+  const roleActive = useRoleInsightStore(s => s.isActive);
+  const [rolePickerOpen, setRolePickerOpen] = useState(false);
   const currentNodeId = useCampaignStore(s => s.currentNodeId);
   const startCampaign = useCampaignStore(s => s.startCampaign);
 
@@ -107,6 +114,14 @@ export default function GraphPage() {
     }
   }, [campaignActive, currentNodeId, selectNode]);
 
+  // Deactivate role when a node is clicked (so NodeDetailPanel can show)
+  useEffect(() => {
+    if (selectedNode && roleActive) {
+      // clearRole() only resets role store — selectNode already set its own highlights
+      useRoleInsightStore.getState().clearRole();
+    }
+  }, [selectedNode, roleActive]);
+
   // Floating "Run a Campaign" CTA for explore mode
   const handleStartCampaign = () => {
     setMode('campaign');
@@ -139,25 +154,36 @@ export default function GraphPage() {
           <SearchBar />
           <LegendPanel />
           <ZoomControls />
-          <NodeDetailPanel />
 
-          {/* Floating CTA to start a campaign */}
-          <button
-            onClick={handleStartCampaign}
-            className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50
-                       px-6 py-3 rounded-2xl glass-panel
-                       hover:shadow-lg hover:shadow-[#4CAF50]/10
-                       transition-all duration-300 group"
-          >
-            <div className="text-center">
-              <p className="text-sm font-semibold text-[#4CAF50] group-hover:text-[#66BB6A] transition-colors">
-                {'\u25B6'} Run a Campaign
-              </p>
-              <p className="text-xs text-muted-foreground mt-0.5">
-                Walk through the workflow step by step
-              </p>
-            </div>
-          </button>
+          {/* Show RoleInsightPanel when role is active, NodeDetailPanel otherwise */}
+          {roleActive ? (
+            <RoleInsightPanel onChangeRole={() => setRolePickerOpen(true)} />
+          ) : (
+            <NodeDetailPanel />
+          )}
+
+          {/* Role picker modal */}
+          <RolePicker open={rolePickerOpen} onClose={() => setRolePickerOpen(false)} />
+
+          {/* Bottom CTAs — Campaign + Role */}
+          <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3">
+            <RoleSelectorButton onOpenPicker={() => setRolePickerOpen(true)} />
+            <button
+              onClick={handleStartCampaign}
+              className="px-6 py-3 rounded-2xl glass-panel
+                         hover:shadow-lg hover:shadow-[#4CAF50]/10
+                         transition-all duration-300 group"
+            >
+              <div className="text-center">
+                <p className="text-sm font-semibold text-[#4CAF50] group-hover:text-[#66BB6A] transition-colors">
+                  {'\u25B6'} Run a Campaign
+                </p>
+                <p className="text-xs text-muted-foreground mt-0.5">
+                  Walk through the workflow step by step
+                </p>
+              </div>
+            </button>
+          </div>
         </>
       )}
     </>

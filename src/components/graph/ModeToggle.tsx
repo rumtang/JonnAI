@@ -3,6 +3,7 @@
 import { usePresentationStore } from '@/lib/store/presentation-store';
 import { useGraphStore } from '@/lib/store/graph-store';
 import { useCampaignStore } from '@/lib/store/campaign-store';
+import { useRoleInsightStore } from '@/lib/store/role-insight-store';
 import { motion } from 'framer-motion';
 
 type Mode = 'guided' | 'explore' | 'campaign';
@@ -18,6 +19,7 @@ export default function ModeToggle() {
     clearHighlights();
     resetFilters();
     clearNavigation();
+    useRoleInsightStore.getState().clearRole();
 
     if (newMode === 'guided') {
       endCampaign();
