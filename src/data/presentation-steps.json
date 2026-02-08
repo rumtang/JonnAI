@@ -25,7 +25,7 @@
     "cameraPosition": {
       "x": 0,
       "y": 0,
-      "z": 800
+      "z": 450
     },
     "cameraLookAt": {
       "x": 0,
@@ -42,13 +42,13 @@
     "title": "The Teams Behind Each Phase",
     "narration": "Zoom into each phase and you find people. The Content Director owns the brief. Editors and brand managers own review. Marketing Ops runs distribution. Analytics closes the loop. Each phase has a team, and each team has a process. This is the organizational view — who does what, in what order.",
     "cameraPosition": {
-      "x": 0,
-      "y": 0,
-      "z": 800
+      "x": -60,
+      "y": 30,
+      "z": 380
     },
     "cameraLookAt": {
-      "x": 0,
-      "y": 0,
+      "x": -60,
+      "y": 30,
       "z": 0
     },
     "cameraTransitionMs": 2000,
@@ -67,13 +67,13 @@
     "title": "The Work Inside Each Phase",
     "narration": "Each phase contains multiple steps. Brief alone has campaign planning, journey mapping, request intake, scoring, research, social listening, and the brief itself. Creation includes drafting, SEO, visual assets, A/B variants, paid creative, and sales enablement. This is the operational reality — more complex than the five-stage slide, but still a left-to-right sequence.",
     "cameraPosition": {
-      "x": 0,
-      "y": 0,
-      "z": 800
+      "x": 80,
+      "y": -20,
+      "z": 480
     },
     "cameraLookAt": {
-      "x": 0,
-      "y": 0,
+      "x": 80,
+      "y": -20,
       "z": 0
     },
     "cameraTransitionMs": 2000,
@@ -93,12 +93,12 @@
     "narration": "AI agents plug into specific steps. A Research Agent handles insights. A Content Writer drafts. An SEO Optimizer polishes for search. A Performance Analyst measures results. A Legal Screening Agent pre-checks compliance. A Localization Agent adapts for markets. A Repurposing Agent creates derivatives. A Personalization Agent maps variants to segments. A Privacy Agent validates consent. Eleven agents, each mapped to specific tasks. This is where most organizations stop — bolting AI onto existing human workflows to make each step a little faster.",
     "cameraPosition": {
       "x": 0,
-      "y": 0,
-      "z": 800
+      "y": -80,
+      "z": 520
     },
     "cameraLookAt": {
       "x": 0,
-      "y": 0,
+      "y": -80,
       "z": 0
     },
     "cameraTransitionMs": 2000,
@@ -119,12 +119,12 @@
     "narration": "Agents do not operate in a vacuum. Every agent draws on reference inputs: the Brand Voice Guide, Content Strategy, Audience Personas, Legal Guidelines, CDP profiles, Channel Benchmarks. These inputs are what prevent agent output from being generic. Remove the brand guide and the Content Writer produces commodity copy. Remove the CDP and the Personalization Agent is guessing. The agents are only as good as the context they are given.",
     "cameraPosition": {
       "x": 0,
-      "y": 0,
-      "z": 800
+      "y": -100,
+      "z": 400
     },
     "cameraLookAt": {
       "x": 0,
-      "y": 0,
+      "y": -100,
       "z": 0
     },
     "cameraTransitionMs": 2000,
@@ -146,14 +146,14 @@
     "cameraPosition": {
       "x": 0,
       "y": 0,
-      "z": 800
+      "z": 550
     },
     "cameraLookAt": {
       "x": 0,
       "y": 0,
       "z": 0
     },
-    "cameraTransitionMs": 2000,
+    "cameraTransitionMs": 2500,
     "graphState": "full-graph",
     "action": "explode-to-graph",
     "duration": 0
@@ -164,12 +164,12 @@
     "narration": "Nine gates control the flow. Brief Approval checks strategic alignment. Quality Check validates readability and SEO. Brand Review catches tone drift. Legal Compliance gates regulatory risk. Stakeholder Sign-off is the final authority before publication. Personalization QA validates segment coverage. Localization Quality catches cultural misfires. Performance Review decides what gets optimized. Governance Gate audits live content for decay. Each gate has auto-pass criteria and escalation triggers. When the criteria are met, work flows. When they are not, humans intervene. That is the design — not human-in-the-loop for everything, but human-at-the-gate for what matters.",
     "cameraPosition": {
       "x": 0,
-      "y": 0,
-      "z": 800
+      "y": 50,
+      "z": 420
     },
     "cameraLookAt": {
       "x": 0,
-      "y": 0,
+      "y": 50,
       "z": 0
     },
     "cameraTransitionMs": 2000,
@@ -191,12 +191,12 @@
     "title": "The System That Learns",
     "narration": "The feedback loops are what make this a system, not a conveyor belt. Performance data flows back to campaign planning through executive reporting. Governance findings trigger new content requests. Competitive signals from sentiment monitoring fast-track response briefs. Optimization can restart at content repurposing, competitive response, or a full new request — the path depends on the data. These loops mean the system improves with every cycle. Content that underperforms teaches the system what to do differently. Content that overperforms gets repurposed and amplified. The graph learns.",
     "cameraPosition": {
-      "x": 0,
+      "x": -40,
       "y": 0,
-      "z": 800
+      "z": 480
     },
     "cameraLookAt": {
-      "x": 0,
+      "x": -40,
       "y": 0,
       "z": 0
     },
@@ -220,12 +220,12 @@
     "narration": "Look at the input layer. Twenty inputs — brand guides, legal guidelines, audience personas, CDP profiles, content taxonomy, scoring matrices, orchestration rules, personalization logic, privacy regulations, channel benchmarks. This is not supporting documentation. This is a knowledge graph. Every input is connected to multiple agents and steps. Every relationship is explicit. Every dependency is traceable. This is the semantic layer that makes the entire system possible — and it is the part that most organizations never build.",
     "cameraPosition": {
       "x": 0,
-      "y": 0,
-      "z": 800
+      "y": -60,
+      "z": 400
     },
     "cameraLookAt": {
       "x": 0,
-      "y": 0,
+      "y": -60,
       "z": 0
     },
     "cameraTransitionMs": 2000,
@@ -245,12 +245,12 @@
     "title": "Agents Commoditize. Infrastructure Compounds.",
     "narration": "Here is the strategic insight. The agents are interchangeable. You can swap the Content Writer for a better model next quarter. You can replace the SEO Optimizer with a different tool. Agents are execution components — valuable, but not differentiating. The knowledge graph is what compounds. Every time you refine a persona, every agent that references it gets better. Every time you update a legal guideline, every compliance check becomes more accurate. Every time you add a new orchestration rule, the distribution engine gets smarter. The infrastructure improves the entire system simultaneously. The agents improve one step at a time. That asymmetry is your competitive advantage — and it is what makes this a strategic investment, not a technology experiment.",
     "cameraPosition": {
-      "x": 0,
+      "x": 60,
       "y": 0,
-      "z": 800
+      "z": 500
     },
     "cameraLookAt": {
-      "x": 0,
+      "x": 60,
       "y": 0,
       "z": 0
     },
@@ -274,7 +274,7 @@
     "cameraPosition": {
       "x": 0,
       "y": 0,
-      "z": 800
+      "z": 420
     },
     "cameraLookAt": {
       "x": 0,
@@ -292,12 +292,12 @@
     "narration": "This is not about making each person twenty percent faster at their current job. That is the small thinking. This is about changing what the job is. When agents handle drafting, optimization, compliance screening, translation, variant creation, and performance monitoring — what is left for humans? Strategy. Creative direction. Judgment calls at gates. Relationship decisions with creators and partners. The design of the system itself. The humans in this graph do not do less. They do different work — higher-leverage work that agents cannot replicate because it requires taste, accountability, and strategic context that cannot be reduced to a prompt.",
     "cameraPosition": {
       "x": 0,
-      "y": 0,
-      "z": 800
+      "y": 40,
+      "z": 400
     },
     "cameraLookAt": {
       "x": 0,
-      "y": 0,
+      "y": 40,
       "z": 0
     },
     "cameraTransitionMs": 2000,
@@ -318,12 +318,12 @@
     "title": "Roles That Do Not Exist Yet",
     "narration": "Some of the most important roles in this system do not exist in most marketing organizations today. The Context Engineer maintains the knowledge graph — the taxonomy, scoring matrices, orchestration rules, and semantic relationships that make agents effective. The Privacy Officer designs the consent framework that allows personalization at scale. The Growth Lead designs experimentation strategy rather than producing variants. These roles emerge when you stop thinking about AI as individual productivity tools and start thinking about it as a system that needs architectural governance. They are to agentic marketing what data engineers were to the analytics revolution — the roles that make everything else possible.",
     "cameraPosition": {
-      "x": 0,
+      "x": -40,
       "y": 0,
-      "z": 800
+      "z": 480
     },
     "cameraLookAt": {
-      "x": 0,
+      "x": -40,
       "y": 0,
       "z": 0
     },
@@ -348,7 +348,7 @@
     "cameraPosition": {
       "x": 0,
       "y": 0,
-      "z": 800
+      "z": 420
     },
     "cameraLookAt": {
       "x": 0,
@@ -370,12 +370,12 @@
     "narration": "This graph changes how you think about investment. You are not buying AI tools and hoping for ROI. You are building infrastructure that compounds. Every dollar spent structuring the knowledge graph — refining personas, documenting brand voice, mapping orchestration rules, building the content taxonomy — makes every agent in the system more effective simultaneously. The marginal cost of the next piece of content approaches zero. The marginal value of the next knowledge graph update increases with every agent that uses it. That is not a linear return. That is a platform investment.",
     "cameraPosition": {
       "x": 0,
-      "y": 0,
-      "z": 800
+      "y": -40,
+      "z": 400
     },
     "cameraLookAt": {
       "x": 0,
-      "y": 0,
+      "y": -40,
       "z": 0
     },
     "cameraTransitionMs": 2000,
@@ -397,7 +397,7 @@
     "cameraPosition": {
       "x": 0,
       "y": 0,
-      "z": 800
+      "z": 520
     },
     "cameraLookAt": {
       "x": 0,
@@ -416,7 +416,7 @@
     "cameraPosition": {
       "x": 0,
       "y": 0,
-      "z": 800
+      "z": 500
     },
     "cameraLookAt": {
       "x": 0,

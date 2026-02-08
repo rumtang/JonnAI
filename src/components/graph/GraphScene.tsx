@@ -13,6 +13,8 @@ import { setGraphRef } from '@/lib/graph/graph-ref';
 import { GraphNode, GraphLink, StepMeta } from '@/lib/graph/types';
 import * as THREE from 'three';
 import SpriteText from 'three-spritetext';
+// @ts-expect-error -- d3-force-3d has no type declarations
+import { forceCenter } from 'd3-force-3d';
 
 // Memoized caches to avoid re-creating GPU resources per render
 const colorCache = new Map<string, THREE.Color>();
@@ -52,6 +54,7 @@ export default function GraphScene() {
     visibleLinkTypes,
     searchQuery,
     flashingLinkKey,
+    highlightedLinkTypes,
   } = useGraphStore();
 
   const { mode } = usePresentationStore();
@@ -84,7 +87,7 @@ export default function GraphScene() {
     return getNeighborIds(hoveredNode.id, graphData.links);
   }, [hoveredNode, graphData.links]);
 
-  const hasHighlights = highlightedNodeIds.size > 0 || hoveredNode !== null;
+  const hasHighlights = highlightedNodeIds.size > 0 || hoveredNode !== null || highlightedLinkTypes.size > 0;
 
   // Create geometries once
   const geometries = useMemo(() => ({
@@ -104,6 +107,12 @@ export default function GraphScene() {
 
     const fg = fgRef.current;
     setGraphRef(fg);
+
+    // Add a center force so nodes stay anchored near the origin
+    // Without this, the graph drifts off-screen over time in explore mode
+    fg.d3Force('center', forceCenter(0, 0, 0).strength(0.05));
+    fg.d3Force('charge')?.strength(-80);
+
     const lights: THREE.Light[] = [];
 
     const timer = setTimeout(() => {
@@ -371,12 +380,23 @@ export default function GraphScene() {
       return 'rgba(160,150,140,0.15)';
     }
 
+    // Link type highlighting (from presentation actions)
+    if (highlightedLinkTypes.size > 0) {
+      if (highlightedLinkTypes.has(link.type)) return baseColor;
+      // If only link types are highlighted (no node highlights), dim non-matching links
+      if (highlightedNodeIds.size === 0) return 'rgba(160,150,140,0.15)';
+    }
+
     if (highlightedNodeIds.has(sourceId) || highlightedNodeIds.has(targetId)) {
+      // If link types are also active, only show matching link types for highlighted nodes
+      if (highlightedLinkTypes.size > 0 && !highlightedLinkTypes.has(link.type)) {
+        return 'rgba(160,150,140,0.15)';
+      }
       return baseColor;
     }
 
     return 'rgba(160,150,140,0.15)';
-  }, [hasHighlights, hoveredNode, neighborSet, highlightedNodeIds, flashingLinkKey, campaignActive, campaignVisitedSet, campaignNeighborSet]);
+  }, [hasHighlights, hoveredNode, neighborSet, highlightedNodeIds, highlightedLinkTypes, flashingLinkKey, campaignActive, campaignVisitedSet, campaignNeighborSet]);
 
   // Link width accessor
   const linkWidth = useCallback((link: GraphLink) => {
@@ -403,8 +423,13 @@ export default function GraphScene() {
       return base * 2.5;
     }
 
+    // Widen highlighted link types (presentation mode)
+    if (highlightedLinkTypes.size > 0 && highlightedLinkTypes.has(link.type)) {
+      return base * 1.8;
+    }
+
     return base * 0.3;
-  }, [hasHighlights, hoveredNode, neighborSet, flashingLinkKey]);
+  }, [hasHighlights, hoveredNode, neighborSet, highlightedLinkTypes, flashingLinkKey]);
 
   // Link particles
   const linkParticles = useCallback((link: GraphLink) => {
@@ -440,8 +465,8 @@ export default function GraphScene() {
       onNodeClick={handleNodeClick as any}
       onNodeHover={handleNodeHover as any}
       onBackgroundClick={handleBackgroundClick}
-      d3VelocityDecay={0.3}
-      d3AlphaDecay={0.02}
+      d3VelocityDecay={0.5}
+      d3AlphaDecay={0.03}
       warmupTicks={100}
       cooldownTicks={300}
       enableNodeDrag={mode === 'explore' && !campaignActive}

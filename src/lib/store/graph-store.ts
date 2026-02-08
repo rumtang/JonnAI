@@ -26,6 +26,7 @@ interface GraphState {
   hoveredNode: GraphNode | null;
   highlightedNodeIds: Set<string>;
   highlightedLinkIndices: Set<number>;
+  highlightedLinkTypes: Set<LinkType>;
 
   // Navigation history (breadcrumb trail for connection navigation)
   navigationHistory: GraphNode[];
@@ -78,6 +79,7 @@ export const useGraphStore = create<GraphState>((set, get) => ({
   hoveredNode: null,
   highlightedNodeIds: new Set(),
   highlightedLinkIndices: new Set(),
+  highlightedLinkTypes: new Set(),
   navigationHistory: [],
   flashingLinkKey: null,
   visibleNodeTypes: new Set(ALL_NODE_TYPES),
@@ -116,6 +118,7 @@ export const useGraphStore = create<GraphState>((set, get) => ({
   clearHighlights: () => set({
     highlightedNodeIds: new Set(),
     highlightedLinkIndices: new Set(),
+    highlightedLinkTypes: new Set(),
     hoveredNode: null,
   }),
 
@@ -141,6 +144,7 @@ export const useGraphStore = create<GraphState>((set, get) => ({
     searchQuery: '',
     highlightedNodeIds: new Set(),
     highlightedLinkIndices: new Set(),
+    highlightedLinkTypes: new Set(),
   }),
 
   loadLinearView: () => {
@@ -184,7 +188,7 @@ export const useGraphStore = create<GraphState>((set, get) => ({
     state.graphData.links.forEach((link, i) => {
       if (link.type === linkType) indices.add(i);
     });
-    set({ highlightedLinkIndices: indices });
+    set({ highlightedLinkIndices: indices, highlightedLinkTypes: new Set([linkType]) });
   },
 
   // Highlight links matching any of the given types
@@ -194,7 +198,7 @@ export const useGraphStore = create<GraphState>((set, get) => ({
     state.graphData.links.forEach((link, i) => {
       if (linkTypes.includes(link.type)) indices.add(i);
     });
-    set({ highlightedLinkIndices: indices });
+    set({ highlightedLinkIndices: indices, highlightedLinkTypes: new Set(linkTypes) });
   },
 
   // Navigation history — breadcrumb trail for connection clicks
