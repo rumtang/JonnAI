@@ -89,6 +89,7 @@ export default function PresentationController() {
   } = useGraphStore();
 
   const currentStep = steps[currentStepIndex];
+  const isTitleSlide = currentStep?.action === 'show-title-slide';
 
   const exitToExplore = useCallback(() => {
     clearHighlights();
@@ -115,6 +116,14 @@ export default function PresentationController() {
     if (mode !== 'guided') return;
 
     switch (action) {
+      case 'show-title-slide': {
+        // Pre-load the linear graph behind the overlay so it's ready on transition
+        if (linearGraphData) {
+          setGraphData({ ...linearGraphData });
+        }
+        break;
+      }
+
       case 'show-linear': {
         if (linearGraphData) {
           setGraphData({ ...linearGraphData });
@@ -291,30 +300,130 @@ export default function PresentationController() {
 
   return (
     <>
-      {/* Narration Card */}
-      <motion.div
-        initial={{ opacity: 0, y: 40 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="fixed bottom-24 left-1/2 -translate-x-1/2 z-50 w-full max-w-2xl px-4"
-      >
-        <AnimatePresence mode="wait">
+      {/* Title Slide Overlay OR Narration Card */}
+      <AnimatePresence mode="wait">
+        {isTitleSlide ? (
           <motion.div
-            key={currentStep.id}
-            initial={{ opacity: 0, y: 20, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -20, scale: 0.95 }}
-            transition={{ duration: 0.4 }}
-            className="glass-panel rounded-2xl p-6 shadow-2xl"
+            key="title-slide"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.6 }}
+            className="fixed inset-0 z-[60] flex flex-col items-center justify-center"
           >
-            <h2 className="text-lg font-semibold text-primary mb-2 font-[family-name:var(--font-playfair)]">
-              {currentStep.title}
-            </h2>
-            <p className="text-muted-foreground text-sm leading-relaxed">
-              {currentStep.narration}
-            </p>
+            {/* Opaque background to fully hide the 3D graph */}
+            <div className="absolute inset-0 bg-background/95 backdrop-blur-md" />
+
+            {/* Content */}
+            <div className="relative z-10 text-center max-w-4xl px-8">
+              {/* Pill badge */}
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+                className="mb-8"
+              >
+                <span className="px-4 py-1.5 rounded-full text-xs font-medium glass-panel text-primary">
+                  Guided Presentation
+                </span>
+              </motion.div>
+
+              {/* Title */}
+              <motion.h1
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3, duration: 0.6 }}
+                className="text-4xl md:text-5xl font-bold mb-4 leading-tight font-[family-name:var(--font-playfair)]"
+              >
+                <span className="bg-gradient-to-r from-[#C9A04E] via-[#5B9ECF] to-[#9B7ACC] bg-clip-text text-transparent">
+                  The Content Production Lifecycle
+                </span>
+              </motion.h1>
+
+              {/* Subtitle */}
+              <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.5 }}
+                className="text-lg text-muted-foreground mb-12 max-w-xl mx-auto leading-relaxed"
+              >
+                Every team tells the same story: a clean five-stage pipeline.
+                But what does the process really look like?
+              </motion.p>
+
+              {/* Horizontal pipeline diagram: Brief → Creation → Review → Publish → Measure */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.7, duration: 0.5 }}
+                className="flex items-center justify-center gap-0 mb-12"
+              >
+                {[
+                  { label: 'Brief', icon: '\uD83D\uDCCB' },
+                  { label: 'Creation', icon: '\u270F\uFE0F' },
+                  { label: 'Review', icon: '\uD83D\uDD0D' },
+                  { label: 'Publish', icon: '\uD83D\uDE80' },
+                  { label: 'Measure', icon: '\uD83D\uDCCA' },
+                ].map((stage, i, arr) => (
+                  <div key={stage.label} className="flex items-center">
+                    <div className="flex flex-col items-center gap-2">
+                      <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl glass-panel flex items-center justify-center text-2xl md:text-3xl">
+                        {stage.icon}
+                      </div>
+                      <span className="text-xs md:text-sm font-medium text-foreground">
+                        {stage.label}
+                      </span>
+                    </div>
+                    {i < arr.length - 1 && (
+                      <div className="mx-2 md:mx-4 flex items-center -mt-6">
+                        <div className="w-8 md:w-12 h-0.5 bg-gradient-to-r from-[#C9A04E] to-[#5B9ECF]" />
+                        <div className="w-0 h-0 border-t-[5px] border-t-transparent border-b-[5px] border-b-transparent border-l-[8px] border-l-[#5B9ECF]" />
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </motion.div>
+
+              {/* Prompt to continue */}
+              <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 1.0 }}
+                className="text-sm text-muted-foreground/60"
+              >
+                Press {'\u2192'} or click Next to begin
+              </motion.p>
+            </div>
           </motion.div>
-        </AnimatePresence>
-      </motion.div>
+        ) : (
+          <motion.div
+            key="narration"
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 40 }}
+            transition={{ duration: 0.4 }}
+            className="fixed bottom-24 left-1/2 -translate-x-1/2 z-50 w-full max-w-2xl px-4"
+          >
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={currentStep.id}
+                initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -20, scale: 0.95 }}
+                transition={{ duration: 0.4 }}
+                className="glass-panel rounded-2xl p-6 shadow-2xl"
+              >
+                <h2 className="text-lg font-semibold text-primary mb-2 font-[family-name:var(--font-playfair)]">
+                  {currentStep.title}
+                </h2>
+                <p className="text-muted-foreground text-sm leading-relaxed">
+                  {currentStep.narration}
+                </p>
+              </motion.div>
+            </AnimatePresence>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Navigation Controls */}
       <motion.div

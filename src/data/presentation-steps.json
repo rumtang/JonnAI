@@ -1,5 +1,16 @@
 [
   {
+    "id": "step-0-title",
+    "title": "The Content Production Lifecycle",
+    "narration": "",
+    "cameraPosition": { "x": 0, "y": 0, "z": 800 },
+    "cameraLookAt": { "x": 0, "y": 0, "z": 0 },
+    "cameraTransitionMs": 0,
+    "graphState": "linear",
+    "action": "show-title-slide",
+    "duration": 0
+  },
+  {
     "id": "step-1-pipeline",
     "title": "The Content Pipeline",
     "narration": "Most teams present their content workflow as a clean five-stage pipeline. Brief, Creation, Review, Publish, Measure. This is the slide-deck version.",
