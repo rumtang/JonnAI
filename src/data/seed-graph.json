@@ -11,8 +11,13 @@
         "phase": "Brief",
         "owner": "human",
         "estimatedTime": "30 min",
-        "inputs": ["Client brief", "Campaign objectives"],
-        "outputs": ["Scoped request"]
+        "inputs": [
+          "Client brief",
+          "Campaign objectives"
+        ],
+        "outputs": [
+          "Scoped request"
+        ]
       }
     },
     {
@@ -27,8 +32,16 @@
         "owner": "agent",
         "agentName": "Research Agent",
         "estimatedTime": "15 min",
-        "inputs": ["Audience Personas", "Analytics Data", "Content Strategy"],
-        "outputs": ["Research summary", "Keyword opportunities", "Competitive gaps"]
+        "inputs": [
+          "Audience Personas",
+          "Analytics Data",
+          "Content Strategy"
+        ],
+        "outputs": [
+          "Research summary",
+          "Keyword opportunities",
+          "Competitive gaps"
+        ]
       }
     },
     {
@@ -43,8 +56,14 @@
         "owner": "shared",
         "agentName": "Content Writer",
         "estimatedTime": "20 min",
-        "inputs": ["Research summary", "Content Strategy", "Brand Voice Guide"],
-        "outputs": ["Content brief"]
+        "inputs": [
+          "Research summary",
+          "Content Strategy",
+          "Brand Voice Guide"
+        ],
+        "outputs": [
+          "Content brief"
+        ]
       }
     },
     {
@@ -59,8 +78,14 @@
         "owner": "agent",
         "agentName": "Content Writer",
         "estimatedTime": "15 min",
-        "inputs": ["Approved brief", "Brand Voice Guide", "Audience Personas"],
-        "outputs": ["Draft article"]
+        "inputs": [
+          "Approved brief",
+          "Brand Voice Guide",
+          "Audience Personas"
+        ],
+        "outputs": [
+          "Draft article"
+        ]
       }
     },
     {
@@ -75,8 +100,14 @@
         "owner": "agent",
         "agentName": "SEO Optimizer",
         "estimatedTime": "10 min",
-        "inputs": ["Draft article", "SEO Tools", "Analytics Data"],
-        "outputs": ["SEO-optimized draft"]
+        "inputs": [
+          "Draft article",
+          "SEO Tools",
+          "Analytics Data"
+        ],
+        "outputs": [
+          "SEO-optimized draft"
+        ]
       }
     },
     {
@@ -91,8 +122,14 @@
         "owner": "agent",
         "agentName": "Content Writer",
         "estimatedTime": "5 min",
-        "inputs": ["SEO-optimized draft", "Brand Voice Guide"],
-        "outputs": ["Compliance report", "Flagged issues"]
+        "inputs": [
+          "SEO-optimized draft",
+          "Brand Voice Guide"
+        ],
+        "outputs": [
+          "Compliance report",
+          "Flagged issues"
+        ]
       }
     },
     {
@@ -106,8 +143,13 @@
         "phase": "Review",
         "owner": "human",
         "estimatedTime": "30 min",
-        "inputs": ["Brand-approved draft", "Compliance report"],
-        "outputs": ["Final content"]
+        "inputs": [
+          "Brand-approved draft",
+          "Compliance report"
+        ],
+        "outputs": [
+          "Final content"
+        ]
       }
     },
     {
@@ -121,8 +163,13 @@
         "phase": "Publish",
         "owner": "shared",
         "estimatedTime": "10 min",
-        "inputs": ["Final content", "Content calendar"],
-        "outputs": ["Published content"]
+        "inputs": [
+          "Final content",
+          "Content calendar"
+        ],
+        "outputs": [
+          "Published content"
+        ]
       }
     },
     {
@@ -136,8 +183,13 @@
         "phase": "Publish",
         "owner": "shared",
         "estimatedTime": "15 min",
-        "inputs": ["Published content", "Channel strategy"],
-        "outputs": ["Distribution confirmations"]
+        "inputs": [
+          "Published content",
+          "Channel strategy"
+        ],
+        "outputs": [
+          "Distribution confirmations"
+        ]
       }
     },
     {
@@ -152,8 +204,13 @@
         "owner": "agent",
         "agentName": "Performance Analyst",
         "estimatedTime": "Continuous",
-        "inputs": ["Analytics Data", "Published content"],
-        "outputs": ["Performance metrics"]
+        "inputs": [
+          "Analytics Data",
+          "Published content"
+        ],
+        "outputs": [
+          "Performance metrics"
+        ]
       }
     },
     {
@@ -168,8 +225,14 @@
         "owner": "agent",
         "agentName": "Performance Analyst",
         "estimatedTime": "10 min",
-        "inputs": ["Performance metrics", "Analytics Data", "Content Strategy"],
-        "outputs": ["Performance report"]
+        "inputs": [
+          "Performance metrics",
+          "Analytics Data",
+          "Content Strategy"
+        ],
+        "outputs": [
+          "Performance report"
+        ]
       }
     },
     {
@@ -183,11 +246,16 @@
         "phase": "Measure",
         "owner": "shared",
         "estimatedTime": "20 min",
-        "inputs": ["Performance report", "Original content"],
-        "outputs": ["Optimized content", "Iteration brief"]
+        "inputs": [
+          "Performance report",
+          "Original content"
+        ],
+        "outputs": [
+          "Optimized content",
+          "Iteration brief"
+        ]
       }
     },
-
     {
       "id": "brief-approval",
       "type": "gate",
@@ -200,7 +268,11 @@
         "reviewer": "Content Director",
         "autoPassCriteria": "All required fields complete and strategy score above 80%",
         "escalationTrigger": "Brief requires new audience segment or unplanned budget",
-        "decisions": ["Approve", "Revise", "Escalate"]
+        "decisions": [
+          "Approve",
+          "Revise",
+          "Escalate"
+        ]
       }
     },
     {
@@ -215,7 +287,11 @@
         "reviewer": "Content Writer Agent + Content Lead",
         "autoPassCriteria": "Readability score > 70, SEO score > 85, no factual flags",
         "escalationTrigger": "Factual claim flagged or readability below 50",
-        "decisions": ["Pass", "Revise", "Escalate to Editor"]
+        "decisions": [
+          "Pass",
+          "Revise",
+          "Escalate to Editor"
+        ]
       }
     },
     {
@@ -230,7 +306,11 @@
         "reviewer": "Brand Manager",
         "autoPassCriteria": "Brand compliance score above 90%",
         "escalationTrigger": "Brand score below 70% or new tone requested",
-        "decisions": ["Approve", "Revise", "Escalate"]
+        "decisions": [
+          "Approve",
+          "Revise",
+          "Escalate"
+        ]
       }
     },
     {
@@ -243,8 +323,14 @@
       "meta": {
         "gateType": "approval",
         "reviewer": "VP Marketing or Client",
+        "autoPassCriteria": "All upstream gates passed, content sensitivity score below threshold, no legal flags",
         "escalationTrigger": "Sensitive topic, legal risk, or executive-visibility content",
-        "decisions": ["Approve", "Revise", "Hold", "Escalate"]
+        "decisions": [
+          "Approve",
+          "Revise",
+          "Hold",
+          "Escalate"
+        ]
       }
     },
     {
@@ -259,10 +345,14 @@
         "reviewer": "Analytics Lead",
         "autoPassCriteria": "Meets 80% of target KPIs within first 7 days",
         "escalationTrigger": "Performance below 50% of target or negative sentiment detected",
-        "decisions": ["Archive", "Optimize", "Iterate", "Escalate"]
+        "decisions": [
+          "Archive",
+          "Optimize",
+          "Iterate",
+          "Escalate"
+        ]
       }
     },
-
     {
       "id": "research-agent",
       "type": "agent",
@@ -273,7 +363,12 @@
       "meta": {
         "capability": "Synthesizes market research, audience insights, and competitive data into actionable briefs",
         "autonomy": "supervised",
-        "tools": ["Audience analytics", "Competitive tracker", "Trend monitor", "Keyword explorer"]
+        "tools": [
+          "Audience analytics",
+          "Competitive tracker",
+          "Trend monitor",
+          "Keyword explorer"
+        ]
       }
     },
     {
@@ -286,7 +381,12 @@
       "meta": {
         "capability": "Generates marketing content from structured briefs while maintaining brand voice consistency",
         "autonomy": "supervised",
-        "tools": ["Brand voice checker", "Readability analyzer", "Plagiarism detector", "Tone calibrator"]
+        "tools": [
+          "Brand voice checker",
+          "Readability analyzer",
+          "Plagiarism detector",
+          "Tone calibrator"
+        ]
       }
     },
     {
@@ -299,7 +399,12 @@
       "meta": {
         "capability": "Applies SEO best practices to maximize organic visibility without compromising readability",
         "autonomy": "supervised",
-        "tools": ["SEO scorer", "Keyword density analyzer", "SERP simulator", "Internal link mapper"]
+        "tools": [
+          "SEO scorer",
+          "Keyword density analyzer",
+          "SERP simulator",
+          "Internal link mapper"
+        ]
       }
     },
     {
@@ -312,10 +417,14 @@
       "meta": {
         "capability": "Monitors content KPIs in real time and produces data-driven optimization recommendations",
         "autonomy": "supervised",
-        "tools": ["Analytics dashboard", "Attribution modeler", "A/B test analyzer", "Sentiment tracker"]
+        "tools": [
+          "Analytics dashboard",
+          "Attribution modeler",
+          "A/B test analyzer",
+          "Sentiment tracker"
+        ]
       }
     },
-
     {
       "id": "brand-guide",
       "type": "input",
@@ -380,72 +489,2260 @@
         "source": "SEMrush, Ahrefs, Google Search Console",
         "refreshRate": "Daily"
       }
+    },
+    {
+      "id": "social-listening",
+      "type": "step",
+      "label": "Social Listening",
+      "description": "Monitor social platforms, forums, and news for trending topics, audience sentiment, and competitive activity to inform the brief.",
+      "group": "Brief",
+      "val": 5,
+      "meta": {
+        "phase": "Brief",
+        "owner": "agent",
+        "agentName": "Social Listening Agent",
+        "estimatedTime": "10 min",
+        "inputs": [
+          "Analytics Data",
+          "Audience Personas",
+          "Competitor Library"
+        ],
+        "outputs": [
+          "Trending topics",
+          "Sentiment snapshot",
+          "Competitive signals"
+        ]
+      }
+    },
+    {
+      "id": "visual-asset-creation",
+      "type": "step",
+      "label": "Create Visual Assets",
+      "description": "Design or source supporting imagery, graphics, infographics, and video thumbnails aligned with the content brief and brand guidelines.",
+      "group": "Creation",
+      "val": 5,
+      "meta": {
+        "phase": "Creation",
+        "owner": "shared",
+        "estimatedTime": "45 min",
+        "inputs": [
+          "Approved brief",
+          "Brand Voice Guide",
+          "Asset Library"
+        ],
+        "outputs": [
+          "Hero image",
+          "Supporting graphics",
+          "Alt text"
+        ]
+      }
+    },
+    {
+      "id": "legal-review",
+      "type": "step",
+      "label": "Legal Review",
+      "description": "Screen content for regulatory compliance, IP risk, disclosure requirements, and claims substantiation before publication.",
+      "group": "Review",
+      "val": 5,
+      "meta": {
+        "phase": "Review",
+        "owner": "shared",
+        "agentName": "Legal Screening Agent",
+        "estimatedTime": "15 min",
+        "inputs": [
+          "Brand-approved draft",
+          "Legal Guidelines",
+          "Approval Matrix"
+        ],
+        "outputs": [
+          "Legal clearance memo",
+          "Flagged claims",
+          "Required disclosures"
+        ]
+      }
+    },
+    {
+      "id": "accessibility-check",
+      "type": "step",
+      "label": "Accessibility Check",
+      "description": "Verify content meets WCAG standards, inclusive language guidelines, and alt-text requirements for all visual assets.",
+      "group": "Review",
+      "val": 5,
+      "meta": {
+        "phase": "Review",
+        "owner": "agent",
+        "agentName": "Accessibility Agent",
+        "estimatedTime": "5 min",
+        "inputs": [
+          "Final content",
+          "Accessibility Standards",
+          "Visual assets"
+        ],
+        "outputs": [
+          "Accessibility report",
+          "Remediation list"
+        ]
+      }
+    },
+    {
+      "id": "localize-content",
+      "type": "step",
+      "label": "Localize Content",
+      "description": "Adapt approved content for target markets including translation, cultural adaptation, local regulatory compliance, and region-specific imagery.",
+      "group": "Publish",
+      "val": 5,
+      "meta": {
+        "phase": "Publish",
+        "owner": "shared",
+        "agentName": "Localization Agent",
+        "estimatedTime": "30 min",
+        "inputs": [
+          "Final content",
+          "Localization Guides",
+          "Legal Guidelines"
+        ],
+        "outputs": [
+          "Localized content variants",
+          "Market-specific assets"
+        ]
+      }
+    },
+    {
+      "id": "ab-variant-creation",
+      "type": "step",
+      "label": "A/B Variant Creation",
+      "description": "Generate test variants for headlines, CTAs, subject lines, and imagery based on channel benchmarks and historical performance data.",
+      "group": "Creation",
+      "val": 5,
+      "meta": {
+        "phase": "Creation",
+        "owner": "agent",
+        "agentName": "Repurposing Agent",
+        "estimatedTime": "10 min",
+        "inputs": [
+          "Final content",
+          "Channel Benchmarks",
+          "Analytics Data"
+        ],
+        "outputs": [
+          "Variant set",
+          "Test plan",
+          "Hypothesis documentation"
+        ]
+      }
+    },
+    {
+      "id": "content-repurposing",
+      "type": "step",
+      "label": "Repurpose Content",
+      "description": "Derive secondary assets from the primary content piece: social posts, email snippets, video scripts, carousel decks, and pull quotes.",
+      "group": "Publish",
+      "val": 5,
+      "meta": {
+        "phase": "Publish",
+        "owner": "agent",
+        "agentName": "Repurposing Agent",
+        "estimatedTime": "15 min",
+        "inputs": [
+          "Published content",
+          "Content Strategy",
+          "Channel Benchmarks",
+          "Brand Voice Guide"
+        ],
+        "outputs": [
+          "Social posts",
+          "Email copy",
+          "Video script",
+          "Carousel deck"
+        ]
+      }
+    },
+    {
+      "id": "archive-tag",
+      "type": "step",
+      "label": "Archive & Tag",
+      "description": "Classify, tag, and archive content into the content taxonomy for future discovery, reuse, and governance reporting.",
+      "group": "Measure",
+      "val": 5,
+      "meta": {
+        "phase": "Measure",
+        "owner": "shared",
+        "estimatedTime": "5 min",
+        "inputs": [
+          "Performance report",
+          "Content Taxonomy",
+          "Published content"
+        ],
+        "outputs": [
+          "Archived content record",
+          "Taxonomy tags",
+          "Reuse metadata"
+        ]
+      }
+    },
+    {
+      "id": "legal-compliance-gate",
+      "type": "gate",
+      "label": "Legal Compliance Gate",
+      "description": "Legal sign-off confirming content is clear of regulatory risk, IP issues, and disclosure requirements. Required before stakeholder sign-off.",
+      "group": "Review",
+      "val": 6,
+      "meta": {
+        "gateType": "approval",
+        "reviewer": "Legal Counsel",
+        "autoPassCriteria": "No flagged claims, no regulated terms, disclosure checklist complete",
+        "escalationTrigger": "Regulated industry claim, competitor mention, or unsubstantiated performance data",
+        "decisions": [
+          "Approve",
+          "Revise",
+          "Escalate",
+          "Hold"
+        ]
+      }
+    },
+    {
+      "id": "localization-quality-gate",
+      "type": "gate",
+      "label": "Localization Quality Gate",
+      "description": "Quality check on localized content for translation accuracy, cultural appropriateness, and local regulatory compliance.",
+      "group": "Publish",
+      "val": 6,
+      "meta": {
+        "gateType": "quality-check",
+        "reviewer": "Localization Manager",
+        "autoPassCriteria": "Translation confidence score above 90%, no cultural flags, local legal checklist passed",
+        "escalationTrigger": "Cultural sensitivity flag, legal divergence across markets, or translation confidence below 75%",
+        "decisions": [
+          "Approve",
+          "Revise",
+          "Escalate"
+        ]
+      }
+    },
+    {
+      "id": "social-listening-agent",
+      "type": "agent",
+      "label": "Social Listening Agent",
+      "description": "Monitors social platforms, forums, and news feeds for trending topics, sentiment shifts, and competitive activity relevant to the content pipeline.",
+      "group": "AI Agents",
+      "val": 5,
+      "meta": {
+        "capability": "Synthesizes real-time social signals, trending topics, and sentiment data into actionable pre-brief intelligence",
+        "autonomy": "supervised",
+        "tools": [
+          "Social API monitor",
+          "Sentiment analyzer",
+          "Trend detector",
+          "Competitive tracker"
+        ]
+      }
+    },
+    {
+      "id": "legal-screening-agent",
+      "type": "agent",
+      "label": "Legal Screening Agent",
+      "description": "Pre-screens content for regulatory compliance, flagging claims that require substantiation, regulated terminology, and missing disclosures.",
+      "group": "AI Agents",
+      "val": 5,
+      "meta": {
+        "capability": "Scans content against legal guidelines and regulatory databases to flag compliance risks before human legal review",
+        "autonomy": "supervised",
+        "tools": [
+          "Regulatory term scanner",
+          "Claims substantiation checker",
+          "Disclosure template matcher",
+          "IP risk flagger"
+        ]
+      }
+    },
+    {
+      "id": "localization-agent",
+      "type": "agent",
+      "label": "Localization Agent",
+      "description": "Adapts content for target markets including translation, cultural adaptation, and region-specific formatting.",
+      "group": "AI Agents",
+      "val": 5,
+      "meta": {
+        "capability": "Translates and culturally adapts content across markets while preserving brand voice and complying with local regulations",
+        "autonomy": "supervised",
+        "tools": [
+          "Translation engine",
+          "Cultural sensitivity checker",
+          "Local compliance validator",
+          "Brand voice adapter"
+        ]
+      }
+    },
+    {
+      "id": "repurposing-agent",
+      "type": "agent",
+      "label": "Repurposing Agent",
+      "description": "Derives secondary content formats from a primary asset: social posts, email copy, video scripts, test variants, and carousel decks.",
+      "group": "AI Agents",
+      "val": 5,
+      "meta": {
+        "capability": "Generates multi-format derivative content and A/B test variants from a single approved asset while maintaining brand and message consistency",
+        "autonomy": "supervised",
+        "tools": [
+          "Format adapter",
+          "Headline generator",
+          "CTA optimizer",
+          "Channel-specific formatter"
+        ]
+      }
+    },
+    {
+      "id": "accessibility-agent",
+      "type": "agent",
+      "label": "Accessibility Agent",
+      "description": "Checks content against WCAG standards, inclusive language guidelines, and alt-text requirements.",
+      "group": "AI Agents",
+      "val": 5,
+      "meta": {
+        "capability": "Evaluates content and visual assets for accessibility compliance and inclusive language, generating remediation recommendations",
+        "autonomy": "autonomous",
+        "tools": [
+          "WCAG scanner",
+          "Alt-text generator",
+          "Readability analyzer",
+          "Inclusive language checker"
+        ]
+      }
+    },
+    {
+      "id": "legal-guidelines",
+      "type": "input",
+      "label": "Legal Guidelines",
+      "description": "Regulatory compliance policies, disclosure requirements, IP guidelines, and claims substantiation rules by market and industry.",
+      "group": "Reference",
+      "val": 4,
+      "meta": {
+        "inputType": "reference",
+        "source": "Legal team — compliance documentation",
+        "refreshRate": "Quarterly"
+      }
+    },
+    {
+      "id": "content-taxonomy",
+      "type": "input",
+      "label": "Content Taxonomy",
+      "description": "Hierarchical tagging schema covering content types, topics, audiences, funnel stages, and lifecycle states for governance and reuse.",
+      "group": "Reference",
+      "val": 4,
+      "meta": {
+        "inputType": "reference",
+        "source": "Content Ops — taxonomy governance",
+        "refreshRate": "Monthly"
+      }
+    },
+    {
+      "id": "competitor-library",
+      "type": "input",
+      "label": "Competitor Content Library",
+      "description": "Indexed repository of competitor content, messaging themes, channel strategies, and share-of-voice benchmarks.",
+      "group": "Data",
+      "val": 4,
+      "meta": {
+        "inputType": "data",
+        "source": "Competitive intelligence platform, Manual curation",
+        "refreshRate": "Weekly"
+      }
+    },
+    {
+      "id": "channel-benchmarks",
+      "type": "input",
+      "label": "Channel Performance Benchmarks",
+      "description": "Historical and industry benchmarks for engagement rates, CTR, conversion, and cost-per-action by channel and content type.",
+      "group": "Data",
+      "val": 4,
+      "meta": {
+        "inputType": "data",
+        "source": "Analytics team, Industry benchmark reports",
+        "refreshRate": "Monthly"
+      }
+    },
+    {
+      "id": "approval-matrix",
+      "type": "input",
+      "label": "Approval Matrix",
+      "description": "Routing rules that define who approves what based on content type, sensitivity level, market, and budget threshold.",
+      "group": "Reference",
+      "val": 4,
+      "meta": {
+        "inputType": "reference",
+        "source": "Marketing Ops — governance framework",
+        "refreshRate": "Quarterly"
+      }
+    },
+    {
+      "id": "asset-library",
+      "type": "input",
+      "label": "Asset Library (DAM)",
+      "description": "Digital asset management system containing approved images, templates, brand elements, video clips, and design files.",
+      "group": "Tools",
+      "val": 4,
+      "meta": {
+        "inputType": "tool",
+        "source": "Creative team — DAM platform",
+        "refreshRate": "Real-time"
+      }
+    },
+    {
+      "id": "accessibility-standards",
+      "type": "input",
+      "label": "Accessibility Standards",
+      "description": "WCAG 2.1 AA guidelines, inclusive language reference, alt-text requirements, and accessible design patterns.",
+      "group": "Reference",
+      "val": 4,
+      "meta": {
+        "inputType": "reference",
+        "source": "Accessibility team — compliance documentation",
+        "refreshRate": "Semi-annual"
+      }
+    },
+    {
+      "id": "localization-guides",
+      "type": "input",
+      "label": "Localization Style Guides",
+      "description": "Market-specific style guides covering translation preferences, cultural taboos, local regulatory nuances, and regional brand voice adaptations.",
+      "group": "Reference",
+      "val": 4,
+      "meta": {
+        "inputType": "reference",
+        "source": "Localization team — regional marketing leads",
+        "refreshRate": "Quarterly"
+      }
+    },
+    {
+      "id": "cdp-profiles",
+      "type": "input",
+      "label": "Customer Data Platform",
+      "description": "Unified customer profiles including behavioral signals, segment membership, propensity scores, lifecycle stage, and interaction history across all touchpoints.",
+      "group": "Data",
+      "val": 4,
+      "meta": {
+        "inputType": "data",
+        "source": "CDP platform (Segment, Tealium, Adobe RT-CDP, or equivalent)",
+        "refreshRate": "Real-time"
+      }
+    },
+    {
+      "id": "personalization-rules",
+      "type": "input",
+      "label": "Personalization Rules",
+      "description": "Decisioning logic that maps content variants to audience segments, including suppression rules, frequency caps, next-best-content logic, and fallback hierarchy.",
+      "group": "Reference",
+      "val": 4,
+      "meta": {
+        "inputType": "reference",
+        "source": "Growth team — personalization strategy",
+        "refreshRate": "Monthly"
+      }
+    },
+    {
+      "id": "segment-mapping",
+      "type": "step",
+      "label": "Segment-Variant Mapping",
+      "description": "Map approved content variants and A/B test variants to CDP audience segments using personalization rules, propensity scores, and channel affinity data.",
+      "group": "Publish",
+      "val": 5,
+      "meta": {
+        "phase": "Publish",
+        "owner": "shared",
+        "agentName": "Personalization Agent",
+        "estimatedTime": "15 min",
+        "inputs": [
+          "Final content",
+          "A/B variants",
+          "CDP Profiles",
+          "Personalization Rules",
+          "Channel Benchmarks"
+        ],
+        "outputs": [
+          "Segment-variant matrix",
+          "Coverage report",
+          "Suppression list"
+        ]
+      }
+    },
+    {
+      "id": "dynamic-assembly",
+      "type": "step",
+      "label": "Dynamic Content Assembly",
+      "description": "Construct the delivered experience per segment: select hero image, headline variant, CTA, and layout based on segment-variant matrix and real-time behavioral signals.",
+      "group": "Publish",
+      "val": 5,
+      "meta": {
+        "phase": "Publish",
+        "owner": "agent",
+        "agentName": "Personalization Agent",
+        "estimatedTime": "5 min",
+        "inputs": [
+          "Segment-variant matrix",
+          "CDP Profiles",
+          "Asset Library",
+          "Brand Voice Guide"
+        ],
+        "outputs": [
+          "Assembled content experiences",
+          "Preview renders per segment"
+        ]
+      }
+    },
+    {
+      "id": "personalization-qa",
+      "type": "gate",
+      "label": "Personalization QA Gate",
+      "description": "Validate segment-variant matrix for coverage gaps, suppression conflicts, frequency cap violations, and consent compliance before dynamic assembly.",
+      "group": "Publish",
+      "val": 6,
+      "meta": {
+        "gateType": "quality-check",
+        "reviewer": "Growth Lead + Privacy Officer",
+        "autoPassCriteria": "All segments have assigned variants, no suppression conflicts, frequency caps within limits, consent flags validated",
+        "escalationTrigger": "Segment with no variant, consent flag missing, or frequency cap exceeded for priority segment",
+        "decisions": [
+          "Pass",
+          "Revise",
+          "Escalate"
+        ]
+      }
+    },
+    {
+      "id": "personalization-agent",
+      "type": "agent",
+      "label": "Personalization Agent",
+      "description": "Matches content variants to audience segments using CDP signals, personalization rules, and channel affinity data. Handles dynamic assembly of delivered experiences.",
+      "group": "AI Agents",
+      "val": 5,
+      "meta": {
+        "capability": "Maps content variants to customer segments using behavioral signals and personalization logic, then assembles the delivered experience per segment in real time",
+        "autonomy": "supervised",
+        "tools": [
+          "Segment matcher",
+          "Variant selector",
+          "Coverage analyzer",
+          "Frequency cap checker",
+          "Consent validator"
+        ]
+      }
+    },
+    {
+      "id": "campaign-planning",
+      "type": "step",
+      "label": "Campaign Planning",
+      "description": "Define campaign objectives, audience targets, channel mix, budget allocation, timeline, and success KPIs before any content requests are generated.",
+      "group": "Brief",
+      "val": 5,
+      "meta": {
+        "phase": "Brief",
+        "owner": "human",
+        "estimatedTime": "2 hours",
+        "inputs": [
+          "Content Strategy",
+          "Analytics Data",
+          "Channel Benchmarks",
+          "CDP Profiles",
+          "Budget Allocation"
+        ],
+        "outputs": [
+          "Campaign plan",
+          "Budget breakdown",
+          "Channel allocation",
+          "KPI targets"
+        ]
+      }
+    },
+    {
+      "id": "budget-allocation",
+      "type": "input",
+      "label": "Budget Allocation",
+      "description": "Campaign and channel-level budget constraints, spend pacing rules, and ROI thresholds by content type and audience segment.",
+      "group": "Data",
+      "val": 4,
+      "meta": {
+        "inputType": "data",
+        "source": "Finance team — marketing budget model",
+        "refreshRate": "Monthly"
+      }
+    },
+    {
+      "id": "consent-check",
+      "type": "step",
+      "label": "Consent & Privacy Check",
+      "description": "Validate that all personalization, targeting, and data usage complies with GDPR, CCPA, and other applicable privacy regulations. Verify consent signals from CDP before segment activation.",
+      "group": "Publish",
+      "val": 5,
+      "meta": {
+        "phase": "Publish",
+        "owner": "agent",
+        "agentName": "Privacy Compliance Agent",
+        "estimatedTime": "3 min",
+        "inputs": [
+          "Segment-variant matrix",
+          "CDP Profiles",
+          "Privacy Regulations"
+        ],
+        "outputs": [
+          "Consent validation report",
+          "Suppression list updates"
+        ]
+      }
+    },
+    {
+      "id": "privacy-regulations",
+      "type": "input",
+      "label": "Privacy Regulations",
+      "description": "Current consent requirements, data processing rules, and opt-out handling procedures by jurisdiction (GDPR, CCPA, LGPD, PIPEDA, etc.).",
+      "group": "Reference",
+      "val": 4,
+      "meta": {
+        "inputType": "reference",
+        "source": "Legal/Privacy team — regulatory documentation",
+        "refreshRate": "Quarterly"
+      }
+    },
+    {
+      "id": "privacy-agent",
+      "type": "agent",
+      "label": "Privacy Compliance Agent",
+      "description": "Validates consent signals, checks data processing compliance, and enforces suppression rules based on jurisdiction-specific privacy regulations.",
+      "group": "AI Agents",
+      "val": 5,
+      "meta": {
+        "capability": "Automatically validates consent status for targeted segments and flags privacy violations before content delivery",
+        "autonomy": "autonomous",
+        "tools": [
+          "Consent validator",
+          "Jurisdiction mapper",
+          "Suppression enforcer",
+          "Privacy audit logger"
+        ]
+      }
+    },
+    {
+      "id": "paid-creative-production",
+      "type": "step",
+      "label": "Paid Media Creative",
+      "description": "Produce ad creative, landing page variants, and sponsored content versions derived from the approved organic content, tailored to platform specs and audience targeting.",
+      "group": "Creation",
+      "val": 5,
+      "meta": {
+        "phase": "Creation",
+        "owner": "shared",
+        "agentName": "Repurposing Agent",
+        "estimatedTime": "30 min",
+        "inputs": [
+          "Final content",
+          "Channel Benchmarks",
+          "CDP Profiles",
+          "Brand Voice Guide",
+          "Budget Allocation"
+        ],
+        "outputs": [
+          "Ad creative set",
+          "Landing page variants",
+          "Platform-specific specs"
+        ]
+      }
+    },
+    {
+      "id": "media-plan",
+      "type": "input",
+      "label": "Media Plan",
+      "description": "Channel-level media buy strategy including platform targeting parameters, bid strategies, flight dates, and creative rotation rules.",
+      "group": "Reference",
+      "val": 4,
+      "meta": {
+        "inputType": "reference",
+        "source": "Media team — planning platform",
+        "refreshRate": "Weekly"
+      }
+    },
+    {
+      "id": "attribution-modeling",
+      "type": "step",
+      "label": "Attribution & ROI Analysis",
+      "description": "Run multi-touch attribution models, calculate content ROI by channel and segment, and generate spend efficiency analysis against campaign KPIs and budget allocation.",
+      "group": "Measure",
+      "val": 5,
+      "meta": {
+        "phase": "Measure",
+        "owner": "agent",
+        "agentName": "Performance Analyst",
+        "estimatedTime": "15 min",
+        "inputs": [
+          "Performance metrics",
+          "CDP Profiles",
+          "Budget Allocation",
+          "Channel Benchmarks"
+        ],
+        "outputs": [
+          "Attribution report",
+          "ROI by channel",
+          "Spend efficiency scorecard",
+          "Budget reallocation recommendations"
+        ]
+      }
+    },
+    {
+      "id": "executive-reporting",
+      "type": "step",
+      "label": "Executive Reporting",
+      "description": "Synthesize performance data, attribution results, and budget utilization into an executive-level dashboard with strategic recommendations for the CMO and leadership team.",
+      "group": "Measure",
+      "val": 5,
+      "meta": {
+        "phase": "Measure",
+        "owner": "shared",
+        "agentName": "Performance Analyst",
+        "estimatedTime": "20 min",
+        "inputs": [
+          "Attribution report",
+          "Performance report",
+          "Budget Allocation",
+          "Content Strategy",
+          "Campaign plan"
+        ],
+        "outputs": [
+          "CMO dashboard",
+          "Strategic recommendations",
+          "Budget reallocation proposal"
+        ]
+      }
+    },
+    {
+      "id": "competitive-response",
+      "type": "step",
+      "label": "Competitive Response",
+      "description": "Rapid-turn content creation triggered by competitive signals: counter-messaging, reactive thought leadership, or opportunistic content responding to competitor moves or market shifts.",
+      "group": "Brief",
+      "val": 5,
+      "meta": {
+        "phase": "Brief",
+        "owner": "shared",
+        "agentName": "Research Agent",
+        "estimatedTime": "30 min",
+        "inputs": [
+          "Competitor Library",
+          "Social listening signals",
+          "Content Strategy",
+          "Brand Voice Guide"
+        ],
+        "outputs": [
+          "Competitive response brief",
+          "Priority flag",
+          "Fast-track approval request"
+        ]
+      }
+    },
+    {
+      "id": "content-governance",
+      "type": "step",
+      "label": "Content Governance Review",
+      "description": "Periodic review of live content for accuracy, regulatory currency, brand alignment drift, and performance decay. Flag content for refresh, retirement, or archival.",
+      "group": "Measure",
+      "val": 5,
+      "meta": {
+        "phase": "Measure",
+        "owner": "shared",
+        "estimatedTime": "30 min",
+        "inputs": [
+          "Content Taxonomy",
+          "Performance report",
+          "Legal Guidelines",
+          "Brand Voice Guide"
+        ],
+        "outputs": [
+          "Governance audit report",
+          "Refresh queue",
+          "Retirement list",
+          "Compliance exceptions"
+        ]
+      }
+    },
+    {
+      "id": "governance-gate",
+      "type": "gate",
+      "label": "Governance Gate",
+      "description": "Periodic checkpoint validating that all live content remains current, compliant, and brand-aligned. Triggers refresh, retirement, or re-review cycles.",
+      "group": "Measure",
+      "val": 6,
+      "meta": {
+        "gateType": "quality-check",
+        "reviewer": "Content Director + Legal Counsel",
+        "autoPassCriteria": "Content less than 90 days old, no regulatory changes in category, performance above decay threshold",
+        "escalationTrigger": "Regulatory change affecting live content, brand guideline update, or content older than 180 days with declining performance",
+        "decisions": [
+          "Maintain",
+          "Refresh",
+          "Retire",
+          "Escalate"
+        ]
+      }
+    },
+    {
+      "id": "journey-mapping",
+      "type": "step",
+      "label": "Journey Stage Mapping",
+      "description": "Map content assets to customer journey stages (awareness, consideration, decision, retention, advocacy) using CDP lifecycle data and content taxonomy.",
+      "group": "Brief",
+      "val": 5,
+      "meta": {
+        "phase": "Brief",
+        "owner": "shared",
+        "estimatedTime": "20 min",
+        "inputs": [
+          "CDP Profiles",
+          "Content Taxonomy",
+          "Content Strategy",
+          "Audience Personas"
+        ],
+        "outputs": [
+          "Journey-content map",
+          "Gap analysis by stage",
+          "Priority content requests"
+        ]
+      }
+    },
+    {
+      "id": "sentiment-monitoring",
+      "type": "step",
+      "label": "Sentiment Monitoring",
+      "description": "Real-time monitoring of audience sentiment, brand mention tone, and content reception signals across social, reviews, and support channels to detect issues before they escalate.",
+      "group": "Measure",
+      "val": 5,
+      "meta": {
+        "phase": "Measure",
+        "owner": "agent",
+        "agentName": "Social Listening Agent",
+        "estimatedTime": "Continuous",
+        "inputs": [
+          "Analytics Data",
+          "CDP Profiles",
+          "Competitor Library"
+        ],
+        "outputs": [
+          "Sentiment alerts",
+          "Brand health score",
+          "Escalation triggers"
+        ]
+      }
+    },
+    {
+      "id": "sales-enablement",
+      "type": "step",
+      "label": "Sales Enablement Content",
+      "description": "Produce sales-facing content derived from marketing assets: battle cards, case studies, ROI calculators, objection handlers, competitive one-pagers, and pitch decks.",
+      "group": "Creation",
+      "val": 5,
+      "meta": {
+        "phase": "Creation",
+        "owner": "shared",
+        "agentName": "Repurposing Agent",
+        "estimatedTime": "30 min",
+        "inputs": [
+          "Final content",
+          "Competitor Library",
+          "Audience Personas",
+          "Sales Feedback Log",
+          "CDP Profiles"
+        ],
+        "outputs": [
+          "Battle cards",
+          "Case study drafts",
+          "ROI calculator",
+          "Competitive one-pagers"
+        ]
+      }
+    },
+    {
+      "id": "sales-feedback-log",
+      "type": "input",
+      "label": "Sales Feedback Log",
+      "description": "Structured feedback from sales teams on content effectiveness, objection patterns, win/loss themes, and content gaps surfaced during the sales cycle.",
+      "group": "Data",
+      "val": 4,
+      "meta": {
+        "inputType": "data",
+        "source": "CRM integration — sales team feedback, win/loss analysis",
+        "refreshRate": "Weekly"
+      }
+    },
+    {
+      "id": "influencer-brief",
+      "type": "step",
+      "label": "Influencer & Creator Brief",
+      "description": "Develop briefs for influencer collaborations, UGC campaigns, and co-created content including brand guardrails, messaging guidelines, platform specs, and compensation terms.",
+      "group": "Brief",
+      "val": 5,
+      "meta": {
+        "phase": "Brief",
+        "owner": "human",
+        "estimatedTime": "45 min",
+        "inputs": [
+          "Content Strategy",
+          "Brand Voice Guide",
+          "Audience Personas",
+          "CDP Profiles",
+          "Influencer Database",
+          "Budget Allocation"
+        ],
+        "outputs": [
+          "Influencer brief",
+          "Creator guidelines",
+          "UGC parameters",
+          "Collaboration terms"
+        ]
+      }
+    },
+    {
+      "id": "ugc-moderation",
+      "type": "step",
+      "label": "UGC Moderation & Curation",
+      "description": "Review, moderate, and curate user-generated and influencer-created content for brand safety, quality, rights clearance, and strategic alignment before amplification.",
+      "group": "Review",
+      "val": 5,
+      "meta": {
+        "phase": "Review",
+        "owner": "shared",
+        "agentName": "Content Writer",
+        "estimatedTime": "20 min",
+        "inputs": [
+          "UGC submissions",
+          "Brand Voice Guide",
+          "Legal Guidelines",
+          "Influencer Database"
+        ],
+        "outputs": [
+          "Approved UGC",
+          "Rights-cleared assets",
+          "Moderation log"
+        ]
+      }
+    },
+    {
+      "id": "influencer-database",
+      "type": "input",
+      "label": "Influencer Database",
+      "description": "Vetted influencer and creator profiles with audience demographics, brand affinity scores, past performance data, rate cards, and compliance history.",
+      "group": "Data",
+      "val": 4,
+      "meta": {
+        "inputType": "data",
+        "source": "Partnerships team — influencer management platform",
+        "refreshRate": "Weekly"
+      }
+    },
+    {
+      "id": "content-scoring",
+      "type": "step",
+      "label": "Content Scoring & Prioritization",
+      "description": "Score and rank incoming content requests against strategic priority, audience demand, resource availability, and expected ROI. Triage the production queue.",
+      "group": "Brief",
+      "val": 5,
+      "meta": {
+        "phase": "Brief",
+        "owner": "shared",
+        "agentName": "Research Agent",
+        "estimatedTime": "10 min",
+        "inputs": [
+          "Campaign plan",
+          "Content Strategy",
+          "Scoring Matrix",
+          "Analytics Data",
+          "Budget Allocation"
+        ],
+        "outputs": [
+          "Prioritized request queue",
+          "Resource allocation plan",
+          "Deferred request log"
+        ]
+      }
+    },
+    {
+      "id": "scoring-matrix",
+      "type": "input",
+      "label": "Content Scoring Matrix",
+      "description": "Weighted scoring framework for content requests incorporating strategic alignment, audience demand, competitive urgency, resource cost, and expected business impact.",
+      "group": "Reference",
+      "val": 4,
+      "meta": {
+        "inputType": "reference",
+        "source": "Content Director — governance framework",
+        "refreshRate": "Quarterly"
+      }
+    },
+    {
+      "id": "channel-orchestration",
+      "type": "step",
+      "label": "Cross-Channel Orchestration",
+      "description": "Define distribution sequencing, channel-specific timing rules, and cross-channel coordination logic. Email before social, gated before ungated, paid amplification triggers.",
+      "group": "Publish",
+      "val": 5,
+      "meta": {
+        "phase": "Publish",
+        "owner": "shared",
+        "agentName": "Personalization Agent",
+        "estimatedTime": "15 min",
+        "inputs": [
+          "Segment-variant matrix",
+          "Channel Benchmarks",
+          "Orchestration Rules",
+          "Media Plan",
+          "CDP Profiles"
+        ],
+        "outputs": [
+          "Distribution sequence",
+          "Channel-specific launch times",
+          "Cross-channel coordination plan"
+        ]
+      }
+    },
+    {
+      "id": "orchestration-rules",
+      "type": "input",
+      "label": "Orchestration Rules",
+      "description": "Cross-channel sequencing logic including channel priority order, timing offsets, trigger conditions for paid amplification, gating rules, and holdout group definitions.",
+      "group": "Reference",
+      "val": 4,
+      "meta": {
+        "inputType": "reference",
+        "source": "Marketing Ops — channel strategy",
+        "refreshRate": "Monthly"
+      }
     }
   ],
-
   "links": [
-    { "source": "receive-request",    "target": "research-insights",   "type": "flows-to" },
-    { "source": "research-insights",  "target": "write-brief",         "type": "flows-to" },
-    { "source": "write-brief",        "target": "brief-approval",      "type": "flows-to" },
-    { "source": "brief-approval",     "target": "draft-content",       "type": "flows-to" },
-    { "source": "draft-content",      "target": "seo-optimization",    "type": "flows-to" },
-    { "source": "seo-optimization",   "target": "quality-check",       "type": "flows-to" },
-    { "source": "quality-check",      "target": "brand-compliance",    "type": "flows-to" },
-    { "source": "brand-compliance",   "target": "brand-review",        "type": "flows-to" },
-    { "source": "brand-review",       "target": "final-edit",          "type": "flows-to" },
-    { "source": "final-edit",         "target": "stakeholder-signoff", "type": "flows-to" },
-    { "source": "stakeholder-signoff","target": "schedule-publish",    "type": "flows-to" },
-    { "source": "schedule-publish",   "target": "distribute",          "type": "flows-to" },
-    { "source": "distribute",         "target": "track-performance",   "type": "flows-to" },
-    { "source": "track-performance",  "target": "generate-report",     "type": "flows-to" },
-    { "source": "generate-report",    "target": "performance-review",  "type": "flows-to" },
-    { "source": "performance-review", "target": "optimize",            "type": "flows-to" },
-    { "source": "optimize",           "target": "draft-content",       "type": "flows-to" },
-
-    { "source": "brief-approval",      "target": "write-brief",         "type": "reviews" },
-    { "source": "quality-check",       "target": "seo-optimization",    "type": "reviews" },
-    { "source": "brand-review",        "target": "brand-compliance",    "type": "reviews" },
-    { "source": "stakeholder-signoff", "target": "final-edit",          "type": "reviews" },
-    { "source": "performance-review",  "target": "generate-report",     "type": "reviews" },
-
-    { "source": "brand-review",        "target": "stakeholder-signoff", "type": "escalates-to" },
-    { "source": "performance-review",  "target": "receive-request",     "type": "escalates-to" },
-    { "source": "quality-check",       "target": "brand-review",        "type": "escalates-to" },
-
-    { "source": "brief-approval",      "target": "write-brief",        "type": "returns-to" },
-    { "source": "quality-check",       "target": "draft-content",      "type": "returns-to" },
-    { "source": "brand-review",        "target": "brand-compliance",   "type": "returns-to" },
-    { "source": "stakeholder-signoff", "target": "final-edit",         "type": "returns-to" },
-    { "source": "performance-review",  "target": "optimize",           "type": "returns-to" },
-
-    { "source": "research-insights",  "target": "analytics-data",      "type": "uses" },
-    { "source": "research-insights",  "target": "audience-personas",   "type": "uses" },
-    { "source": "research-insights",  "target": "content-strategy",    "type": "uses" },
-    { "source": "write-brief",        "target": "content-strategy",    "type": "uses" },
-    { "source": "write-brief",        "target": "brand-guide",         "type": "uses" },
-    { "source": "draft-content",      "target": "brand-guide",         "type": "uses" },
-    { "source": "draft-content",      "target": "audience-personas",   "type": "uses" },
-    { "source": "seo-optimization",   "target": "seo-tools",           "type": "uses" },
-    { "source": "seo-optimization",   "target": "analytics-data",      "type": "uses" },
-    { "source": "brand-compliance",   "target": "brand-guide",         "type": "uses" },
-    { "source": "track-performance",  "target": "analytics-data",      "type": "uses" },
-    { "source": "generate-report",    "target": "analytics-data",      "type": "uses" },
-    { "source": "generate-report",    "target": "content-strategy",    "type": "uses" },
-
-    { "source": "research-agent",     "target": "analytics-data",      "type": "uses" },
-    { "source": "research-agent",     "target": "audience-personas",   "type": "uses" },
-    { "source": "writer-agent",       "target": "brand-guide",         "type": "uses" },
-    { "source": "writer-agent",       "target": "content-strategy",    "type": "uses" },
-    { "source": "seo-agent",          "target": "seo-tools",           "type": "uses" },
-    { "source": "seo-agent",          "target": "analytics-data",      "type": "uses" },
-    { "source": "performance-agent",  "target": "analytics-data",      "type": "uses" },
-
-    { "source": "research-agent",     "target": "research-insights",   "type": "performs" },
-    { "source": "writer-agent",       "target": "write-brief",         "type": "performs" },
-    { "source": "writer-agent",       "target": "draft-content",       "type": "performs" },
-    { "source": "writer-agent",       "target": "brand-compliance",    "type": "performs" },
-    { "source": "seo-agent",          "target": "seo-optimization",    "type": "performs" },
-    { "source": "performance-agent",  "target": "track-performance",   "type": "performs" },
-    { "source": "performance-agent",  "target": "generate-report",     "type": "performs" }
+    {
+      "source": "research-insights",
+      "target": "write-brief",
+      "type": "flows-to"
+    },
+    {
+      "source": "write-brief",
+      "target": "brief-approval",
+      "type": "flows-to"
+    },
+    {
+      "source": "brief-approval",
+      "target": "draft-content",
+      "type": "flows-to"
+    },
+    {
+      "source": "draft-content",
+      "target": "seo-optimization",
+      "type": "flows-to"
+    },
+    {
+      "source": "seo-optimization",
+      "target": "quality-check",
+      "type": "flows-to"
+    },
+    {
+      "source": "quality-check",
+      "target": "brand-compliance",
+      "type": "flows-to"
+    },
+    {
+      "source": "brand-compliance",
+      "target": "brand-review",
+      "type": "flows-to"
+    },
+    {
+      "source": "brand-review",
+      "target": "legal-review",
+      "type": "flows-to"
+    },
+    {
+      "source": "final-edit",
+      "target": "stakeholder-signoff",
+      "type": "flows-to"
+    },
+    {
+      "source": "stakeholder-signoff",
+      "target": "schedule-publish",
+      "type": "flows-to"
+    },
+    {
+      "source": "schedule-publish",
+      "target": "distribute",
+      "type": "flows-to"
+    },
+    {
+      "source": "distribute",
+      "target": "track-performance",
+      "type": "flows-to"
+    },
+    {
+      "source": "track-performance",
+      "target": "generate-report",
+      "type": "flows-to"
+    },
+    {
+      "source": "generate-report",
+      "target": "performance-review",
+      "type": "flows-to"
+    },
+    {
+      "source": "performance-review",
+      "target": "optimize",
+      "type": "flows-to"
+    },
+    {
+      "source": "brief-approval",
+      "target": "write-brief",
+      "type": "reviews"
+    },
+    {
+      "source": "quality-check",
+      "target": "seo-optimization",
+      "type": "reviews"
+    },
+    {
+      "source": "brand-review",
+      "target": "brand-compliance",
+      "type": "reviews"
+    },
+    {
+      "source": "stakeholder-signoff",
+      "target": "final-edit",
+      "type": "reviews"
+    },
+    {
+      "source": "performance-review",
+      "target": "generate-report",
+      "type": "reviews"
+    },
+    {
+      "source": "brand-review",
+      "target": "stakeholder-signoff",
+      "type": "escalates-to"
+    },
+    {
+      "source": "performance-review",
+      "target": "receive-request",
+      "type": "escalates-to"
+    },
+    {
+      "source": "quality-check",
+      "target": "brand-review",
+      "type": "escalates-to"
+    },
+    {
+      "source": "brief-approval",
+      "target": "write-brief",
+      "type": "returns-to"
+    },
+    {
+      "source": "quality-check",
+      "target": "draft-content",
+      "type": "returns-to"
+    },
+    {
+      "source": "brand-review",
+      "target": "brand-compliance",
+      "type": "returns-to"
+    },
+    {
+      "source": "stakeholder-signoff",
+      "target": "final-edit",
+      "type": "returns-to"
+    },
+    {
+      "source": "performance-review",
+      "target": "optimize",
+      "type": "returns-to"
+    },
+    {
+      "source": "research-insights",
+      "target": "analytics-data",
+      "type": "uses"
+    },
+    {
+      "source": "research-insights",
+      "target": "audience-personas",
+      "type": "uses"
+    },
+    {
+      "source": "research-insights",
+      "target": "content-strategy",
+      "type": "uses"
+    },
+    {
+      "source": "write-brief",
+      "target": "content-strategy",
+      "type": "uses"
+    },
+    {
+      "source": "write-brief",
+      "target": "brand-guide",
+      "type": "uses"
+    },
+    {
+      "source": "draft-content",
+      "target": "brand-guide",
+      "type": "uses"
+    },
+    {
+      "source": "draft-content",
+      "target": "audience-personas",
+      "type": "uses"
+    },
+    {
+      "source": "seo-optimization",
+      "target": "seo-tools",
+      "type": "uses"
+    },
+    {
+      "source": "seo-optimization",
+      "target": "analytics-data",
+      "type": "uses"
+    },
+    {
+      "source": "brand-compliance",
+      "target": "brand-guide",
+      "type": "uses"
+    },
+    {
+      "source": "track-performance",
+      "target": "analytics-data",
+      "type": "uses"
+    },
+    {
+      "source": "generate-report",
+      "target": "analytics-data",
+      "type": "uses"
+    },
+    {
+      "source": "generate-report",
+      "target": "content-strategy",
+      "type": "uses"
+    },
+    {
+      "source": "research-agent",
+      "target": "analytics-data",
+      "type": "uses"
+    },
+    {
+      "source": "research-agent",
+      "target": "audience-personas",
+      "type": "uses"
+    },
+    {
+      "source": "writer-agent",
+      "target": "brand-guide",
+      "type": "uses"
+    },
+    {
+      "source": "writer-agent",
+      "target": "content-strategy",
+      "type": "uses"
+    },
+    {
+      "source": "seo-agent",
+      "target": "seo-tools",
+      "type": "uses"
+    },
+    {
+      "source": "seo-agent",
+      "target": "analytics-data",
+      "type": "uses"
+    },
+    {
+      "source": "performance-agent",
+      "target": "analytics-data",
+      "type": "uses"
+    },
+    {
+      "source": "research-agent",
+      "target": "research-insights",
+      "type": "performs"
+    },
+    {
+      "source": "writer-agent",
+      "target": "write-brief",
+      "type": "performs"
+    },
+    {
+      "source": "writer-agent",
+      "target": "draft-content",
+      "type": "performs"
+    },
+    {
+      "source": "writer-agent",
+      "target": "brand-compliance",
+      "type": "performs"
+    },
+    {
+      "source": "seo-agent",
+      "target": "seo-optimization",
+      "type": "performs"
+    },
+    {
+      "source": "performance-agent",
+      "target": "track-performance",
+      "type": "performs"
+    },
+    {
+      "source": "performance-agent",
+      "target": "generate-report",
+      "type": "performs"
+    },
+    {
+      "source": "receive-request",
+      "target": "social-listening",
+      "type": "flows-to"
+    },
+    {
+      "source": "social-listening",
+      "target": "research-insights",
+      "type": "flows-to"
+    },
+    {
+      "source": "draft-content",
+      "target": "visual-asset-creation",
+      "type": "flows-to"
+    },
+    {
+      "source": "visual-asset-creation",
+      "target": "quality-check",
+      "type": "flows-to"
+    },
+    {
+      "source": "legal-review",
+      "target": "legal-compliance-gate",
+      "type": "flows-to"
+    },
+    {
+      "source": "legal-compliance-gate",
+      "target": "final-edit",
+      "type": "flows-to"
+    },
+    {
+      "source": "final-edit",
+      "target": "accessibility-check",
+      "type": "flows-to"
+    },
+    {
+      "source": "accessibility-check",
+      "target": "stakeholder-signoff",
+      "type": "flows-to"
+    },
+    {
+      "source": "stakeholder-signoff",
+      "target": "localize-content",
+      "type": "flows-to"
+    },
+    {
+      "source": "localize-content",
+      "target": "localization-quality-gate",
+      "type": "flows-to"
+    },
+    {
+      "source": "localization-quality-gate",
+      "target": "schedule-publish",
+      "type": "flows-to"
+    },
+    {
+      "source": "final-edit",
+      "target": "ab-variant-creation",
+      "type": "flows-to"
+    },
+    {
+      "source": "ab-variant-creation",
+      "target": "schedule-publish",
+      "type": "flows-to"
+    },
+    {
+      "source": "distribute",
+      "target": "content-repurposing",
+      "type": "flows-to"
+    },
+    {
+      "source": "content-repurposing",
+      "target": "track-performance",
+      "type": "flows-to"
+    },
+    {
+      "source": "performance-review",
+      "target": "archive-tag",
+      "type": "flows-to"
+    },
+    {
+      "source": "legal-compliance-gate",
+      "target": "legal-review",
+      "type": "reviews"
+    },
+    {
+      "source": "localization-quality-gate",
+      "target": "localize-content",
+      "type": "reviews"
+    },
+    {
+      "source": "legal-compliance-gate",
+      "target": "brand-compliance",
+      "type": "returns-to"
+    },
+    {
+      "source": "localization-quality-gate",
+      "target": "localize-content",
+      "type": "returns-to"
+    },
+    {
+      "source": "legal-compliance-gate",
+      "target": "stakeholder-signoff",
+      "type": "escalates-to"
+    },
+    {
+      "source": "localization-quality-gate",
+      "target": "legal-compliance-gate",
+      "type": "escalates-to"
+    },
+    {
+      "source": "social-listening-agent",
+      "target": "social-listening",
+      "type": "performs"
+    },
+    {
+      "source": "legal-screening-agent",
+      "target": "legal-review",
+      "type": "performs"
+    },
+    {
+      "source": "localization-agent",
+      "target": "localize-content",
+      "type": "performs"
+    },
+    {
+      "source": "repurposing-agent",
+      "target": "ab-variant-creation",
+      "type": "performs"
+    },
+    {
+      "source": "repurposing-agent",
+      "target": "content-repurposing",
+      "type": "performs"
+    },
+    {
+      "source": "accessibility-agent",
+      "target": "accessibility-check",
+      "type": "performs"
+    },
+    {
+      "source": "social-listening-agent",
+      "target": "analytics-data",
+      "type": "uses"
+    },
+    {
+      "source": "social-listening-agent",
+      "target": "audience-personas",
+      "type": "uses"
+    },
+    {
+      "source": "social-listening-agent",
+      "target": "competitor-library",
+      "type": "uses"
+    },
+    {
+      "source": "legal-screening-agent",
+      "target": "legal-guidelines",
+      "type": "uses"
+    },
+    {
+      "source": "legal-screening-agent",
+      "target": "approval-matrix",
+      "type": "uses"
+    },
+    {
+      "source": "localization-agent",
+      "target": "localization-guides",
+      "type": "uses"
+    },
+    {
+      "source": "localization-agent",
+      "target": "legal-guidelines",
+      "type": "uses"
+    },
+    {
+      "source": "localization-agent",
+      "target": "brand-guide",
+      "type": "uses"
+    },
+    {
+      "source": "repurposing-agent",
+      "target": "brand-guide",
+      "type": "uses"
+    },
+    {
+      "source": "repurposing-agent",
+      "target": "channel-benchmarks",
+      "type": "uses"
+    },
+    {
+      "source": "repurposing-agent",
+      "target": "content-strategy",
+      "type": "uses"
+    },
+    {
+      "source": "accessibility-agent",
+      "target": "accessibility-standards",
+      "type": "uses"
+    },
+    {
+      "source": "social-listening",
+      "target": "analytics-data",
+      "type": "uses"
+    },
+    {
+      "source": "social-listening",
+      "target": "audience-personas",
+      "type": "uses"
+    },
+    {
+      "source": "social-listening",
+      "target": "competitor-library",
+      "type": "uses"
+    },
+    {
+      "source": "visual-asset-creation",
+      "target": "brand-guide",
+      "type": "uses"
+    },
+    {
+      "source": "visual-asset-creation",
+      "target": "asset-library",
+      "type": "uses"
+    },
+    {
+      "source": "legal-review",
+      "target": "legal-guidelines",
+      "type": "uses"
+    },
+    {
+      "source": "legal-review",
+      "target": "approval-matrix",
+      "type": "uses"
+    },
+    {
+      "source": "accessibility-check",
+      "target": "accessibility-standards",
+      "type": "uses"
+    },
+    {
+      "source": "localize-content",
+      "target": "localization-guides",
+      "type": "uses"
+    },
+    {
+      "source": "localize-content",
+      "target": "legal-guidelines",
+      "type": "uses"
+    },
+    {
+      "source": "ab-variant-creation",
+      "target": "channel-benchmarks",
+      "type": "uses"
+    },
+    {
+      "source": "ab-variant-creation",
+      "target": "analytics-data",
+      "type": "uses"
+    },
+    {
+      "source": "content-repurposing",
+      "target": "brand-guide",
+      "type": "uses"
+    },
+    {
+      "source": "content-repurposing",
+      "target": "channel-benchmarks",
+      "type": "uses"
+    },
+    {
+      "source": "content-repurposing",
+      "target": "content-strategy",
+      "type": "uses"
+    },
+    {
+      "source": "archive-tag",
+      "target": "content-taxonomy",
+      "type": "uses"
+    },
+    {
+      "source": "research-insights",
+      "target": "competitor-library",
+      "type": "uses"
+    },
+    {
+      "source": "schedule-publish",
+      "target": "approval-matrix",
+      "type": "uses"
+    },
+    {
+      "source": "distribute",
+      "target": "channel-benchmarks",
+      "type": "uses"
+    },
+    {
+      "source": "receive-request",
+      "target": "approval-matrix",
+      "type": "uses"
+    },
+    {
+      "source": "stakeholder-signoff",
+      "target": "approval-matrix",
+      "type": "uses"
+    },
+    {
+      "source": "ab-variant-creation",
+      "target": "segment-mapping",
+      "type": "flows-to"
+    },
+    {
+      "source": "segment-mapping",
+      "target": "personalization-qa",
+      "type": "flows-to"
+    },
+    {
+      "source": "personalization-qa",
+      "target": "dynamic-assembly",
+      "type": "flows-to"
+    },
+    {
+      "source": "dynamic-assembly",
+      "target": "schedule-publish",
+      "type": "flows-to"
+    },
+    {
+      "source": "personalization-qa",
+      "target": "segment-mapping",
+      "type": "returns-to"
+    },
+    {
+      "source": "personalization-qa",
+      "target": "stakeholder-signoff",
+      "type": "escalates-to"
+    },
+    {
+      "source": "personalization-qa",
+      "target": "segment-mapping",
+      "type": "reviews"
+    },
+    {
+      "source": "personalization-agent",
+      "target": "segment-mapping",
+      "type": "performs"
+    },
+    {
+      "source": "personalization-agent",
+      "target": "dynamic-assembly",
+      "type": "performs"
+    },
+    {
+      "source": "personalization-agent",
+      "target": "cdp-profiles",
+      "type": "uses"
+    },
+    {
+      "source": "personalization-agent",
+      "target": "personalization-rules",
+      "type": "uses"
+    },
+    {
+      "source": "personalization-agent",
+      "target": "channel-benchmarks",
+      "type": "uses"
+    },
+    {
+      "source": "segment-mapping",
+      "target": "cdp-profiles",
+      "type": "uses"
+    },
+    {
+      "source": "segment-mapping",
+      "target": "personalization-rules",
+      "type": "uses"
+    },
+    {
+      "source": "segment-mapping",
+      "target": "channel-benchmarks",
+      "type": "uses"
+    },
+    {
+      "source": "dynamic-assembly",
+      "target": "cdp-profiles",
+      "type": "uses"
+    },
+    {
+      "source": "dynamic-assembly",
+      "target": "asset-library",
+      "type": "uses"
+    },
+    {
+      "source": "dynamic-assembly",
+      "target": "brand-guide",
+      "type": "uses"
+    },
+    {
+      "source": "campaign-planning",
+      "target": "receive-request",
+      "type": "flows-to"
+    },
+    {
+      "source": "campaign-planning",
+      "target": "content-strategy",
+      "type": "uses"
+    },
+    {
+      "source": "campaign-planning",
+      "target": "analytics-data",
+      "type": "uses"
+    },
+    {
+      "source": "campaign-planning",
+      "target": "channel-benchmarks",
+      "type": "uses"
+    },
+    {
+      "source": "campaign-planning",
+      "target": "cdp-profiles",
+      "type": "uses"
+    },
+    {
+      "source": "campaign-planning",
+      "target": "budget-allocation",
+      "type": "uses"
+    },
+    {
+      "source": "personalization-qa",
+      "target": "consent-check",
+      "type": "flows-to"
+    },
+    {
+      "source": "consent-check",
+      "target": "dynamic-assembly",
+      "type": "flows-to"
+    },
+    {
+      "source": "privacy-agent",
+      "target": "consent-check",
+      "type": "performs"
+    },
+    {
+      "source": "privacy-agent",
+      "target": "cdp-profiles",
+      "type": "uses"
+    },
+    {
+      "source": "privacy-agent",
+      "target": "privacy-regulations",
+      "type": "uses"
+    },
+    {
+      "source": "consent-check",
+      "target": "cdp-profiles",
+      "type": "uses"
+    },
+    {
+      "source": "consent-check",
+      "target": "privacy-regulations",
+      "type": "uses"
+    },
+    {
+      "source": "final-edit",
+      "target": "paid-creative-production",
+      "type": "flows-to"
+    },
+    {
+      "source": "paid-creative-production",
+      "target": "segment-mapping",
+      "type": "flows-to"
+    },
+    {
+      "source": "paid-creative-production",
+      "target": "channel-benchmarks",
+      "type": "uses"
+    },
+    {
+      "source": "paid-creative-production",
+      "target": "cdp-profiles",
+      "type": "uses"
+    },
+    {
+      "source": "paid-creative-production",
+      "target": "brand-guide",
+      "type": "uses"
+    },
+    {
+      "source": "paid-creative-production",
+      "target": "budget-allocation",
+      "type": "uses"
+    },
+    {
+      "source": "paid-creative-production",
+      "target": "media-plan",
+      "type": "uses"
+    },
+    {
+      "source": "repurposing-agent",
+      "target": "paid-creative-production",
+      "type": "performs"
+    },
+    {
+      "source": "generate-report",
+      "target": "attribution-modeling",
+      "type": "flows-to"
+    },
+    {
+      "source": "attribution-modeling",
+      "target": "performance-review",
+      "type": "flows-to"
+    },
+    {
+      "source": "attribution-modeling",
+      "target": "cdp-profiles",
+      "type": "uses"
+    },
+    {
+      "source": "attribution-modeling",
+      "target": "budget-allocation",
+      "type": "uses"
+    },
+    {
+      "source": "attribution-modeling",
+      "target": "channel-benchmarks",
+      "type": "uses"
+    },
+    {
+      "source": "performance-agent",
+      "target": "attribution-modeling",
+      "type": "performs"
+    },
+    {
+      "source": "performance-agent",
+      "target": "cdp-profiles",
+      "type": "uses"
+    },
+    {
+      "source": "performance-agent",
+      "target": "channel-benchmarks",
+      "type": "uses"
+    },
+    {
+      "source": "attribution-modeling",
+      "target": "executive-reporting",
+      "type": "flows-to"
+    },
+    {
+      "source": "executive-reporting",
+      "target": "campaign-planning",
+      "type": "flows-to"
+    },
+    {
+      "source": "executive-reporting",
+      "target": "content-strategy",
+      "type": "uses"
+    },
+    {
+      "source": "executive-reporting",
+      "target": "budget-allocation",
+      "type": "uses"
+    },
+    {
+      "source": "performance-agent",
+      "target": "executive-reporting",
+      "type": "performs"
+    },
+    {
+      "source": "social-listening",
+      "target": "competitive-response",
+      "type": "flows-to"
+    },
+    {
+      "source": "competitive-response",
+      "target": "draft-content",
+      "type": "flows-to"
+    },
+    {
+      "source": "competitive-response",
+      "target": "competitor-library",
+      "type": "uses"
+    },
+    {
+      "source": "competitive-response",
+      "target": "content-strategy",
+      "type": "uses"
+    },
+    {
+      "source": "competitive-response",
+      "target": "brand-guide",
+      "type": "uses"
+    },
+    {
+      "source": "research-agent",
+      "target": "competitive-response",
+      "type": "performs"
+    },
+    {
+      "source": "research-agent",
+      "target": "competitor-library",
+      "type": "uses"
+    },
+    {
+      "source": "archive-tag",
+      "target": "content-governance",
+      "type": "flows-to"
+    },
+    {
+      "source": "content-governance",
+      "target": "governance-gate",
+      "type": "flows-to"
+    },
+    {
+      "source": "governance-gate",
+      "target": "receive-request",
+      "type": "returns-to"
+    },
+    {
+      "source": "governance-gate",
+      "target": "archive-tag",
+      "type": "returns-to"
+    },
+    {
+      "source": "governance-gate",
+      "target": "stakeholder-signoff",
+      "type": "escalates-to"
+    },
+    {
+      "source": "governance-gate",
+      "target": "content-governance",
+      "type": "reviews"
+    },
+    {
+      "source": "content-governance",
+      "target": "content-taxonomy",
+      "type": "uses"
+    },
+    {
+      "source": "content-governance",
+      "target": "legal-guidelines",
+      "type": "uses"
+    },
+    {
+      "source": "content-governance",
+      "target": "brand-guide",
+      "type": "uses"
+    },
+    {
+      "source": "campaign-planning",
+      "target": "journey-mapping",
+      "type": "flows-to"
+    },
+    {
+      "source": "journey-mapping",
+      "target": "receive-request",
+      "type": "flows-to"
+    },
+    {
+      "source": "journey-mapping",
+      "target": "cdp-profiles",
+      "type": "uses"
+    },
+    {
+      "source": "journey-mapping",
+      "target": "content-taxonomy",
+      "type": "uses"
+    },
+    {
+      "source": "journey-mapping",
+      "target": "content-strategy",
+      "type": "uses"
+    },
+    {
+      "source": "journey-mapping",
+      "target": "audience-personas",
+      "type": "uses"
+    },
+    {
+      "source": "distribute",
+      "target": "sentiment-monitoring",
+      "type": "flows-to"
+    },
+    {
+      "source": "sentiment-monitoring",
+      "target": "track-performance",
+      "type": "flows-to"
+    },
+    {
+      "source": "sentiment-monitoring",
+      "target": "competitive-response",
+      "type": "flows-to"
+    },
+    {
+      "source": "social-listening-agent",
+      "target": "sentiment-monitoring",
+      "type": "performs"
+    },
+    {
+      "source": "sentiment-monitoring",
+      "target": "analytics-data",
+      "type": "uses"
+    },
+    {
+      "source": "sentiment-monitoring",
+      "target": "cdp-profiles",
+      "type": "uses"
+    },
+    {
+      "source": "sentiment-monitoring",
+      "target": "competitor-library",
+      "type": "uses"
+    },
+    {
+      "source": "final-edit",
+      "target": "sales-enablement",
+      "type": "flows-to"
+    },
+    {
+      "source": "sales-enablement",
+      "target": "segment-mapping",
+      "type": "flows-to"
+    },
+    {
+      "source": "sales-enablement",
+      "target": "competitor-library",
+      "type": "uses"
+    },
+    {
+      "source": "sales-enablement",
+      "target": "audience-personas",
+      "type": "uses"
+    },
+    {
+      "source": "sales-enablement",
+      "target": "sales-feedback-log",
+      "type": "uses"
+    },
+    {
+      "source": "sales-enablement",
+      "target": "cdp-profiles",
+      "type": "uses"
+    },
+    {
+      "source": "sales-enablement",
+      "target": "brand-guide",
+      "type": "uses"
+    },
+    {
+      "source": "repurposing-agent",
+      "target": "sales-enablement",
+      "type": "performs"
+    },
+    {
+      "source": "repurposing-agent",
+      "target": "sales-feedback-log",
+      "type": "uses"
+    },
+    {
+      "source": "campaign-planning",
+      "target": "influencer-brief",
+      "type": "flows-to"
+    },
+    {
+      "source": "influencer-brief",
+      "target": "ugc-moderation",
+      "type": "flows-to"
+    },
+    {
+      "source": "ugc-moderation",
+      "target": "brand-review",
+      "type": "flows-to"
+    },
+    {
+      "source": "influencer-brief",
+      "target": "content-strategy",
+      "type": "uses"
+    },
+    {
+      "source": "influencer-brief",
+      "target": "brand-guide",
+      "type": "uses"
+    },
+    {
+      "source": "influencer-brief",
+      "target": "audience-personas",
+      "type": "uses"
+    },
+    {
+      "source": "influencer-brief",
+      "target": "cdp-profiles",
+      "type": "uses"
+    },
+    {
+      "source": "influencer-brief",
+      "target": "influencer-database",
+      "type": "uses"
+    },
+    {
+      "source": "influencer-brief",
+      "target": "budget-allocation",
+      "type": "uses"
+    },
+    {
+      "source": "ugc-moderation",
+      "target": "brand-guide",
+      "type": "uses"
+    },
+    {
+      "source": "ugc-moderation",
+      "target": "legal-guidelines",
+      "type": "uses"
+    },
+    {
+      "source": "ugc-moderation",
+      "target": "influencer-database",
+      "type": "uses"
+    },
+    {
+      "source": "writer-agent",
+      "target": "ugc-moderation",
+      "type": "performs"
+    },
+    {
+      "source": "receive-request",
+      "target": "content-scoring",
+      "type": "flows-to"
+    },
+    {
+      "source": "content-scoring",
+      "target": "research-insights",
+      "type": "flows-to"
+    },
+    {
+      "source": "content-scoring",
+      "target": "content-strategy",
+      "type": "uses"
+    },
+    {
+      "source": "content-scoring",
+      "target": "scoring-matrix",
+      "type": "uses"
+    },
+    {
+      "source": "content-scoring",
+      "target": "analytics-data",
+      "type": "uses"
+    },
+    {
+      "source": "content-scoring",
+      "target": "budget-allocation",
+      "type": "uses"
+    },
+    {
+      "source": "research-agent",
+      "target": "content-scoring",
+      "type": "performs"
+    },
+    {
+      "source": "research-agent",
+      "target": "scoring-matrix",
+      "type": "uses"
+    },
+    {
+      "source": "dynamic-assembly",
+      "target": "channel-orchestration",
+      "type": "flows-to"
+    },
+    {
+      "source": "channel-orchestration",
+      "target": "schedule-publish",
+      "type": "flows-to"
+    },
+    {
+      "source": "channel-orchestration",
+      "target": "channel-benchmarks",
+      "type": "uses"
+    },
+    {
+      "source": "channel-orchestration",
+      "target": "orchestration-rules",
+      "type": "uses"
+    },
+    {
+      "source": "channel-orchestration",
+      "target": "media-plan",
+      "type": "uses"
+    },
+    {
+      "source": "channel-orchestration",
+      "target": "cdp-profiles",
+      "type": "uses"
+    },
+    {
+      "source": "personalization-agent",
+      "target": "channel-orchestration",
+      "type": "performs"
+    },
+    {
+      "source": "personalization-agent",
+      "target": "orchestration-rules",
+      "type": "uses"
+    },
+    {
+      "source": "optimize",
+      "target": "content-repurposing",
+      "type": "flows-to"
+    },
+    {
+      "source": "optimize",
+      "target": "competitive-response",
+      "type": "flows-to"
+    },
+    {
+      "source": "optimize",
+      "target": "receive-request",
+      "type": "flows-to"
+    },
+    {
+      "source": "distribute",
+      "target": "orchestration-rules",
+      "type": "uses"
+    },
+    {
+      "source": "distribute",
+      "target": "media-plan",
+      "type": "uses"
+    },
+    {
+      "source": "schedule-publish",
+      "target": "orchestration-rules",
+      "type": "uses"
+    },
+    {
+      "source": "track-performance",
+      "target": "cdp-profiles",
+      "type": "uses"
+    },
+    {
+      "source": "track-performance",
+      "target": "channel-benchmarks",
+      "type": "uses"
+    },
+    {
+      "source": "generate-report",
+      "target": "budget-allocation",
+      "type": "uses"
+    },
+    {
+      "source": "optimize",
+      "target": "channel-benchmarks",
+      "type": "uses"
+    },
+    {
+      "source": "optimize",
+      "target": "analytics-data",
+      "type": "uses"
+    }
   ]
 }
