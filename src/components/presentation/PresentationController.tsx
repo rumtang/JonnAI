@@ -62,6 +62,16 @@ const AGENT_PRIMARY_LINKS: Array<[string, string]> = [
   ['performance-agent', 'track-performance'],
 ];
 
+// Lifecycle stages shown on slides 1-3 as the "map everyone draws"
+const PIPELINE_STAGES = [
+  { label: 'Strategy', icon: '\uD83C\uDFAF' },
+  { label: 'Create', icon: '\u270F\uFE0F' },
+  { label: 'Review', icon: '\u2714\uFE0F' },
+  { label: 'Publish', icon: '\uD83D\uDE80' },
+  { label: 'Measure', icon: '\uD83D\uDCCA' },
+  { label: 'Optimize', icon: '\uD83D\uDD04' },
+];
+
 export default function PresentationController() {
   const {
     currentStepIndex,
@@ -90,6 +100,13 @@ export default function PresentationController() {
 
   const currentStep = steps[currentStepIndex];
   const isTitleSlide = currentStep?.action === 'show-title-slide';
+  const isPipelineSlide = currentStep?.id === 'act1-pipeline';
+  const isTransitionSlide = currentStep?.id === 'act1-teams';
+  const showPipelineOverlay = isTitleSlide || isPipelineSlide || isTransitionSlide;
+  // Scrim opacity: fully opaque on title+pipeline, semi-transparent on transition
+  const scrimOpacity = isTitleSlide ? 0.95 : isPipelineSlide ? 0.92 : 0.35;
+  // Diagram fades on the transition slide to let the 3D graph emerge
+  const diagramOpacity = isTransitionSlide ? 0.4 : 1;
 
   const exitToExplore = useCallback(() => {
     clearHighlights();
@@ -385,28 +402,94 @@ export default function PresentationController() {
 
   return (
     <>
-      {/* Title Slide Overlay OR Narration Card */}
-      <AnimatePresence mode="wait">
-        {isTitleSlide ? (
+      {/* ─── Background Scrim (slides 1-3) ──────────────────── */}
+      <AnimatePresence>
+        {showPipelineOverlay && (
           <motion.div
-            key="title-slide"
+            key="scrim"
+            className="fixed inset-0 z-[45] pointer-events-none"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: scrimOpacity }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.8 }}
+          >
+            <div className="absolute inset-0 bg-background backdrop-blur-sm" />
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* ─── Pipeline Diagram (slides 1-3, persistent layer) ── */}
+      <AnimatePresence>
+        {showPipelineOverlay && (
+          <motion.div
+            key="pipeline-diagram"
+            className="fixed inset-0 z-[55] flex items-center justify-center pointer-events-none"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{
+              opacity: diagramOpacity,
+              y: isTitleSlide ? 30 : -40,
+              scale: isTransitionSlide ? 0.85 : 1,
+            }}
+            exit={{ opacity: 0, scale: 0.9, y: -60 }}
+            transition={{ duration: 0.6 }}
+          >
+            <div className="flex flex-col items-center">
+              {/* Lifecycle stages */}
+              <div className="flex items-center justify-center gap-0">
+                {PIPELINE_STAGES.map((stage, i, arr) => (
+                  <div key={stage.label} className="flex items-center">
+                    <div className="flex flex-col items-center gap-2">
+                      <div className="w-14 h-14 md:w-16 md:h-16 rounded-2xl glass-panel flex items-center justify-center text-xl md:text-2xl">
+                        {stage.icon}
+                      </div>
+                      <span className="text-xs font-medium text-foreground">
+                        {stage.label}
+                      </span>
+                    </div>
+                    {i < arr.length - 1 && (
+                      <div className="mx-1.5 md:mx-3 flex items-center -mt-6">
+                        <div className="w-6 md:w-10 h-0.5 bg-gradient-to-r from-[#C9A04E] to-[#5B9ECF]" />
+                        <div className="w-0 h-0 border-t-[4px] border-t-transparent border-b-[4px] border-b-transparent border-l-[6px] border-l-[#5B9ECF]" />
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+              {/* Feedback loop arc: Optimize → Strategy */}
+              <svg className="w-[85%] mt-3" height="20" viewBox="0 0 100 20" preserveAspectRatio="none">
+                <defs>
+                  <linearGradient id="feedback-arc" x1="100%" y1="0%" x2="0%" y2="0%">
+                    <stop offset="0%" stopColor="#9B7ACC" stopOpacity="0.5" />
+                    <stop offset="100%" stopColor="#C9A04E" stopOpacity="0.5" />
+                  </linearGradient>
+                </defs>
+                <path d="M 88 2 C 88 16, 12 16, 12 2" fill="none" stroke="url(#feedback-arc)" strokeWidth="0.8" strokeDasharray="3 2" />
+                <polygon points="12,0 10,4 14,4" fill="#C9A04E" opacity="0.5" />
+              </svg>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* ─── Title Content (slide 1 only) ─────────────────── */}
+      <AnimatePresence>
+        {isTitleSlide && (
+          <motion.div
+            key="title-content"
+            className="fixed inset-0 z-[60] flex flex-col items-center pointer-events-none"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.6 }}
-            className="fixed inset-0 z-[60] flex flex-col items-center justify-center"
+            transition={{ duration: 0.5 }}
           >
-            {/* Opaque background to fully hide the 3D graph */}
-            <div className="absolute inset-0 bg-background/95 backdrop-blur-md" />
-
-            {/* Content */}
-            <div className="relative z-10 text-center max-w-4xl px-8">
+            {/* Title block positioned above the pipeline diagram */}
+            <div className="text-center max-w-4xl px-8 mt-[18vh]">
               {/* Pill badge */}
               <motion.div
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
-                className="mb-8"
+                className="mb-6"
               >
                 <span className="px-4 py-1.5 rounded-full text-xs font-medium glass-panel text-primary">
                   Guided Presentation
@@ -430,57 +513,29 @@ export default function PresentationController() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.5 }}
-                className="text-lg text-muted-foreground mb-12 max-w-xl mx-auto leading-relaxed"
+                className="text-lg text-muted-foreground max-w-xl mx-auto leading-relaxed"
               >
-                Every team tells the same story: a clean five-stage pipeline.
+                Every team tells the same story: a clean, linear pipeline.
                 But what does the process really look like?
               </motion.p>
-
-              {/* Horizontal pipeline diagram: Brief → Creation → Review → Publish → Measure */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.7, duration: 0.5 }}
-                className="flex items-center justify-center gap-0 mb-12"
-              >
-                {[
-                  { label: 'Brief', icon: '\uD83D\uDCCB' },
-                  { label: 'Creation', icon: '\u270F\uFE0F' },
-                  { label: 'Review', icon: '\uD83D\uDD0D' },
-                  { label: 'Publish', icon: '\uD83D\uDE80' },
-                  { label: 'Measure', icon: '\uD83D\uDCCA' },
-                ].map((stage, i, arr) => (
-                  <div key={stage.label} className="flex items-center">
-                    <div className="flex flex-col items-center gap-2">
-                      <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl glass-panel flex items-center justify-center text-2xl md:text-3xl">
-                        {stage.icon}
-                      </div>
-                      <span className="text-xs md:text-sm font-medium text-foreground">
-                        {stage.label}
-                      </span>
-                    </div>
-                    {i < arr.length - 1 && (
-                      <div className="mx-2 md:mx-4 flex items-center -mt-6">
-                        <div className="w-8 md:w-12 h-0.5 bg-gradient-to-r from-[#C9A04E] to-[#5B9ECF]" />
-                        <div className="w-0 h-0 border-t-[5px] border-t-transparent border-b-[5px] border-b-transparent border-l-[8px] border-l-[#5B9ECF]" />
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </motion.div>
-
-              {/* Prompt to continue */}
-              <motion.p
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 1.0 }}
-                className="text-sm text-muted-foreground/60"
-              >
-                Press {'\u2192'} or click Next to begin
-              </motion.p>
             </div>
+
+            {/* Prompt at bottom */}
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 1.0 }}
+              className="absolute bottom-32 text-sm text-muted-foreground/60"
+            >
+              Press {'\u2192'} or click Next to begin
+            </motion.p>
           </motion.div>
-        ) : (
+        )}
+      </AnimatePresence>
+
+      {/* ─── Narration Card (slides 2+) ───────────────────── */}
+      <AnimatePresence mode="wait">
+        {!isTitleSlide && (
           <motion.div
             key="narration"
             initial={{ opacity: 0, y: 40 }}
