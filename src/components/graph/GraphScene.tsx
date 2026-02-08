@@ -317,11 +317,12 @@ export default function GraphScene() {
     setDetailPanelOpen(true);
 
     if (fgRef.current && node.x !== undefined && node.y !== undefined && node.z !== undefined) {
-      const distance = 80;
-      const distRatio = 1 + distance / Math.hypot(node.x, node.y, node.z || 1);
+      // Fixed offset from the node — avoids the ratio-based calculation that
+      // sends the camera to infinity when a node is near the origin
+      const distance = 120;
       fgRef.current.cameraPosition(
-        { x: node.x * distRatio, y: node.y * distRatio, z: node.z * distRatio },
-        node,
+        { x: node.x, y: node.y, z: node.z + distance },
+        { x: node.x, y: node.y, z: node.z },
         2500
       );
     }
