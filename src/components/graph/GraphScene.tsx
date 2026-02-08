@@ -14,8 +14,9 @@ import { GraphNode, GraphLink, StepMeta } from '@/lib/graph/types';
 import * as THREE from 'three';
 import SpriteText from 'three-spritetext';
 
-// Memoized color cache to avoid re-creating THREE.Color per render
+// Memoized caches to avoid re-creating GPU resources per render
 const colorCache = new Map<string, THREE.Color>();
+const glowTextureCache = new Map<string, THREE.Texture>();
 function getCachedColor(hex: string): THREE.Color {
   let c = colorCache.get(hex);
   if (!c) {
@@ -23,6 +24,15 @@ function getCachedColor(hex: string): THREE.Color {
     colorCache.set(hex, c);
   }
   return c;
+}
+
+function getCachedGlowTexture(color: string): THREE.Texture {
+  let tex = glowTextureCache.get(color);
+  if (!tex) {
+    tex = createGlowTexture(color);
+    glowTextureCache.set(color, tex);
+  }
+  return tex;
 }
 
 export default function GraphScene() {
@@ -94,6 +104,7 @@ export default function GraphScene() {
 
     const fg = fgRef.current;
     setGraphRef(fg);
+    const lights: THREE.Light[] = [];
 
     const timer = setTimeout(() => {
       try {
@@ -111,20 +122,24 @@ export default function GraphScene() {
           const keyLight = new THREE.DirectionalLight(0xfff5e6, 0.8);
           keyLight.position.set(100, 150, 100);
           scene.add(keyLight);
+          lights.push(keyLight);
 
           // Cool fill light from bottom-left
           const fillLight = new THREE.DirectionalLight(0xe6f2ff, 0.4);
           fillLight.position.set(-100, -80, -50);
           scene.add(fillLight);
+          lights.push(fillLight);
 
           // Base ambient illumination
           const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
           scene.add(ambientLight);
+          lights.push(ambientLight);
 
           // Inner glow point light
           const pointLight = new THREE.PointLight(0xffeaa7, 0.3, 200);
           pointLight.position.set(0, 0, 0);
           scene.add(pointLight);
+          lights.push(pointLight);
         }
       } catch {
         // Renderer/scene not available yet
@@ -150,6 +165,16 @@ export default function GraphScene() {
       if (rotationRef.current !== null) {
         cancelAnimationFrame(rotationRef.current);
       }
+      // Remove lights from scene on unmount (prevents accumulation during HMR)
+      try {
+        const scene = fg.scene?.();
+        if (scene) {
+          lights.forEach(light => {
+            scene.remove(light);
+            light.dispose();
+          });
+        }
+      } catch { /* scene may already be destroyed */ }
       setGraphRef(null);
     };
   }, []);
@@ -196,7 +221,7 @@ export default function GraphScene() {
 
     // Soft glow sprite with additive blending
     const spriteMaterial = new THREE.SpriteMaterial({
-      map: createGlowTexture(isCampaignCurrent ? '#4CAF50' : style.color),
+      map: getCachedGlowTexture(isCampaignCurrent ? '#4CAF50' : style.color),
       transparent: true,
       opacity: isDimmed ? 0.04 : (isCampaignCurrent ? 0.45 : isHighlighted ? 0.30 : 0.12),
       depthWrite: false,
@@ -222,7 +247,7 @@ export default function GraphScene() {
     // Campaign visited node — subtle green tint on glow
     if (isCampaignVisited && !isCampaignCurrent) {
       const visitedGlow = new THREE.SpriteMaterial({
-        map: createGlowTexture('#4CAF50'),
+        map: getCachedGlowTexture('#4CAF50'),
         transparent: true,
         opacity: 0.15,
         depthWrite: false,
@@ -295,7 +320,8 @@ export default function GraphScene() {
 
   // Handle node hover
   const handleNodeHover = useCallback((node: GraphNode | null) => {
-    if (selectedNode) return;
+    // Block hover highlight when a node is manually selected (not in campaign mode)
+    if (selectedNode && !campaignActive) return;
     hoverNode(node || null);
     if (node) {
       const neighbors = getNeighborIds(node.id, graphData.links);
@@ -303,7 +329,7 @@ export default function GraphScene() {
     } else {
       clearHighlights();
     }
-  }, [hoverNode, graphData.links, setHighlightedNodeIds, clearHighlights, selectedNode]);
+  }, [hoverNode, graphData.links, setHighlightedNodeIds, clearHighlights, selectedNode, campaignActive]);
 
   // Handle background click - deselect
   const handleBackgroundClick = useCallback(() => {

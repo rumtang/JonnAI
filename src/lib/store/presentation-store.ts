@@ -25,7 +25,7 @@ export const usePresentationStore = create<PresentationState>((set, get) => ({
   isPlaying: false,
   isTransitioning: false,
 
-  setMode: (mode) => set({ mode }),
+  setMode: (mode) => set({ mode, currentStepIndex: 0, isPlaying: false, isTransitioning: false }),
   setSteps: (steps) => set({ steps }),
 
   nextStep: () => {

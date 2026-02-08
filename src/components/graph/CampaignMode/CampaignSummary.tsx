@@ -18,7 +18,7 @@ export default function CampaignSummary() {
     startCampaign,
   } = useCampaignStore();
   const { setMode } = usePresentationStore();
-  const { loadFullGraph } = useGraphStore();
+  const { loadFullGraph, selectNode, clearHighlights } = useGraphStore();
 
   const gatesPassed = decisions.filter(d => {
     const dl = d.decision.toLowerCase();
@@ -30,11 +30,15 @@ export default function CampaignSummary() {
   const timeLabel = hours > 0 ? `${hours}h ${mins}m` : `${mins}m`;
 
   const handleRunAgain = () => {
+    selectNode(null);
+    clearHighlights();
     resetCampaign();
     startCampaign();
   };
 
   const handleExplore = () => {
+    selectNode(null);
+    clearHighlights();
     resetCampaign();
     setMode('explore');
     loadFullGraph();

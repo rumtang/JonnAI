@@ -10,23 +10,24 @@ type Mode = 'guided' | 'explore' | 'campaign';
 
 export default function ModeToggle() {
   const { mode, setMode, reset } = usePresentationStore();
-  const { loadFullGraph, loadLinearView, resetFilters, clearHighlights, clearNavigation } = useGraphStore();
-  const { startCampaign, endCampaign, resetCampaign } = useCampaignStore();
+  const { loadFullGraph, loadLinearView, resetFilters, clearHighlights, clearNavigation, selectNode } = useGraphStore();
+  const { startCampaign, resetCampaign } = useCampaignStore();
 
   const handleModeChange = (newMode: Mode) => {
     if (newMode === mode) return;
     setMode(newMode);
+    selectNode(null);
     clearHighlights();
     resetFilters();
     clearNavigation();
     useRoleInsightStore.getState().clearRole();
 
     if (newMode === 'guided') {
-      endCampaign();
+      resetCampaign();
       reset();
       loadLinearView();
     } else if (newMode === 'explore') {
-      endCampaign();
+      resetCampaign();
       loadFullGraph();
     } else if (newMode === 'campaign') {
       resetCampaign();

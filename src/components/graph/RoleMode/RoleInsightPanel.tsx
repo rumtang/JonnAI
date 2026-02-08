@@ -1,5 +1,6 @@
 'use client';
 
+import { useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Users, ChevronLeft, ChevronRight, RefreshCw, Eye } from 'lucide-react';
 import { useRoleInsightStore } from '@/lib/store/role-insight-store';
@@ -45,13 +46,22 @@ export default function RoleInsightPanel({ onChangeRole }: RoleInsightPanelProps
     goToStep,
   } = useRoleInsight();
 
+  // Prevent rapid clicks from launching multiple camera animations
+  const isNavigatingRef = useRef(false);
+  const guardedNav = (fn: () => void) => {
+    if (isNavigatingRef.current) return;
+    isNavigatingRef.current = true;
+    fn();
+    setTimeout(() => { isNavigatingRef.current = false; }, 1000);
+  };
+
   if (!selectedRole || !roleSubgraph || walkthroughPath.length === 0) return null;
 
   const currentNodeId = walkthroughPath[currentStepIndex];
   const currentNode = graphData.nodes.find(n => n.id === currentNodeId);
   if (!currentNode) return null;
 
-  const style = NODE_STYLES[currentNode.type as NodeType];
+  const style = NODE_STYLES[currentNode.type as NodeType] || NODE_STYLES.step;
   const isFirst = currentStepIndex === 0;
   const isLast = currentStepIndex === walkthroughPath.length - 1;
   const narrativeBlock = getNarrativeForStep(currentNodeId, selectedRole, selectedRole.narrative);
@@ -99,13 +109,13 @@ export default function RoleInsightPanel({ onChangeRole }: RoleInsightPanelProps
             <div className="flex items-center gap-1 mb-4 overflow-x-auto pb-1">
               {walkthroughPath.map((nodeId, i) => {
                 const node = graphData.nodes.find(n => n.id === nodeId);
-                const nodeStyle = node ? NODE_STYLES[node.type as NodeType] : null;
+                const nodeStyle = node ? (NODE_STYLES[node.type as NodeType] || NODE_STYLES.step) : NODE_STYLES.step;
                 const isCurrent = i === currentStepIndex;
                 const isVisited = i < currentStepIndex;
                 return (
                   <button
                     key={nodeId}
-                    onClick={() => goToStep(i)}
+                    onClick={() => guardedNav(() => goToStep(i))}
                     title={node?.label || nodeId}
                     className={`shrink-0 rounded-full transition-all duration-300 ${
                       isCurrent
@@ -208,7 +218,7 @@ export default function RoleInsightPanel({ onChangeRole }: RoleInsightPanelProps
               {/* Prev / Next navigation */}
               <div className="flex items-center gap-2">
                 <button
-                  onClick={goToPrevStep}
+                  onClick={() => guardedNav(goToPrevStep)}
                   disabled={isFirst}
                   className={`flex-1 flex items-center justify-center gap-1 px-3 py-2.5 rounded-xl
                              border text-sm font-medium transition-all duration-200
@@ -220,7 +230,7 @@ export default function RoleInsightPanel({ onChangeRole }: RoleInsightPanelProps
                   Prev
                 </button>
                 <button
-                  onClick={goToNextStep}
+                  onClick={() => guardedNav(goToNextStep)}
                   disabled={isLast}
                   className={`flex-1 flex items-center justify-center gap-1 px-3 py-2.5 rounded-xl
                              border text-sm font-semibold transition-all duration-200

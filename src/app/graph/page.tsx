@@ -68,13 +68,18 @@ export default function GraphPage() {
 
   useEffect(() => {
     // Read initial mode from sessionStorage (set by landing page)
-    const savedMode = typeof window !== 'undefined'
-      ? sessionStorage.getItem('initialMode') as 'guided' | 'explore' | 'campaign' | null
-      : null;
+    let savedMode: 'guided' | 'explore' | 'campaign' | null = null;
+    try {
+      if (typeof window !== 'undefined') {
+        savedMode = sessionStorage.getItem('initialMode') as typeof savedMode;
+      }
+    } catch {
+      // sessionStorage may be disabled (e.g. private browsing, security policy)
+    }
 
     if (savedMode) {
       setMode(savedMode);
-      sessionStorage.removeItem('initialMode');
+      try { sessionStorage.removeItem('initialMode'); } catch { /* ignore */ }
     }
 
     const activeMode = savedMode || mode;

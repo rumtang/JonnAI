@@ -104,6 +104,7 @@ export const useGraphStore = create<GraphState>((set, get) => ({
         highlightedNodeIds: new Set(),
         highlightedLinkIndices: new Set(),
         hoveredNode: null,
+        navigationHistory: [],
       });
     }
   },

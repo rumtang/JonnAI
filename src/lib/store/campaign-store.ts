@@ -124,7 +124,10 @@ export const useCampaignStore = create<CampaignState>((set, get) => ({
     const state = get();
     const currentId = state.currentNodeId;
     const currentNode = graphData.nodes.find(n => n.id === currentId);
-    if (!currentNode) return null;
+    if (!currentNode) {
+      console.warn('[Campaign] advanceToNext: current node not found:', currentId);
+      return null;
+    }
 
     // Log the completed step
     const estTime = currentNode.type === 'step'
@@ -149,13 +152,19 @@ export const useCampaignStore = create<CampaignState>((set, get) => ({
       return sId === currentId && l.type === 'flows-to';
     });
 
-    if (!flowsToLink) return null;
+    if (!flowsToLink) {
+      console.warn('[Campaign] advanceToNext: no flows-to link from:', currentId);
+      return null;
+    }
 
     const nextId = typeof flowsToLink.target === 'object'
       ? (flowsToLink.target as GraphNode).id
       : flowsToLink.target;
     const nextNode = graphData.nodes.find(n => n.id === nextId);
-    if (!nextNode) return null;
+    if (!nextNode) {
+      console.warn('[Campaign] advanceToNext: target node not found:', nextId);
+      return null;
+    }
 
     set({
       currentNodeId: nextId,
@@ -173,7 +182,10 @@ export const useCampaignStore = create<CampaignState>((set, get) => ({
     const state = get();
     const currentId = state.currentNodeId;
     const currentNode = graphData.nodes.find(n => n.id === currentId);
-    if (!currentNode) return null;
+    if (!currentNode) {
+      console.warn('[Campaign] makeGateDecision: current node not found:', currentId);
+      return null;
+    }
 
     const d = decision.toLowerCase();
     let targetNode: GraphNode | null = null;
@@ -265,12 +277,16 @@ export const useCampaignStore = create<CampaignState>((set, get) => ({
       return null;
     }
 
-    if (!targetNode) return null;
+    if (!targetNode) {
+      console.warn('[Campaign] makeGateDecision: no target node for decision:', decision, 'at gate:', currentId);
+      return null;
+    }
 
-    // Log revision return if applicable
-    const logEntries = [logEntry];
+    // Build log entries in display order (newest first, since log is prepended)
+    const logEntries: CampaignLogEntry[] = [];
     if (revisionInc > 0 && targetNode) {
-      logEntries.unshift({
+      // "Returned to" is the most recent action (where we end up)
+      logEntries.push({
         nodeId: targetNode.id,
         nodeLabel: targetNode.label,
         nodeType: targetNode.type,
@@ -281,6 +297,8 @@ export const useCampaignStore = create<CampaignState>((set, get) => ({
         icon: '\uD83D\uDD04',
       });
     }
+    // The gate decision that triggered the action
+    logEntries.push(logEntry);
 
     set({
       currentNodeId: targetNode.id,
@@ -289,7 +307,7 @@ export const useCampaignStore = create<CampaignState>((set, get) => ({
       revisionCount: state.revisionCount + revisionInc,
       escalationCount: state.escalationCount + escalationInc,
       stepCount: state.stepCount + 1,
-      log: [...logEntries.reverse(), ...state.log],
+      log: [...logEntries, ...state.log],
     });
 
     return targetNode;
