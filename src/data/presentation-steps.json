@@ -116,11 +116,11 @@
   {
     "id": "act2-agent-grounding",
     "title": "What Agents Actually Depend On",
-    "narration": "Agents do not operate in a vacuum. Every agent draws on reference inputs: the Brand Voice Guide, Content Strategy, Audience Personas, Legal Guidelines, CDP profiles, Channel Benchmarks. These inputs are what prevent agent output from being generic. Remove the brand guide and the Content Writer produces commodity copy. Remove the CDP and the Personalization Agent is guessing. The agents are only as good as the context they are given.",
+    "narration": "Every organization has information like this: brand guidelines, audience personas, content strategy documents, legal frameworks, analytics data. Most teams treat these as reference material — documents that sit in a shared drive and get consulted when someone remembers they exist. But context is not the same as information. Context is how that information is actually used within the company — who applies it, when it triggers a decision, what happens when it changes, and which systems depend on it being current. That is a fundamentally different question. It goes beyond what your team knows and into how your team actually operates. Beyond skills and into the real how.",
     "cameraPosition": {
       "x": 0,
       "y": -100,
-      "z": 400
+      "z": 450
     },
     "cameraLookAt": {
       "x": 0,
@@ -131,7 +131,6 @@
     "graphState": "linear",
     "action": "show-agent-dependencies",
     "filterNodeTypes": [
-      "agent",
       "input"
     ],
     "highlightLinkTypes": [
