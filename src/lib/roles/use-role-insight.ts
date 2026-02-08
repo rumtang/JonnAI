@@ -1,11 +1,18 @@
 // Integration hook bridging role-insight-store and graph-store.
 // Activating a role computes the subgraph, applies highlights, and flies
 // the camera to the first node. Next/Prev step through the walkthrough path.
+//
+// IMPORTANT: Camera navigation must read nodes from getState() at call time,
+// not from the hook closure. The force-graph engine mutates node objects to
+// add x/y/z positions — a stale closure may have nodes without positions.
 
 import { useCallback } from 'react';
 import { useGraphStore } from '../store/graph-store';
 import { useRoleInsightStore } from '../store/role-insight-store';
 import { navigateToNode } from '../utils/camera-navigation';
+
+// Camera distance for role walkthrough — close enough to feel immersive
+const ROLE_CAM_DISTANCE = 60;
 
 export function useRoleInsight() {
   const {
@@ -24,13 +31,15 @@ export function useRoleInsight() {
     currentStepIndex,
   } = useRoleInsightStore();
 
-  // Helper: find a node by ID and fly camera to it
+  // Helper: find a node by ID from the LIVE store (not closure) and fly camera to it
   const flyToNodeId = useCallback((nodeId: string) => {
-    const node = graphData.nodes.find(n => n.id === nodeId);
+    // Read from getState() to get force-graph-mutated nodes with x/y/z positions
+    const liveNodes = useGraphStore.getState().graphData.nodes;
+    const node = liveNodes.find(n => n.id === nodeId);
     if (node) {
-      navigateToNode(node, { distance: 120, duration: 1000 });
+      navigateToNode(node, { distance: ROLE_CAM_DISTANCE, duration: 1000 });
     }
-  }, [graphData.nodes]);
+  }, []);
 
   const activateRole = useCallback((roleId: string) => {
     selectRole(roleId, graphData);
@@ -44,13 +53,15 @@ export function useRoleInsight() {
     // Fly camera to the first node in the walkthrough
     if (state.walkthroughPath.length > 0) {
       const firstNodeId = state.walkthroughPath[0];
-      const firstNode = graphData.nodes.find(n => n.id === firstNodeId);
-      if (firstNode) {
-        // Small delay so the graph highlights settle before camera moves
-        setTimeout(() => {
-          navigateToNode(firstNode, { distance: 120, duration: 1200 });
-        }, 200);
-      }
+      // Small delay so the graph highlights settle before camera moves
+      setTimeout(() => {
+        // Read live nodes at fly time, not from closure
+        const liveNodes = useGraphStore.getState().graphData.nodes;
+        const firstNode = liveNodes.find(n => n.id === firstNodeId);
+        if (firstNode) {
+          navigateToNode(firstNode, { distance: ROLE_CAM_DISTANCE, duration: 1200 });
+        }
+      }, 300);
     }
   }, [graphData, selectRole, setHighlightedNodeIds]);
 
