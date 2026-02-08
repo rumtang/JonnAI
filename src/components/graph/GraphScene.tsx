@@ -42,11 +42,13 @@ export default function GraphScene() {
     visibleLinkTypes,
     searchQuery,
     flashingLinkKey,
-    pushNavigation,
   } = useGraphStore();
 
   const { mode } = usePresentationStore();
-  const { isActive: campaignActive, currentNodeId: campaignNodeId, visitedNodes: campaignVisited } = useCampaignStore();
+  // Use individual selectors to avoid re-rendering on every campaign store change
+  const campaignActive = useCampaignStore(s => s.isActive);
+  const campaignNodeId = useCampaignStore(s => s.currentNodeId);
+  const campaignVisited = useCampaignStore(s => s.visitedNodes);
   const { setDetailPanelOpen } = useUIStore();
 
   // In campaign mode, build sets for highlighting
@@ -275,9 +277,9 @@ export default function GraphScene() {
   }, [hoveredNode, selectedNode, highlightedNodeIds, neighborSet, hasHighlights, geometries, campaignActive, campaignNodeId, campaignVisitedSet, campaignNeighborSet]);
 
   // Handle node click - fly camera to node (cinematic 2500ms)
+  // Breadcrumbs only track connection navigation in NodeDetailPanel, not direct clicks.
   const handleNodeClick = useCallback((node: GraphNode) => {
     selectNode(node);
-    pushNavigation(node);
     setDetailPanelOpen(true);
 
     if (fgRef.current && node.x !== undefined && node.y !== undefined && node.z !== undefined) {
@@ -289,7 +291,7 @@ export default function GraphScene() {
         2500
       );
     }
-  }, [selectNode, pushNavigation, setDetailPanelOpen]);
+  }, [selectNode, setDetailPanelOpen]);
 
   // Handle node hover
   const handleNodeHover = useCallback((node: GraphNode | null) => {

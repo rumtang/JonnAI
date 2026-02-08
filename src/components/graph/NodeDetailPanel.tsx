@@ -23,6 +23,7 @@ export default function NodeDetailPanel() {
   const handleClose = () => {
     selectNode(null);
     setDetailPanelOpen(false);
+    useGraphStore.getState().clearNavigation();
   };
 
   // Navigate to a connected node — camera + panel + breadcrumb

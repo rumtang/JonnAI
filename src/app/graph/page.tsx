@@ -49,9 +49,15 @@ function buildLinearGraphData(): GraphData {
 }
 
 export default function GraphPage() {
-  const { setGraphData, setFullGraphData, setLinearGraphData, selectNode } = useGraphStore();
+  // Use selectors to avoid re-rendering on every store change (e.g. flashingLinkKey, navigationHistory)
+  const setGraphData = useGraphStore(s => s.setGraphData);
+  const setFullGraphData = useGraphStore(s => s.setFullGraphData);
+  const setLinearGraphData = useGraphStore(s => s.setLinearGraphData);
+  const selectNode = useGraphStore(s => s.selectNode);
   const { setSteps, mode, setMode } = usePresentationStore();
-  const { isActive: campaignActive, currentNodeId, startCampaign } = useCampaignStore();
+  const campaignActive = useCampaignStore(s => s.isActive);
+  const currentNodeId = useCampaignStore(s => s.currentNodeId);
+  const startCampaign = useCampaignStore(s => s.startCampaign);
 
   useEffect(() => {
     // Read initial mode from sessionStorage (set by landing page)
