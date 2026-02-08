@@ -1,59 +1,66 @@
 'use client';
 
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Users, ArrowRight, RefreshCw } from 'lucide-react';
+import { X, Users, ChevronLeft, ChevronRight, RefreshCw, Eye } from 'lucide-react';
 import { useRoleInsightStore } from '@/lib/store/role-insight-store';
 import { useGraphStore } from '@/lib/store/graph-store';
-import { useUIStore } from '@/lib/store/ui-store';
 import { useRoleInsight } from '@/lib/roles/use-role-insight';
-import { getTeamConnections, TeamConnection } from '@/lib/roles/role-subgraph';
 import { NODE_STYLES } from '@/lib/graph/node-styles';
-import { GraphNode, NodeType } from '@/lib/graph/types';
-import { navigateToNode } from '@/lib/utils/camera-navigation';
+import { Badge } from '@/components/ui/badge';
+import { GraphNode, NodeType, StepMeta, GateMeta, AgentMeta, InputMeta } from '@/lib/graph/types';
 
 interface RoleInsightPanelProps {
   onChangeRole: () => void;
+}
+
+// Map walkthrough node to a narrative section heading + content
+function getNarrativeForStep(
+  nodeId: string,
+  role: { ownedSteps: string[]; reviewedGates: string[]; relatedAgents: string[]; relatedInputs: string[] },
+  narrative: { today: string; future: string; teamSupport: string; keyInsight: string }
+): { heading: string; content: string } | null {
+  if (role.ownedSteps.includes(nodeId) || role.reviewedGates.includes(nodeId)) {
+    return { heading: 'Your Work Today', content: narrative.today };
+  }
+  if (role.relatedAgents.includes(nodeId)) {
+    return { heading: 'Your Future with AI', content: narrative.future };
+  }
+  if (role.relatedInputs.includes(nodeId)) {
+    return { heading: 'How Your Team Supports You', content: narrative.teamSupport };
+  }
+  return null;
 }
 
 export default function RoleInsightPanel({ onChangeRole }: RoleInsightPanelProps) {
   const selectedRole = useRoleInsightStore(s => s.selectedRole);
   const roleSubgraph = useRoleInsightStore(s => s.roleSubgraph);
   const isActive = useRoleInsightStore(s => s.isActive);
-  const { deactivateRole, activateRole } = useRoleInsight();
+  const walkthroughPath = useRoleInsightStore(s => s.walkthroughPath);
+  const currentStepIndex = useRoleInsightStore(s => s.currentStepIndex);
   const graphData = useGraphStore(s => s.graphData);
-  const selectNode = useGraphStore(s => s.selectNode);
-  const setDetailPanelOpen = useUIStore(s => s.setDetailPanelOpen);
+  const {
+    deactivateRole,
+    goToNextStep,
+    goToPrevStep,
+    goToStep,
+  } = useRoleInsight();
 
-  if (!selectedRole || !roleSubgraph) return null;
+  if (!selectedRole || !roleSubgraph || walkthroughPath.length === 0) return null;
 
-  // Split nodes into primary (owned steps + gates) and support (agents + inputs)
-  const primaryNodes = graphData.nodes.filter(
-    n => roleSubgraph.primaryNodeIds.has(n.id)
-  );
-  const supportNodes = graphData.nodes.filter(
-    n => roleSubgraph.supportNodeIds.has(n.id)
-  );
+  const currentNodeId = walkthroughPath[currentStepIndex];
+  const currentNode = graphData.nodes.find(n => n.id === currentNodeId);
+  if (!currentNode) return null;
 
-  const teamConnections = getTeamConnections(selectedRole, graphData);
+  const style = NODE_STYLES[currentNode.type as NodeType];
+  const isFirst = currentStepIndex === 0;
+  const isLast = currentStepIndex === walkthroughPath.length - 1;
+  const narrativeBlock = getNarrativeForStep(currentNodeId, selectedRole, selectedRole.narrative);
 
-  // When clicking a node in the list: deactivate role, select node, show NodeDetailPanel
-  const handleNodeClick = (node: GraphNode) => {
-    // Clear role store only (not graph highlights — selectNode will set its own)
-    useRoleInsightStore.getState().clearRole();
-    selectNode(node);
-    setDetailPanelOpen(true);
-    navigateToNode(node, { distance: 120, duration: 1000 });
-  };
-
-  const handleConnectedRoleClick = (roleId: string) => {
-    activateRole(roleId);
-  };
-
-  const handleClose = () => {
-    deactivateRole();
-  };
-
-  const narrative = selectedRole.narrative;
+  // Classify the current node for the user
+  const isPrimary = selectedRole.ownedSteps.includes(currentNodeId) || selectedRole.reviewedGates.includes(currentNodeId);
+  const nodeRelation = isPrimary
+    ? (selectedRole.ownedSteps.includes(currentNodeId) ? 'You own this step' : 'You review this gate')
+    : (selectedRole.relatedAgents.includes(currentNodeId) ? 'AI agent supporting you' : 'Input you depend on');
 
   return (
     <AnimatePresence>
@@ -64,121 +71,188 @@ export default function RoleInsightPanel({ onChangeRole }: RoleInsightPanelProps
           exit={{ x: 400, opacity: 0 }}
           transition={{ type: 'spring', damping: 25, stiffness: 200 }}
           onWheel={(e) => e.stopPropagation()}
-          className="fixed right-0 top-14 h-[calc(100vh-3.5rem)] w-96 z-50 glass-panel rounded-l-2xl overflow-y-auto"
+          className="fixed right-0 top-14 h-[calc(100vh-3.5rem)] w-96 z-50 glass-panel rounded-l-2xl flex flex-col"
         >
-          <div className="p-6">
-            {/* Header */}
-            <div className="flex items-start justify-between mb-6">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-[#C9A04E]/20">
-                  <Users className="w-5 h-5 text-[#C9A04E]" />
+          <div className="flex flex-col h-full p-6 overflow-hidden">
+            {/* Role header — fixed */}
+            <div className="flex items-start justify-between mb-4">
+              <div className="flex items-center gap-3 min-w-0">
+                <div className="w-9 h-9 rounded-lg flex items-center justify-center bg-[#C9A04E]/20 shrink-0">
+                  <Users className="w-4 h-4 text-[#C9A04E]" />
                 </div>
-                <div>
-                  <h2 className="text-lg font-semibold text-foreground">{selectedRole.title}</h2>
-                  <p className="text-xs text-[#C9A04E] font-medium mt-0.5">{selectedRole.description}</p>
+                <div className="min-w-0">
+                  <h2 className="text-base font-semibold text-foreground truncate">{selectedRole.title}</h2>
+                  <p className="text-xs text-[#C9A04E]">
+                    Step {currentStepIndex + 1} of {walkthroughPath.length}
+                  </p>
                 </div>
               </div>
               <button
-                onClick={handleClose}
-                className="p-1 rounded-lg hover:bg-accent text-muted-foreground hover:text-foreground transition-colors"
+                onClick={deactivateRole}
+                className="p-1 rounded-lg hover:bg-accent text-muted-foreground hover:text-foreground transition-colors shrink-0"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            {/* Narrative sections with staggered animation */}
-            <div className="space-y-4 mb-6">
-              <NarrativeCard
-                title="Your Work Today"
-                content={narrative.today}
-                delay={0.1}
-              />
-              <NarrativeCard
-                title="Your Future with AI"
-                content={narrative.future}
-                delay={0.2}
-              />
-              <NarrativeCard
-                title="How Your Team Supports You"
-                content={narrative.teamSupport}
-                delay={0.3}
-              />
-              {/* Key Insight — gold-bordered callout */}
+            {/* Progress dots */}
+            <div className="flex items-center gap-1 mb-4 overflow-x-auto pb-1">
+              {walkthroughPath.map((nodeId, i) => {
+                const node = graphData.nodes.find(n => n.id === nodeId);
+                const nodeStyle = node ? NODE_STYLES[node.type as NodeType] : null;
+                const isCurrent = i === currentStepIndex;
+                const isVisited = i < currentStepIndex;
+                return (
+                  <button
+                    key={nodeId}
+                    onClick={() => goToStep(i)}
+                    title={node?.label || nodeId}
+                    className={`shrink-0 rounded-full transition-all duration-300 ${
+                      isCurrent
+                        ? 'w-6 h-3 ring-2 ring-[#C9A04E]/50'
+                        : 'w-3 h-3 hover:scale-125'
+                    } ${isVisited ? 'opacity-100' : 'opacity-40'}`}
+                    style={{
+                      backgroundColor: isCurrent
+                        ? '#C9A04E'
+                        : (nodeStyle?.color || '#6b7280') + (isVisited ? '' : '80'),
+                    }}
+                  />
+                );
+              })}
+            </div>
+
+            {/* Divider */}
+            <div className="border-t border-border mb-4" />
+
+            {/* Scrollable content — current node details */}
+            <div className="flex-1 overflow-y-auto min-h-0">
+              {/* Current node card */}
               <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4 }}
-                className="p-4 rounded-xl bg-[#C9A04E]/5 border border-[#C9A04E]/30"
+                key={currentNodeId}
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.3 }}
               >
-                <h4 className="text-xs font-semibold text-[#C9A04E] mb-2">Key Insight</h4>
-                <p className="text-sm text-foreground/90 leading-relaxed">{narrative.keyInsight}</p>
+                {/* Node header */}
+                <div className="flex items-center gap-3 mb-3">
+                  <div
+                    className="w-10 h-10 rounded-lg flex items-center justify-center text-lg"
+                    style={{ backgroundColor: (style?.color || '#6b7280') + '20' }}
+                  >
+                    {style?.emoji}
+                  </div>
+                  <div>
+                    <h3 className="text-base font-semibold text-foreground">{currentNode.label}</h3>
+                    <div className="flex items-center gap-2 mt-0.5">
+                      <Badge
+                        variant="outline"
+                        className="text-xs"
+                        style={{ borderColor: (style?.color || '#6b7280') + '60', color: style?.color }}
+                      >
+                        {currentNode.type}
+                      </Badge>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Relationship to role */}
+                <div className="mb-3 px-3 py-2 rounded-lg bg-[#C9A04E]/5 border border-[#C9A04E]/20">
+                  <p className="text-xs font-medium text-[#C9A04E]">
+                    <Eye className="w-3 h-3 inline mr-1" />
+                    {nodeRelation}
+                  </p>
+                </div>
+
+                {/* Node description */}
+                <p className="text-sm text-muted-foreground mb-4">{currentNode.description}</p>
+
+                {/* Type-specific metadata */}
+                <div className="space-y-3 mb-4">
+                  {currentNode.type === 'step' && <StepDetail meta={currentNode.meta as StepMeta} />}
+                  {currentNode.type === 'gate' && <GateDetail meta={currentNode.meta as GateMeta} />}
+                  {currentNode.type === 'agent' && <AgentDetail meta={currentNode.meta as AgentMeta} />}
+                  {currentNode.type === 'input' && <InputDetail meta={currentNode.meta as InputMeta} />}
+                </div>
+
+                {/* Narrative insight for this step */}
+                {narrativeBlock && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.15 }}
+                    className="p-4 rounded-xl bg-[#C9A04E]/5 border border-[#C9A04E]/30 mb-4"
+                  >
+                    <h4 className="text-xs font-semibold text-[#C9A04E] mb-2">{narrativeBlock.heading}</h4>
+                    <p className="text-sm text-foreground/90 leading-relaxed">{narrativeBlock.content}</p>
+                  </motion.div>
+                )}
+
+                {/* Key insight — shown on the last step */}
+                {isLast && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.2 }}
+                    className="p-4 rounded-xl bg-[#C9A04E]/10 border border-[#C9A04E]/40 mb-4"
+                  >
+                    <h4 className="text-xs font-bold text-[#C9A04E] mb-2">Key Insight</h4>
+                    <p className="text-sm text-foreground leading-relaxed">{selectedRole.narrative.keyInsight}</p>
+                  </motion.div>
+                )}
               </motion.div>
             </div>
 
-            {/* Your Nodes */}
-            <div className="mb-6">
-              <h3 className="text-sm font-semibold text-foreground mb-3">Your Nodes</h3>
-
-              {primaryNodes.length > 0 && (
-                <div className="mb-3">
-                  <p className="text-xs text-muted-foreground mb-2">Owned Steps & Gates</p>
-                  <div className="space-y-1">
-                    {primaryNodes.map(node => (
-                      <NodeRow key={node.id} node={node} onClick={handleNodeClick} />
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {supportNodes.length > 0 && (
-                <div>
-                  <p className="text-xs text-muted-foreground mb-2">Supporting Agents & Inputs</p>
-                  <div className="space-y-1">
-                    {supportNodes.map(node => (
-                      <NodeRow key={node.id} node={node} onClick={handleNodeClick} />
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {/* Connected Roles */}
-            {teamConnections.length > 0 && (
-              <div className="mb-6">
-                <h3 className="text-sm font-semibold text-foreground mb-3">
-                  Connected Roles ({teamConnections.length})
-                </h3>
-                <div className="space-y-1">
-                  {teamConnections.map(conn => (
-                    <ConnectedRoleRow
-                      key={conn.roleId}
-                      connection={conn}
-                      onClick={handleConnectedRoleClick}
-                    />
-                  ))}
-                </div>
+            {/* Fixed bottom — navigation + actions */}
+            <div className="pt-4 border-t border-border space-y-3">
+              {/* Prev / Next navigation */}
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={goToPrevStep}
+                  disabled={isFirst}
+                  className={`flex-1 flex items-center justify-center gap-1 px-3 py-2.5 rounded-xl
+                             border text-sm font-medium transition-all duration-200
+                             ${isFirst
+                               ? 'border-white/5 text-muted-foreground/30 cursor-not-allowed'
+                               : 'border-white/10 text-foreground hover:bg-white/5'}`}
+                >
+                  <ChevronLeft className="w-4 h-4" />
+                  Prev
+                </button>
+                <button
+                  onClick={goToNextStep}
+                  disabled={isLast}
+                  className={`flex-1 flex items-center justify-center gap-1 px-3 py-2.5 rounded-xl
+                             border text-sm font-semibold transition-all duration-200
+                             ${isLast
+                               ? 'border-white/5 text-muted-foreground/30 cursor-not-allowed'
+                               : 'border-[#C9A04E]/30 bg-[#C9A04E]/20 text-[#C9A04E] hover:bg-[#C9A04E]/30'}`}
+                >
+                  Next
+                  <ChevronRight className="w-4 h-4" />
+                </button>
               </div>
-            )}
 
-            {/* Footer buttons */}
-            <div className="flex gap-3 pt-4 border-t border-border">
-              <button
-                onClick={onChangeRole}
-                className="flex-1 px-4 py-3 rounded-xl bg-[#C9A04E]/20 hover:bg-[#C9A04E]/30
-                           border border-[#C9A04E]/30 text-[#C9A04E] font-semibold text-sm
-                           transition-all duration-200 flex items-center justify-center gap-2"
-              >
-                <RefreshCw className="w-4 h-4" />
-                Change Role
-              </button>
-              <button
-                onClick={handleClose}
-                className="flex-1 px-4 py-3 rounded-xl bg-white/5 hover:bg-white/10
-                           border border-white/10 text-muted-foreground font-semibold text-sm
-                           transition-all duration-200"
-              >
-                Clear View
-              </button>
+              {/* Change role / clear */}
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={onChangeRole}
+                  className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl
+                             text-xs text-muted-foreground hover:text-foreground
+                             border border-white/10 hover:bg-white/5 transition-all duration-200"
+                >
+                  <RefreshCw className="w-3 h-3" />
+                  Change Role
+                </button>
+                <button
+                  onClick={deactivateRole}
+                  className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl
+                             text-xs text-muted-foreground hover:text-foreground
+                             border border-white/10 hover:bg-white/5 transition-all duration-200"
+                >
+                  Clear View
+                </button>
+              </div>
             </div>
           </div>
         </motion.div>
@@ -187,66 +261,87 @@ export default function RoleInsightPanel({ onChangeRole }: RoleInsightPanelProps
   );
 }
 
-function NarrativeCard({ title, content, delay }: { title: string; content: string; delay: number }) {
+// --- Metadata components (match CampaignNodeCard patterns) ---
+
+function MetaRow({ label, value }: { label: string; value: string | undefined }) {
+  if (!value) return null;
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay }}
-      className="p-4 rounded-xl bg-white/5 border border-white/10"
-    >
-      <h4 className="text-xs font-semibold text-muted-foreground mb-2">{title}</h4>
-      <p className="text-sm text-foreground/90 leading-relaxed">{content}</p>
-    </motion.div>
+    <div className="flex items-center justify-between py-1.5 border-b border-border">
+      <span className="text-xs text-muted-foreground">{label}</span>
+      <span className="text-xs text-foreground">{value}</span>
+    </div>
   );
 }
 
-function NodeRow({ node, onClick }: { node: GraphNode; onClick: (node: GraphNode) => void }) {
-  const style = NODE_STYLES[node.type as NodeType];
+function StepDetail({ meta }: { meta?: StepMeta }) {
+  if (!meta) return null;
+  const ownerColors: Record<string, string> = {
+    agent: 'text-[#9B7ACC] border-[#9B7ACC]/30',
+    human: 'text-[#5B9ECF] border-[#5B9ECF]/30',
+    shared: 'text-[#C9A04E] border-[#C9A04E]/30',
+  };
   return (
-    <button
-      onClick={() => onClick(node)}
-      className="group w-full flex items-center gap-3 p-2 rounded-lg
-                 hover:bg-accent/20 transition-all duration-200 text-left
-                 border border-transparent hover:border-white/10"
-    >
-      <div
-        className="w-6 h-6 rounded flex items-center justify-center text-xs"
-        style={{ backgroundColor: (style?.color || '#6b7280') + '20' }}
-      >
-        {style?.emoji}
+    <>
+      <MetaRow label="Phase" value={meta.phase} />
+      <div className="flex items-center justify-between py-1.5 border-b border-border">
+        <span className="text-xs text-muted-foreground">Owner</span>
+        <Badge variant="outline" className={`text-xs ${ownerColors[meta.owner] || ''}`}>
+          {meta.owner === 'agent' ? `AI: ${meta.agentName || 'Agent'}` : meta.owner === 'human' ? 'Human' : 'Shared'}
+        </Badge>
       </div>
-      <div className="flex-1 min-w-0">
-        <p className="text-sm text-foreground truncate">{node.label}</p>
-        <p className="text-xs text-muted-foreground">{node.type}</p>
-      </div>
-      <ArrowRight className="w-4 h-4 text-muted-foreground/0 group-hover:text-muted-foreground
-                             transition-all duration-200 shrink-0" />
-    </button>
+      <MetaRow label="Est. Time" value={meta.estimatedTime} />
+    </>
   );
 }
 
-function ConnectedRoleRow({ connection, onClick }: { connection: TeamConnection; onClick: (roleId: string) => void }) {
+function GateDetail({ meta }: { meta?: GateMeta }) {
+  if (!meta) return null;
   return (
-    <button
-      onClick={() => onClick(connection.roleId)}
-      className="group w-full flex items-center gap-3 p-2 rounded-lg
-                 hover:bg-accent/20 transition-all duration-200 text-left
-                 border border-transparent hover:border-[#C9A04E]/20"
-    >
-      <div className="w-6 h-6 rounded flex items-center justify-center bg-[#C9A04E]/10">
-        <Users className="w-3.5 h-3.5 text-[#C9A04E]" />
+    <>
+      <div className="p-3 rounded-lg bg-white/5 border border-white/10 mb-2">
+        <p className="text-xs text-muted-foreground mb-1">Reviewed by</p>
+        <p className="text-sm font-semibold text-foreground">{meta.reviewer}</p>
       </div>
-      <div className="flex-1 min-w-0">
-        <p className="text-sm text-foreground truncate">{connection.roleTitle}</p>
-        {connection.sharedNodeIds.length > 0 && (
-          <p className="text-xs text-muted-foreground">
-            {connection.sharedNodeIds.length} shared node{connection.sharedNodeIds.length !== 1 ? 's' : ''}
-          </p>
-        )}
-      </div>
-      <ArrowRight className="w-4 h-4 text-muted-foreground/0 group-hover:text-muted-foreground
-                             transition-all duration-200 shrink-0" />
-    </button>
+      <MetaRow label="Gate Type" value={meta.gateType.replace(/-/g, ' ')} />
+      {meta.autoPassCriteria && (
+        <div className="p-3 rounded-lg bg-emerald-500/5 border border-emerald-500/20 mt-2">
+          <p className="text-xs text-emerald-400 font-semibold mb-1">Auto-pass Criteria</p>
+          <p className="text-sm text-slate-200">{meta.autoPassCriteria}</p>
+        </div>
+      )}
+    </>
+  );
+}
+
+function AgentDetail({ meta }: { meta?: AgentMeta }) {
+  if (!meta) return null;
+  return (
+    <>
+      <MetaRow label="Capability" value={meta.capability} />
+      <MetaRow label="Autonomy" value={meta.autonomy} />
+      {meta.tools && meta.tools.length > 0 && (
+        <div className="mt-2">
+          <p className="text-xs text-muted-foreground mb-1">Tools:</p>
+          <div className="flex flex-wrap gap-1">
+            {meta.tools.map(tool => (
+              <Badge key={tool} variant="outline" className="text-xs border-[#9B7ACC]/30 text-[#9B7ACC]">
+                {tool}
+              </Badge>
+            ))}
+          </div>
+        </div>
+      )}
+    </>
+  );
+}
+
+function InputDetail({ meta }: { meta?: InputMeta }) {
+  if (!meta) return null;
+  return (
+    <>
+      <MetaRow label="Type" value={meta.inputType} />
+      <MetaRow label="Source" value={meta.source} />
+      <MetaRow label="Refresh Rate" value={meta.refreshRate} />
+    </>
   );
 }
