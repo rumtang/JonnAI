@@ -21,7 +21,7 @@
   {
     "id": "act1-pipeline",
     "title": "The Pipeline Everyone Draws",
-    "narration": "Every marketing team draws the same five-stage pipeline: Brief, Creation, Review, Publish, Measure. Left to right. Clean columns. This is the version that lives in your process documentation and gets presented to leadership when someone asks how content gets made.",
+    "narration": "Every marketing team draws the same pipeline: Strategy, Create, Review, Publish, Measure, Optimize. Six stages, left to right. Clean columns. This is the version that lives in your process documentation and gets presented to leadership when someone asks how content gets made.",
     "cameraPosition": {
       "x": 0,
       "y": 0,
@@ -65,7 +65,7 @@
   {
     "id": "act1-sub-steps",
     "title": "The Work Inside Each Phase",
-    "narration": "Each phase contains multiple steps. Brief alone has campaign planning, journey mapping, request intake, scoring, research, social listening, and the brief itself. Creation includes drafting, SEO, visual assets, A/B variants, paid creative, and sales enablement. This is the operational reality — more complex than the five-stage slide, but still a left-to-right sequence.",
+    "narration": "Each phase contains multiple steps. Strategy alone has campaign planning, journey mapping, request intake, scoring, research, social listening, and the brief itself. Create includes drafting, SEO, visual assets, A/B variants, paid creative, and sales enablement. This is the operational reality — more complex than the six-stage slide, but still a left-to-right sequence.",
     "cameraPosition": {
       "x": 80,
       "y": -20,

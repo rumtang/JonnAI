@@ -22,7 +22,7 @@ export type LinkType =
 // ─── Node Metadata ────────────────────────────────────────────
 
 export interface StepMeta {
-  phase: string;                               // Brief | Creation | Review | Publish | Measure
+  phase: string;                               // Strategy | Create | Review | Publish | Measure | Optimize
   owner: 'agent' | 'human' | 'shared';        // Who does this work
   agentName?: string;                          // If agent-owned, which agent
   estimatedTime?: string;                      // How long this typically takes

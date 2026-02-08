@@ -9,26 +9,27 @@ import { ChevronLeft, ChevronRight, Play, Pause, Compass } from 'lucide-react';
 import { GraphNode, GraphLink, StepMeta } from '@/lib/graph/types';
 
 // ─── Process Chart Layout ────────────────────────────────────
-// Positions 12 step nodes in 5 phase columns for a traditional
+// Positions 12 step nodes in 6 phase columns for a traditional
 // left-to-right process chart feel on slides 2-3.
 const PROCESS_CHART_LAYOUT: Record<string, { fx: number; fy: number; fz: number }> = {
-  // Brief column (x = -400) — expanded vertical spread for better viewport fill
-  'receive-request':   { fx: -400, fy:  200, fz: 0 },
-  'research-insights': { fx: -400, fy:    0, fz: 0 },
-  'write-brief':       { fx: -400, fy: -200, fz: 0 },
-  // Creation column (x = -200)
-  'draft-content':     { fx: -200, fy:  100, fz: 0 },
-  'seo-optimization':  { fx: -200, fy: -100, fz: 0 },
-  // Review column (x = 0)
-  'brand-compliance':  { fx:    0, fy:  100, fz: 0 },
-  'final-edit':        { fx:    0, fy: -100, fz: 0 },
-  // Publish column (x = 200)
-  'schedule-publish':  { fx:  200, fy:  100, fz: 0 },
-  'distribute':        { fx:  200, fy: -100, fz: 0 },
-  // Measure column (x = 400)
-  'track-performance': { fx:  400, fy:  200, fz: 0 },
-  'generate-report':   { fx:  400, fy:    0, fz: 0 },
-  'optimize':          { fx:  400, fy: -200, fz: 0 },
+  // Strategy column (x = -500)
+  'receive-request':   { fx: -500, fy:  200, fz: 0 },
+  'research-insights': { fx: -500, fy:    0, fz: 0 },
+  'write-brief':       { fx: -500, fy: -200, fz: 0 },
+  // Create column (x = -300)
+  'draft-content':     { fx: -300, fy:  100, fz: 0 },
+  'seo-optimization':  { fx: -300, fy: -100, fz: 0 },
+  // Review column (x = -100)
+  'brand-compliance':  { fx: -100, fy:  100, fz: 0 },
+  'final-edit':        { fx: -100, fy: -100, fz: 0 },
+  // Publish column (x = 100)
+  'schedule-publish':  { fx:  100, fy:  100, fz: 0 },
+  'distribute':        { fx:  100, fy: -100, fz: 0 },
+  // Measure column (x = 300)
+  'track-performance': { fx:  300, fy:  100, fz: 0 },
+  'generate-report':   { fx:  300, fy: -100, fz: 0 },
+  // Optimize column (x = 500)
+  'optimize':          { fx:  500, fy:    0, fz: 0 },
 };
 
 // Sequential step-to-step flows (no gates, no feedback loops)
@@ -48,10 +49,10 @@ const PROCESS_CHART_LINKS: Array<[string, string]> = [
 
 // Agent positions below their primary phase column — spaced for expanded layout
 const AGENT_CHART_POSITIONS: Record<string, { fx: number; fy: number; fz: number }> = {
-  'research-agent':    { fx: -400, fy: -350, fz: 0 },
-  'writer-agent':      { fx: -250, fy: -350, fz: 0 },
-  'seo-agent':         { fx: -150, fy: -350, fz: 0 },
-  'performance-agent': { fx:  400, fy: -350, fz: 0 },
+  'research-agent':    { fx: -500, fy: -350, fz: 0 },
+  'writer-agent':      { fx: -350, fy: -350, fz: 0 },
+  'seo-agent':         { fx: -250, fy: -350, fz: 0 },
+  'performance-agent': { fx:  300, fy: -350, fz: 0 },
 };
 
 // One primary performs link per agent
