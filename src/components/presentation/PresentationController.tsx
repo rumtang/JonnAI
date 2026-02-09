@@ -101,11 +101,11 @@ export default function PresentationController() {
 
   const currentStep = steps[currentStepIndex];
   const isTitleSlide = currentStep?.action === 'show-title-slide';
-  const isPipelineSlide = currentStep?.id === 'act1-pipeline';
-  const isTransitionSlide = currentStep?.id === 'act1-teams';
+  const isPipelineSlide = currentStep?.id === 'act1-lifecycle';
+  const isTransitionSlide = currentStep?.id === 'act2-agents-and-context';
   const showPipelineOverlay = isTitleSlide || isPipelineSlide || isTransitionSlide;
-  // Scrim opacity: fully opaque on title+pipeline, semi-transparent on transition
-  const scrimOpacity = isTitleSlide ? 0.95 : isPipelineSlide ? 0.92 : 0.35;
+  // Scrim opacity: fully opaque on title, high on pipeline, medium on transition
+  const scrimOpacity = isTitleSlide ? 0.95 : isPipelineSlide ? 0.90 : 0.55;
   // Diagram fades on the transition slide to let the 3D graph emerge
   const diagramOpacity = isTransitionSlide ? 0.4 : 1;
 
