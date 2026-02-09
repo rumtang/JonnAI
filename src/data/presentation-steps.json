@@ -21,7 +21,7 @@
   {
     "id": "act1-pipeline",
     "title": "The Pipeline Everyone Draws",
-    "narration": "Every marketing team draws the same pipeline: Strategy, Create, Review, Publish, Measure, Optimize. Six stages, left to right. Clean columns. This is the version that lives in your process documentation and gets presented to leadership when someone asks how content gets made.",
+    "narration": "Every marketing team draws the same pipeline: Strategy, Create, Review, Publish, Measure, Optimize. Six stages, left to right. Clean columns. This is the version you present to your board.",
     "cameraPosition": {
       "x": 0,
       "y": 0,
@@ -40,7 +40,7 @@
   {
     "id": "act1-teams",
     "title": "The Teams Behind Each Phase",
-    "narration": "Zoom into each phase and you find people. The Content Director owns the brief. Editors and brand managers own review. Marketing Ops runs distribution. Analytics closes the loop. Each phase has a team, and each team has a process. Thirty-one steps. Not six.",
+    "narration": "Behind each phase: teams, handoffs, dependencies. You know who owns what. But zoom in and the complexity compounds. Thirty-one steps. Not six.",
     "cameraPosition": {
       "x": -60,
       "y": 30,
@@ -65,7 +65,7 @@
   {
     "id": "act2-agents-appear",
     "title": "Where AI Agents Fit Today",
-    "narration": "AI agents plug into specific steps. A Research Agent handles audience insights. A Content Writer drafts. A Performance Analyst measures results. Eleven agents total, each mapped to a specific task in the pipeline. This is where most organizations stop — bolting AI onto existing workflows to make each step a little faster.",
+    "narration": "Now add AI. Eleven agents, each bolted onto a specific step — research, drafting, optimization, performance analysis. This is where most organizations stop. Each step gets a little faster. The workflow stays the same.",
     "cameraPosition": {
       "x": 0,
       "y": -80,
@@ -91,7 +91,7 @@
   {
     "id": "act2-context",
     "title": "What Agents Actually Depend On",
-    "narration": "Every organization has brand guidelines, audience personas, legal frameworks, analytics data. Most teams treat these as reference material — documents that sit in a shared drive and get consulted when someone remembers they exist. But context is not the same as information. Context is how information actually governs decisions — who applies it, when it triggers a review, what breaks when it goes stale. That distinction changes everything about how you build an AI system.",
+    "narration": "Your brand guidelines, personas, and legal frameworks are not just reference documents. They are operating instructions — they govern which decisions get made, by whom, under what conditions. Most organizations store them as files. The ones that win will structure them as infrastructure — explicit, connected, and machine-readable. That is the difference between AI that does tasks and AI that understands your business.",
     "cameraPosition": {
       "x": 0,
       "y": -100,
@@ -116,7 +116,7 @@
   {
     "id": "act3-reality",
     "title": "The Pipeline Is a Fiction",
-    "narration": "Now watch what happens when we add the real structure. Gates create checkpoints between phases. Feedback loops send work back for revision. Escalation paths route exceptions upward. Competitive signals create fast-track paths that bypass the normal sequence. The neat columns dissolve. This is not a pipeline — it is a graph.",
+    "narration": "Now add the real structure. Checkpoints. Feedback loops. Escalation paths. Fast-track bypasses. The neat columns dissolve. This is not a pipeline — it is a graph.",
     "cameraPosition": {
       "x": 0,
       "y": 0,
@@ -135,7 +135,7 @@
   {
     "id": "act3-governance",
     "title": "Governance and Learning",
-    "narration": "Nine gates control the flow. Brief Approval checks strategic alignment before a word gets written. Legal Compliance gates regulatory risk before anything publishes. Each gate has auto-pass criteria and escalation triggers — not human-in-the-loop for everything, but human-at-the-gate for what matters. And the system learns. Performance data flows back to campaign planning. Governance findings trigger new content requests. Content that underperforms teaches the system what to change. Content that overperforms gets repurposed and amplified. The graph learns.",
+    "narration": "Nine gates in this system — decision points where humans intervene on what matters, not on every task. And the system learns from every cycle. What underperforms gets reworked. What overperforms gets amplified. The graph does not just execute. It adapts.",
     "cameraPosition": {
       "x": 0,
       "y": 50,
@@ -163,7 +163,7 @@
   {
     "id": "act4-infrastructure",
     "title": "The Infrastructure That Compounds",
-    "narration": "Now look at the input layer. Twenty reference inputs — brand guides, audience personas, orchestration rules — connected to multiple agents and steps simultaneously. Every relationship is explicit. Every dependency is traceable. This is not supporting documentation. This is a knowledge graph. And it is the part that most organizations never build.",
+    "narration": "This is the layer most organizations never build. Twenty inputs — brand voice, personas, legal frameworks, orchestration rules — each connected to every agent that depends on it. Update one, and the entire system improves. This is not supporting documentation. This is your knowledge graph.",
     "cameraPosition": {
       "x": 0,
       "y": -60,
@@ -189,7 +189,7 @@
   {
     "id": "act4-thesis",
     "title": "Agents Commoditize. Infrastructure Compounds.",
-    "narration": "Here is the strategic insight. The agents are interchangeable — you can swap the Content Writer for a better model next quarter. Agents improve one step at a time. The knowledge graph improves the entire system simultaneously. Every time you refine a persona, every agent that references it gets better. The infrastructure compounds. The agents commoditize. That asymmetry is your competitive advantage.",
+    "narration": "The agents are interchangeable. Swap any of them for a better model next quarter — it improves one step. Refine one input in the knowledge graph — it improves every agent simultaneously. Agents commoditize. Infrastructure compounds. Your competitors can buy the same agents. They cannot replicate the knowledge graph you build.",
     "cameraPosition": {
       "x": 60,
       "y": 0,
@@ -216,7 +216,7 @@
   {
     "id": "act5-elevation",
     "title": "Elevating Human Work",
-    "narration": "This is not about making each person twenty percent faster at their current job. That is the small thinking. When agents handle drafting, compliance screening, and variant creation — what is left for humans? Strategy. Creative direction. Judgment calls at gates. The design of the system itself. The humans in this graph do not do less. They do different work — higher-leverage work that requires taste, accountability, and strategic context that cannot be reduced to a prompt.",
+    "narration": "This is not about making each person twenty percent faster. That is the small thinking. When agents handle production — drafting, compliance, optimization, variant creation — humans move to higher-leverage work. Strategy. Creative direction. Judgment. The work that defines your brand, not the work that merely executes it.",
     "cameraPosition": {
       "x": 0,
       "y": 40,
@@ -243,7 +243,7 @@
   {
     "id": "act5-new-roles",
     "title": "Roles That Do Not Exist Yet",
-    "narration": "Some of the most important roles in this system do not exist in most marketing organizations today. The Context Engineer maintains the knowledge graph — the taxonomy, scoring matrices, and semantic relationships that make every agent effective. This role is to agentic marketing what the data engineer was to the analytics revolution — the role that makes everything else possible.",
+    "narration": "The most important role in this system does not exist in most organizations today. The Context Engineer — the person who builds and evolves the knowledge infrastructure that makes every agent effective. This role is to AI-driven marketing what the data engineer was to the analytics revolution. The role that makes everything else possible.",
     "cameraPosition": {
       "x": -40,
       "y": 0,
@@ -271,7 +271,7 @@
   {
     "id": "act6-close",
     "title": "A Different Way of Working",
-    "narration": "The question is not whether to adopt AI. It is whether you treat it as a collection of productivity tools or as an operating system. Productivity tools give you incremental gains — each person gets a little faster. The operating system gives you structural advantage — the system gets smarter, the knowledge infrastructure compounds, and the humans do higher-leverage work. The marginal cost of the next piece of content approaches zero. The marginal value of the next knowledge graph update increases with every agent that uses it. That is not a technology experiment. That is a platform investment.",
+    "narration": "The question is not whether to adopt AI. It is whether you build a collection of tools or an operating system. Tools give you incremental speed. An operating system gives you structural advantage — the system gets smarter with every cycle, and the knowledge infrastructure becomes an asset your competitors cannot replicate. That is not a technology experiment. That is how you win.",
     "cameraPosition": {
       "x": 0,
       "y": 0,
