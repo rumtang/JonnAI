@@ -841,14 +841,14 @@ Key patterns:
 
 ---
 
-## 9. Step Narratives (Deep Storytelling)
+## 9. Step Narratives
 
-Each of the 31 main workflow steps has a narrative entry with a headline, lede, and 2-4 storytelling blocks. Block types are:
+Each of the 31 main workflow steps has a narrative entry with a headline, one-sentence lede, and one storytelling block. Block types are:
 
 | Block Type | Purpose |
 |------------|---------|
 | `narrative` | Descriptive explanation of what happens and why |
-| `scenario` | "Picture this..." — a concrete example |
+| `scenario` | A concrete example |
 | `tension` | The problem if this step is skipped or done poorly |
 | `ai-handoff` | How AI and human divide the work at this step |
 | `metric` | A data point about impact or improvement |
@@ -858,267 +858,235 @@ Each of the 31 main workflow steps has a narrative entry with a headline, lede, 
 | `tip` | Best practice advice |
 | `quote` | Attributed perspective from a role |
 
+### STRATEGY PHASE
+
 ### Step 1: campaign-planning
-**Headline:** Where Revenue Targets Meet Content Strategy
-**Lede:** Every content operation begins here — translating business objectives into a campaign architecture with defined audiences, channels, budgets, and KPIs.
+**Headline:** Campaign Planning
+**Lede:** Translating business objectives into a campaign architecture with defined audiences, channels, budgets, and KPIs.
 **Primary role:** campaign-manager
 
-- **[scenario]** Picture this: Q3 pipeline is 20% below target. The CMO needs a demand-gen campaign in four weeks. Without a structured planning step, the team scrambles — random assets, no journey logic, budget spread thin. With it, every downstream node inherits clear objectives.
-- **[metric]** Teams with documented campaign plans produce 3x more pipeline-attributed content than those running ad hoc requests.
-- **[tip]** Define your primary KPI before choosing channels. The channel mix should serve the metric, not the other way around.
+- **[scenario]** Q3 pipeline is 20% below target. The CMO needs a demand-gen campaign in four weeks. Without structured planning, the team scrambles — random assets, no journey logic, budget spread thin. With it, every downstream node inherits clear objectives.
 
 ### Step 2: journey-mapping
-**Headline:** Mapping Content to the Buyer's Path
-**Lede:** Content that ignores journey stage talks to everyone and persuades no one. This step maps each asset to awareness, consideration, decision, retention, or advocacy.
+**Headline:** Journey Stage Mapping
+**Lede:** Content that ignores journey stage talks to everyone and persuades no one.
 **Primary role:** campaign-manager
 
-- **[narrative]** Journey mapping connects CDP lifecycle data with your content taxonomy. The output is a coverage matrix showing where you have strong content, where gaps exist, and which journey stages are over-served with redundant assets.
 - **[before-after]** Before: A blog post is published and promoted identically to cold prospects and existing customers. | After: The same topic spawns three assets — a thought-leadership piece for awareness, a comparison guide for consideration, and a case study for decision.
 
 ### Step 3: receive-request
-**Headline:** The Front Door of the Content Pipeline
-**Lede:** Every piece of content starts as a request. This step captures who wants it, why, for whom, and by when — preventing the chaos of undocumented asks.
+**Headline:** Receive Request
+**Lede:** Capturing who wants content, why, for whom, and by when — the front door of the pipeline.
 **Primary role:** content-director
 
-- **[tension]** Without a structured intake, requests arrive via Slack, email, hallway conversations, and shared docs — each with different levels of detail. The production team becomes a translation layer, spending more time clarifying scope than creating content.
-- **[ai-handoff]** AI pre-fills request fields from historical patterns and similar past briefs. The human reviews and adjusts — turning a 30-minute scoping call into a 5-minute confirmation.
+- **[tension]** Without structured intake, requests arrive via Slack, email, and hallway conversations — each with different levels of detail. The production team spends more time clarifying scope than creating content.
 
 ### Step 4: content-scoring
-**Headline:** Not All Requests Deserve Resources
-**Lede:** Content scoring ranks every incoming request against strategic priority, audience demand, resource cost, and expected ROI — triaging the production queue before work begins.
+**Headline:** Content Scoring & Prioritization
+**Lede:** Ranking requests against strategic priority, audience demand, and expected ROI before work begins.
 **Primary role:** content-director
 
-- **[scenario]** Picture this: Twelve requests land in the same sprint. Three are strategic priorities, four are "nice to have," and five are repeats of content that already exists. Without scoring, the loudest stakeholder wins. With it, data decides.
-- **[domino-effect]** Skip scoring and low-impact content consumes the same resources as high-impact content. The result: your best writers spend cycles on a partner one-pager while a revenue-critical product launch brief waits in the queue.
-- **[metric]** Organizations using content scoring report 40% fewer "wasted" assets — content produced but never activated or measured.
+- **[domino-effect]** Skip scoring and low-impact content consumes the same resources as high-impact content. Your best writers spend cycles on a partner one-pager while a revenue-critical launch brief waits in the queue.
 
 ### Step 5: research-insights
-**Headline:** Grounding Every Brief in Evidence
-**Lede:** Research turns assumptions into data. The Research Agent synthesizes audience signals, competitive intelligence, and trending topics into brief-ready insights.
+**Headline:** Research & Insights
+**Lede:** The Research Agent synthesizes audience signals, competitive intelligence, and trending topics into brief-ready insights.
 **Primary role:** content-strategist
 
-- **[ai-handoff]** The AI scans social listening feeds, SEO keyword trends, and competitor content in minutes. The human strategist interprets what the data means for positioning — which angle is differentiated, not just which keyword has volume.
-- **[quote]** "Every brief that skips research is a bet placed without looking at the odds." — Content Strategist perspective
+- **[ai-handoff]** The agent scans social listening feeds, SEO keyword trends, and competitor content in minutes. The human strategist interprets what the data means for positioning — which angle is differentiated, not just which keyword has volume.
 
 ### Step 6: write-brief
-**Headline:** The Blueprint That Governs Everything Downstream
-**Lede:** A brief is not paperwork — it is the single document that aligns writers, designers, reviewers, and agents on what "done" looks like.
+**Headline:** Write Brief
+**Lede:** The single document that aligns writers, designers, reviewers, and agents on what "done" looks like.
 **Primary role:** content-director
 
-- **[narrative]** The brief captures objectives, target audience, key messages, format, distribution channels, and success metrics. Every downstream node — from drafting to performance review — references this document. A vague brief creates revision cycles. A sharp brief creates velocity.
 - **[tension]** The most expensive content failures trace back to briefs, not drafts. A well-written draft against a misaligned brief is still a failure — it just takes longer to discover.
-- **[tip]** Include a "this piece is NOT about" section in every brief. Defining scope exclusions prevents the most common cause of revision: stakeholders expecting content the brief never promised.
 
 ### Step 7: brief-approval
-**Headline:** The Highest-Leverage Decision in the System
-**Lede:** Approving a brief commits the entire pipeline to an objective. This gate exists because changing direction after drafting costs 5x more than refining the brief.
+**Headline:** Brief Approval
+**Lede:** Approving a brief commits the pipeline to an objective — changing direction after drafting costs 5x more.
 **Primary role:** content-director
 
-- **[decision-tree]** Approve: Strategy score above 80%, required fields complete, audience clearly defined, and success metrics are measurable. | Revise: Missing audience specificity, unclear differentiation from existing content, or KPIs that cannot be tracked with current tooling.
-- **[before-after]** Before: Briefs are approved in hallway conversations. Writers discover misalignment at the draft stage. Average revision cycles: 3.2 per piece. | After: Structured brief approval catches 80% of alignment issues before a single word is written. Revision cycles drop to 1.1.
+- **[decision-tree]** Approve: Strategy score above threshold, required fields complete, audience clearly defined, success metrics measurable. | Revise: Missing audience specificity, unclear differentiation from existing content, or KPIs that cannot be tracked with current tooling.
+
+### CREATE PHASE
 
 ### Step 8: draft-content
-**Headline:** Where the Blank Page Becomes a First Draft
-**Lede:** The Content Writer agent transforms an approved brief into a structured first draft — following brand voice, hitting key messages, and maintaining the narrative arc the brief defined.
+**Headline:** Draft Content
+**Lede:** The Content Writer agent transforms an approved brief into a structured first draft.
 **Primary role:** creative-director
 
-- **[ai-handoff]** The AI generates the initial draft from the brief, brand guide, and audience persona. The human editor will later refine what no algorithm reliably produces: narrative judgment, emotional nuance, and whether the piece says something genuinely worth reading.
-- **[scenario]** Picture this: The brief calls for a technical explainer targeting engineering leaders. The agent drafts 1,200 words in 90 seconds, pulling from the brand voice guide and research insights. Without the agent, a writer spends two hours on the same draft. The quality difference? Marginal for technical content. The time savings? Transformative for throughput.
+- **[ai-handoff]** The agent generates the draft from the brief, brand guide, and audience persona. The human editor refines what no algorithm reliably produces: narrative judgment, emotional nuance, and whether the piece says something worth reading.
 
 ### Step 9: visual-asset-creation
-**Headline:** Design That Runs Parallel, Not Sequential
-**Lede:** Visual assets are created alongside the draft — not bolted on at the end. This parallel workflow means imagery is ready when copy is ready.
+**Headline:** Visual Asset Creation
+**Lede:** Visual assets created alongside the draft — not bolted on at the end.
 **Primary role:** creative-director
 
-- **[narrative]** The Creative Director commissions hero images, infographics, social graphics, and video thumbnails based on the content brief. Each asset is designed for its target channel: dimensions, accessibility requirements, and brand visual language are baked in from the start.
-- **[tension]** When visual creation is sequential — waiting until after the draft is approved — it becomes the bottleneck. Last-minute design requests produce generic stock-photo solutions instead of purposeful visual storytelling.
-- **[quote]** "The difference between visually compliant and visually compelling is the difference between content people scroll past and content they stop for." — Creative Director perspective
+- **[tension]** When visual creation waits until after draft approval, it becomes the bottleneck. Last-minute design requests produce generic stock-photo solutions instead of purposeful visual storytelling.
 
 ### Step 10: seo-optimization
-**Headline:** Search Visibility Built In, Not Bolted On
-**Lede:** The SEO Optimizer agent handles keywords, meta descriptions, heading structure, and internal linking — ensuring the content is discoverable without sacrificing readability.
+**Headline:** SEO Optimization
+**Lede:** Search visibility built in, not bolted on — keywords, meta descriptions, heading structure, and internal linking.
 **Primary role:** editor
 
-- **[metric]** Content optimized before publication ranks 68% faster than content retrofitted with SEO after launch. The first 48 hours of indexing establish signals that are expensive to overcome later.
-- **[ai-handoff]** The AI handles the mechanical: keyword density, meta tag generation, schema markup, and internal link suggestions. The human ensures that optimization serves the reader — no keyword stuffing, no clickbait headings, no sacrificing narrative flow for search score.
+- **[ai-handoff]** The agent handles keyword density, meta tags, schema markup, and internal link suggestions. The human ensures optimization serves the reader — no keyword stuffing, no clickbait headings, no sacrificing narrative flow for a search score.
+
+### REVIEW PHASE
 
 ### Step 11: quality-check
-**Headline:** The Gate Where Technical Meets Editorial
-**Lede:** An automated quality gate checks readability, factual accuracy, and SEO score. When all thresholds pass, the content flows through automatically. When they don't, a human editor steps in.
+**Headline:** Quality Check
+**Lede:** Automated readability, factual accuracy, and SEO scoring — when thresholds pass, content flows through automatically.
 **Primary role:** editor
 
-- **[decision-tree]** Auto-pass: Readability score above 70, SEO score above 85, zero factual flags. Content proceeds to brand compliance without human review. | Manual review: Any threshold missed triggers editor review. The most common failures: readability below threshold (jargon-heavy drafts) and factual flags (unsubstantiated claims).
-- **[domino-effect]** A quality failure caught here costs one revision cycle. The same failure caught at stakeholder sign-off costs three cycles plus a trust deficit with the approver — they will scrutinize the next ten pieces more closely.
+- **[decision-tree]** Auto-pass: Readability above 70, SEO above 85, zero factual flags. Content proceeds without human review. | Manual review: Any threshold missed triggers editor review. Most common failures: jargon-heavy drafts and unsubstantiated claims.
 
 ### Step 12: brand-compliance
-**Headline:** Protecting the Brand Voice at Scale
-**Lede:** The Content Writer agent scans the draft against brand guidelines — tone, terminology, messaging consistency, and visual identity markers — flagging violations before human review.
+**Headline:** Brand Compliance
+**Lede:** Automated scanning against brand guidelines — tone, terminology, messaging — flagging violations before human review.
 **Primary role:** brand-manager
 
-- **[scenario]** Picture this: An agent-drafted blog post uses "cutting-edge" three times — a term the brand guide explicitly bans for being vague. Without automated compliance scanning, it reaches the Brand Manager who flags it manually. With it, the term is caught and suggested alternatives are offered before the draft leaves creation.
-- **[metric]** Automated brand compliance scanning catches 92% of terminology violations and 78% of tone inconsistencies before human review, reducing Brand Manager review time by 60%.
-- **[tip]** Maintain a living "banned terms" list alongside your brand guide. It is easier to check content against a prohibited list than against aspirational guidelines.
+- **[scenario]** An agent-drafted blog post uses "cutting-edge" three times — a term the brand guide bans. Without automated scanning, the Brand Manager catches it manually. With it, the term is flagged and alternatives suggested before the draft ever leaves creation.
 
 ### Step 13: brand-review
-**Headline:** Where Brand Judgment Cannot Be Automated
-**Lede:** The Brand Manager reviews content that passed automated scanning but requires human judgment — cultural context, competitive positioning nuance, and brand evolution decisions.
+**Headline:** Brand Review
+**Lede:** The Brand Manager reviews content requiring human judgment — cultural context, competitive positioning, brand evolution.
 **Primary role:** brand-manager
 
-- **[tension]** Automated compliance catches rule violations. But brand is more than rules — it is how the audience feels about you. A piece can be 100% compliant and still feel off-brand because the cultural moment changed, a competitor shifted positioning, or the audience matured.
-- **[before-after]** Before: The Brand Manager reviews every piece of content, spending 70% of their time on routine checks that surface no issues. | After: Automated scanning handles routine compliance. The Brand Manager only sees content that genuinely needs judgment — exception-based review instead of assembly-line review.
+- **[tension]** A piece can be 100% compliant and still feel off-brand because the cultural moment changed, a competitor shifted positioning, or the audience matured. Brand is how the audience feels about you — that cannot be reduced to a checklist.
 
 ### Step 14: legal-review
-**Headline:** The Line Between Marketing and Liability
-**Lede:** Legal review screens content for regulatory compliance, IP risk, disclosure requirements, and claims substantiation — the stakes where "move fast" meets "move carefully."
+**Headline:** Legal Review
+**Lede:** Screening for regulatory compliance, IP risk, disclosure requirements, and claims substantiation.
 **Primary role:** legal-counsel
 
-- **[ai-handoff]** The Legal Screening Agent pre-scans for regulated terminology, unsubstantiated claims, missing disclosures, and competitor references. Legal Counsel reviews flagged items and genuine gray areas — the cases where precedent matters more than pattern matching.
-- **[domino-effect]** A legal issue caught here pauses one content piece. The same issue published live triggers regulatory inquiry, PR crisis management, content takedown across all channels, and potential financial penalties. The asymmetry is extreme.
-- **[scenario]** Picture this: A product comparison page implies competitor inferiority without substantiation. The Legal Screening Agent flags "market-leading" and "best-in-class" as unsubstantiated comparative claims. Legal Counsel reviews and requires either evidence or softer language. Total delay: 2 hours. Without this step? A competitor sends a cease-and-desist.
+- **[domino-effect]** A legal issue caught here pauses one content piece. The same issue published live triggers regulatory inquiry, PR crisis management, content takedown across all channels, and potential financial penalties.
 
 ### Step 15: legal-compliance-gate
-**Headline:** The Gate No Algorithm Can Override
-**Lede:** Legal sign-off is the one checkpoint where human authority is absolute. No agent, no auto-pass threshold, no urgency overrides a legal hold.
+**Headline:** Legal Compliance Gate
+**Lede:** The one checkpoint where human authority is absolute — no agent overrides a legal hold.
 **Primary role:** legal-counsel
 
-- **[decision-tree]** Auto-pass: No flagged claims, no regulated terms detected, disclosure checklist 100% complete. Content proceeds to final edit. | Escalate: Any flagged regulatory term, unsubstantiated claim, or missing disclosure triggers Legal Counsel review. Escalation goes directly to stakeholder sign-off if risk is material.
-- **[quote]** "No agent in this system has the authority to override a legal hold. That is by design, not by limitation." — Legal Counsel perspective
+- **[decision-tree]** Auto-pass: No flagged claims, no regulated terms, disclosure checklist complete. Content proceeds to final edit. | Escalate: Any regulatory flag triggers Legal Counsel review. Escalation goes directly to stakeholder sign-off if risk is material.
 
 ### Step 16: final-edit
-**Headline:** The Last Human Touch Before the World Sees It
-**Lede:** The Editor refines narrative flow, checks facts, ensures coherence, and polishes the draft to the standard the brand name demands. This is where taste lives.
+**Headline:** Final Edit
+**Lede:** The last human touch — narrative flow, coherence, and whether the piece says something worth reading.
 **Primary role:** editor
 
-- **[narrative]** Final edit is not proofreading — it is the step where a skilled editor asks: does this piece actually say something worth reading? Is the argument coherent? Does the opening earn the reader's next paragraph? Agents handle readability scores. Editors handle whether writing resonates.
-- **[ai-handoff]** AI agents have already handled readability scoring, SEO optimization, and factual checking upstream. The editor focuses on what machines consistently fail at: narrative judgment, emotional resonance, and the ineffable quality that separates adequate content from memorable content.
-- **[tip]** Read the piece aloud. If a sentence makes you pause to parse its structure, the reader will abandon it. The editor's job is to make every sentence earn its place.
+- **[narrative]** Final edit is not proofreading. Agents handle readability scores, SEO, and factual checking upstream. The editor handles what machines consistently miss: whether the argument is coherent, the opening earns the next paragraph, and the writing resonates.
 
 ### Step 17: accessibility-check
-**Headline:** Content That Works for Everyone
-**Lede:** The Accessibility Agent verifies WCAG compliance, inclusive language, alt-text coverage, and screen reader compatibility — because content that excludes audiences is content that fails.
+**Headline:** Accessibility Check
+**Lede:** WCAG compliance, inclusive language, alt-text coverage, and screen reader compatibility.
 **Primary role:** editor
 
-- **[metric]** 15% of the global population experiences some form of disability. Content that fails accessibility standards loses that audience entirely — and increasingly faces legal exposure under ADA and European Accessibility Act requirements.
-- **[before-after]** Before: Accessibility is an afterthought — alt-text is "image.png," color contrast fails, and screen readers choke on decorative elements. | After: Automated accessibility checking is a standard pipeline step. Alt-text is descriptive, contrast ratios pass WCAG AA, and every visual element has a text equivalent.
+- **[before-after]** Before: Alt-text reads "image.png," color contrast fails, screen readers choke on decorative elements. | After: Alt-text is descriptive, contrast ratios pass WCAG AA, every visual element has a text equivalent.
 
 ### Step 18: stakeholder-signoff
-**Headline:** The Final Gate Before Content Goes Live
-**Lede:** The VP Marketing or client gives final approval — checking strategic alignment, brand positioning, and whether this content represents the organization the way leadership intends.
+**Headline:** Stakeholder Sign-off
+**Lede:** Final approval from leadership — strategic alignment, not editorial quality.
 **Primary role:** vp-marketing
 
-- **[tension]** Stakeholder time is the scarcest resource in the pipeline. Every gate upstream exists to filter content so that only decisions requiring executive judgment reach this point. When upstream gates work, this is a 5-minute review. When they fail, this becomes a bottleneck that delays entire campaigns.
-- **[decision-tree]** Auto-pass: All upstream gates passed, content sensitivity score below threshold, no legal flags. Content proceeds to publication without executive review. | Manual review: Content flagged as high-sensitivity, high-visibility, or involving new market positioning. The stakeholder reviews for strategic alignment — not editorial quality, which was settled upstream.
-- **[tip]** If a stakeholder is consistently requesting editorial-level changes at this gate, the upstream quality and brand gates need recalibration. This gate is for strategy, not grammar.
+- **[decision-tree]** Auto-pass: All upstream gates passed, content sensitivity below threshold, no legal flags. | Manual review: High-sensitivity, high-visibility, or new market positioning. The stakeholder reviews strategy — editorial quality was settled upstream.
+
+### PUBLISH PHASE
 
 ### Step 19: localize-content
-**Headline:** Same Message, Different Markets
-**Lede:** Localization adapts approved content for target markets — translation, cultural nuance, regional regulatory differences, and local visual standards. It is adaptation, not translation.
+**Headline:** Localize Content
+**Lede:** Adapting content for target markets — cultural nuance, regional regulatory differences, and local visual standards.
 **Primary role:** localization-manager
 
-- **[scenario]** Picture this: A US-centric case study references baseball metaphors and dollar-denominated ROI figures. The Localization Agent adapts metaphors to locally resonant equivalents, converts currency, and flags that the regulatory disclosure valid in the US does not satisfy EU requirements. The Localization Manager reviews the cultural judgment calls.
-- **[ai-handoff]** The AI handles mechanical translation, format adaptation, and regulatory checklist matching. The human reviews cultural subtleties — humor that does not translate, idioms that carry unintended meaning, and visual elements that require cultural sensitivity. This exception set is larger than most functions because cultural context is inherently ambiguous.
+- **[ai-handoff]** The agent handles translation, format adaptation, and regulatory checklist matching. The human reviews cultural subtleties — humor that misfires across borders, idioms with unintended meaning, and visual elements requiring cultural sensitivity.
 
 ### Step 20: localization-quality-gate
-**Headline:** Quality Control Across Every Market
-**Lede:** The Localization Manager validates translation accuracy, cultural appropriateness, and local regulatory compliance before localized content enters the publication queue.
+**Headline:** Localization Quality Gate
+**Lede:** Validating translation accuracy, cultural appropriateness, and local regulatory compliance.
 **Primary role:** localization-manager
 
-- **[domino-effect]** A cultural misstep in one market does not stay in one market. Social media amplifies regional failures globally. This gate can escalate to legal compliance, meaning a cultural flag in one locale can trigger legal review across all markets — preventing regional problems from becoming global crises.
-- **[metric]** Translation confidence score threshold: 90%. Below that, the Localization Manager conducts manual review. Above it, content auto-passes — but cultural sensitivity flags always require human judgment regardless of confidence score.
+- **[domino-effect]** A cultural misstep in one market does not stay in one market. Social media amplifies regional failures globally. This gate can escalate to legal — a cultural flag in one locale can trigger legal review across all markets.
 
 ### Step 21: schedule-publish
-**Headline:** Timing Is Half the Strategy
-**Lede:** Setting the publication date, configuring the CMS, and pushing content live. When content publishes matters almost as much as what it says.
+**Headline:** Schedule & Publish
+**Lede:** When content publishes matters almost as much as what it says.
 **Primary role:** marketing-ops
 
-- **[narrative]** Schedule and publish coordinates the CMS configuration, publication timing, and channel-specific launch sequences. Cross-channel orchestration rules determine whether email goes before social, whether gated content precedes ungated, and when paid amplification triggers.
-- **[tip]** Never publish on Friday afternoon. Your monitoring team is weakest when problems are most likely to go unnoticed. Tuesday and Wednesday mornings consistently show the highest engagement across B2B channels.
-- **[metric]** Content published during optimal channel windows sees 23% higher first-48-hour engagement than identical content published off-schedule. The content is the same — only the timing changes.
+- **[narrative]** Cross-channel orchestration rules determine whether email goes before social, whether gated content precedes ungated, and when paid amplification triggers. The sequence is the strategy.
 
 ### Step 22: distribute
-**Headline:** Getting Content Where Audiences Actually Are
-**Lede:** Distribution pushes content across social, email, syndication, and paid channels — each with its own format, timing, and audience expectations.
+**Headline:** Distribute
+**Lede:** Pushing content across social, email, syndication, and paid — each channel gets a native format.
 **Primary role:** marketing-ops
 
-- **[before-after]** Before: The same blog link is shared identically on LinkedIn, Twitter, email, and Slack. One format, one message, every channel. | After: Each channel gets a native-feeling format — LinkedIn gets a thought-leadership hook, email gets a personalized subject line, social gets a visual-first treatment, and syndication gets an optimized excerpt.
-- **[scenario]** Picture this: A product launch campaign distributes across six channels in a coordinated sequence: analyst-targeted email at 7 AM, LinkedIn thought leadership at 9 AM, blog publication at 10 AM, social promotion at noon, paid amplification starting at 2 PM, and sales enablement alert at 3 PM. Each channel builds on the previous one.
+- **[before-after]** Before: The same blog link shared identically on LinkedIn, Twitter, email, and Slack. | After: Each channel gets a native format — LinkedIn gets a thought-leadership hook, email gets a personalized subject line, social gets a visual-first treatment.
+
+### MEASURE PHASE
 
 ### Step 23: track-performance
-**Headline:** The Feedback Loop That Makes the System Learn
-**Lede:** Real-time performance monitoring tracks engagement, traffic, conversions, and social signals — turning every published piece into data that improves the next one.
+**Headline:** Track Performance
+**Lede:** Real-time monitoring that compresses the time between signal and response.
 **Primary role:** analytics-lead
 
-- **[ai-handoff]** The Performance Analyst agent monitors metrics continuously and flags underperformers against defined thresholds. The human Analytics Lead interprets what the data means for strategy — why something underperformed matters more than the fact that it did.
-- **[tension]** Without real-time tracking, you discover content failures in the monthly report — weeks after you could have acted. By then, the campaign window has closed and the budget is spent. Performance tracking exists to compress the time between signal and response.
+- **[tension]** Without real-time tracking, content failures surface in the monthly report — weeks after you could have acted. By then, the campaign window has closed and the budget is spent.
 
 ### Step 24: generate-report
-**Headline:** Data Becomes Decisions
-**Lede:** The Performance Analyst agent compiles raw metrics into an actionable report — not just what happened, but what to do about it.
+**Headline:** Generate Report
+**Lede:** Raw metrics compiled into actionable recommendations — not what happened, but what to do next.
 **Primary role:** analytics-lead
 
-- **[narrative]** Report generation transforms continuous tracking data into structured recommendations. The output is not a dashboard — it is a prioritized action list: which content to boost, which to revise, which channels to reallocate budget toward, and which experiments to run next.
-- **[metric]** Teams using AI-generated performance reports make optimization decisions 4x faster than teams relying on manual analysis. The speed advantage compounds — faster decisions mean more iteration cycles within the same campaign window.
-- **[quote]** "A report that tells you what happened is journalism. A report that tells you what to do next is strategy." — Analytics Lead perspective
+- **[quote]** "A report that tells you what happened is journalism. A report that tells you what to do next is strategy." — Analytics Lead
 
 ### Step 25: attribution-modeling
-**Headline:** Tracing Revenue Back to Content
-**Lede:** Multi-touch attribution models calculate content ROI by channel and segment, revealing which content actually drives pipeline — not just which content gets clicks.
+**Headline:** Attribution Modeling
+**Lede:** Multi-touch attribution revealing which content drives pipeline — not just clicks.
 **Primary role:** analytics-lead
 
-- **[before-after]** Before: Attribution is last-touch — the final asset before conversion gets all the credit. Top-of-funnel content looks like a cost center. | After: Multi-touch attribution reveals that awareness-stage content influenced 60% of closed deals. The blog post that "never converted anyone" actually initiated the buying journey for your largest accounts.
-- **[tension]** Attribution modeling is politically charged. It redistributes credit — and therefore budget — across the content portfolio. Teams that own high-attribution content gain resources. Teams that own low-attribution content face hard questions. The model must be defensible because it will be challenged.
+- **[before-after]** Before: Last-touch attribution gives all credit to the final asset before conversion. Top-of-funnel content looks like a cost center. | After: Multi-touch attribution reveals awareness-stage content influenced the majority of closed deals. The blog post that "never converted" initiated the buying journey for your largest accounts.
 
 ### Step 26: executive-reporting
-**Headline:** Speaking the Language of the C-Suite
-**Lede:** Executive reporting synthesizes performance data, attribution results, and budget utilization into a dashboard designed for leadership — strategic recommendations, not operational details.
+**Headline:** Executive Reporting
+**Lede:** Performance data synthesized for leadership — strategic recommendations, not operational details.
 **Primary role:** analytics-lead
 
-- **[scenario]** Picture this: The CMO has 10 minutes before a board meeting. The executive report shows three things: content-sourced pipeline is up 18%, cost-per-lead dropped 22% from the previous quarter, and two campaigns are underperforming their ROI targets with recommended reallocation. No jargon, no vanity metrics, no 40-slide deck.
-- **[tip]** Lead with the number the executive cares about most — usually pipeline contribution or cost efficiency. Bury engagement metrics in the appendix. Executives fund outcomes, not impressions.
-- **[domino-effect]** Executive reports that reach the CMO feed directly back into campaign planning — closing the largest feedback loop in the system. When this loop is tight, the pipeline becomes a learning system. When it is slow, you are always optimizing for last quarter's reality.
+- **[domino-effect]** Executive reports feed directly back into campaign planning — closing the largest feedback loop in the system. When this loop is tight, the pipeline becomes a learning system. When it is slow, you are optimizing for last quarter's reality.
+
+### OPTIMIZE PHASE
 
 ### Step 27: performance-review
-**Headline:** The Gate That Closes the Loop
-**Lede:** Performance review evaluates content against its original KPIs and decides the next action: optimize, iterate with a new brief, or archive. This is where the pipeline becomes a cycle.
+**Headline:** Performance Review
+**Lede:** Evaluating content against original KPIs — optimize, iterate, or archive.
 **Primary role:** analytics-lead
 
-- **[decision-tree]** Optimize: Content meets 60-80% of KPI targets. Tweak headlines, CTAs, or distribution mix. The asset is fundamentally sound — it needs refinement, not reinvention. | Iterate: Content misses KPI targets by a wide margin, but the topic has strategic value. Send back to brief stage with new data. Archive: Content has run its course — performance is declining and the topic is no longer strategic.
-- **[narrative]** This gate can send content all the way back to a new brief — restarting the entire pipeline with updated data. That feedback loop is what makes the system learn. Without it, the pipeline is a conveyor belt: content goes in one end and comes out the other with no memory of what worked.
+- **[decision-tree]** Optimize: Meets 60–80% of KPI targets. Tweak headlines, CTAs, or distribution. The asset is sound — it needs refinement, not reinvention. | Iterate: Misses targets widely but topic has strategic value — send back to brief with new data. Archive: Performance declining and topic no longer strategic.
 
 ### Step 28: optimize
-**Headline:** Making Good Content Better
-**Lede:** Optimization updates headlines, CTAs, distribution mix, or repurposes content based on performance data. It is the most cost-effective step in the pipeline — improving existing assets costs a fraction of creating new ones.
+**Headline:** Optimize
+**Lede:** Improving existing assets at a fraction of the cost of creating new ones.
 **Primary role:** marketing-ops
 
-- **[before-after]** Before: Content is "one and done" — published, promoted once, and forgotten. The team moves to the next brief. | After: Top-performing content gets optimized iteratively — updated headlines, refreshed CTAs, expanded distribution. A single optimized piece can outperform three new pieces in pipeline contribution.
-- **[ai-handoff]** AI agents test headline variants, CTA alternatives, and distribution timing automatically. The human decides when to iterate versus start over — a system-level judgment call that requires understanding whether the problem is execution or strategy.
-- **[metric]** Optimized content generates 2.5x the ROI of net-new content on a per-dollar basis. The research, brief, and approval work is already done. Optimization captures residual value at marginal cost.
+- **[before-after]** Before: Content is "one and done" — published, promoted once, forgotten. | After: Top-performing content gets optimized iteratively. A single optimized piece can outperform three new pieces in pipeline contribution.
 
 ### Step 29: archive-tag
-**Headline:** Building the Content Library That Compounds
-**Lede:** Archive and tag classifies content into the taxonomy for future discovery, reuse, and governance — turning individual assets into a searchable, composable knowledge base.
+**Headline:** Archive & Tag
+**Lede:** Turning individual assets into a searchable, composable knowledge base.
 **Primary role:** context-engineer
 
-- **[narrative]** Archiving is not retirement — it is curation. Properly tagged content becomes discoverable for future campaigns, repurposing, and governance reporting. The content taxonomy transforms a folder of files into a structured library where every asset is findable by topic, audience, journey stage, and performance tier.
-- **[tension]** Most content teams create assets faster than they organize them. Within two years, the content library becomes a graveyard — thousands of assets, no one knows what exists, and new content is created because finding existing content takes longer than starting from scratch.
+- **[tension]** Most content teams create assets faster than they organize them. Within two years, the library becomes a graveyard — thousands of assets, no one knows what exists, and new content is created because finding existing content takes longer than starting from scratch.
 
 ### Step 30: content-governance
-**Headline:** Keeping Live Content Honest
-**Lede:** Governance reviews live content for accuracy decay, regulatory currency, brand alignment drift, and performance decline — because content does not stay correct forever.
+**Headline:** Content Governance
+**Lede:** Content does not stay correct forever — governance catches decay before customers or regulators do.
 **Primary role:** context-engineer
 
-- **[scenario]** Picture this: A "2024 compliance guide" is still live in 2025 with outdated regulatory references. A product comparison page references a competitor product that was discontinued. A case study quotes a client who is now in litigation with your company. Governance catches these before customers or regulators do.
-- **[domino-effect]** Outdated content erodes trust silently. Prospects who encounter inaccurate content do not complain — they leave. The damage is invisible in analytics because you cannot measure the visits that never converted due to stale information.
-- **[tip]** Set automated governance triggers: content older than 90 days gets flagged for review, content with declining traffic gets reviewed for relevance, and any regulatory change in a content category triggers immediate review of all assets in that category.
+- **[scenario]** A "2024 compliance guide" is still live in 2025 with outdated regulatory references. A product comparison references a discontinued competitor. A case study quotes a client now in litigation with your company.
 
 ### Step 31: governance-gate
-**Headline:** The System That Maintains Itself
-**Lede:** The governance gate validates that all live content remains current, compliant, and brand-aligned — triggering refresh, retirement, or re-review cycles as needed.
+**Headline:** Governance Gate
+**Lede:** The gate that makes the content operation self-maintaining.
 **Primary role:** context-engineer
 
-- **[decision-tree]** Auto-pass: Content is less than 90 days old, no regulatory changes detected in its category, and performance remains above decay threshold. | Flag for review: Content exceeds age threshold, regulatory landscape has shifted, or performance has declined below the minimum. Triggers re-entry into the pipeline at the appropriate stage — sometimes a quick refresh, sometimes a full re-brief.
-- **[quote]** "This role does not exist in most organizations today. It emerges when you think about AI as a system that needs structured context to reason well." — Context Engineer perspective
-- **[narrative]** The governance gate is what makes the content operation self-maintaining. Without it, the pipeline produces new content while old content quietly decays. With it, every asset in the library is continuously validated — and the system gets smarter with each governance cycle because it accumulates knowledge about what ages well and what does not.
+- **[decision-tree]** Auto-pass: Content under 90 days old, no regulatory changes in its category, performance above decay threshold. | Flag for review: Age threshold exceeded, regulatory landscape shifted, or performance declined. Triggers re-entry into the pipeline at the appropriate stage.
+- **[narrative]** This is where agents commoditize and infrastructure compounds. The governance knowledge that accrues here — what ages well, what decays, what triggers regulatory exposure — improves every agent's output simultaneously. The pipeline does not just produce content. It learns.
 
 ---
 
