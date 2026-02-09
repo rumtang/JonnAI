@@ -40,7 +40,7 @@
   {
     "id": "act1-teams",
     "title": "The Teams Behind Each Phase",
-    "narration": "Zoom into each phase and you find people. The Content Director owns the brief. Editors and brand managers own review. Marketing Ops runs distribution. Analytics closes the loop. Each phase has a team, and each team has a process. This is the organizational view — who does what, in what order.",
+    "narration": "Zoom into each phase and you find people. The Content Director owns the brief. Editors and brand managers own review. Marketing Ops runs distribution. Analytics closes the loop. Each phase has a team, and each team has a process. Thirty-one steps. Not six.",
     "cameraPosition": {
       "x": -60,
       "y": 30,
@@ -63,34 +63,9 @@
     "duration": 0
   },
   {
-    "id": "act1-sub-steps",
-    "title": "The Work Inside Each Phase",
-    "narration": "Each phase contains multiple steps. Strategy alone has campaign planning, journey mapping, request intake, scoring, research, social listening, and the brief itself. Create includes drafting, SEO, visual assets, A/B variants, paid creative, and sales enablement. This is the operational reality — more complex than the six-stage slide, but still a left-to-right sequence.",
-    "cameraPosition": {
-      "x": 80,
-      "y": -20,
-      "z": 480
-    },
-    "cameraLookAt": {
-      "x": 80,
-      "y": -20,
-      "z": 0
-    },
-    "cameraTransitionMs": 2000,
-    "graphState": "linear",
-    "action": "show-detailed-steps",
-    "filterNodeTypes": [
-      "step"
-    ],
-    "highlightLinkTypes": [
-      "flows-to"
-    ],
-    "duration": 0
-  },
-  {
     "id": "act2-agents-appear",
     "title": "Where AI Agents Fit Today",
-    "narration": "AI agents plug into specific steps. A Research Agent handles insights. A Content Writer drafts. An SEO Optimizer polishes for search. A Performance Analyst measures results. A Legal Screening Agent pre-checks compliance. A Localization Agent adapts for markets. A Repurposing Agent creates derivatives. A Personalization Agent maps variants to segments. A Privacy Agent validates consent. Eleven agents, each mapped to specific tasks. This is where most organizations stop — bolting AI onto existing human workflows to make each step a little faster.",
+    "narration": "AI agents plug into specific steps. A Research Agent handles audience insights. A Content Writer drafts. A Performance Analyst measures results. Eleven agents total, each mapped to a specific task in the pipeline. This is where most organizations stop — bolting AI onto existing workflows to make each step a little faster.",
     "cameraPosition": {
       "x": 0,
       "y": -80,
@@ -114,9 +89,9 @@
     "duration": 0
   },
   {
-    "id": "act2-agent-grounding",
+    "id": "act2-context",
     "title": "What Agents Actually Depend On",
-    "narration": "Every organization has information like this: brand guidelines, audience personas, content strategy documents, legal frameworks, analytics data. Most teams treat these as reference material — documents that sit in a shared drive and get consulted when someone remembers they exist. But context is not the same as information. Context is how that information is actually used within the company — who applies it, when it triggers a decision, what happens when it changes, and which systems depend on it being current. That is a fundamentally different question. It goes beyond what your team knows and into how your team actually operates. Beyond skills and into the real how.",
+    "narration": "Every organization has brand guidelines, audience personas, legal frameworks, analytics data. Most teams treat these as reference material — documents that sit in a shared drive and get consulted when someone remembers they exist. But context is not the same as information. Context is how information actually governs decisions — who applies it, when it triggers a review, what breaks when it goes stale. That distinction changes everything about how you build an AI system.",
     "cameraPosition": {
       "x": 0,
       "y": -100,
@@ -141,7 +116,7 @@
   {
     "id": "act3-reality",
     "title": "The Pipeline Is a Fiction",
-    "narration": "Now watch what happens when we add the real structure. Gates create checkpoints between phases. Feedback loops send work back for revision. Escalation paths route exceptions upward. Performance data triggers re-briefs. Governance audits live content months after publication. Competitive signals create fast-track paths that bypass the normal sequence. The neat columns dissolve. This is not a pipeline — it is a graph.",
+    "narration": "Now watch what happens when we add the real structure. Gates create checkpoints between phases. Feedback loops send work back for revision. Escalation paths route exceptions upward. Competitive signals create fast-track paths that bypass the normal sequence. The neat columns dissolve. This is not a pipeline — it is a graph.",
     "cameraPosition": {
       "x": 0,
       "y": 0,
@@ -158,9 +133,9 @@
     "duration": 0
   },
   {
-    "id": "act3-gates",
-    "title": "Human Judgment at Every Gate",
-    "narration": "Nine gates control the flow. Brief Approval checks strategic alignment. Quality Check validates readability and SEO. Brand Review catches tone drift. Legal Compliance gates regulatory risk. Stakeholder Sign-off is the final authority before publication. Personalization QA validates segment coverage. Localization Quality catches cultural misfires. Performance Review decides what gets optimized. Governance Gate audits live content for decay. Each gate has auto-pass criteria and escalation triggers. When the criteria are met, work flows. When they are not, humans intervene. That is the design — not human-in-the-loop for everything, but human-at-the-gate for what matters.",
+    "id": "act3-governance",
+    "title": "Governance and Learning",
+    "narration": "Nine gates control the flow. Brief Approval checks strategic alignment before a word gets written. Legal Compliance gates regulatory risk before anything publishes. Each gate has auto-pass criteria and escalation triggers — not human-in-the-loop for everything, but human-at-the-gate for what matters. And the system learns. Performance data flows back to campaign planning. Governance findings trigger new content requests. Content that underperforms teaches the system what to change. Content that overperforms gets repurposed and amplified. The graph learns.",
     "cameraPosition": {
       "x": 0,
       "y": 50,
@@ -186,37 +161,9 @@
     "duration": 0
   },
   {
-    "id": "act3-feedback-loops",
-    "title": "The System That Learns",
-    "narration": "The feedback loops are what make this a system, not a conveyor belt. Performance data flows back to campaign planning through executive reporting. Governance findings trigger new content requests. Competitive signals from sentiment monitoring fast-track response briefs. Optimization can restart at content repurposing, competitive response, or a full new request — the path depends on the data. These loops mean the system improves with every cycle. Content that underperforms teaches the system what to do differently. Content that overperforms gets repurposed and amplified. The graph learns.",
-    "cameraPosition": {
-      "x": -40,
-      "y": 0,
-      "z": 480
-    },
-    "cameraLookAt": {
-      "x": -40,
-      "y": 0,
-      "z": 0
-    },
-    "cameraTransitionMs": 2000,
-    "graphState": "full-graph",
-    "action": "show-feedback-loops",
-    "filterNodeTypes": [
-      "step",
-      "gate"
-    ],
-    "highlightLinkTypes": [
-      "returns-to",
-      "escalates-to",
-      "flows-to"
-    ],
-    "duration": 0
-  },
-  {
     "id": "act4-infrastructure",
     "title": "The Infrastructure That Compounds",
-    "narration": "Look at the input layer. Twenty inputs — brand guides, legal guidelines, audience personas, CDP profiles, content taxonomy, scoring matrices, orchestration rules, personalization logic, privacy regulations, channel benchmarks. This is not supporting documentation. This is a knowledge graph. Every input is connected to multiple agents and steps. Every relationship is explicit. Every dependency is traceable. This is the semantic layer that makes the entire system possible — and it is the part that most organizations never build.",
+    "narration": "Now look at the input layer. Twenty reference inputs — brand guides, audience personas, orchestration rules — connected to multiple agents and steps simultaneously. Every relationship is explicit. Every dependency is traceable. This is not supporting documentation. This is a knowledge graph. And it is the part that most organizations never build.",
     "cameraPosition": {
       "x": 0,
       "y": -60,
@@ -240,9 +187,9 @@
     "duration": 0
   },
   {
-    "id": "act4-context-thesis",
+    "id": "act4-thesis",
     "title": "Agents Commoditize. Infrastructure Compounds.",
-    "narration": "Here is the strategic insight. The agents are interchangeable. You can swap the Content Writer for a better model next quarter. You can replace the SEO Optimizer with a different tool. Agents are execution components — valuable, but not differentiating. The knowledge graph is what compounds. Every time you refine a persona, every agent that references it gets better. Every time you update a legal guideline, every compliance check becomes more accurate. Every time you add a new orchestration rule, the distribution engine gets smarter. The infrastructure improves the entire system simultaneously. The agents improve one step at a time. That asymmetry is your competitive advantage — and it is what makes this a strategic investment, not a technology experiment.",
+    "narration": "Here is the strategic insight. The agents are interchangeable — you can swap the Content Writer for a better model next quarter. Agents improve one step at a time. The knowledge graph improves the entire system simultaneously. Every time you refine a persona, every agent that references it gets better. The infrastructure compounds. The agents commoditize. That asymmetry is your competitive advantage.",
     "cameraPosition": {
       "x": 60,
       "y": 0,
@@ -267,28 +214,9 @@
     "duration": 0
   },
   {
-    "id": "act4-structuring-context",
-    "title": "Structuring Context for Agentic Reasoning",
-    "narration": "This graph is not just a process diagram. It is a specification. Every node has typed attributes. Every link has a semantic relationship. Every input has a source and a refresh rate. Every gate has pass criteria and escalation triggers. This structure is what allows an agentic team to reason over the workflow — to know which inputs are stale, which gates are bottlenecked, which feedback loops are firing, and which steps need human attention. Without this structure, you have agents doing tasks. With it, you have agents understanding context. That is the difference between automation and intelligence.",
-    "cameraPosition": {
-      "x": 0,
-      "y": 0,
-      "z": 420
-    },
-    "cameraLookAt": {
-      "x": 0,
-      "y": 0,
-      "z": 0
-    },
-    "cameraTransitionMs": 2000,
-    "graphState": "full-graph",
-    "action": "show-structured-context",
-    "duration": 0
-  },
-  {
     "id": "act5-elevation",
     "title": "Elevating Human Work",
-    "narration": "This is not about making each person twenty percent faster at their current job. That is the small thinking. This is about changing what the job is. When agents handle drafting, optimization, compliance screening, translation, variant creation, and performance monitoring — what is left for humans? Strategy. Creative direction. Judgment calls at gates. Relationship decisions with creators and partners. The design of the system itself. The humans in this graph do not do less. They do different work — higher-leverage work that agents cannot replicate because it requires taste, accountability, and strategic context that cannot be reduced to a prompt.",
+    "narration": "This is not about making each person twenty percent faster at their current job. That is the small thinking. When agents handle drafting, compliance screening, and variant creation — what is left for humans? Strategy. Creative direction. Judgment calls at gates. The design of the system itself. The humans in this graph do not do less. They do different work — higher-leverage work that requires taste, accountability, and strategic context that cannot be reduced to a prompt.",
     "cameraPosition": {
       "x": 0,
       "y": 40,
@@ -315,7 +243,7 @@
   {
     "id": "act5-new-roles",
     "title": "Roles That Do Not Exist Yet",
-    "narration": "Some of the most important roles in this system do not exist in most marketing organizations today. The Context Engineer maintains the knowledge graph — the taxonomy, scoring matrices, orchestration rules, and semantic relationships that make agents effective. The Privacy Officer designs the consent framework that allows personalization at scale. The Growth Lead designs experimentation strategy rather than producing variants. These roles emerge when you stop thinking about AI as individual productivity tools and start thinking about it as a system that needs architectural governance. They are to agentic marketing what data engineers were to the analytics revolution — the roles that make everything else possible.",
+    "narration": "Some of the most important roles in this system do not exist in most marketing organizations today. The Context Engineer maintains the knowledge graph — the taxonomy, scoring matrices, and semantic relationships that make every agent effective. This role is to agentic marketing what the data engineer was to the analytics revolution — the role that makes everything else possible.",
     "cameraPosition": {
       "x": -40,
       "y": 0,
@@ -341,58 +269,9 @@
     "duration": 0
   },
   {
-    "id": "act5-role-explorer",
-    "title": "Your Role in the System",
-    "narration": "Every role in this graph has a today story and a future story. The today story is the work you do now. The future story is the work you will do when agents handle the production layer. Click any role to see how your responsibilities shift — not what you lose, but what you gain. The steps you own today become the judgment calls that agents cannot make. The gates you review become the quality standards that define your expertise. The inputs you maintain become the infrastructure that scales your impact.",
-    "cameraPosition": {
-      "x": 0,
-      "y": 0,
-      "z": 420
-    },
-    "cameraLookAt": {
-      "x": 0,
-      "y": 0,
-      "z": 0
-    },
-    "cameraTransitionMs": 2000,
-    "graphState": "full-graph",
-    "action": "show-role-explorer",
-    "filterNodeTypes": [
-      "step",
-      "gate"
-    ],
-    "duration": 0
-  },
-  {
-    "id": "act6-strategic-asset",
-    "title": "A Strategic Asset, Not a Cost Center",
-    "narration": "This graph changes how you think about investment. You are not buying AI tools and hoping for ROI. You are building infrastructure that compounds. Every dollar spent structuring the knowledge graph — refining personas, documenting brand voice, mapping orchestration rules, building the content taxonomy — makes every agent in the system more effective simultaneously. The marginal cost of the next piece of content approaches zero. The marginal value of the next knowledge graph update increases with every agent that uses it. That is not a linear return. That is a platform investment.",
-    "cameraPosition": {
-      "x": 0,
-      "y": -40,
-      "z": 400
-    },
-    "cameraLookAt": {
-      "x": 0,
-      "y": -40,
-      "z": 0
-    },
-    "cameraTransitionMs": 2000,
-    "graphState": "full-graph",
-    "action": "show-investment-thesis",
-    "filterNodeTypes": [
-      "input",
-      "agent"
-    ],
-    "highlightLinkTypes": [
-      "uses"
-    ],
-    "duration": 0
-  },
-  {
-    "id": "act6-different-mentality",
+    "id": "act6-close",
     "title": "A Different Way of Working",
-    "narration": "The question is not whether to adopt AI. The question is whether you treat it as a collection of productivity tools or as an operating system that requires a different way of working. The productivity tools approach gives you incremental gains — each person gets a little faster. The operating system approach gives you structural advantage — the system gets smarter, the humans do higher-leverage work, and the knowledge infrastructure becomes an asset that competitors cannot easily replicate. This graph is the blueprint for the second approach. Every node, every link, every gate, every input is a design decision about how human intelligence and machine capability combine. That combination — not the agents alone, not the humans alone — is the strategic asset.",
+    "narration": "The question is not whether to adopt AI. It is whether you treat it as a collection of productivity tools or as an operating system. Productivity tools give you incremental gains — each person gets a little faster. The operating system gives you structural advantage — the system gets smarter, the knowledge infrastructure compounds, and the humans do higher-leverage work. The marginal cost of the next piece of content approaches zero. The marginal value of the next knowledge graph update increases with every agent that uses it. That is not a technology experiment. That is a platform investment.",
     "cameraPosition": {
       "x": 0,
       "y": 0,
@@ -406,25 +285,6 @@
     "cameraTransitionMs": 2000,
     "graphState": "full-graph",
     "action": "show-operating-model",
-    "duration": 0
-  },
-  {
-    "id": "act6-explore",
-    "title": "Explore the System",
-    "narration": "This is the complete marketing operating system. Seventy-five nodes. Eleven agents. Nine gates. Twenty reference inputs. Every step has an owner. Every gate has criteria. Every agent is grounded in structured context. Every feedback loop is explicit. Click any node to explore its connections. Filter by role to see your view. Follow the links to understand how your work connects to everyone else. This is what it means to design AI into a workflow — not bolt it on.",
-    "cameraPosition": {
-      "x": 0,
-      "y": 0,
-      "z": 500
-    },
-    "cameraLookAt": {
-      "x": 0,
-      "y": 0,
-      "z": 0
-    },
-    "cameraTransitionMs": 2000,
-    "graphState": "full-graph",
-    "action": "full-explore",
     "duration": 0
   }
 ]
