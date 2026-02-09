@@ -242,11 +242,33 @@ export default function PresentationController() {
 
       case 'show-agents-grounded':
       case 'show-agent-dependencies': {
+        // Show the step pipeline with input nodes floating around it,
+        // connected by 'uses' links — the context layer agents depend on
         clearHighlights();
-        const chartWithAgents = buildProcessChartWithAgents();
-        if (chartWithAgents) setGraphData(chartWithAgents);
-        highlightByTypes(['agent']);
-        highlightLinksByTypes(['performs']);
+        if (!fullGraphData) break;
+        const stepNodesD: GraphNode[] = fullGraphData.nodes
+          .filter(n => n.type === 'step')
+          .map(n => {
+            const pos = PROCESS_CHART_LAYOUT[n.id];
+            if (!pos) return { ...n };
+            return { ...n, fx: pos.fx, fy: pos.fy, fz: pos.fz };
+          });
+        const inputNodes: GraphNode[] = fullGraphData.nodes
+          .filter(n => n.type === 'input');
+        const stepLinks: GraphLink[] = PROCESS_CHART_LINKS.map(([src, tgt]) => ({
+          source: src,
+          target: tgt,
+          type: 'flows-to' as const,
+          particles: 2,
+        }));
+        const usesLinks: GraphLink[] = fullGraphData.links
+          .filter(l => l.type === 'uses');
+        setGraphData({
+          nodes: [...stepNodesD, ...inputNodes],
+          links: [...stepLinks, ...usesLinks],
+        });
+        highlightByTypes(['input']);
+        highlightLinksByTypes(['uses']);
         break;
       }
 
