@@ -22,7 +22,7 @@
 8. [All Links — Complete Relationship Map](#8-all-links)
 9. [Step Narratives (Deep Storytelling)](#9-step-narratives)
 10. [Role Definitions (16 Roles)](#10-role-definitions)
-11. [Presentation Walkthrough (18 Slides)](#11-presentation-walkthrough)
+11. [Presentation Walkthrough (6 Slides)](#11-presentation-walkthrough)
 12. [Side Branches and Parallel Paths](#12-side-branches)
 13. [Feedback Loops and Escalation Paths](#13-feedback-loops)
 14. [The Knowledge Graph Layer](#14-knowledge-graph-layer)
@@ -1243,81 +1243,38 @@ Each role maps to specific nodes in the graph and carries a transformation narra
 
 ---
 
-## 11. Presentation Walkthrough (18 Slides)
+## 11. Presentation Walkthrough (6 Slides)
 
-The presentation is a guided narrative delivered through 18 slides. Each slide controls the 3D camera position, which nodes are visible, and which link types are highlighted. The slides build a progressive argument from simple pipeline → real complexity → strategic infrastructure → human elevation → investment thesis.
+The presentation is a guided narrative delivered through 6 slides. Each slide controls the 3D camera position, which nodes are visible, and which link types are highlighted. The slides build a progressive argument from simple pipeline → real complexity → strategic infrastructure → human elevation → closing argument.
 
 ### Slide 1: "The Content Production Lifecycle" (act1-title)
 - Narration: (none — title card)
 - Graph state: linear | Action: show-title-slide
 
-### Slide 2: "The Pipeline Everyone Draws" (act1-pipeline)
-- Narration: Every marketing team draws the same pipeline: Strategy, Create, Review, Publish, Measure, Optimize. Six stages, left to right. Clean columns. This is the version that lives in your process documentation and gets presented to leadership when someone asks how content gets made.
-- Graph state: linear | Action: show-linear-pipeline
+### Slide 2: "The Marketing Lifecycle" (act1-lifecycle)
+- Narration: Every marketing team draws the same pipeline: Strategy, Create, Review, Publish, Measure, Optimize. Six stages, left to right. Clean columns. But behind each stage are teams, handoffs, and dependencies — and the complexity compounds fast. Thirty-one steps, not six. This is the operational reality most process documents never show.
+- Graph state: linear | Shows: steps | Highlights: flows-to | Action: show-teams-by-phase
+- *Merges former slides 2 (pipeline) + 3 (teams). show-teams-by-phase is a visual superset of show-linear-pipeline.*
 
-### Slide 3: "The Teams Behind Each Phase" (act1-teams)
-- Narration: Zoom into each phase and you find people. The Content Director owns the brief. Editors and brand managers own review. Marketing Ops runs distribution. Analytics closes the loop. Each phase has a team, and each team has a process. This is the organizational view — who does what, in what order.
-- Graph state: linear | Shows: steps | Highlights: flows-to
+### Slide 3: "Adding Agents — And What They Actually Need" (act2-agents-and-context)
+- Narration: AI agents get overlaid on specific steps — research, drafting, optimization, performance analysis. That is the natural first move, and it works. But what this agent-first approach misses is that the real work depends on context: brand instincts, legal judgment calls, audience intuition that lives in your best people's heads. Most of that intelligence is mundane — routine decisions, everyday judgment calls. Codifying the mundane is exactly the point. When you make the routine explicit, agents can reason over it — and your people focus on work that actually requires them.
+- Graph state: linear | Shows: inputs | Highlights: uses | Action: show-agent-dependencies
+- *Merges former slides 4 (agents on pipeline) + 5 (agent dependencies). show-agent-dependencies shows agents AND their input dependencies.*
 
-### Slide 4: "The Work Inside Each Phase" (act1-sub-steps)
-- Narration: Each phase contains multiple steps. Strategy alone has campaign planning, journey mapping, request intake, scoring, research, social listening, and the brief itself. Create includes drafting, SEO, visual assets, A/B variants, paid creative, and sales enablement. This is the operational reality — more complex than the six-stage slide, but still a left-to-right sequence.
-- Graph state: linear | Shows: steps | Highlights: flows-to
-
-### Slide 5: "Where AI Agents Fit Today" (act2-agents-appear)
-- Narration: AI agents plug into specific steps. A Research Agent handles insights. A Content Writer drafts. An SEO Optimizer polishes for search. A Performance Analyst measures results. A Legal Screening Agent pre-checks compliance. A Localization Agent adapts for markets. A Repurposing Agent creates derivatives. A Personalization Agent maps variants to segments. A Privacy Agent validates consent. Eleven agents, each mapped to specific tasks. This is where most organizations stop — bolting AI onto existing human workflows to make each step a little faster.
-- Graph state: linear | Shows: steps, agents | Highlights: performs
-
-### Slide 6: "What Agents Actually Depend On" (act2-agent-grounding)
-- Narration: Every organization has information like this: brand guidelines, audience personas, content strategy documents, legal frameworks, analytics data. Most teams treat these as reference material — documents that sit in a shared drive and get consulted when someone remembers they exist. But context is not the same as information. Context is how that information is actually used within the company — who applies it, when it triggers a decision, what happens when it changes, and which systems depend on it being current. That is a fundamentally different question. It goes beyond what your team knows and into how your team actually operates. Beyond skills and into the real how.
-- Graph state: linear | Shows: inputs | Highlights: uses
-
-### Slide 7: "The Pipeline Is a Fiction" (act3-reality)
-- Narration: Now watch what happens when we add the real structure. Gates create checkpoints between phases. Feedback loops send work back for revision. Escalation paths route exceptions upward. Performance data triggers re-briefs. Governance audits live content months after publication. Competitive signals create fast-track paths that bypass the normal sequence. The neat columns dissolve. This is not a pipeline — it is a graph.
+### Slide 4: "It's Not a Pipeline — It's a Graph" (act3-graph-reveal)
+- Narration: Now add the real structure. Checkpoints. Feedback loops. Escalation paths. Fast-track bypasses. The neat columns dissolve. This is not a pipeline — it is a graph.
 - **Graph state: full-graph** (THE REVEAL) | Action: explode-to-graph
+- *Unchanged — the single most dramatic moment keeps its own slide.*
 
-### Slide 8: "Human Judgment at Every Gate" (act3-gates)
-- Narration: Nine gates control the flow. Brief Approval checks strategic alignment. Quality Check validates readability and SEO. Brand Review catches tone drift. Legal Compliance gates regulatory risk. Stakeholder Sign-off is the final authority before publication. Personalization QA validates segment coverage. Localization Quality catches cultural misfires. Performance Review decides what gets optimized. Governance Gate audits live content for decay. Each gate has auto-pass criteria and escalation triggers. When the criteria are met, work flows. When they are not, humans intervene. That is the design — not human-in-the-loop for everything, but human-at-the-gate for what matters.
-- Graph state: full-graph | Shows: gates, steps | Highlights: reviews, escalates-to, returns-to
+### Slide 5: "The Intelligence Layer" (act4-intelligence-layer)
+- Narration: This is the intelligence layer. Twenty inputs capturing how your organization actually works — brand voice, audience understanding, legal frameworks, orchestration rules — each connected to every agent that depends on it. Update one input, and the entire system gets smarter. The agents will become interchangeable — you can swap models next quarter. But the knowledge graph compounds. Refine one input and every agent that touches it improves simultaneously. Agents commoditize. Infrastructure compounds. Your competitors can buy the same models. They cannot replicate the way your organization thinks.
+- Graph state: full-graph | Shows: inputs, agents | Highlights: uses, performs | Action: show-infrastructure-vs-agents
+- *Merges former slides 7 (intelligence layer) + 8 (thesis). show-infrastructure-vs-agents highlights both inputs and agents with all connecting links.*
 
-### Slide 9: "The System That Learns" (act3-feedback-loops)
-- Narration: The feedback loops are what make this a system, not a conveyor belt. Performance data flows back to campaign planning through executive reporting. Governance findings trigger new content requests. Competitive signals from sentiment monitoring fast-track response briefs. Optimization can restart at content repurposing, competitive response, or a full new request — the path depends on the data. These loops mean the system improves with every cycle. Content that underperforms teaches the system what to do differently. Content that overperforms gets repurposed and amplified. The graph learns.
-- Graph state: full-graph | Shows: steps, gates | Highlights: returns-to, escalates-to, flows-to
-
-### Slide 10: "The Infrastructure That Compounds" (act4-infrastructure)
-- Narration: Look at the input layer. Twenty inputs — brand guides, legal guidelines, audience personas, CDP profiles, content taxonomy, scoring matrices, orchestration rules, personalization logic, privacy regulations, channel benchmarks. This is not supporting documentation. This is a knowledge graph. Every input is connected to multiple agents and steps. Every relationship is explicit. Every dependency is traceable. This is the semantic layer that makes the entire system possible — and it is the part that most organizations never build.
-- Graph state: full-graph | Shows: inputs, agents | Highlights: uses
-
-### Slide 11: "Agents Commoditize. Infrastructure Compounds." (act4-context-thesis)
-- Narration: Here is the strategic insight. The agents are interchangeable. You can swap the Content Writer for a better model next quarter. You can replace the SEO Optimizer with a different tool. Agents are execution components — valuable, but not differentiating. The knowledge graph is what compounds. Every time you refine a persona, every agent that references it gets better. Every time you update a legal guideline, every compliance check becomes more accurate. Every time you add a new orchestration rule, the distribution engine gets smarter. The infrastructure improves the entire system simultaneously. The agents improve one step at a time. That asymmetry is your competitive advantage — and it is what makes this a strategic investment, not a technology experiment.
-- Graph state: full-graph | Shows: inputs, agents | Highlights: uses, performs
-
-### Slide 12: "Structuring Context for Agentic Reasoning" (act4-structuring-context)
-- Narration: This graph is not just a process diagram. It is a specification. Every node has typed attributes. Every link has a semantic relationship. Every input has a source and a refresh rate. Every gate has pass criteria and escalation triggers. This structure is what allows an agentic team to reason over the workflow — to know which inputs are stale, which gates are bottlenecked, which feedback loops are firing, and which steps need human attention. Without this structure, you have agents doing tasks. With it, you have agents understanding context. That is the difference between automation and intelligence.
-- Graph state: full-graph | Action: show-structured-context
-
-### Slide 13: "Elevating Human Work" (act5-elevation)
-- Narration: This is not about making each person twenty percent faster at their current job. That is the small thinking. This is about changing what the job is. When agents handle drafting, optimization, compliance screening, translation, variant creation, and performance monitoring — what is left for humans? Strategy. Creative direction. Judgment calls at gates. Relationship decisions with creators and partners. The design of the system itself. The humans in this graph do not do less. They do different work — higher-leverage work that agents cannot replicate because it requires taste, accountability, and strategic context that cannot be reduced to a prompt.
-- Graph state: full-graph | Shows: steps, gates | Highlights: reviews, escalates-to
-
-### Slide 14: "Roles That Do Not Exist Yet" (act5-new-roles)
-- Narration: Some of the most important roles in this system do not exist in most marketing organizations today. The Context Engineer maintains the knowledge graph — the taxonomy, scoring matrices, orchestration rules, and semantic relationships that make agents effective. The Privacy Officer designs the consent framework that allows personalization at scale. The Growth Lead designs experimentation strategy rather than producing variants. These roles emerge when you stop thinking about AI as individual productivity tools and start thinking about it as a system that needs architectural governance. They are to agentic marketing what data engineers were to the analytics revolution — the roles that make everything else possible.
-- Graph state: full-graph | Shows: steps, gates, inputs | Highlights: uses, reviews
-
-### Slide 15: "Your Role in the System" (act5-role-explorer)
-- Narration: Every role in this graph has a today story and a future story. The today story is the work you do now. The future story is the work you will do when agents handle the production layer. Click any role to see how your responsibilities shift — not what you lose, but what you gain. The steps you own today become the judgment calls that agents cannot make. The gates you review become the quality standards that define your expertise. The inputs you maintain become the infrastructure that scales your impact.
-- Graph state: full-graph | Shows: steps, gates | Action: show-role-explorer
-
-### Slide 16: "A Strategic Asset, Not a Cost Center" (act6-strategic-asset)
-- Narration: This graph changes how you think about investment. You are not buying AI tools and hoping for ROI. You are building infrastructure that compounds. Every dollar spent structuring the knowledge graph — refining personas, documenting brand voice, mapping orchestration rules, building the content taxonomy — makes every agent in the system more effective simultaneously. The marginal cost of the next piece of content approaches zero. The marginal value of the next knowledge graph update increases with every agent that uses it. That is not a linear return. That is a platform investment.
-- Graph state: full-graph | Shows: inputs, agents | Highlights: uses
-
-### Slide 17: "A Different Way of Working" (act6-different-mentality)
-- Narration: The question is not whether to adopt AI. The question is whether you treat it as a collection of productivity tools or as an operating system that requires a different way of working. The productivity tools approach gives you incremental gains — each person gets a little faster. The operating system approach gives you structural advantage — the system gets smarter, the humans do higher-leverage work, and the knowledge infrastructure becomes an asset that competitors cannot easily replicate. This graph is the blueprint for the second approach. Every node, every link, every gate, every input is a design decision about how human intelligence and machine capability combine. That combination — not the agents alone, not the humans alone — is the strategic asset.
+### Slide 6: "A Different Way of Working" (act6-close)
+- Narration: To take humans out of the loop on routine work, you first have to codify that routine — extract the patterns, the decision logic, the ways of working that nobody has ever written down. That is the unglamorous work. But once the mundane is structured, agents handle it — and humans move to strategy, creative direction, and judgment. Someone needs to own this intelligence layer. The Context Engineer — the person who structures and evolves the operational knowledge that makes every agent effective. This role is to AI-driven marketing what the data engineer was to the analytics revolution. The question is not whether to adopt AI. It is whether you do the work of codifying how your organization actually operates and structure it so the entire system can reason over it. That codification is the transformation. The knowledge compounds. The advantage compounds.
 - Graph state: full-graph | Action: show-operating-model
-
-### Slide 18: "Explore the System" (act6-explore)
-- Narration: This is the complete marketing operating system. Seventy-five nodes. Eleven agents. Nine gates. Twenty reference inputs. Every step has an owner. Every gate has criteria. Every agent is grounded in structured context. Every feedback loop is explicit. Click any node to explore its connections. Filter by role to see your view. Follow the links to understand how your work connects to everyone else. This is what it means to design AI into a workflow — not bolt it on.
-- Graph state: full-graph | Action: full-explore
+- *Merges former slides 9 (elevation) + 10 (new roles) + 11 (close). show-operating-model clears all highlights showing the full graph — a "zoom out" close covering elevation, context engineer role, and the closing argument.*
 
 ---
 

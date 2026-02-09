@@ -19,28 +19,9 @@
     "duration": 0
   },
   {
-    "id": "act1-pipeline",
-    "title": "The Traditional View of the Marketing Lifecycle",
-    "narration": "Our traditional way of understanding the marketing process is as a series of efforts: Strategy, Create, Review, Publish, Measure, Optimize. Six stages, left to right. Clean columns.",
-    "cameraPosition": {
-      "x": 0,
-      "y": 0,
-      "z": 450
-    },
-    "cameraLookAt": {
-      "x": 0,
-      "y": 0,
-      "z": 0
-    },
-    "cameraTransitionMs": 2000,
-    "graphState": "linear",
-    "action": "show-linear-pipeline",
-    "duration": 0
-  },
-  {
-    "id": "act1-teams",
-    "title": "The Teams Behind Each Phase",
-    "narration": "Behind each stage in the process are teams, handoffs, dependencies and dig in further and the complexity compounds. Thirty-one steps, not 6. And so on.",
+    "id": "act1-lifecycle",
+    "title": "The Marketing Lifecycle",
+    "narration": "Every marketing team draws the same pipeline: Strategy, Create, Review, Publish, Measure, Optimize. Six stages, left to right. Clean columns. But behind each stage are teams, handoffs, and dependencies — and the complexity compounds fast. Thirty-one steps, not six. This is the operational reality most process documents never show.",
     "cameraPosition": {
       "x": -60,
       "y": 30,
@@ -63,35 +44,9 @@
     "duration": 0
   },
   {
-    "id": "act2-agents-appear",
-    "title": "How we think about adding agents today",
-    "narration": "AI agents get overlaid, each mapped to a specific step — research, drafting, optimization, performance analysis. This is the natural first move, and it can introduce productivity and insight gains at each stage. But what this skill/agent first approach misses is the actual work relies on much more context than that.",
-    "cameraPosition": {
-      "x": 0,
-      "y": -80,
-      "z": 520
-    },
-    "cameraLookAt": {
-      "x": 0,
-      "y": -80,
-      "z": 0
-    },
-    "cameraTransitionMs": 2000,
-    "graphState": "linear",
-    "action": "show-agents-on-pipeline",
-    "filterNodeTypes": [
-      "step",
-      "agent"
-    ],
-    "highlightLinkTypes": [
-      "performs"
-    ],
-    "duration": 0
-  },
-  {
-    "id": "act2-context",
-    "title": "What Agents Actually Depend On",
-    "narration": "Every organization runs on more than process. It runs on how people actually make decisions — the brand instincts, the legal judgment calls, the audience intuition that lives in your best people's heads. Most of that intelligence is mundane. Routine decisions, everyday judgment calls, the way things have always been done. But codifying the mundane is exactly the point. When you make the routine explicit, you make it something agents can reason over — and you free your people to focus on work that actually requires them.",
+    "id": "act2-agents-and-context",
+    "title": "Adding Agents — And What They Actually Need",
+    "narration": "AI agents get overlaid on specific steps — research, drafting, optimization, performance analysis. That is the natural first move, and it works. But what this agent-first approach misses is that the real work depends on context: brand instincts, legal judgment calls, audience intuition that lives in your best people's heads. Most of that intelligence is mundane — routine decisions, everyday judgment calls. Codifying the mundane is exactly the point. When you make the routine explicit, agents can reason over it — and your people focus on work that actually requires them.",
     "cameraPosition": {
       "x": 0,
       "y": -100,
@@ -114,8 +69,8 @@
     "duration": 0
   },
   {
-    "id": "act3-reality",
-    "title": "The Pipeline view distracts from the real work",
+    "id": "act3-graph-reveal",
+    "title": "It's Not a Pipeline — It's a Graph",
     "narration": "Now add the real structure. Checkpoints. Feedback loops. Escalation paths. Fast-track bypasses. The neat columns dissolve. This is not a pipeline — it is a graph.",
     "cameraPosition": {
       "x": 0,
@@ -133,35 +88,9 @@
     "duration": 0
   },
   {
-    "id": "act4-infrastructure",
+    "id": "act4-intelligence-layer",
     "title": "The Intelligence Layer",
-    "narration": "This is the intelligence layer. Twenty inputs capturing how your organization actually works — brand voice, audience understanding, legal frameworks, orchestration rules — each connected to every agent that depends on it. Update one, and the entire system gets smarter. This is not documentation. This is your organization's knowledge graph.",
-    "cameraPosition": {
-      "x": 0,
-      "y": -60,
-      "z": 400
-    },
-    "cameraLookAt": {
-      "x": 0,
-      "y": -60,
-      "z": 0
-    },
-    "cameraTransitionMs": 2000,
-    "graphState": "full-graph",
-    "action": "show-knowledge-layer",
-    "filterNodeTypes": [
-      "input",
-      "agent"
-    ],
-    "highlightLinkTypes": [
-      "uses"
-    ],
-    "duration": 0
-  },
-  {
-    "id": "act4-thesis",
-    "title": "Agents Will Commoditize. Infrastructure Will Compound.",
-    "narration": "The agents will become interchangeable. But the knowledge graph — the structured intelligence of how your organization works — that is yours alone. Refine one input and every agent that touches it improves simultaneously. Agents commoditize. Infrastructure compounds. Your competitors can buy the same models. They cannot replicate the way your organization thinks.",
+    "narration": "This is the intelligence layer. Twenty inputs capturing how your organization actually works — brand voice, audience understanding, legal frameworks, orchestration rules — each connected to every agent that depends on it. Update one input, and the entire system gets smarter. The agents will become interchangeable — you can swap models next quarter. But the knowledge graph compounds. Refine one input and every agent that touches it improves simultaneously. Agents commoditize. Infrastructure compounds. Your competitors can buy the same models. They cannot replicate the way your organization thinks.",
     "cameraPosition": {
       "x": 60,
       "y": 0,
@@ -186,64 +115,9 @@
     "duration": 0
   },
   {
-    "id": "act5-elevation",
-    "title": "Elevating Human Work",
-    "narration": "Here is the push-pull of transformation. To take humans out of the loop on routine work, you first have to codify that routine — extract the patterns, the decision logic, the ways of working that nobody has ever written down. That is the unglamorous work. But it is the work that changes everything. Once the mundane is structured, agents handle it. And humans move to the work that actually requires them — strategy, creative direction, judgment, and evolving the intelligence that makes the whole system smarter.",
-    "cameraPosition": {
-      "x": 0,
-      "y": 40,
-      "z": 400
-    },
-    "cameraLookAt": {
-      "x": 0,
-      "y": 40,
-      "z": 0
-    },
-    "cameraTransitionMs": 2000,
-    "graphState": "full-graph",
-    "action": "show-human-elevation",
-    "filterNodeTypes": [
-      "step",
-      "gate"
-    ],
-    "highlightLinkTypes": [
-      "reviews",
-      "escalates-to"
-    ],
-    "duration": 0
-  },
-  {
-    "id": "act5-new-roles",
-    "title": "Roles That Do Not Exist Yet",
-    "narration": "Someone needs to own this intelligence layer. The Context Engineer — the person who extracts, structures, and evolves the operational knowledge that makes every agent effective. This role is to AI-driven marketing what the data engineer was to the analytics revolution. The role that makes everything else possible.",
-    "cameraPosition": {
-      "x": -40,
-      "y": 0,
-      "z": 480
-    },
-    "cameraLookAt": {
-      "x": -40,
-      "y": 0,
-      "z": 0
-    },
-    "cameraTransitionMs": 2000,
-    "graphState": "full-graph",
-    "action": "show-emerging-roles",
-    "filterNodeTypes": [
-      "step",
-      "gate",
-      "input"
-    ],
-    "highlightLinkTypes": [
-      "uses",
-      "reviews"
-    ],
-    "duration": 0
-  },
-  {
     "id": "act6-close",
     "title": "A Different Way of Working",
-    "narration": "The question is not whether to adopt AI. It is whether you do the work of codifying how your organization actually operates — the mundane and the strategic, the routine and the exceptional — and structure it so the entire system can reason over it. That codification is the transformation. It is what takes humans out of the loop where they do not need to be, and elevates them where they do. The knowledge compounds. The advantage compounds. That is how you build something your competitors cannot copy.",
+    "narration": "To take humans out of the loop on routine work, you first have to codify that routine — extract the patterns, the decision logic, the ways of working that nobody has ever written down. That is the unglamorous work. But once the mundane is structured, agents handle it — and humans move to strategy, creative direction, and judgment. Someone needs to own this intelligence layer. The Context Engineer — the person who structures and evolves the operational knowledge that makes every agent effective. This role is to AI-driven marketing what the data engineer was to the analytics revolution. The question is not whether to adopt AI. It is whether you do the work of codifying how your organization actually operates and structure it so the entire system can reason over it. That codification is the transformation. The knowledge compounds. The advantage compounds.",
     "cameraPosition": {
       "x": 0,
       "y": 0,
