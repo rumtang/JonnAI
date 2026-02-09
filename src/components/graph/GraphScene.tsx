@@ -460,7 +460,7 @@ export default function GraphScene() {
       linkCurvature={0.1}
       linkCurveRotation={0}
       linkDirectionalParticles={linkParticles as any}
-      linkDirectionalParticleSpeed={0.008}
+      linkDirectionalParticleSpeed={0.003}
       linkDirectionalParticleWidth={2.0}
       linkDirectionalParticleColor={((link: any) => getLinkColor(link.type)) as any}
       onNodeClick={handleNodeClick as any}

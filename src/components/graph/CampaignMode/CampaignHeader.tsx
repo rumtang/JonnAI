@@ -86,7 +86,7 @@ export default function CampaignHeader() {
 
       {/* Stats row */}
       <div className="flex items-center gap-3 text-xs text-muted-foreground">
-        <span>Step {stepCount} of ~17</span>
+        <span>Step {stepCount} of ~31</span>
         <span className="text-muted-foreground/30">|</span>
         <span>{'\u23F1'} {timeLabel} elapsed</span>
         <span className="text-muted-foreground/30">|</span>

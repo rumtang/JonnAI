@@ -3,23 +3,37 @@ import { GraphNode, GraphLink, StepMeta, GateMeta } from '../graph/types';
 
 // The main workflow path (flows-to chain) — used to determine "next node"
 const MAIN_WORKFLOW_ORDER = [
+  'campaign-planning',
+  'journey-mapping',
   'receive-request',
+  'content-scoring',
   'research-insights',
   'write-brief',
   'brief-approval',
   'draft-content',
+  'visual-asset-creation',
   'seo-optimization',
   'quality-check',
   'brand-compliance',
   'brand-review',
+  'legal-review',
+  'legal-compliance-gate',
   'final-edit',
+  'accessibility-check',
   'stakeholder-signoff',
+  'localize-content',
+  'localization-quality-gate',
   'schedule-publish',
   'distribute',
   'track-performance',
   'generate-report',
+  'attribution-modeling',
+  'executive-reporting',
   'performance-review',
   'optimize',
+  'archive-tag',
+  'content-governance',
+  'governance-gate',
 ];
 
 export interface CampaignLogEntry {
@@ -90,7 +104,7 @@ function getOwnerLabel(node: GraphNode): string {
 export const useCampaignStore = create<CampaignState>((set, get) => ({
   isActive: false,
   campaignName: 'Content Campaign',
-  currentNodeId: 'receive-request',
+  currentNodeId: 'campaign-planning',
   visitedNodes: [],
   decisions: [],
   revisionCount: 0,
@@ -103,8 +117,8 @@ export const useCampaignStore = create<CampaignState>((set, get) => ({
   startCampaign: () => {
     set({
       isActive: true,
-      currentNodeId: 'receive-request',
-      visitedNodes: ['receive-request'],
+      currentNodeId: 'campaign-planning',
+      visitedNodes: ['campaign-planning'],
       decisions: [],
       revisionCount: 0,
       escalationCount: 0,
@@ -146,11 +160,18 @@ export const useCampaignStore = create<CampaignState>((set, get) => ({
       icon: '\u2705',
     };
 
-    // Find the next node via flows-to
-    const flowsToLink = graphData.links.find(l => {
+    // Find the next node via flows-to, preferring the main workflow path
+    const flowsToLinks = graphData.links.filter(l => {
       const sId = typeof l.source === 'object' ? (l.source as GraphNode).id : l.source;
       return sId === currentId && l.type === 'flows-to';
     });
+
+    const mainPathLink = flowsToLinks.find(l => {
+      const tId = typeof l.target === 'object' ? (l.target as GraphNode).id : l.target;
+      return MAIN_WORKFLOW_ORDER.includes(tId);
+    });
+
+    const flowsToLink = mainPathLink || flowsToLinks[0];
 
     if (!flowsToLink) {
       console.warn('[Campaign] advanceToNext: no flows-to link from:', currentId);
@@ -195,11 +216,16 @@ export const useCampaignStore = create<CampaignState>((set, get) => ({
     let escalationInc = 0;
 
     if (d === 'approve' || d === 'pass') {
-      // Advance via flows-to
-      const link = graphData.links.find(l => {
+      // Advance via flows-to, preferring the main workflow path
+      const ftLinks = graphData.links.filter(l => {
         const sId = typeof l.source === 'object' ? (l.source as GraphNode).id : l.source;
         return sId === currentId && l.type === 'flows-to';
       });
+      const mainLink = ftLinks.find(l => {
+        const tId = typeof l.target === 'object' ? (l.target as GraphNode).id : l.target;
+        return MAIN_WORKFLOW_ORDER.includes(tId);
+      });
+      const link = mainLink || ftLinks[0];
       if (link) {
         const tId = typeof link.target === 'object' ? (link.target as GraphNode).id : link.target;
         targetNode = graphData.nodes.find(n => n.id === tId) || null;
@@ -316,7 +342,7 @@ export const useCampaignStore = create<CampaignState>((set, get) => ({
   resetCampaign: () => set({
     isActive: false,
     campaignName: 'Content Campaign',
-    currentNodeId: 'receive-request',
+    currentNodeId: 'campaign-planning',
     visitedNodes: [],
     decisions: [],
     revisionCount: 0,

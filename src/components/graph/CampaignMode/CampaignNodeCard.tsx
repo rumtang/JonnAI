@@ -6,7 +6,7 @@ import { navigateToNode } from '@/lib/utils/camera-navigation';
 import { NODE_STYLES } from '@/lib/graph/node-styles';
 import { Badge } from '@/components/ui/badge';
 import { GraphNode, StepMeta, GateMeta, AgentMeta, InputMeta } from '@/lib/graph/types';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, BookOpen, Database, Wrench } from 'lucide-react';
 
 export default function CampaignNodeCard() {
   const { currentNodeId, advanceToNext, makeGateDecision } = useCampaignStore();
@@ -102,18 +102,7 @@ export default function CampaignNodeCard() {
       )}
 
       {connectedInputs.length > 0 && (
-        <div className="mb-4 p-3 rounded-lg bg-[#C9A04E]/10 border border-[#C9A04E]/20">
-          <p className="text-xs font-semibold text-[#C9A04E] mb-1">
-            {'\uD83D\uDCC4'} Using
-          </p>
-          <div className="flex flex-wrap gap-1">
-            {connectedInputs.map(inp => (
-              <Badge key={inp.id} variant="outline" className="text-xs border-[#C9A04E]/30 text-[#C9A04E]">
-                {inp.label}
-              </Badge>
-            ))}
-          </div>
-        </div>
+        <InputContextGroups inputs={connectedInputs} />
       )}
 
       {/* Action buttons */}
@@ -145,6 +134,55 @@ export default function CampaignNodeCard() {
           ))}
         </div>
       )}
+    </div>
+  );
+}
+
+const INPUT_TYPE_CONFIG: Record<string, { label: string; Icon: typeof BookOpen; color: string; bg: string; border: string }> = {
+  reference: { label: 'Reference Documents', Icon: BookOpen, color: 'text-blue-400', bg: 'bg-blue-500/10', border: 'border-blue-500/20' },
+  data:      { label: 'Data Feeds',          Icon: Database, color: 'text-cyan-400', bg: 'bg-cyan-500/10', border: 'border-cyan-500/20' },
+  tool:      { label: 'Tools & Platforms',    Icon: Wrench,   color: 'text-amber-400', bg: 'bg-amber-500/10', border: 'border-amber-500/20' },
+};
+
+function InputContextGroups({ inputs }: { inputs: GraphNode[] }) {
+  // Group inputs by their inputType
+  const groups: Record<string, GraphNode[]> = {};
+  for (const inp of inputs) {
+    const meta = inp.meta as InputMeta | undefined;
+    const type = meta?.inputType || 'reference';
+    if (!groups[type]) groups[type] = [];
+    groups[type].push(inp);
+  }
+
+  return (
+    <div className="mb-4 space-y-2">
+      {(['reference', 'data', 'tool'] as const).map(type => {
+        const items = groups[type];
+        if (!items || items.length === 0) return null;
+        const config = INPUT_TYPE_CONFIG[type];
+        const { Icon } = config;
+        return (
+          <div key={type} className={`p-3 rounded-lg ${config.bg} border ${config.border}`}>
+            <div className={`flex items-center gap-1.5 text-xs font-semibold ${config.color} mb-2`}>
+              <Icon className="w-3.5 h-3.5" />
+              {config.label}
+            </div>
+            <div className="space-y-1.5">
+              {items.map(inp => {
+                const meta = inp.meta as InputMeta | undefined;
+                return (
+                  <div key={inp.id}>
+                    <p className="text-sm text-foreground">{inp.label}</p>
+                    {meta?.source && (
+                      <p className="text-xs text-muted-foreground">{meta.source}</p>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        );
+      })}
     </div>
   );
 }
