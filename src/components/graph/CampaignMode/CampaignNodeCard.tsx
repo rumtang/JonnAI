@@ -117,47 +117,49 @@ export default function CampaignNodeCard() {
         ))}
       </div>
 
-      {/* ── Tier 2: Role perspective ──────────────────── */}
-      {role && (
-        <div className="mb-4 p-3 rounded-lg bg-white/5 border border-white/10">
-          <p className="text-xs font-semibold text-muted-foreground mb-1.5">
-            {role.title} perspective
-          </p>
-          <p className="text-sm text-foreground/70 italic leading-relaxed">
-            {role.narrative.keyInsight}
-          </p>
-        </div>
-      )}
-
-      {/* Connected agents and inputs */}
-      {connectedAgents.length > 0 && (
-        <div className="mb-3 p-3 rounded-lg bg-[#9B7ACC]/10 border border-[#9B7ACC]/20">
-          <p className="text-xs font-semibold text-[#9B7ACC] mb-1">
-            {'\uD83E\uDD16'} AI Agent performing this step
-          </p>
-          {connectedAgents.map(a => (
-            <p key={a.id} className="text-sm text-foreground">{a.label}</p>
-          ))}
-        </div>
-      )}
-
-      {connectedInputs.length > 0 && (
-        <InputContextGroups inputs={connectedInputs} />
-      )}
-
-      {/* ── Tier 3: Collapsible metadata ──────────────── */}
+      {/* ── Tier 2: Collapsible context ────────────────── */}
       <button
         onClick={() => setShowDetails(!showDetails)}
         className="w-full flex items-center justify-between px-3 py-2 rounded-lg
                    bg-white/5 hover:bg-white/8 border border-white/10
                    text-xs text-muted-foreground transition-colors duration-150 mb-3"
       >
-        <span>Show details</span>
+        <span>More context</span>
         {showDetails ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
       </button>
 
       {showDetails && (
         <div className="space-y-3 mb-4 animate-in fade-in slide-in-from-top-1 duration-200">
+          {/* Role perspective */}
+          {role && (
+            <div className="p-3 rounded-lg bg-white/5 border border-white/10">
+              <p className="text-xs font-semibold text-muted-foreground mb-1.5">
+                {role.title} perspective
+              </p>
+              <p className="text-sm text-foreground/70 italic leading-relaxed">
+                {role.narrative.keyInsight}
+              </p>
+            </div>
+          )}
+
+          {/* Connected agents */}
+          {connectedAgents.length > 0 && (
+            <div className="p-3 rounded-lg bg-[#9B7ACC]/10 border border-[#9B7ACC]/20">
+              <p className="text-xs font-semibold text-[#9B7ACC] mb-1">
+                {'\uD83E\uDD16'} AI Agent performing this step
+              </p>
+              {connectedAgents.map(a => (
+                <p key={a.id} className="text-sm text-foreground">{a.label}</p>
+              ))}
+            </div>
+          )}
+
+          {/* Reference documents / inputs */}
+          {connectedInputs.length > 0 && (
+            <InputContextGroups inputs={connectedInputs} />
+          )}
+
+          {/* Metadata */}
           <p className="text-xs text-muted-foreground italic mb-1">{currentNode.description}</p>
           {currentNode.type === 'step' && <StepDetail meta={currentNode.meta as StepMeta} />}
           {currentNode.type === 'gate' && <GateDetail meta={currentNode.meta as GateMeta} />}
