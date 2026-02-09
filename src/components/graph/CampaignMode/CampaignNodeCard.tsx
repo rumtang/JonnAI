@@ -1,21 +1,31 @@
 'use client';
 
+import { useState } from 'react';
 import { useCampaignStore } from '@/lib/store/campaign-store';
 import { useGraphStore } from '@/lib/store/graph-store';
 import { navigateToNode } from '@/lib/utils/camera-navigation';
 import { NODE_STYLES } from '@/lib/graph/node-styles';
+import { ROLE_MAP } from '@/lib/roles/role-definitions';
+import { STEP_NARRATIVES, ContentBlock } from '@/data/step-narratives';
 import { Badge } from '@/components/ui/badge';
 import { GraphNode, StepMeta, GateMeta, AgentMeta, InputMeta } from '@/lib/graph/types';
-import { ArrowRight, BookOpen, Database, Wrench } from 'lucide-react';
+import {
+  ArrowRight, BookOpen, Database, Wrench, ChevronDown, ChevronUp,
+  Lightbulb, AlertTriangle, ArrowRightLeft, BarChart3, GitFork,
+  Zap, MessageSquareQuote, Eye, Target, Link2,
+} from 'lucide-react';
 
 export default function CampaignNodeCard() {
   const { currentNodeId, advanceToNext, makeGateDecision } = useCampaignStore();
   const { graphData, selectNode } = useGraphStore();
+  const [showDetails, setShowDetails] = useState(false);
 
   const currentNode = graphData.nodes.find(n => n.id === currentNodeId);
   if (!currentNode) return null;
 
   const style = NODE_STYLES[currentNode.type];
+  const narrative = STEP_NARRATIVES[currentNode.id];
+  const role = narrative ? ROLE_MAP.get(narrative.roleId) : undefined;
 
   // Find connected agents and inputs for step nodes
   const connectedAgents = currentNode.type === 'step'
@@ -60,36 +70,66 @@ export default function CampaignNodeCard() {
     }
   };
 
+  // Nodes without narratives render the original layout unchanged
+  if (!narrative) {
+    return (
+      <FallbackCard
+        currentNode={currentNode}
+        style={style}
+        connectedAgents={connectedAgents}
+        connectedInputs={connectedInputs}
+        onAdvance={handleAdvance}
+        onDecision={handleDecision}
+      />
+    );
+  }
+
   return (
     <div className="flex-1 overflow-y-auto">
-      {/* Node header */}
-      <div className="flex items-center gap-3 mb-4">
+      {/* ── Tier 1: Narrative content ─────────────────── */}
+
+      {/* Node header with narrative headline */}
+      <div className="flex items-center gap-3 mb-3">
         <div
-          className="w-10 h-10 rounded-lg flex items-center justify-center text-lg"
+          className="w-10 h-10 rounded-lg flex items-center justify-center text-lg shrink-0"
           style={{ backgroundColor: style?.color + '20' }}
         >
           {style?.emoji}
         </div>
-        <div>
-          <h3 className="text-base font-semibold text-foreground">{currentNode.label}</h3>
-          <Badge variant="outline" className="text-xs mt-0.5" style={{ borderColor: style?.color + '60', color: style?.color }}>
-            {currentNode.type}
-          </Badge>
+        <div className="min-w-0">
+          <h3 className="text-base font-semibold text-foreground leading-tight">{narrative.headline}</h3>
+          <div className="flex items-center gap-2 mt-0.5">
+            <Badge variant="outline" className="text-xs" style={{ borderColor: style?.color + '60', color: style?.color }}>
+              {currentNode.type}
+            </Badge>
+            <span className="text-xs text-muted-foreground truncate">{currentNode.label}</span>
+          </div>
         </div>
       </div>
 
-      {/* Description */}
-      <p className="text-sm text-muted-foreground mb-4">{currentNode.description}</p>
+      {/* Lede — replaces the dry description */}
+      <p className="text-sm text-foreground/80 mb-4 leading-relaxed">{narrative.lede}</p>
 
-      {/* Type-specific metadata */}
+      {/* Content blocks — each type gets distinct visual styling */}
       <div className="space-y-3 mb-4">
-        {currentNode.type === 'step' && <StepDetail meta={currentNode.meta as StepMeta} />}
-        {currentNode.type === 'gate' && <GateDetail meta={currentNode.meta as GateMeta} />}
-        {currentNode.type === 'agent' && <AgentDetail meta={currentNode.meta as AgentMeta} />}
-        {currentNode.type === 'input' && <InputDetail meta={currentNode.meta as InputMeta} />}
+        {narrative.blocks.map((block, i) => (
+          <NarrativeBlock key={i} block={block} />
+        ))}
       </div>
 
-      {/* Connected agents and inputs (for step nodes) */}
+      {/* ── Tier 2: Role perspective ──────────────────── */}
+      {role && (
+        <div className="mb-4 p-3 rounded-lg bg-white/5 border border-white/10">
+          <p className="text-xs font-semibold text-muted-foreground mb-1.5">
+            {role.title} perspective
+          </p>
+          <p className="text-sm text-foreground/70 italic leading-relaxed">
+            {role.narrative.keyInsight}
+          </p>
+        </div>
+      )}
+
+      {/* Connected agents and inputs */}
       {connectedAgents.length > 0 && (
         <div className="mb-3 p-3 rounded-lg bg-[#9B7ACC]/10 border border-[#9B7ACC]/20">
           <p className="text-xs font-semibold text-[#9B7ACC] mb-1">
@@ -105,7 +145,28 @@ export default function CampaignNodeCard() {
         <InputContextGroups inputs={connectedInputs} />
       )}
 
-      {/* Action buttons */}
+      {/* ── Tier 3: Collapsible metadata ──────────────── */}
+      <button
+        onClick={() => setShowDetails(!showDetails)}
+        className="w-full flex items-center justify-between px-3 py-2 rounded-lg
+                   bg-white/5 hover:bg-white/8 border border-white/10
+                   text-xs text-muted-foreground transition-colors duration-150 mb-3"
+      >
+        <span>Show details</span>
+        {showDetails ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+      </button>
+
+      {showDetails && (
+        <div className="space-y-3 mb-4 animate-in fade-in slide-in-from-top-1 duration-200">
+          <p className="text-xs text-muted-foreground italic mb-1">{currentNode.description}</p>
+          {currentNode.type === 'step' && <StepDetail meta={currentNode.meta as StepMeta} />}
+          {currentNode.type === 'gate' && <GateDetail meta={currentNode.meta as GateMeta} />}
+          {currentNode.type === 'agent' && <AgentDetail meta={currentNode.meta as AgentMeta} />}
+          {currentNode.type === 'input' && <InputDetail meta={currentNode.meta as InputMeta} />}
+        </div>
+      )}
+
+      {/* ── Action buttons ────────────────────────────── */}
       {currentNode.type === 'step' && (
         <button
           onClick={handleAdvance}
@@ -138,6 +199,164 @@ export default function CampaignNodeCard() {
   );
 }
 
+/* ── Block type visual styles ─────────────────────────── */
+
+const BLOCK_CONFIG: Record<string, {
+  Icon: typeof Lightbulb;
+  label: string;
+  bg: string;
+  border: string;
+  accent: string;
+}> = {
+  narrative:      { Icon: BookOpen,          label: '',                     bg: 'bg-transparent',      border: 'border-transparent', accent: 'text-foreground/70' },
+  scenario:       { Icon: Eye,               label: 'Scenario',             bg: 'bg-indigo-500/8',     border: 'border-indigo-500/20', accent: 'text-indigo-400' },
+  tension:        { Icon: AlertTriangle,     label: 'Why This Matters',     bg: 'bg-amber-500/8',      border: 'border-amber-500/20',  accent: 'text-amber-400' },
+  'ai-handoff':   { Icon: ArrowRightLeft,    label: 'AI + Human Handoff',   bg: 'bg-violet-500/8',     border: 'border-violet-500/20', accent: 'text-violet-400' },
+  metric:         { Icon: BarChart3,          label: 'Key Metric',           bg: 'bg-emerald-500/8',    border: 'border-emerald-500/20', accent: 'text-emerald-400' },
+  'before-after': { Icon: ArrowRightLeft,    label: 'Before & After',       bg: 'bg-sky-500/8',        border: 'border-sky-500/20',    accent: 'text-sky-400' },
+  'decision-tree':{ Icon: GitFork,           label: 'Decision Paths',       bg: 'bg-orange-500/8',     border: 'border-orange-500/20', accent: 'text-orange-400' },
+  'domino-effect':{ Icon: Zap,               label: 'Downstream Impact',    bg: 'bg-red-500/8',        border: 'border-red-500/20',    accent: 'text-red-400' },
+  tip:            { Icon: Lightbulb,          label: 'Tip',                  bg: 'bg-cyan-500/8',       border: 'border-cyan-500/20',   accent: 'text-cyan-400' },
+  quote:          { Icon: MessageSquareQuote, label: '',                     bg: 'bg-white/5',          border: 'border-white/10',      accent: 'text-foreground/60' },
+};
+
+function NarrativeBlock({ block }: { block: ContentBlock }) {
+  const config = BLOCK_CONFIG[block.type] || BLOCK_CONFIG.narrative;
+  const { Icon } = config;
+
+  // Narrative blocks render as plain prose
+  if (block.type === 'narrative') {
+    return (
+      <p className="text-sm text-foreground/70 leading-relaxed">{block.content}</p>
+    );
+  }
+
+  // Quote blocks render as styled blockquote
+  if (block.type === 'quote') {
+    return (
+      <div className={`p-3 rounded-lg ${config.bg} border ${config.border} border-l-2 border-l-white/20`}>
+        <p className="text-sm text-foreground/60 italic leading-relaxed">{block.content}</p>
+      </div>
+    );
+  }
+
+  // Before-after and decision-tree blocks have two sections
+  if ((block.type === 'before-after' || block.type === 'decision-tree') && block.alt) {
+    return (
+      <div className={`p-3 rounded-lg ${config.bg} border ${config.border}`}>
+        <div className={`flex items-center gap-1.5 text-xs font-semibold ${config.accent} mb-2`}>
+          <Icon className="w-3.5 h-3.5" />
+          {config.label}
+        </div>
+        <p className="text-sm text-foreground/70 leading-relaxed mb-2">{block.content}</p>
+        <div className="border-t border-white/10 pt-2">
+          <p className="text-sm text-foreground/70 leading-relaxed">{block.alt}</p>
+        </div>
+      </div>
+    );
+  }
+
+  // All other block types: labeled card with icon
+  return (
+    <div className={`p-3 rounded-lg ${config.bg} border ${config.border}`}>
+      {config.label && (
+        <div className={`flex items-center gap-1.5 text-xs font-semibold ${config.accent} mb-1.5`}>
+          <Icon className="w-3.5 h-3.5" />
+          {config.label}
+        </div>
+      )}
+      <p className="text-sm text-foreground/70 leading-relaxed">{block.content}</p>
+    </div>
+  );
+}
+
+/* ── Fallback: original layout for nodes without narratives ── */
+
+function FallbackCard({
+  currentNode, style, connectedAgents, connectedInputs, onAdvance, onDecision,
+}: {
+  currentNode: GraphNode;
+  style: { color: string; emoji: string } | undefined;
+  connectedAgents: GraphNode[];
+  connectedInputs: GraphNode[];
+  onAdvance: () => void;
+  onDecision: (d: string) => void;
+}) {
+  return (
+    <div className="flex-1 overflow-y-auto">
+      <div className="flex items-center gap-3 mb-4">
+        <div
+          className="w-10 h-10 rounded-lg flex items-center justify-center text-lg"
+          style={{ backgroundColor: style?.color + '20' }}
+        >
+          {style?.emoji}
+        </div>
+        <div>
+          <h3 className="text-base font-semibold text-foreground">{currentNode.label}</h3>
+          <Badge variant="outline" className="text-xs mt-0.5" style={{ borderColor: style?.color + '60', color: style?.color }}>
+            {currentNode.type}
+          </Badge>
+        </div>
+      </div>
+
+      <p className="text-sm text-muted-foreground mb-4">{currentNode.description}</p>
+
+      <div className="space-y-3 mb-4">
+        {currentNode.type === 'step' && <StepDetail meta={currentNode.meta as StepMeta} />}
+        {currentNode.type === 'gate' && <GateDetail meta={currentNode.meta as GateMeta} />}
+        {currentNode.type === 'agent' && <AgentDetail meta={currentNode.meta as AgentMeta} />}
+        {currentNode.type === 'input' && <InputDetail meta={currentNode.meta as InputMeta} />}
+      </div>
+
+      {connectedAgents.length > 0 && (
+        <div className="mb-3 p-3 rounded-lg bg-[#9B7ACC]/10 border border-[#9B7ACC]/20">
+          <p className="text-xs font-semibold text-[#9B7ACC] mb-1">
+            {'\uD83E\uDD16'} AI Agent performing this step
+          </p>
+          {connectedAgents.map(a => (
+            <p key={a.id} className="text-sm text-foreground">{a.label}</p>
+          ))}
+        </div>
+      )}
+
+      {connectedInputs.length > 0 && (
+        <InputContextGroups inputs={connectedInputs} />
+      )}
+
+      {currentNode.type === 'step' && (
+        <button
+          onClick={onAdvance}
+          className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl
+                     bg-[#4CAF50]/20 hover:bg-[#4CAF50]/30 border border-[#4CAF50]/30
+                     text-[#4CAF50] font-semibold text-sm transition-all duration-200"
+        >
+          Advance
+          <ArrowRight className="w-4 h-4" />
+        </button>
+      )}
+
+      {currentNode.type === 'gate' && (
+        <div className="space-y-2">
+          <p className="text-xs font-semibold text-muted-foreground mb-2">Make a decision:</p>
+          {((currentNode.meta as GateMeta)?.decisions || []).map(decision => (
+            <button
+              key={decision}
+              onClick={() => onDecision(decision)}
+              className={`w-full flex items-center gap-2.5 px-4 py-2.5 rounded-xl border
+                         font-medium text-sm transition-all duration-200 ${getDecisionButtonStyle(decision)}`}
+            >
+              <span className="text-base">{getDecisionButtonIcon(decision)}</span>
+              {decision}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ── Shared sub-components (unchanged from original) ────── */
+
 const INPUT_TYPE_CONFIG: Record<string, { label: string; Icon: typeof BookOpen; color: string; bg: string; border: string }> = {
   reference: { label: 'Reference Documents', Icon: BookOpen, color: 'text-blue-400', bg: 'bg-blue-500/10', border: 'border-blue-500/20' },
   data:      { label: 'Data Feeds',          Icon: Database, color: 'text-cyan-400', bg: 'bg-cyan-500/10', border: 'border-cyan-500/20' },
@@ -145,7 +364,6 @@ const INPUT_TYPE_CONFIG: Record<string, { label: string; Icon: typeof BookOpen; 
 };
 
 function InputContextGroups({ inputs }: { inputs: GraphNode[] }) {
-  // Group inputs by their inputType
   const groups: Record<string, GraphNode[]> = {};
   for (const inp of inputs) {
     const meta = inp.meta as InputMeta | undefined;
