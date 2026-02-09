@@ -55,6 +55,9 @@ export default function GraphScene() {
     searchQuery,
     flashingLinkKey,
     highlightedLinkTypes,
+    revealedNodeIds,
+    progressiveReveal,
+    expandNode,
   } = useGraphStore();
 
   const { mode } = usePresentationStore();
@@ -75,10 +78,10 @@ export default function GraphScene() {
     return getNeighborIds(campaignNodeId, graphData.links);
   }, [campaignActive, campaignNodeId, graphData.links]);
 
-  // Apply node/link type filters and search query
+  // Apply node/link type filters, search query, and progressive reveal
   const filteredGraphData = useMemo(
-    () => applyFilters(graphData, visibleNodeTypes, visibleLinkTypes, searchQuery),
-    [graphData, visibleNodeTypes, visibleLinkTypes, searchQuery]
+    () => applyFilters(graphData, visibleNodeTypes, visibleLinkTypes, searchQuery, revealedNodeIds, progressiveReveal),
+    [graphData, visibleNodeTypes, visibleLinkTypes, searchQuery, revealedNodeIds, progressiveReveal]
   );
 
   // Compute neighbor sets for hover highlighting
@@ -313,6 +316,8 @@ export default function GraphScene() {
   // Handle node click - fly camera to node (cinematic 2500ms)
   // Breadcrumbs only track connection navigation in NodeDetailPanel, not direct clicks.
   const handleNodeClick = useCallback((node: GraphNode) => {
+    // Reveal neighbors when progressive reveal is active
+    if (progressiveReveal) expandNode(node.id);
     selectNode(node);
     setDetailPanelOpen(true);
 
@@ -326,7 +331,7 @@ export default function GraphScene() {
         2500
       );
     }
-  }, [selectNode, setDetailPanelOpen]);
+  }, [selectNode, setDetailPanelOpen, progressiveReveal, expandNode]);
 
   // Handle node hover
   const handleNodeHover = useCallback((node: GraphNode | null) => {

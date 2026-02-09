@@ -7,12 +7,14 @@ import {
   RotateCcw, ChevronUp, ChevronDown, ChevronLeft, ChevronRight,
 } from 'lucide-react';
 import { getGraphRef } from '@/lib/graph/graph-ref';
+import { useIsMobile } from '@/lib/hooks/use-is-mobile';
 
 const ZOOM_FACTOR = 0.5;
 const FIT_ALL_DISTANCE = 500;
 const ORBIT_ANGLE = Math.PI / 12; // 15 degrees per click
 
 export default function ZoomControls() {
+  const isMobile = useIsMobile();
   // Track held-down buttons for continuous orbit
   const holdIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
@@ -115,62 +117,64 @@ export default function ZoomControls() {
       transition={{ delay: 0.7 }}
       className="fixed bottom-4 right-4 z-50 flex flex-col items-center gap-2"
     >
-      {/* Orbit D-pad */}
-      <div className="relative w-[100px] h-[100px]">
-        {/* Up */}
-        <OrbitButton
-          direction="up"
-          className="absolute top-0 left-1/2 -translate-x-1/2"
-          onStart={() => startHold('up')}
-          onStop={stopHold}
-          label="Orbit up"
-        >
-          <ChevronUp className="w-4 h-4" />
-        </OrbitButton>
+      {/* Orbit D-pad — hidden on mobile (pinch-to-zoom / drag works natively) */}
+      {!isMobile && (
+        <div className="relative w-[100px] h-[100px]">
+          {/* Up */}
+          <OrbitButton
+            direction="up"
+            className="absolute top-0 left-1/2 -translate-x-1/2"
+            onStart={() => startHold('up')}
+            onStop={stopHold}
+            label="Orbit up"
+          >
+            <ChevronUp className="w-4 h-4" />
+          </OrbitButton>
 
-        {/* Left */}
-        <OrbitButton
-          direction="left"
-          className="absolute left-0 top-1/2 -translate-y-1/2"
-          onStart={() => startHold('left')}
-          onStop={stopHold}
-          label="Orbit left"
-        >
-          <ChevronLeft className="w-4 h-4" />
-        </OrbitButton>
+          {/* Left */}
+          <OrbitButton
+            direction="left"
+            className="absolute left-0 top-1/2 -translate-y-1/2"
+            onStart={() => startHold('left')}
+            onStop={stopHold}
+            label="Orbit left"
+          >
+            <ChevronLeft className="w-4 h-4" />
+          </OrbitButton>
 
-        {/* Center — reset */}
-        <button
-          onClick={fitAll}
-          title="Reset view"
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
-                     p-2 rounded-full glass-panel text-muted-foreground hover:text-foreground transition-all"
-        >
-          <RotateCcw className="w-3.5 h-3.5" />
-        </button>
+          {/* Center — reset */}
+          <button
+            onClick={fitAll}
+            title="Reset view"
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
+                       p-2 rounded-full glass-panel text-muted-foreground hover:text-foreground transition-all"
+          >
+            <RotateCcw className="w-3.5 h-3.5" />
+          </button>
 
-        {/* Right */}
-        <OrbitButton
-          direction="right"
-          className="absolute right-0 top-1/2 -translate-y-1/2"
-          onStart={() => startHold('right')}
-          onStop={stopHold}
-          label="Orbit right"
-        >
-          <ChevronRight className="w-4 h-4" />
-        </OrbitButton>
+          {/* Right */}
+          <OrbitButton
+            direction="right"
+            className="absolute right-0 top-1/2 -translate-y-1/2"
+            onStart={() => startHold('right')}
+            onStop={stopHold}
+            label="Orbit right"
+          >
+            <ChevronRight className="w-4 h-4" />
+          </OrbitButton>
 
-        {/* Down */}
-        <OrbitButton
-          direction="down"
-          className="absolute bottom-0 left-1/2 -translate-x-1/2"
-          onStart={() => startHold('down')}
-          onStop={stopHold}
-          label="Orbit down"
-        >
-          <ChevronDown className="w-4 h-4" />
-        </OrbitButton>
-      </div>
+          {/* Down */}
+          <OrbitButton
+            direction="down"
+            className="absolute bottom-0 left-1/2 -translate-x-1/2"
+            onStart={() => startHold('down')}
+            onStop={stopHold}
+            label="Orbit down"
+          >
+            <ChevronDown className="w-4 h-4" />
+          </OrbitButton>
+        </div>
+      )}
 
       {/* Zoom buttons */}
       <div className="flex gap-1">
@@ -197,10 +201,12 @@ export default function ZoomControls() {
         </button>
       </div>
 
-      {/* Hint */}
-      <p className="text-[10px] text-muted-foreground/40 text-center">
-        Arrow keys to orbit
-      </p>
+      {/* Hint — desktop only */}
+      {!isMobile && (
+        <p className="text-[10px] text-muted-foreground/40 text-center">
+          Arrow keys to orbit
+        </p>
+      )}
     </motion.div>
   );
 }

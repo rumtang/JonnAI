@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useIsMobile } from '@/lib/hooks/use-is-mobile';
 import GraphScene from '@/components/graph/GraphScene';
 import NodeDetailPanel from '@/components/graph/NodeDetailPanel';
 import GraphControls from '@/components/graph/GraphControls';
@@ -63,6 +64,7 @@ export default function GraphPage() {
   const campaignActive = useCampaignStore(s => s.isActive);
   const roleActive = useRoleInsightStore(s => s.isActive);
   const [rolePickerOpen, setRolePickerOpen] = useState(false);
+  const isMobile = useIsMobile();
   const currentNodeId = useCampaignStore(s => s.currentNodeId);
   const startCampaign = useCampaignStore(s => s.startCampaign);
 
@@ -97,6 +99,10 @@ export default function GraphPage() {
       setGraphData(linearData);
     } else {
       setGraphData(fullData);
+      if (activeMode === 'explore') {
+        // Progressive reveal: start with core workflow nodes only
+        useGraphStore.getState().initCoreNodes(fullData);
+      }
       if (activeMode === 'campaign') {
         startCampaign();
       }
@@ -171,21 +177,24 @@ export default function GraphPage() {
           <RolePicker open={rolePickerOpen} onClose={() => setRolePickerOpen(false)} />
 
           {/* Bottom CTAs — Campaign + Role */}
-          <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3">
+          <div className={`fixed bottom-8 left-1/2 -translate-x-1/2 z-50 ${
+            isMobile ? 'flex flex-col items-stretch gap-2 w-[calc(100%-2rem)]' : 'flex items-center gap-3'
+          }`}>
             <RoleSelectorButton onOpenPicker={() => setRolePickerOpen(true)} />
             <button
               onClick={handleStartCampaign}
-              className="px-6 py-3 rounded-2xl glass-panel
-                         hover:shadow-lg hover:shadow-[#4CAF50]/10
-                         transition-all duration-300 group"
+              className={`rounded-2xl glass-panel hover:shadow-lg hover:shadow-[#4CAF50]/10
+                         transition-all duration-300 group ${isMobile ? 'px-4 py-2' : 'px-6 py-3'}`}
             >
               <div className="text-center">
-                <p className="text-sm font-semibold text-[#4CAF50] group-hover:text-[#66BB6A] transition-colors">
+                <p className={`font-semibold text-[#4CAF50] group-hover:text-[#66BB6A] transition-colors ${isMobile ? 'text-xs' : 'text-sm'}`}>
                   {'\u25B6'} Run a Campaign
                 </p>
-                <p className="text-xs text-muted-foreground mt-0.5">
-                  Walk through the workflow step by step
-                </p>
+                {!isMobile && (
+                  <p className="text-xs text-muted-foreground mt-0.5">
+                    Walk through the workflow step by step
+                  </p>
+                )}
               </div>
             </button>
           </div>

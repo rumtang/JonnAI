@@ -3,6 +3,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { useGraphStore } from '@/lib/store/graph-store';
 import { useUIStore } from '@/lib/store/ui-store';
+import { useIsMobile } from '@/lib/hooks/use-is-mobile';
 import { navigateToNode } from '@/lib/utils/camera-navigation';
 import { NODE_STYLES } from '@/lib/graph/node-styles';
 import { Badge } from '@/components/ui/badge';
@@ -14,11 +15,16 @@ export default function NodeDetailPanel() {
   const {
     selectedNode,
     graphData,
+    fullGraphData,
     selectNode,
     pushNavigation,
     flashLink,
+    revealedNodeIds,
+    progressiveReveal,
+    expandNode,
   } = useGraphStore();
   const { detailPanelOpen, setDetailPanelOpen } = useUIStore();
+  const isMobile = useIsMobile();
 
   const handleClose = () => {
     selectNode(null);
@@ -46,7 +52,7 @@ export default function NodeDetailPanel() {
     navigateToNode(targetNode, { distance: 120, duration: 1000 });
   };
 
-  // Find connected nodes
+  // Find connected nodes (from the currently visible graph data)
   const connectedNodes = selectedNode ? graphData.links
     .filter(l => {
       const sId = typeof l.source === 'object' ? (l.source as GraphNode).id : l.source;
@@ -62,18 +68,43 @@ export default function NodeDetailPanel() {
     })
     .filter(c => c.node) : [];
 
+  // Count hidden connections (only relevant in progressive reveal mode)
+  const hiddenCount = (progressiveReveal && selectedNode && fullGraphData) ? (() => {
+    let count = 0;
+    for (const link of fullGraphData.links) {
+      const sId = typeof link.source === 'object' ? (link.source as GraphNode).id : link.source;
+      const tId = typeof link.target === 'object' ? (link.target as GraphNode).id : link.target;
+      if (sId === selectedNode.id || tId === selectedNode.id) {
+        const otherId = sId === selectedNode.id ? tId : sId;
+        if (!revealedNodeIds.has(otherId)) count++;
+      }
+    }
+    return count;
+  })() : 0;
+
   return (
     <AnimatePresence>
       {detailPanelOpen && selectedNode && (
         <motion.div
-          initial={{ x: 400, opacity: 0 }}
-          animate={{ x: 0, opacity: 1 }}
-          exit={{ x: 400, opacity: 0 }}
+          initial={isMobile ? { y: '100%', opacity: 0 } : { x: 400, opacity: 0 }}
+          animate={isMobile ? { y: 0, opacity: 1 } : { x: 0, opacity: 1 }}
+          exit={isMobile ? { y: '100%', opacity: 0 } : { x: 400, opacity: 0 }}
           transition={{ type: 'spring', damping: 25, stiffness: 200 }}
           onWheel={(e) => e.stopPropagation()}
-          className="fixed right-0 top-14 h-[calc(100vh-3.5rem)] w-96 z-50 glass-panel rounded-l-2xl overflow-y-auto"
+          onTouchMove={(e) => e.stopPropagation()}
+          className={
+            isMobile
+              ? 'fixed bottom-0 left-0 right-0 h-[50vh] z-50 glass-panel rounded-t-2xl overflow-y-auto'
+              : 'fixed right-0 top-14 h-[calc(100vh-3.5rem)] w-96 z-50 glass-panel rounded-l-2xl overflow-y-auto'
+          }
         >
-          <div className="p-6">
+          {/* Drag handle on mobile */}
+          {isMobile && (
+            <div className="flex justify-center pt-2 pb-1">
+              <div className="w-10 h-1 rounded-full bg-white/20" />
+            </div>
+          )}
+          <div className={isMobile ? 'p-4' : 'p-6'}>
             {/* Breadcrumb navigation */}
             <NavigationBreadcrumb />
 
@@ -144,6 +175,20 @@ export default function NodeDetailPanel() {
                                            transition-all duration-200 shrink-0" />
                   </button>
                 ))}
+
+                {/* Hidden connections badge — progressive reveal */}
+                {hiddenCount > 0 && selectedNode && (
+                  <button
+                    onClick={() => expandNode(selectedNode.id)}
+                    className="w-full mt-2 p-2 rounded-lg border border-dashed border-white/15
+                               hover:border-white/30 hover:bg-accent/10 transition-all text-center"
+                  >
+                    <p className="text-xs text-muted-foreground">
+                      <span className="font-semibold text-foreground">+{hiddenCount} hidden connection{hiddenCount > 1 ? 's' : ''}</span>
+                      {' '}&mdash; click to reveal
+                    </p>
+                  </button>
+                )}
               </div>
             </div>
           </div>

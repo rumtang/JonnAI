@@ -1,13 +1,15 @@
 'use client';
 
+import { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { useGraphStore } from '@/lib/store/graph-store';
 import { useUIStore } from '@/lib/store/ui-store';
+import { useIsMobile } from '@/lib/hooks/use-is-mobile';
 import { NODE_STYLES } from '@/lib/graph/node-styles';
 import { NodeType } from '@/lib/graph/types';
 import { Switch } from '@/components/ui/switch';
 import { Button } from '@/components/ui/button';
-import { Filter, RotateCcw } from 'lucide-react';
+import { Filter, RotateCcw, Eye, Focus } from 'lucide-react';
 
 const NODE_TYPE_LABELS: Record<NodeType, string> = {
   step:  'Steps',
@@ -17,8 +19,18 @@ const NODE_TYPE_LABELS: Record<NodeType, string> = {
 };
 
 export default function GraphControls() {
-  const { visibleNodeTypes, toggleNodeTypeVisibility, resetFilters, clearHighlights } = useGraphStore();
+  const { visibleNodeTypes, toggleNodeTypeVisibility, resetFilters, clearHighlights, progressiveReveal, showAllNodes, resetToCore } = useGraphStore();
   const { controlsVisible, toggleControls } = useUIStore();
+  const isMobile = useIsMobile();
+  const didCollapse = useRef(false);
+
+  // Auto-collapse controls on mobile (once on mount)
+  useEffect(() => {
+    if (isMobile && !didCollapse.current && controlsVisible) {
+      didCollapse.current = true;
+      toggleControls();
+    }
+  }, [isMobile, controlsVisible, toggleControls]);
 
   const nodeTypes: NodeType[] = ['step', 'gate', 'agent', 'input'];
 
@@ -67,6 +79,28 @@ export default function GraphControls() {
           </div>
 
           <div className="border-t border-border mt-4 pt-4 space-y-2">
+            {/* Progressive reveal toggle */}
+            {progressiveReveal ? (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={showAllNodes}
+                className="w-full justify-start text-muted-foreground hover:text-foreground text-xs"
+              >
+                <Eye className="w-3 h-3 mr-2" />
+                Show All Nodes
+              </Button>
+            ) : (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={resetToCore}
+                className="w-full justify-start text-muted-foreground hover:text-foreground text-xs"
+              >
+                <Focus className="w-3 h-3 mr-2" />
+                Focus View
+              </Button>
+            )}
             <Button
               variant="ghost"
               size="sm"

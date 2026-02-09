@@ -1,7 +1,9 @@
 'use client';
 
+import { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { useUIStore } from '@/lib/store/ui-store';
+import { useIsMobile } from '@/lib/hooks/use-is-mobile';
 import { NODE_STYLES } from '@/lib/graph/node-styles';
 import { NodeType } from '@/lib/graph/types';
 
@@ -14,6 +16,16 @@ const LEGEND_ITEMS: { type: NodeType; label: string }[] = [
 
 export default function LegendPanel() {
   const { legendVisible, toggleLegend } = useUIStore();
+  const isMobile = useIsMobile();
+  const didCollapse = useRef(false);
+
+  // Auto-collapse legend on mobile (once on mount)
+  useEffect(() => {
+    if (isMobile && !didCollapse.current && legendVisible) {
+      didCollapse.current = true;
+      toggleLegend();
+    }
+  }, [isMobile, legendVisible, toggleLegend]);
 
   return (
     <motion.div

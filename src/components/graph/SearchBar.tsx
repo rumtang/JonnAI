@@ -4,6 +4,7 @@ import { useState, useMemo, useCallback, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useGraphStore } from '@/lib/store/graph-store';
 import { useUIStore } from '@/lib/store/ui-store';
+import { useIsMobile } from '@/lib/hooks/use-is-mobile';
 import { NODE_STYLES } from '@/lib/graph/node-styles';
 import { GraphNode } from '@/lib/graph/types';
 import { Search, X } from 'lucide-react';
@@ -12,30 +13,38 @@ import debounce from 'lodash-es/debounce';
 export default function SearchBar() {
   const [query, setQuery] = useState('');
   const [isOpen, setIsOpen] = useState(false);
+  const [mobileExpanded, setMobileExpanded] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
-  const { graphData, setSearchQuery, selectNode, setHighlightedNodeIds, visibleNodeTypes } = useGraphStore();
+  const { graphData, fullGraphData, setSearchQuery, selectNode, setHighlightedNodeIds, visibleNodeTypes } = useGraphStore();
   const { setDetailPanelOpen } = useUIStore();
+  const isMobile = useIsMobile();
 
   const debouncedSearch = useMemo(
     () => debounce((q: string) => setSearchQuery(q), 300),
     [setSearchQuery]
   );
 
+  // Search all nodes (including hidden ones in progressive reveal) so users can find anything
+  const searchNodes = fullGraphData?.nodes ?? graphData.nodes;
   const results = useMemo(() => {
     if (!query.trim()) return [];
     const q = query.toLowerCase();
-    return graphData.nodes
+    return searchNodes
       .filter(n => visibleNodeTypes.has(n.type))
       .filter(n => n.label.toLowerCase().includes(q) || n.description.toLowerCase().includes(q))
       .slice(0, 8);
-  }, [query, graphData.nodes, visibleNodeTypes]);
+  }, [query, searchNodes, visibleNodeTypes]);
 
   const handleSelect = useCallback((node: GraphNode) => {
+    // Auto-reveal if progressive reveal is on
+    const { progressiveReveal, expandNode } = useGraphStore.getState();
+    if (progressiveReveal) expandNode(node.id);
     selectNode(node);
     setDetailPanelOpen(true);
     setHighlightedNodeIds(new Set([node.id]));
     setQuery('');
     setIsOpen(false);
+    setMobileExpanded(false);
   }, [selectNode, setDetailPanelOpen, setHighlightedNodeIds]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -50,6 +59,7 @@ export default function SearchBar() {
     setQuery('');
     setSearchQuery('');
     setIsOpen(false);
+    setMobileExpanded(false);
   };
 
   // Keyboard shortcut: Cmd+K to focus
@@ -64,12 +74,35 @@ export default function SearchBar() {
     return () => window.removeEventListener('keydown', handler);
   }, []);
 
+  // On mobile: collapsed = icon button, expanded = full-width overlay
+  if (isMobile && !mobileExpanded) {
+    return (
+      <motion.div
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ delay: 0.4 }}
+        className="fixed top-4 left-16 z-50"
+      >
+        <button
+          onClick={() => { setMobileExpanded(true); setTimeout(() => inputRef.current?.focus(), 100); }}
+          className="p-2.5 rounded-xl glass-panel text-muted-foreground hover:text-foreground transition-all"
+        >
+          <Search className="w-4 h-4" />
+        </button>
+      </motion.div>
+    );
+  }
+
   return (
     <motion.div
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.4 }}
-      className="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-80"
+      className={
+        isMobile
+          ? 'fixed top-4 left-4 right-4 z-50'
+          : 'fixed top-4 left-1/2 -translate-x-1/2 z-50 w-80'
+      }
     >
       <div className="relative">
         <div className="flex items-center glass-panel rounded-xl px-3 py-2">
@@ -78,10 +111,10 @@ export default function SearchBar() {
             ref={inputRef}
             value={query}
             onChange={handleChange}
-            placeholder="Search nodes... (⌘K)"
+            placeholder={isMobile ? 'Search nodes...' : 'Search nodes... (\u2318K)'}
             className="bg-transparent text-sm text-foreground placeholder:text-muted-foreground outline-none w-full"
           />
-          {query && (
+          {(query || isMobile) && (
             <button onClick={handleClear} className="text-muted-foreground hover:text-foreground ml-2">
               <X className="w-3.5 h-3.5" />
             </button>

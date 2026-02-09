@@ -13,9 +13,16 @@ export function applyFilters(
   fullData: GraphData,
   visibleNodeTypes: Set<NodeType>,
   visibleLinkTypes: Set<LinkType>,
-  searchQuery: string
+  searchQuery: string,
+  revealedNodeIds?: Set<string>,
+  progressiveReveal?: boolean
 ): GraphData {
-  const visibleNodes = fullData.nodes.filter(n => visibleNodeTypes.has(n.type));
+  // Progressive reveal pre-filter: only show nodes in the revealed set
+  let nodes = fullData.nodes;
+  if (progressiveReveal && revealedNodeIds && revealedNodeIds.size > 0) {
+    nodes = nodes.filter(n => revealedNodeIds.has(n.id));
+  }
+  const visibleNodes = nodes.filter(n => visibleNodeTypes.has(n.type));
   const visibleNodeIds = new Set(visibleNodes.map(n => n.id));
 
   const visibleLinks = fullData.links.filter(l => {

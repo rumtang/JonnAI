@@ -39,6 +39,11 @@ interface GraphState {
   visibleLinkTypes: Set<LinkType>;
   searchQuery: string;
 
+  // Progressive reveal (explore mode only)
+  revealedNodeIds: Set<string>;
+  coreNodeIds: Set<string>;
+  progressiveReveal: boolean;
+
   // Actions
   setGraphData: (data: GraphData) => void;
   setFullGraphData: (data: GraphData) => void;
@@ -59,6 +64,12 @@ interface GraphState {
   highlightByTypes: (types: NodeType[]) => void;
   highlightLinksByType: (linkType: LinkType) => void;
   highlightLinksByTypes: (linkTypes: LinkType[]) => void;
+
+  // Progressive reveal actions
+  initCoreNodes: (fullData: GraphData) => void;
+  expandNode: (nodeId: string) => void;
+  showAllNodes: () => void;
+  resetToCore: () => void;
 
   // Navigation history actions
   pushNavigation: (node: GraphNode) => void;
@@ -85,6 +96,9 @@ export const useGraphStore = create<GraphState>((set, get) => ({
   visibleNodeTypes: new Set(ALL_NODE_TYPES),
   visibleLinkTypes: new Set(ALL_LINK_TYPES),
   searchQuery: '',
+  revealedNodeIds: new Set(),
+  coreNodeIds: new Set(),
+  progressiveReveal: false,
 
   setGraphData: (data) => set({ graphData: data }),
   setFullGraphData: (data) => set({ fullGraphData: data }),
@@ -199,6 +213,64 @@ export const useGraphStore = create<GraphState>((set, get) => ({
       if (linkTypes.includes(link.type)) indices.add(i);
     });
     set({ highlightedLinkIndices: indices, highlightedLinkTypes: new Set(linkTypes) });
+  },
+
+  // Progressive reveal — walk flows-to links from campaign-planning to build core set
+  initCoreNodes: (fullData) => {
+    const coreIds = new Set<string>();
+    // Build adjacency for flows-to links (string IDs from raw data)
+    const flowsToAdj = new Map<string, string[]>();
+    for (const link of fullData.links) {
+      const sourceId = typeof link.source === 'object' ? (link.source as GraphNode).id : link.source;
+      const targetId = typeof link.target === 'object' ? (link.target as GraphNode).id : link.target;
+      if (link.type === 'flows-to') {
+        if (!flowsToAdj.has(sourceId)) flowsToAdj.set(sourceId, []);
+        flowsToAdj.get(sourceId)!.push(targetId);
+      }
+    }
+    // BFS from campaign-planning following flows-to
+    const queue = ['campaign-planning'];
+    const visited = new Set<string>();
+    while (queue.length > 0) {
+      const current = queue.shift()!;
+      if (visited.has(current)) continue;
+      visited.add(current);
+      // Only include nodes that actually exist in the data
+      const node = fullData.nodes.find(n => n.id === current);
+      if (node) coreIds.add(current);
+      const neighbors = flowsToAdj.get(current) || [];
+      for (const next of neighbors) {
+        if (!visited.has(next)) queue.push(next);
+      }
+    }
+    set({
+      coreNodeIds: coreIds,
+      revealedNodeIds: new Set(coreIds),
+      progressiveReveal: true,
+    });
+  },
+
+  expandNode: (nodeId) => {
+    const { fullGraphData, revealedNodeIds } = get();
+    if (!fullGraphData) return;
+    const newRevealed = new Set(revealedNodeIds);
+    const neighbors = getNeighborIds(nodeId, fullGraphData.links);
+    for (const id of neighbors) {
+      newRevealed.add(id);
+    }
+    set({ revealedNodeIds: newRevealed });
+  },
+
+  showAllNodes: () => {
+    const { fullGraphData } = get();
+    if (!fullGraphData) return;
+    const allIds = new Set(fullGraphData.nodes.map(n => n.id));
+    set({ revealedNodeIds: allIds, progressiveReveal: false });
+  },
+
+  resetToCore: () => {
+    const { coreNodeIds } = get();
+    set({ revealedNodeIds: new Set(coreNodeIds), progressiveReveal: true });
   },
 
   // Navigation history — breadcrumb trail for connection clicks
