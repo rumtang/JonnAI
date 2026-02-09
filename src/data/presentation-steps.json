@@ -133,34 +133,6 @@
     "duration": 0
   },
   {
-    "id": "act3-governance",
-    "title": "Governance and Learning",
-    "narration": "Nine gates in this system — decision points shaped by how your teams actually evaluate work. And the system learns from every cycle. What underperforms gets reworked. What overperforms gets amplified. The graph does not just execute. It adapts.",
-    "cameraPosition": {
-      "x": 0,
-      "y": 50,
-      "z": 420
-    },
-    "cameraLookAt": {
-      "x": 0,
-      "y": 50,
-      "z": 0
-    },
-    "cameraTransitionMs": 2000,
-    "graphState": "full-graph",
-    "action": "highlight-gates",
-    "filterNodeTypes": [
-      "gate",
-      "step"
-    ],
-    "highlightLinkTypes": [
-      "reviews",
-      "escalates-to",
-      "returns-to"
-    ],
-    "duration": 0
-  },
-  {
     "id": "act4-infrastructure",
     "title": "The Intelligence Layer",
     "narration": "This is the intelligence layer. Twenty inputs capturing how your organization actually works — brand voice, audience understanding, legal frameworks, orchestration rules — each connected to every agent that depends on it. Update one, and the entire system gets smarter. This is not documentation. This is your organization's knowledge graph.",
