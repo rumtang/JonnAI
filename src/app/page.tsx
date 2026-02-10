@@ -55,8 +55,8 @@ export default function Home() {
           transition={{ delay: 0.25 }}
           className="text-lg text-muted-foreground mb-12 max-w-xl mx-auto leading-relaxed"
         >
-          Why building a semantic knowledge layer matters more than bolting AI agents onto linear processes.
-          Explore the real complexity of marketing campaign workflows.
+          Why building a semantic knowledge layer matters at least as much as the agents themselves.
+          Explore the deep complexity of marketing campaign workflows.
         </motion.p>
 
         {/* Mode selection buttons */}
