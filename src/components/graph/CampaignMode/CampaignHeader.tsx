@@ -1,5 +1,6 @@
 'use client';
 
+import { useShallow } from 'zustand/react/shallow';
 import { useCampaignStore, getPhaseForNode } from '@/lib/store/campaign-store';
 import { useGraphStore } from '@/lib/store/graph-store';
 import { useState } from 'react';
@@ -7,8 +8,17 @@ import { useState } from 'react';
 const PHASES = ['Plan', 'Create', 'Review', 'Publish', 'Measure', 'Optimize'];
 
 export default function CampaignHeader() {
-  const { campaignName, setCampaignName, currentNodeId, stepCount, revisionCount, totalEstimatedMinutes } = useCampaignStore();
-  const { graphData } = useGraphStore();
+  const { campaignName, currentNodeId, stepCount, revisionCount, totalEstimatedMinutes } = useCampaignStore(
+    useShallow((s) => ({
+      campaignName: s.campaignName,
+      currentNodeId: s.currentNodeId,
+      stepCount: s.stepCount,
+      revisionCount: s.revisionCount,
+      totalEstimatedMinutes: s.totalEstimatedMinutes,
+    }))
+  );
+  const setCampaignName = useCampaignStore(s => s.setCampaignName);
+  const graphData = useGraphStore(s => s.graphData);
   const [isEditing, setIsEditing] = useState(false);
   const [editValue, setEditValue] = useState(campaignName);
 

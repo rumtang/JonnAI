@@ -1,5 +1,6 @@
 'use client';
 
+import { useShallow } from 'zustand/react/shallow';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useGraphStore } from '@/lib/store/graph-store';
 import { useUIStore } from '@/lib/store/ui-store';
@@ -16,14 +17,24 @@ export default function NodeDetailPanel() {
     selectedNode,
     graphData,
     fullGraphData,
-    selectNode,
-    pushNavigation,
-    flashLink,
     revealedNodeIds,
     progressiveReveal,
-    expandNode,
-  } = useGraphStore();
-  const { detailPanelOpen, setDetailPanelOpen } = useUIStore();
+  } = useGraphStore(
+    useShallow((s) => ({
+      selectedNode: s.selectedNode,
+      graphData: s.graphData,
+      fullGraphData: s.fullGraphData,
+      revealedNodeIds: s.revealedNodeIds,
+      progressiveReveal: s.progressiveReveal,
+    }))
+  );
+  const selectNode = useGraphStore(s => s.selectNode);
+  const pushNavigation = useGraphStore(s => s.pushNavigation);
+  const flashLink = useGraphStore(s => s.flashLink);
+  const expandNode = useGraphStore(s => s.expandNode);
+
+  const { detailPanelOpen } = useUIStore(useShallow((s) => ({ detailPanelOpen: s.detailPanelOpen })));
+  const setDetailPanelOpen = useUIStore(s => s.setDetailPanelOpen);
   const isMobile = useIsMobile();
 
   const handleClose = () => {

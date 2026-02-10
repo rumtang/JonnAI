@@ -1,18 +1,19 @@
 'use client';
 
+import { useShallow } from 'zustand/react/shallow';
 import { useGraphStore } from '@/lib/store/graph-store';
 import { navigateToNode } from '@/lib/utils/camera-navigation';
 import { NODE_STYLES } from '@/lib/graph/node-styles';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 export default function NavigationBreadcrumb() {
-  const {
-    navigationHistory,
-    navigateBack,
-    navigateToBreadcrumb,
-    selectNode,
-    flashLink,
-  } = useGraphStore();
+  const { navigationHistory } = useGraphStore(
+    useShallow((s) => ({ navigationHistory: s.navigationHistory }))
+  );
+  const navigateBack = useGraphStore(s => s.navigateBack);
+  const navigateToBreadcrumb = useGraphStore(s => s.navigateToBreadcrumb);
+  const selectNode = useGraphStore(s => s.selectNode);
+  const flashLink = useGraphStore(s => s.flashLink);
 
   if (navigationHistory.length < 2) return null;
 

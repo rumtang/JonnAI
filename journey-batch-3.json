@@ -1,0 +1,1660 @@
+{
+  "growth-lead": {
+    "receive-request": {
+      "preAI": {
+        "summary": "You wait for briefs to land, then assess channel fit.",
+        "detail": "Requests arrive via email or Slack with varying detail. You scan them to see if they need paid amplification or multi-channel distribution, often circling back for clarity on target audience or budget."
+      },
+      "aiAgents": {
+        "summary": "AI flags requests that match growth priorities automatically.",
+        "detail": "An agent scans incoming briefs and tags those with distribution potential or A/B test opportunities. You review the flagged items and decide which to pursue, saving hours of manual triage."
+      },
+      "aiAgentic": {
+        "summary": "Agents route growth-relevant requests to you with channel recommendations.",
+        "detail": "The system automatically identifies requests with repurposing or paid media potential, then surfaces them with suggested channels and budget ranges. You approve strategies and set guardrails while agents handle execution."
+      }
+    },
+    "research-insights": {
+      "preAI": {
+        "summary": "You pull platform analytics to understand what's working.",
+        "detail": "You export data from Facebook Ads Manager, Google Analytics, and LinkedIn Campaign Manager, then manually cross-reference performance by channel. Finding patterns requires spreadsheet pivots and memory of past campaigns."
+      },
+      "aiAgents": {
+        "summary": "AI aggregates cross-platform data with growth implications highlighted.",
+        "detail": "An agent pulls metrics from all platforms and flags trends like declining organic reach or rising CPC. You review the summaries and decide which insights should inform content strategy or budget shifts."
+      },
+      "aiAgentic": {
+        "summary": "Agents surface strategic insights and auto-adjust channel mix.",
+        "detail": "The system continuously analyzes performance across channels and autonomously shifts budget toward high-performers while flagging strategic decisions like entering new platforms. You set ROI thresholds and approve major pivots."
+      }
+    },
+    "write-brief": {
+      "preAI": {
+        "summary": "You add distribution notes to briefs if asked.",
+        "detail": "Writers rarely loop you in early. When they do, you add a section on target channels, audience segments, and whether the asset should be built for repurposing. This happens inconsistently."
+      },
+      "aiAgents": {
+        "summary": "AI drafts distribution sections you review and refine.",
+        "detail": "An agent generates recommended channels, variant needs, and A/B test hypotheses based on campaign goals. You edit the suggestions to align with current priorities, then the brief goes to writers with distribution already planned."
+      },
+      "aiAgentic": {
+        "summary": "Agents embed growth strategy into every brief automatically.",
+        "detail": "The system writes distribution plans into all content briefs, including variant requirements, channel priorities, and success metrics. You set the growth playbook once, and agents apply it consistently across all projects."
+      }
+    },
+    "draft-content": {
+      "preAI": {
+        "summary": "You receive drafts with no thought given to variants.",
+        "detail": "Writers create a single version optimized for one format. You then have to request edits for different channels or platforms, delaying launch and frustrating the creative team."
+      },
+      "aiAgents": {
+        "summary": "AI suggests variant angles during drafting you can request.",
+        "detail": "An agent analyzes the draft and recommends social cuts, ad copy, or email variants. You review the suggestions and ask writers to produce the high-value ones, streamlining multi-channel creation."
+      },
+      "aiAgentic": {
+        "summary": "Agents generate channel-specific variants from every draft.",
+        "detail": "The system automatically creates optimized versions for email, social, paid ads, and landing pages while the writer finalizes the core piece. You review the variants and approve or adjust based on current campaign priorities."
+      }
+    },
+    "seo-optimization": {
+      "preAI": {
+        "summary": "You check if SEO aligns with paid search strategy.",
+        "detail": "If you're running paid campaigns on the same topic, you review keywords to avoid cannibalizing budget. This requires manually comparing SEO targets with current ad groups in Google Ads."
+      },
+      "aiAgents": {
+        "summary": "AI flags keyword conflicts between organic and paid.",
+        "detail": "An agent compares SEO keywords with your active ad campaigns and highlights overlaps. You decide whether to shift paid spend, adjust organic targets, or coordinate the strategies."
+      },
+      "aiAgentic": {
+        "summary": "Agents orchestrate SEO and paid search to maximize efficiency.",
+        "detail": "The system automatically coordinates keyword targeting across organic and paid channels, avoiding wasteful overlap while identifying gaps. You set rules for when to compete on branded terms or shift spend to new opportunities."
+      }
+    },
+    "brand-compliance": {
+      "preAI": {
+        "summary": "You wait for compliance clearance before testing variants.",
+        "detail": "Brand checks can delay A/B tests if variants need rework. You often push for speed over perfection, creating tension with brand teams when test timelines are tight."
+      },
+      "aiAgents": {
+        "summary": "AI pre-checks variants for brand issues before you test.",
+        "detail": "An agent scans your A/B test variants for brand guideline violations and flags issues before launch. You fix problems early, avoiding last-minute delays when test windows are critical."
+      },
+      "aiAgentic": {
+        "summary": "Agents ensure variants meet brand standards autonomously.",
+        "detail": "The system validates all test variants against brand rules during creation, auto-correcting minor issues and flagging edge cases. You launch tests faster while maintaining brand consistency across all experiments."
+      }
+    },
+    "final-edit": {
+      "preAI": {
+        "summary": "You receive polished content too late to request variants.",
+        "detail": "By the time editing is done, timelines are tight. Asking for additional formats or cuts often means delaying launch or skipping distribution opportunities entirely."
+      },
+      "aiAgents": {
+        "summary": "AI generates variants during final edit you can approve.",
+        "detail": "An agent creates channel-specific versions while editors finalize the main piece. You review the variants alongside the final edit, approving or tweaking them before handoff to distribution."
+      },
+      "aiAgentic": {
+        "summary": "Agents deliver finalized content with all variants ready.",
+        "detail": "The system completes final edits across all formats simultaneously, delivering a package of platform-optimized assets. You receive everything ready to schedule, test, and distribute without additional requests."
+      }
+    },
+    "schedule-publish": {
+      "preAI": {
+        "summary": "You manually schedule variants across platforms.",
+        "detail": "Each channel requires separate scheduling: WordPress for blog, Hootsuite for social, Mailchimp for email. You juggle time zones, platform quirks, and coordinating simultaneous drops across channels."
+      },
+      "aiAgents": {
+        "summary": "AI suggests optimal timing for each channel you confirm.",
+        "detail": "An agent recommends when to publish based on historical engagement patterns per platform. You review the schedule, adjust for campaign priorities, then agents execute the coordinated publish across tools."
+      },
+      "aiAgentic": {
+        "summary": "Agents orchestrate multi-channel publishing automatically.",
+        "detail": "The system schedules and publishes all variants at optimal times for each platform, coordinating launches for maximum impact. You set the campaign strategy and any embargo dates; agents handle the execution."
+      }
+    },
+    "distribute": {
+      "preAI": {
+        "summary": "You manually push content to paid and owned channels.",
+        "detail": "You copy-paste assets into Facebook Ads Manager, LinkedIn Campaign Manager, and email tools. Each platform has different specs, requiring resizing images and rewriting copy to fit character limits."
+      },
+      "aiAgents": {
+        "summary": "AI formats content for each platform you review.",
+        "detail": "An agent adapts the core asset into platform-specific formats with correct dimensions and copy lengths. You review the adapted versions, make tweaks, then distribute with one click per channel."
+      },
+      "aiAgentic": {
+        "summary": "Agents distribute optimized content across all channels.",
+        "detail": "The system automatically publishes properly formatted versions to every relevant platform, including paid media, organic social, email, and partner channels. You monitor performance dashboards and adjust budget allocation as campaigns run."
+      }
+    },
+    "track-performance": {
+      "preAI": {
+        "summary": "You manually track metrics across disconnected platforms.",
+        "detail": "You log into each channel daily to check impressions, clicks, and conversions. Comparing performance requires exporting CSVs and building pivot tables to identify winners and losers."
+      },
+      "aiAgents": {
+        "summary": "AI aggregates performance data you analyze for insights.",
+        "detail": "An agent pulls metrics from all platforms into a unified dashboard with key KPIs highlighted. You review the data, identify trends, and decide where to shift spend or effort."
+      },
+      "aiAgentic": {
+        "summary": "Agents track and surface performance anomalies in real-time.",
+        "detail": "The system monitors all channels continuously, alerting you to unexpected drops or spikes and recommending budget adjustments. You approve high-impact changes while agents handle routine optimizations autonomously."
+      }
+    },
+    "generate-report": {
+      "preAI": {
+        "summary": "You build performance reports manually each week.",
+        "detail": "You compile data from multiple sources into slides showing channel performance, variant winners, and ROI. This takes hours and delays decision-making until the report is done."
+      },
+      "aiAgents": {
+        "summary": "AI generates draft reports you customize and share.",
+        "detail": "An agent creates weekly performance summaries with charts and key insights. You add context, highlight strategic implications, and customize for different stakeholders before distribution."
+      },
+      "aiAgentic": {
+        "summary": "Agents deliver tailored reports to stakeholders automatically.",
+        "detail": "The system generates and distributes performance reports to relevant teams with role-specific insights. Executives see ROI, creators see engagement, and you receive strategic recommendations with auto-drafted action plans."
+      }
+    },
+    "optimize": {
+      "preAI": {
+        "summary": "You manually adjust campaigns based on weekly reviews.",
+        "detail": "After analyzing performance, you log into each platform to pause underperformers, increase budgets on winners, and tweak targeting. This reactive cycle means opportunities are often missed between reviews."
+      },
+      "aiAgents": {
+        "summary": "AI recommends optimizations you approve and implement.",
+        "detail": "An agent identifies optimization opportunities like pausing low-performers or increasing spend on high-ROI channels. You review the suggestions, approve the changes, then agents execute across platforms."
+      },
+      "aiAgentic": {
+        "summary": "Agents optimize campaigns continuously within your guardrails.",
+        "detail": "The system autonomously adjusts budgets, pauses poor performers, and scales winners based on real-time performance. You set ROI thresholds and strategic constraints; agents handle tactical optimization 24/7."
+      }
+    },
+    "brief-approval": {
+      "preAI": {
+        "summary": "You're rarely looped into brief approvals early enough.",
+        "detail": "Briefs get approved before you see them, then you discover the content wasn't built for repurposing or multi-channel use. This forces last-minute requests or missed opportunities."
+      },
+      "aiAgents": {
+        "summary": "AI routes briefs with distribution implications to you.",
+        "detail": "An agent flags briefs that should include variant planning or channel strategy, surfacing them for your review before approval. You add distribution requirements, ensuring content is built right from the start."
+      },
+      "aiAgentic": {
+        "summary": "Agents ensure distribution strategy is embedded before approval.",
+        "detail": "The system automatically validates that briefs include variant plans, channel priorities, and success metrics before routing for approval. You only review briefs that meet your growth criteria, saving time while ensuring quality."
+      }
+    },
+    "quality-check": {
+      "preAI": {
+        "summary": "You're not involved until content is done and variants aren't built.",
+        "detail": "Quality checks happen without you, so finished content often lacks the formats needed for testing or distribution. Requesting changes at this stage delays launch and frustrates teams."
+      },
+      "aiAgents": {
+        "summary": "AI flags content lacking required variants during QA.",
+        "detail": "An agent checks if all planned variants exist and meet platform specs before final approval. You receive alerts for missing formats, allowing you to request them before the handoff."
+      },
+      "aiAgentic": {
+        "summary": "Agents validate all variants are ready before release.",
+        "detail": "The system automatically verifies that content packages include all required formats, dimensions, and copy variants for each target channel. You receive complete, distribution-ready packages every time."
+      }
+    },
+    "brand-review": {
+      "preAI": {
+        "summary": "Brand reviews delay your tests when variants need fixes.",
+        "detail": "You create A/B test variants that get flagged in brand review, requiring rework that pushes back launch dates. This creates tension between brand consistency and testing velocity."
+      },
+      "aiAgents": {
+        "summary": "AI pre-checks variants before formal brand review.",
+        "detail": "An agent scans your test variants against brand guidelines and surfaces issues early. You fix problems before submitting for review, reducing delays and keeping test schedules on track."
+      },
+      "aiAgentic": {
+        "summary": "Agents ensure variants pass brand standards automatically.",
+        "detail": "The system validates all variants during creation, auto-correcting minor brand issues and only flagging true edge cases. Your tests move through brand review faster while maintaining consistency."
+      }
+    },
+    "stakeholder-signoff": {
+      "preAI": {
+        "summary": "You wait for signoff before launching campaigns.",
+        "detail": "Stakeholders review content without understanding channel strategy or test plans. You often have to explain why variants exist or defend budget allocation during final approvals, delaying launch."
+      },
+      "aiAgents": {
+        "summary": "AI generates stakeholder briefs explaining your strategy.",
+        "detail": "An agent creates summaries of your distribution plan, test hypotheses, and expected ROI for stakeholders. You review and customize the briefs, then stakeholders approve with full context."
+      },
+      "aiAgentic": {
+        "summary": "Agents route campaigns through approval with strategy context.",
+        "detail": "The system automatically generates role-specific approval packets showing stakeholders exactly what they need to evaluate. You receive faster signoffs as stakeholders understand the complete growth strategy without meetings."
+      }
+    },
+    "social-listening": {
+      "preAI": {
+        "summary": "You manually scan social mentions for content opportunities.",
+        "detail": "You search hashtags and brand mentions looking for trending topics or conversations worth amplifying. This ad-hoc approach means you miss opportunities between checks."
+      },
+      "aiAgents": {
+        "summary": "AI surfaces trending conversations relevant to campaigns.",
+        "detail": "An agent monitors social platforms and flags trending topics, competitor moves, or audience conversations worth engaging. You review the highlights and decide which to act on."
+      },
+      "aiAgentic": {
+        "summary": "Agents identify and auto-respond to growth opportunities.",
+        "detail": "The system continuously monitors social conversations, automatically escalating trending topics as content ideas or triggering rapid-response campaigns. You set engagement rules and approve high-stakes responses while agents handle routine amplification."
+      }
+    },
+    "visual-asset-creation": {
+      "preAI": {
+        "summary": "You request platform-specific image sizes after assets are done.",
+        "detail": "Designers create one hero image, then you have to request crops and resizes for each platform. This back-and-forth delays distribution and sometimes compromises visual quality."
+      },
+      "aiAgents": {
+        "summary": "AI generates platform-specific versions you approve.",
+        "detail": "An agent automatically creates properly sized variants for each channel from the master asset. You review the outputs, request adjustments if needed, then greenlight distribution."
+      },
+      "aiAgentic": {
+        "summary": "Agents deliver complete asset packages for all channels.",
+        "detail": "The system automatically produces correctly sized, optimized visuals for every target platform during the design process. You receive a full asset library ready for immediate deployment across channels."
+      }
+    },
+    "legal-review": {
+      "preAI": {
+        "summary": "Legal reviews delay campaigns when claims need verification.",
+        "detail": "You submit ad copy with performance claims that legal flags, forcing rewrites that push back launch dates. This is especially painful when running time-sensitive promotions."
+      },
+      "aiAgents": {
+        "summary": "AI pre-checks copy for common legal issues before review.",
+        "detail": "An agent scans your ad copy for unsubstantiated claims, missing disclosures, or regulatory red flags. You fix issues before submitting to legal, reducing review cycles."
+      },
+      "aiAgentic": {
+        "summary": "Agents ensure compliance during creation, not review.",
+        "detail": "The system validates all promotional copy against legal requirements as it's written, auto-inserting required disclosures and flagging risky language. Your campaigns clear legal faster while staying compliant."
+      }
+    },
+    "accessibility-check": {
+      "preAI": {
+        "summary": "Accessibility isn't on your radar until it blocks launch.",
+        "detail": "You discover alt text is missing or contrast is poor during final checks, requiring last-minute fixes. This rarely happens proactively for paid media assets."
+      },
+      "aiAgents": {
+        "summary": "AI flags accessibility issues in assets you review.",
+        "detail": "An agent checks images, videos, and ad creative for missing alt text, poor contrast, or other accessibility problems. You receive a list of issues to fix before launch."
+      },
+      "aiAgentic": {
+        "summary": "Agents ensure all assets meet accessibility standards automatically.",
+        "detail": "The system validates accessibility during asset creation, auto-generating alt text and flagging visual issues. Your campaigns launch compliant without manual checks or last-minute scrambles."
+      }
+    },
+    "localize-content": {
+      "preAI": {
+        "summary": "You adapt campaigns for new markets manually.",
+        "detail": "When expanding to a new region, you work with translators to adapt copy, resize visuals, and rebuild campaigns in local ad platforms. This is slow and expensive."
+      },
+      "aiAgents": {
+        "summary": "AI translates and formats content you review for markets.",
+        "detail": "An agent generates translated versions of your campaigns with properly localized copy and resized assets. You review with regional stakeholders, make cultural adjustments, then launch."
+      },
+      "aiAgentic": {
+        "summary": "Agents auto-localize campaigns for all target markets.",
+        "detail": "The system automatically creates market-specific versions of every campaign with translated copy, cultural adaptations, and local platform formatting. You set the target markets and budget allocation; agents handle execution."
+      }
+    },
+    "archive-tag": {
+      "preAI": {
+        "summary": "You don't tag content, making it hard to find past winners.",
+        "detail": "When planning new campaigns, you manually search old ad accounts and email tools for high-performing assets to repurpose. Poor organization means you reinvent rather than reuse."
+      },
+      "aiAgents": {
+        "summary": "AI suggests tags for content you approve before archiving.",
+        "detail": "An agent recommends tags based on campaign type, performance, and channel. You review and adjust the metadata, making past winners easier to surface for future repurposing."
+      },
+      "aiAgentic": {
+        "summary": "Agents auto-tag and surface top content for repurposing.",
+        "detail": "The system tags all content with performance data, topics, and formats, then proactively suggests high-performers for repurposing in new campaigns. You approve reuse opportunities without manual searching."
+      }
+    },
+    "legal-compliance-gate": {
+      "preAI": {
+        "summary": "Legal gates delay campaign launches unpredictably.",
+        "detail": "You submit campaigns that get stuck in legal review, sometimes for days, with no visibility into what's blocking approval. This makes coordinating multi-channel launches nearly impossible."
+      },
+      "aiAgents": {
+        "summary": "AI predicts legal issues and estimates review time.",
+        "detail": "An agent analyzes your campaign against past legal feedback and flags likely issues with time estimates for resolution. You adjust plans or fix problems proactively to keep launches on schedule."
+      },
+      "aiAgentic": {
+        "summary": "Agents route campaigns through legal with auto-fixes applied.",
+        "detail": "The system pre-validates campaigns against legal requirements, auto-correcting common issues before submission. Your campaigns clear legal gates faster, and you only get involved when true edge cases arise."
+      }
+    },
+    "localization-quality-gate": {
+      "preAI": {
+        "summary": "You discover localization errors after campaigns launch.",
+        "detail": "Translated campaigns go live with cultural missteps or formatting breaks that damage brand perception in new markets. Fixes are expensive and embarrassing."
+      },
+      "aiAgents": {
+        "summary": "AI validates localized versions you review before launch.",
+        "detail": "An agent checks translated campaigns for formatting issues, cultural problems, and brand consistency. You review findings with regional teams and fix issues before going live."
+      },
+      "aiAgentic": {
+        "summary": "Agents ensure localized campaigns meet quality standards.",
+        "detail": "The system automatically validates all localized content for formatting, cultural appropriateness, and brand alignment before launch. You receive market-ready campaigns that clear quality gates without manual review."
+      }
+    },
+    "dynamic-assembly": {
+      "preAI": {
+        "summary": "You manually customize content for each segment.",
+        "detail": "You create separate campaigns for different audience segments, duplicating effort across similar messages. Managing multiple versions is time-consuming and error-prone."
+      },
+      "aiAgents": {
+        "summary": "AI assembles segment-specific versions you review.",
+        "detail": "An agent generates personalized variants for each audience segment from modular content blocks. You review the assembled versions, tweak outliers, then approve for distribution."
+      },
+      "aiAgentic": {
+        "summary": "Agents dynamically personalize content at delivery.",
+        "detail": "The system assembles optimal content for each user based on segment, behavior, and context in real-time. You set the personalization rules and content modules; agents handle billions of unique combinations."
+      }
+    },
+    "personalization-qa": {
+      "preAI": {
+        "summary": "You test personalization manually across segments.",
+        "detail": "You create test users for each segment and manually verify they receive the right content. This is slow, incomplete, and often skipped when timelines are tight."
+      },
+      "aiAgents": {
+        "summary": "AI simulates personalization across segments you verify.",
+        "detail": "An agent tests how content renders for different audience types and flags mismatches or errors. You review the test results and fix issues before launch."
+      },
+      "aiAgentic": {
+        "summary": "Agents validate personalization logic automatically.",
+        "detail": "The system tests all personalization rules against every segment and context before launch, auto-fixing simple issues and flagging edge cases. Your campaigns launch with confidence that every user sees the right message."
+      }
+    },
+    "attribution-modeling": {
+      "preAI": {
+        "summary": "You rely on last-click attribution in each platform.",
+        "detail": "Facebook takes credit for conversions, Google takes credit, and email takes credit for the same sale. You know multi-touch attribution exists but lack the tools or expertise to implement it."
+      },
+      "aiAgents": {
+        "summary": "AI builds attribution models you use for budget allocation.",
+        "detail": "An agent analyzes cross-channel journeys and assigns weighted credit to each touchpoint. You review the model outputs and shift budget based on true incremental impact."
+      },
+      "aiAgentic": {
+        "summary": "Agents optimize spend using real-time attribution insights.",
+        "detail": "The system continuously models attribution across all channels and automatically adjusts budget toward the highest-impact touchpoints. You set ROI goals and review strategic shifts; agents handle daily reallocation."
+      }
+    },
+    "executive-reporting": {
+      "preAI": {
+        "summary": "You compile executive dashboards manually each month.",
+        "detail": "You extract data from multiple sources, calculate ROI, and build slides showing channel performance and growth metrics. This consumes days and delays strategic decisions."
+      },
+      "aiAgents": {
+        "summary": "AI generates executive summaries you customize.",
+        "detail": "An agent creates monthly performance reports with key metrics, trends, and recommendations. You add strategic context and priorities, then distribute to leadership."
+      },
+      "aiAgentic": {
+        "summary": "Agents deliver real-time executive dashboards automatically.",
+        "detail": "The system maintains live executive views showing growth performance, ROI, and strategic opportunities. Leadership accesses current data anytime; you focus on interpreting insights and planning next moves."
+      }
+    },
+    "competitive-response": {
+      "preAI": {
+        "summary": "You manually monitor competitors and react slowly.",
+        "detail": "You check competitor ads and content when you remember, then scramble to create responses when you spot something threatening. By then, they've already captured attention."
+      },
+      "aiAgents": {
+        "summary": "AI alerts you to competitive moves worth addressing.",
+        "detail": "An agent monitors competitor campaigns and flags significant launches or messaging shifts. You review the alerts, decide if response is needed, then create reactive content or ad campaigns."
+      },
+      "aiAgentic": {
+        "summary": "Agents auto-trigger competitive responses within guardrails.",
+        "detail": "The system detects competitor moves and automatically launches pre-approved rapid-response campaigns when patterns match your playbook. You set the triggers and message frameworks; agents execute at competitive speed."
+      }
+    },
+    "content-governance": {
+      "preAI": {
+        "summary": "Governance doesn't include growth metrics or variant tracking.",
+        "detail": "Content audits focus on brand compliance and freshness, ignoring performance data or distribution effectiveness. You can't identify which evergreen assets drive the most ROI."
+      },
+      "aiAgents": {
+        "summary": "AI adds performance data to governance reviews you analyze.",
+        "detail": "An agent enriches governance audits with engagement metrics, conversion data, and channel performance. You identify top performers to repurpose and low-performers to retire or refresh."
+      },
+      "aiAgentic": {
+        "summary": "Agents govern content with growth performance as a dimension.",
+        "detail": "The system continuously tracks content performance across channels and automatically flags high-performers for scaling and low-performers for sunsetting. You focus on strategic portfolio decisions while agents maintain operational governance."
+      }
+    },
+    "governance-gate": {
+      "preAI": {
+        "summary": "Governance reviews block campaigns without performance context.",
+        "detail": "Content governance checks brand compliance but ignores whether the content will drive results. You get stopped by process even when campaigns are strategically sound."
+      },
+      "aiAgents": {
+        "summary": "AI enriches governance reviews with growth data.",
+        "detail": "An agent provides performance predictions and similar campaign benchmarks during governance review. You use this data to advocate for high-potential campaigns that might otherwise get flagged."
+      },
+      "aiAgentic": {
+        "summary": "Agents clear governance with performance validation built in.",
+        "detail": "The system validates campaigns against both governance rules and performance standards, clearing those that meet both criteria. You only review edge cases where brand and growth priorities conflict."
+      }
+    },
+    "sentiment-monitoring": {
+      "preAI": {
+        "summary": "You track sentiment manually when running campaigns.",
+        "detail": "During major launches, you search social mentions and scan comments to gauge reaction. This is reactive and incomplete, often missing negative sentiment until it's widespread."
+      },
+      "aiAgents": {
+        "summary": "AI tracks campaign sentiment and alerts you to issues.",
+        "detail": "An agent monitors social response during campaign launches and flags unexpected negative sentiment or viral moments. You review the data and decide whether to adjust messaging or pause spend."
+      },
+      "aiAgentic": {
+        "summary": "Agents auto-adjust campaigns based on sentiment signals.",
+        "detail": "The system continuously monitors audience response and autonomously pauses campaigns showing negative sentiment or scales those getting positive reception. You set sentiment thresholds and review significant shifts; agents handle real-time optimization."
+      }
+    },
+    "sales-enablement": {
+      "preAI": {
+        "summary": "You rarely get sales content into your distribution mix.",
+        "detail": "Sales enablement assets sit in separate systems. When sales asks for amplification of case studies or product sheets, you manually create campaigns without templates or workflows."
+      },
+      "aiAgents": {
+        "summary": "AI identifies sales content worth distributing.",
+        "detail": "An agent scans sales enablement libraries and recommends high-value assets for paid amplification or content marketing. You review suggestions and create distribution plans for the best fits."
+      },
+      "aiAgentic": {
+        "summary": "Agents auto-distribute sales content through growth channels.",
+        "detail": "The system identifies top-performing sales assets and automatically creates distribution campaigns with proper targeting and budget. You set criteria for what merits amplification; agents handle execution."
+      }
+    },
+    "influencer-brief": {
+      "preAI": {
+        "summary": "You're handed influencer content to distribute after creation.",
+        "detail": "Partnerships team creates influencer briefs without your input. You receive finished content that wasn't built for amplification, then struggle to extend its reach effectively."
+      },
+      "aiAgents": {
+        "summary": "AI flags influencer briefs needing distribution planning.",
+        "detail": "An agent identifies influencer campaigns worth amplifying and recommends whitelisting creators or boosting organic posts. You review opportunities and allocate budget to extend reach."
+      },
+      "aiAgentic": {
+        "summary": "Agents coordinate influencer distribution strategies automatically.",
+        "detail": "The system analyzes influencer content performance in real-time and automatically triggers paid amplification for high-performers. You set spend limits and creator whitelists; agents optimize reach and engagement."
+      }
+    },
+    "ugc-moderation": {
+      "preAI": {
+        "summary": "You manually scan UGC for content worth amplifying.",
+        "detail": "You search hashtags and mentions for user content that could be boosted in paid campaigns. This ad-hoc approach means you miss opportunities and lack rights management."
+      },
+      "aiAgents": {
+        "summary": "AI surfaces high-quality UGC you can license and amplify.",
+        "detail": "An agent identifies top-performing user content and flags it for licensing and paid promotion. You review the suggestions, secure rights, then create amplification campaigns."
+      },
+      "aiAgentic": {
+        "summary": "Agents auto-identify and distribute approved UGC.",
+        "detail": "The system continuously finds high-performing user content, manages rights acquisition through automated workflows, and amplifies approved pieces across paid channels. You set UGC strategy and budget; agents handle sourcing and distribution."
+      }
+    },
+    "content-scoring": {
+      "preAI": {
+        "summary": "You guess which content deserves budget based on gut feel.",
+        "detail": "You prioritize campaigns based on stakeholder pressure or personal hunches about what will work. There's no systematic way to predict performance before investing."
+      },
+      "aiAgents": {
+        "summary": "AI scores content for distribution potential you review.",
+        "detail": "An agent predicts performance for each asset based on historical data and current trends, recommending budget allocation. You adjust the scores based on strategic priorities, then distribute accordingly."
+      },
+      "aiAgentic": {
+        "summary": "Agents auto-allocate budget based on content scores.",
+        "detail": "The system continuously scores all content for growth potential and autonomously allocates distribution budget to high-scorers. You set the scoring criteria and budget caps; agents optimize spend toward predicted winners."
+      }
+    },
+    "channel-orchestration": {
+      "preAI": {
+        "summary": "You manually coordinate timing across disconnected channels.",
+        "detail": "You use spreadsheets and calendar invites to align when content hits email, social, paid ads, and partners. Inevitably something publishes early or late, undermining coordinated launches."
+      },
+      "aiAgents": {
+        "summary": "AI recommends orchestration sequences you approve.",
+        "detail": "An agent suggests optimal timing and sequencing for multi-channel campaigns based on historical performance. You review the plan, adjust for strategic priorities, then agents execute the coordinated launch."
+      },
+      "aiAgentic": {
+        "summary": "Agents orchestrate cross-channel campaigns automatically.",
+        "detail": "The system manages complex multi-channel sequences, coordinating timing, message progression, and budget pacing across all platforms. You set campaign strategy and success metrics; agents handle perfect execution at scale."
+      }
+    }
+  },
+  "privacy-officer": {
+    "receive-request": {
+      "preAI": {
+        "summary": "You're rarely consulted when requests arrive.",
+        "detail": "Content requests go straight to writers without privacy considerations. You only get involved when someone remembers to ask if personalization or data use might be risky."
+      },
+      "aiAgents": {
+        "summary": "AI flags requests with privacy implications for your review.",
+        "detail": "An agent scans incoming briefs for mentions of personalization, targeting, or data use, then routes them to you. You assess privacy risks and add compliance requirements before work begins."
+      },
+      "aiAgentic": {
+        "summary": "Agents embed privacy requirements into requests automatically.",
+        "detail": "The system identifies requests requiring consent management or data restrictions and auto-adds compliance checkpoints to workflows. You set the privacy rules once; agents apply them consistently."
+      }
+    },
+    "research-insights": {
+      "preAI": {
+        "summary": "Insights teams use data without checking consent status.",
+        "detail": "Analysts pull behavioral data for audience research without verifying consent or data retention limits. You discover privacy violations during audits, forcing retroactive corrections."
+      },
+      "aiAgents": {
+        "summary": "AI validates consent before surfacing insights to teams.",
+        "detail": "An agent checks that audience data used in research complies with consent preferences and retention policies. You review flagged issues and approve data use before insights are shared."
+      },
+      "aiAgentic": {
+        "summary": "Agents ensure all insights respect privacy boundaries automatically.",
+        "detail": "The system validates consent and data policies before including any user data in research outputs. Teams receive privacy-compliant insights without your manual review; you monitor compliance dashboards."
+      }
+    },
+    "write-brief": {
+      "preAI": {
+        "summary": "Briefs describe personalization without addressing consent.",
+        "detail": "Writers request behavioral targeting or segmentation without specifying consent mechanisms. You find out during review that the approach violates privacy policies."
+      },
+      "aiAgents": {
+        "summary": "AI adds consent requirements to briefs you validate.",
+        "detail": "An agent detects personalization or data use in briefs and auto-adds consent language and compliance steps. You review the additions and adjust based on risk tolerance."
+      },
+      "aiAgentic": {
+        "summary": "Agents write briefs with privacy compliance embedded.",
+        "detail": "The system automatically includes proper consent mechanisms, data usage limits, and opt-out paths in every brief requiring personalization. You set the compliance templates; agents ensure they're applied."
+      }
+    },
+    "draft-content": {
+      "preAI": {
+        "summary": "You review drafts for accidental privacy violations.",
+        "detail": "Writers sometimes include examples or language that implies data use users didn't consent to. You catch these during late-stage review, forcing rewrites."
+      },
+      "aiAgents": {
+        "summary": "AI scans drafts for privacy language issues you fix.",
+        "detail": "An agent flags copy that makes consent assumptions or implies unauthorized data use. You review the flagged sections and suggest compliant alternatives to writers."
+      },
+      "aiAgentic": {
+        "summary": "Agents ensure content respects privacy boundaries during writing.",
+        "detail": "The system validates all personalization language against consent policies as content is drafted, suggesting compliant phrasing automatically. Writers receive instant feedback; you monitor edge cases."
+      }
+    },
+    "seo-optimization": {
+      "preAI": {
+        "summary": "SEO tracking happens without privacy impact assessment.",
+        "detail": "Teams add tracking pixels and analytics without checking if consent is required. You discover compliance gaps when regulators ask about data collection practices."
+      },
+      "aiAgents": {
+        "summary": "AI flags tracking implementations needing consent review.",
+        "detail": "An agent identifies when SEO changes add cookies or tracking that require consent. You review the data collection methods and ensure proper consent mechanisms are in place."
+      },
+      "aiAgentic": {
+        "summary": "Agents validate tracking compliance before implementation.",
+        "detail": "The system automatically checks that all analytics and SEO tracking respects user consent preferences and regional regulations. Your tracking infrastructure stays compliant without manual audits."
+      }
+    },
+    "brand-compliance": {
+      "preAI": {
+        "summary": "Brand review ignores whether personalization is compliant.",
+        "detail": "Content passes brand checks even when personalization tactics violate consent policies. Privacy and brand operate in silos, creating compliance risks."
+      },
+      "aiAgents": {
+        "summary": "AI routes content with personalization through privacy review.",
+        "detail": "An agent detects when brand-approved content includes targeting or data use and sends it to you for consent validation. You approve or flag issues before launch."
+      },
+      "aiAgentic": {
+        "summary": "Agents validate brand and privacy compliance together.",
+        "detail": "The system checks both brand guidelines and privacy requirements simultaneously, blocking content that passes one but fails the other. Brand and privacy standards are enforced as a unit."
+      }
+    },
+    "final-edit": {
+      "preAI": {
+        "summary": "Final edits happen without privacy sign-off.",
+        "detail": "Content goes to final edit without your review, then launches with personalization you never approved. You find out when users complain or regulators ask questions."
+      },
+      "aiAgents": {
+        "summary": "AI ensures privacy-sensitive content routes through you.",
+        "detail": "An agent flags finalized content that uses personalization or behavioral data and surfaces it for your approval. You validate consent mechanisms before content can be scheduled."
+      },
+      "aiAgentic": {
+        "summary": "Agents validate privacy compliance before final approval.",
+        "detail": "The system automatically verifies that all personalized content has proper consent and data handling before final edit sign-off. You only review edge cases; compliant content clears automatically."
+      }
+    },
+    "schedule-publish": {
+      "preAI": {
+        "summary": "Content publishes without consent mechanism validation.",
+        "detail": "Teams schedule personalized campaigns without confirming that consent collection is working. You discover broken opt-ins or missing privacy links after launch."
+      },
+      "aiAgents": {
+        "summary": "AI validates consent flows before scheduled publish.",
+        "detail": "An agent checks that opt-in mechanisms, privacy notices, and preference centers are functional before allowing scheduling. You review the validation results and approve publish."
+      },
+      "aiAgentic": {
+        "summary": "Agents block publish if consent mechanisms fail validation.",
+        "detail": "The system automatically tests all consent collection and opt-out paths before any personalized content can go live. Your privacy infrastructure is validated at every launch without manual checks."
+      }
+    },
+    "distribute": {
+      "preAI": {
+        "summary": "Distribution happens without checking audience consent status.",
+        "detail": "Teams send personalized content to segments without filtering for valid consent. This creates legal exposure when users receive content they didn't agree to."
+      },
+      "aiAgents": {
+        "summary": "AI filters audiences based on consent before distribution.",
+        "detail": "An agent removes users lacking proper consent from distribution lists and flags the exclusions for your review. You validate the filtered audiences before content goes out."
+      },
+      "aiAgentic": {
+        "summary": "Agents automatically distribute only to consented audiences.",
+        "detail": "The system filters every distribution list in real-time based on current consent status, blocking delivery to non-consented users. Your personalization stays compliant by design."
+      }
+    },
+    "track-performance": {
+      "preAI": {
+        "summary": "Teams track everything without consent considerations.",
+        "detail": "Analytics tools collect behavioral data on all users regardless of consent status. You audit tracking periodically and find widespread non-compliance with privacy policies."
+      },
+      "aiAgents": {
+        "summary": "AI ensures tracking respects user consent preferences.",
+        "detail": "An agent filters performance data to exclude users who haven't consented to tracking. You review the consent-filtered metrics and ensure reporting stays compliant."
+      },
+      "aiAgentic": {
+        "summary": "Agents track performance within consent boundaries automatically.",
+        "detail": "The system collects analytics only from users who've consented, providing privacy-compliant metrics by default. Your performance data is trustworthy and legally sound without manual filtering."
+      }
+    },
+    "generate-report": {
+      "preAI": {
+        "summary": "Reports include data you haven't validated for compliance.",
+        "detail": "Teams generate performance reports using potentially non-compliant data collection. You review reports after distribution and discover privacy violations embedded in the insights."
+      },
+      "aiAgents": {
+        "summary": "AI adds privacy compliance notes to reports you review.",
+        "detail": "An agent annotates reports with consent coverage percentages and data collection methods. You validate the privacy disclosures before reports are shared with stakeholders."
+      },
+      "aiAgentic": {
+        "summary": "Agents generate reports with privacy compliance certified.",
+        "detail": "The system produces reports that include consent validation badges and exclude non-compliant data automatically. Stakeholders receive trustworthy insights; you monitor compliance metrics."
+      }
+    },
+    "optimize": {
+      "preAI": {
+        "summary": "Optimization uses behavioral data without consent limits.",
+        "detail": "Teams personalize experiences based on tracking data without checking if users consented to behavioral profiling. This creates regulatory risk when optimization tactics violate privacy rules."
+      },
+      "aiAgents": {
+        "summary": "AI restricts optimization to consented data you approve.",
+        "detail": "An agent limits personalization algorithms to use only data from consenting users and flags aggressive tracking tactics. You review the optimization approaches and set acceptable boundaries."
+      },
+      "aiAgentic": {
+        "summary": "Agents optimize within privacy guardrails automatically.",
+        "detail": "The system ensures all optimization and personalization respects user consent preferences and data minimization principles. Your content improves while staying compliant by design."
+      }
+    },
+    "brief-approval": {
+      "preAI": {
+        "summary": "Briefs get approved without privacy review.",
+        "detail": "Stakeholders approve content plans that include risky personalization tactics. You find out too late that the approved approach violates consent or data policies."
+      },
+      "aiAgents": {
+        "summary": "AI routes briefs with privacy risks through your approval.",
+        "detail": "An agent identifies briefs describing behavioral targeting or sensitive data use and adds you to the approval chain. You validate consent plans before stakeholders give final approval."
+      },
+      "aiAgentic": {
+        "summary": "Agents block approval until privacy requirements are met.",
+        "detail": "The system prevents brief approval if privacy impact assessments are incomplete or consent mechanisms are missing. Stakeholders only see briefs that meet your compliance standards."
+      }
+    },
+    "quality-check": {
+      "preAI": {
+        "summary": "QA checks functionality but not privacy compliance.",
+        "detail": "Teams test that personalization works but don't verify consent collection or opt-out mechanisms. You discover broken privacy controls after launch during user complaints."
+      },
+      "aiAgents": {
+        "summary": "AI adds consent validation to quality checklists you review.",
+        "detail": "An agent tests opt-in flows, preference centers, and data access requests alongside functional testing. You review the privacy test results and approve or block launch."
+      },
+      "aiAgentic": {
+        "summary": "Agents validate privacy compliance as part of automated QA.",
+        "detail": "The system automatically tests all consent mechanisms, opt-out paths, and data handling before any personalized experience can launch. Privacy QA is built into every release."
+      }
+    },
+    "brand-review": {
+      "preAI": {
+        "summary": "Brand reviews don't consider privacy implications.",
+        "detail": "Content clears brand guidelines while including personalization that violates consent policies. Brand and privacy teams operate separately, creating compliance gaps."
+      },
+      "aiAgents": {
+        "summary": "AI surfaces privacy issues during brand review you validate.",
+        "detail": "An agent flags when brand-approved content includes targeting tactics requiring consent validation. You review the privacy aspects and either approve or request modifications."
+      },
+      "aiAgentic": {
+        "summary": "Agents enforce privacy standards alongside brand rules.",
+        "detail": "The system validates both brand consistency and privacy compliance in every review, blocking content that passes brand but fails privacy. Reviews are holistic by default."
+      }
+    },
+    "stakeholder-signoff": {
+      "preAI": {
+        "summary": "Stakeholders approve campaigns without privacy assessment.",
+        "detail": "Executives sign off on personalization strategies without understanding consent requirements or regulatory risks. You're left explaining violations after launch."
+      },
+      "aiAgents": {
+        "summary": "AI adds privacy risk summaries to approval packets.",
+        "detail": "An agent generates consent coverage reports and regulatory risk assessments for stakeholder review. You provide context on privacy implications before final approval."
+      },
+      "aiAgentic": {
+        "summary": "Agents require privacy sign-off before stakeholder approval.",
+        "detail": "The system routes all personalized campaigns through mandatory privacy validation before stakeholder review. Executives only see campaigns that meet compliance standards."
+      }
+    },
+    "performance-review": {
+      "preAI": {
+        "summary": "Performance reviews don't account for consent rates.",
+        "detail": "Teams judge campaign success without considering how many users actually consented to tracking. High performance might hide low consent coverage and regulatory risk."
+      },
+      "aiAgents": {
+        "summary": "AI adds consent metrics to performance reviews you interpret.",
+        "detail": "An agent includes consent rates and privacy compliance scores alongside engagement metrics. You help teams understand the relationship between consent and performance."
+      },
+      "aiAgentic": {
+        "summary": "Agents incorporate consent health into performance evaluation.",
+        "detail": "The system evaluates campaign success using both engagement metrics and consent compliance, flagging high-performing campaigns with low consent rates. Privacy is a performance dimension, not an afterthought."
+      }
+    },
+    "social-listening": {
+      "preAI": {
+        "summary": "Social listening collects data without privacy limits.",
+        "detail": "Teams scrape social mentions and user behavior without considering consent or data minimization. This creates exposure when users discover their public data is being profiled."
+      },
+      "aiAgents": {
+        "summary": "AI ensures social data collection follows privacy rules.",
+        "detail": "An agent limits social listening to public data allowed under your privacy policy and flags risky profiling practices. You review the data collection methods and set boundaries."
+      },
+      "aiAgentic": {
+        "summary": "Agents collect social data within privacy guardrails automatically.",
+        "detail": "The system applies data minimization and retention limits to all social listening, collecting only what's needed and permitted. Your insights stay compliant without manual oversight."
+      }
+    },
+    "visual-asset-creation": {
+      "preAI": {
+        "summary": "Assets include user data without considering consent.",
+        "detail": "Designers use customer photos or testimonials without proper consent documentation. You discover rights issues during legal review or after publication."
+      },
+      "aiAgents": {
+        "summary": "AI flags assets using personal data for consent validation.",
+        "detail": "An agent identifies when visuals include customer information or user-generated content and checks consent records. You review the permissions and approve or request alternatives."
+      },
+      "aiAgentic": {
+        "summary": "Agents validate consent for all personal data in assets.",
+        "detail": "The system automatically checks that user photos, testimonials, and personal information have documented consent before assets can be used. Your visual content is rights-cleared and compliant."
+      }
+    },
+    "legal-review": {
+      "preAI": {
+        "summary": "Legal reviews privacy separately from content review.",
+        "detail": "Legal checks contracts and claims but doesn't systematically review consent mechanisms or data handling. Privacy and legal operate in silos."
+      },
+      "aiAgents": {
+        "summary": "AI coordinates privacy and legal review processes.",
+        "detail": "An agent ensures content goes through both legal and privacy validation, highlighting overlapping concerns. You collaborate with legal to address compliance holistically."
+      },
+      "aiAgentic": {
+        "summary": "Agents validate legal and privacy requirements together.",
+        "detail": "The system checks both legal compliance and privacy standards simultaneously, flagging issues that span both domains. Legal and privacy review are integrated automatically."
+      }
+    },
+    "accessibility-check": {
+      "preAI": {
+        "summary": "Accessibility doesn't consider privacy of assistive tech users.",
+        "detail": "Teams ensure screen reader compatibility but don't think about whether tracking affects disabled users differently. Privacy implications of accessibility tools go unconsidered."
+      },
+      "aiAgents": {
+        "summary": "AI evaluates privacy impact on accessibility users.",
+        "detail": "An agent checks whether tracking or data collection affects assistive technology users unfairly. You review the findings and ensure equitable privacy protection."
+      },
+      "aiAgentic": {
+        "summary": "Agents ensure privacy protections work for all users equally.",
+        "detail": "The system validates that consent mechanisms and opt-outs are fully accessible and don't disadvantage users of assistive technology. Privacy equity is validated automatically."
+      }
+    },
+    "localize-content": {
+      "preAI": {
+        "summary": "Localization ignores varying privacy regulations by market.",
+        "detail": "Teams translate content without adjusting consent flows for regional privacy laws. GDPR, CCPA, and other regulations are violated when one-size-fits-all approaches are deployed globally."
+      },
+      "aiAgents": {
+        "summary": "AI adapts privacy controls for each market you review.",
+        "detail": "An agent generates region-specific consent mechanisms and privacy notices based on local regulations. You validate the localized privacy controls before market launches."
+      },
+      "aiAgentic": {
+        "summary": "Agents auto-localize privacy controls for each jurisdiction.",
+        "detail": "The system automatically implements appropriate consent flows, privacy notices, and data handling for every target market's regulations. Your global campaigns are locally compliant without manual adaptation."
+      }
+    },
+    "ab-variant-creation": {
+      "preAI": {
+        "summary": "A/B tests track users without explicit test consent.",
+        "detail": "Teams run experiments using behavioral data without considering whether users consented to research participation. This creates ethical and legal concerns around testing."
+      },
+      "aiAgents": {
+        "summary": "AI ensures test participants have proper consent.",
+        "detail": "An agent filters test audiences to include only consenting users and adds test disclosure language. You review the consent approach and approve the test design."
+      },
+      "aiAgentic": {
+        "summary": "Agents run tests only on consented, disclosed cohorts.",
+        "detail": "The system automatically limits A/B tests to users who've consented to experimentation and ensures proper test disclosures. Your testing is ethically and legally sound by design."
+      }
+    },
+    "content-repurposing": {
+      "preAI": {
+        "summary": "Repurposed content reuses data without revalidating consent.",
+        "detail": "Teams adapt old campaigns with personalization tied to outdated consent. Users who've withdrawn consent still receive targeted content from repurposed assets."
+      },
+      "aiAgents": {
+        "summary": "AI revalidates consent when repurposing personalized content.",
+        "detail": "An agent checks current consent status against original campaign permissions and flags expired or withdrawn consent. You review and approve updated audience targeting."
+      },
+      "aiAgentic": {
+        "summary": "Agents revalidate consent automatically when content is reused.",
+        "detail": "The system checks that all personalization in repurposed content has current, valid consent before redeployment. Old campaigns don't carry forward stale permissions."
+      }
+    },
+    "archive-tag": {
+      "preAI": {
+        "summary": "Archives retain personal data beyond policy limits.",
+        "detail": "Content libraries store user data indefinitely without retention policies. You discover compliance violations during audits when old campaigns still contain personal information."
+      },
+      "aiAgents": {
+        "summary": "AI flags archived content with retention policy violations.",
+        "detail": "An agent identifies archived assets containing personal data past retention limits and recommends redaction or deletion. You review and enforce data minimization policies."
+      },
+      "aiAgentic": {
+        "summary": "Agents auto-redact personal data per retention policies.",
+        "detail": "The system automatically removes or anonymizes personal information in archived content according to your retention schedules. Your archives stay compliant without manual reviews."
+      }
+    },
+    "legal-compliance-gate": {
+      "preAI": {
+        "summary": "Legal gates check contracts but not privacy compliance.",
+        "detail": "Content clears legal review without systematic privacy assessment. Consent mechanisms and data handling aren't part of the standard legal checklist."
+      },
+      "aiAgents": {
+        "summary": "AI adds privacy validation to legal compliance gates.",
+        "detail": "An agent checks both legal requirements and privacy compliance, surfacing gaps for your review. You validate consent mechanisms alongside legal approvals."
+      },
+      "aiAgentic": {
+        "summary": "Agents enforce privacy requirements at legal gates automatically.",
+        "detail": "The system blocks legal approval until privacy compliance is validated, treating consent and data handling as mandatory legal checks. Privacy is part of every legal gate."
+      }
+    },
+    "localization-quality-gate": {
+      "preAI": {
+        "summary": "Localization QA doesn't verify regional privacy compliance.",
+        "detail": "Teams check translation quality but miss that consent flows violate local privacy laws. Markets launch with non-compliant personalization."
+      },
+      "aiAgents": {
+        "summary": "AI validates regional privacy compliance during localization QA.",
+        "detail": "An agent checks that localized consent mechanisms meet regional regulations and flags violations. You review market-specific privacy controls before launch approval."
+      },
+      "aiAgentic": {
+        "summary": "Agents validate local privacy laws in localization quality gates.",
+        "detail": "The system automatically verifies that every localized version complies with regional privacy regulations before clearing quality gates. Your global campaigns are locally compliant by default."
+      }
+    },
+    "segment-mapping": {
+      "preAI": {
+        "summary": "Segments include users without validating consent.",
+        "detail": "Teams create behavioral segments using tracking data without checking if users consented to profiling. This creates compliance risk when personalization is deployed."
+      },
+      "aiAgents": {
+        "summary": "AI filters segments to include only consenting users.",
+        "detail": "An agent removes users lacking appropriate consent from behavioral segments and reports the impact. You review the consent-filtered audiences and approve targeting."
+      },
+      "aiAgentic": {
+        "summary": "Agents build segments with consent validation built in.",
+        "detail": "The system automatically creates audience segments using only data from properly consented users, excluding non-consented individuals. Your targeting is compliant by construction."
+      }
+    },
+    "dynamic-assembly": {
+      "preAI": {
+        "summary": "Dynamic content personalizes without consent validation.",
+        "detail": "Systems assemble personalized experiences using behavioral data without checking consent at delivery. This creates widespread violations when targeting is automatic."
+      },
+      "aiAgents": {
+        "summary": "AI validates consent before every personalization event.",
+        "detail": "An agent checks current consent status before assembling personalized content for each user. You monitor consent coverage and set thresholds for personalization."
+      },
+      "aiAgentic": {
+        "summary": "Agents deliver personalization only to consenting users automatically.",
+        "detail": "The system validates consent in real-time at every content assembly, serving generic versions to non-consented users. Your dynamic personalization respects boundaries at scale."
+      }
+    },
+    "campaign-planning": {
+      "preAI": {
+        "summary": "Campaigns plan personalization without privacy assessment.",
+        "detail": "Teams design targeting strategies without consulting you on consent requirements or data restrictions. You find out about privacy issues during execution or after launch."
+      },
+      "aiAgents": {
+        "summary": "AI adds privacy requirements to campaign plans you review.",
+        "detail": "An agent identifies campaigns requiring consent management or data governance and flags them for your input. You add privacy controls to plans before execution begins."
+      },
+      "aiAgentic": {
+        "summary": "Agents embed privacy controls into campaign plans automatically.",
+        "detail": "The system designs campaigns with consent requirements, data limits, and opt-out mechanisms built into the plan. Your privacy standards are applied from the planning stage."
+      }
+    },
+    "paid-creative-production": {
+      "preAI": {
+        "summary": "Paid ads use behavioral targeting without consent checks.",
+        "detail": "Teams create ad campaigns with aggressive personalization using platform tracking. You don't review paid media plans and discover violations during platform audits."
+      },
+      "aiAgents": {
+        "summary": "AI validates ad targeting against consent policies you set.",
+        "detail": "An agent checks that paid media audience targeting uses only consented data and flags risky practices. You review targeting parameters and approve privacy-compliant ad campaigns."
+      },
+      "aiAgentic": {
+        "summary": "Agents ensure paid media targeting respects consent automatically.",
+        "detail": "The system limits ad platform targeting to audiences with proper consent and applies data minimization to tracking pixels. Your paid campaigns are compliant by design."
+      }
+    },
+    "attribution-modeling": {
+      "preAI": {
+        "summary": "Attribution models track all users without consent limits.",
+        "detail": "Teams build attribution using comprehensive tracking across non-consenting users. This creates regulatory exposure when measurement tactics violate privacy policies."
+      },
+      "aiAgents": {
+        "summary": "AI builds attribution models using only consented data.",
+        "detail": "An agent filters attribution analysis to include only users who've consented to tracking. You review the consent-limited models and validate measurement approaches."
+      },
+      "aiAgentic": {
+        "summary": "Agents model attribution within consent boundaries automatically.",
+        "detail": "The system builds attribution using privacy-compliant data collection, providing insights that respect user choices. Your measurement is trustworthy and legally sound."
+      }
+    },
+    "executive-reporting": {
+      "preAI": {
+        "summary": "Executive reports show metrics without consent context.",
+        "detail": "Leadership sees performance data without understanding what percentage of users are being tracked. Privacy compliance isn't part of executive conversations."
+      },
+      "aiAgents": {
+        "summary": "AI adds consent coverage metrics to executive reports.",
+        "detail": "An agent includes privacy compliance scores and consent rates alongside business metrics. You help executives understand the relationship between privacy and performance."
+      },
+      "aiAgentic": {
+        "summary": "Agents deliver executive reports with privacy health built in.",
+        "detail": "The system provides leadership with integrated views of performance and privacy compliance, making consent coverage a standard business metric. Privacy is part of every executive conversation."
+      }
+    },
+    "competitive-response": {
+      "preAI": {
+        "summary": "Rapid responses use aggressive tracking without review.",
+        "detail": "Teams react to competitors by launching personalized campaigns quickly, skipping privacy checks. You discover violations after competitive responses are live."
+      },
+      "aiAgents": {
+        "summary": "AI validates consent during rapid response creation.",
+        "detail": "An agent ensures competitive response campaigns include proper consent mechanisms even when moving fast. You review and approve privacy controls before rapid launch."
+      },
+      "aiAgentic": {
+        "summary": "Agents ensure competitive responses stay privacy-compliant.",
+        "detail": "The system validates consent and data handling automatically in rapid-response workflows, allowing speed without sacrificing compliance. Your competitive agility doesn't create privacy risk."
+      }
+    },
+    "journey-mapping": {
+      "preAI": {
+        "summary": "Journey maps use tracking without consent validation.",
+        "detail": "Teams map customer journeys using comprehensive behavioral data without checking consent. This creates privacy violations when journey-based personalization is deployed."
+      },
+      "aiAgents": {
+        "summary": "AI filters journey data to respect consent boundaries.",
+        "detail": "An agent limits journey mapping to consented users and flags where gaps in consent prevent accurate mapping. You review consent coverage and set data collection priorities."
+      },
+      "aiAgentic": {
+        "summary": "Agents build journey maps using only consented touchpoints.",
+        "detail": "The system creates customer journey insights from privacy-compliant data collection, respecting user boundaries while providing strategic value. Your journey understanding is ethical and legal."
+      }
+    },
+    "sentiment-monitoring": {
+      "preAI": {
+        "summary": "Sentiment tracking collects user data without consent.",
+        "detail": "Teams monitor social sentiment and behavior without considering privacy implications. Users discover they're being profiled without consent."
+      },
+      "aiAgents": {
+        "summary": "AI ensures sentiment monitoring follows privacy rules.",
+        "detail": "An agent limits sentiment analysis to public data and properly consented sources. You review data collection methods and set ethical boundaries for monitoring."
+      },
+      "aiAgentic": {
+        "summary": "Agents monitor sentiment within privacy guardrails automatically.",
+        "detail": "The system collects sentiment data only from permitted sources with appropriate consent, providing insights that respect user privacy. Your monitoring is compliant by design."
+      }
+    },
+    "sales-enablement": {
+      "preAI": {
+        "summary": "Sales content shares customer data without consent review.",
+        "detail": "Enablement materials include case studies and testimonials without documented consent. You discover rights and privacy issues when customers complain."
+      },
+      "aiAgents": {
+        "summary": "AI validates consent for all customer data in sales content.",
+        "detail": "An agent checks that testimonials, case studies, and customer information have proper consent documentation. You review the permissions and approve or request redaction."
+      },
+      "aiAgentic": {
+        "summary": "Agents ensure sales content uses only consented customer data.",
+        "detail": "The system automatically validates that all customer information in sales materials has documented consent before publication. Your enablement content is rights-cleared and compliant."
+      }
+    },
+    "influencer-brief": {
+      "preAI": {
+        "summary": "Influencer briefs don't address audience data privacy.",
+        "detail": "Partnerships team creates influencer campaigns without considering how creator access to audience data affects consent. Privacy implications of influencer tracking go unaddressed."
+      },
+      "aiAgents": {
+        "summary": "AI adds privacy requirements to influencer contracts you review.",
+        "detail": "An agent flags when influencer campaigns involve audience data sharing and adds consent and data handling terms. You validate the privacy provisions before partnerships proceed."
+      },
+      "aiAgentic": {
+        "summary": "Agents embed privacy terms in all influencer agreements.",
+        "detail": "The system automatically includes data protection and consent requirements in influencer contracts, ensuring creators respect your privacy standards. Partnerships are compliant by default."
+      }
+    },
+    "ugc-moderation": {
+      "preAI": {
+        "summary": "UGC use happens without creator consent documentation.",
+        "detail": "Teams feature user content without proper rights and privacy consent. You discover violations when users object to their content being used in campaigns."
+      },
+      "aiAgents": {
+        "summary": "AI ensures UGC usage has documented consent.",
+        "detail": "An agent checks that featured user content has proper consent for commercial use and privacy release. You review the documentation and approve or request proper permissions."
+      },
+      "aiAgentic": {
+        "summary": "Agents validate consent before any UGC is featured.",
+        "detail": "The system automatically verifies consent and rights for user-generated content before it can be used in campaigns. Your UGC strategy is legally and ethically sound."
+      }
+    },
+    "content-scoring": {
+      "preAI": {
+        "summary": "Scoring uses behavioral data without consent limits.",
+        "detail": "Teams prioritize content based on tracking all user behavior regardless of consent. This creates violations when personalization decisions rely on non-consented data."
+      },
+      "aiAgents": {
+        "summary": "AI scores content using only consented behavioral data.",
+        "detail": "An agent limits scoring algorithms to data from users who've consented to tracking and reports impact. You review the consent-filtered scores and approve prioritization."
+      },
+      "aiAgentic": {
+        "summary": "Agents score content with consent validation built in.",
+        "detail": "The system automatically limits all content scoring to privacy-compliant data sources, providing prioritization that respects user boundaries. Your decisions are data-driven and ethical."
+      }
+    },
+    "channel-orchestration": {
+      "preAI": {
+        "summary": "Cross-channel tracking ignores consent boundaries.",
+        "detail": "Teams orchestrate experiences using comprehensive cross-channel tracking without validating consent. This creates violations when orchestration relies on unauthorized data."
+      },
+      "aiAgents": {
+        "summary": "AI ensures orchestration respects per-channel consent.",
+        "detail": "An agent validates that cross-channel coordination uses only data from channels where users have consented. You review the consent-filtered orchestration and approve strategies."
+      },
+      "aiAgentic": {
+        "summary": "Agents orchestrate channels within consent boundaries automatically.",
+        "detail": "The system coordinates cross-channel experiences using only appropriately consented data, respecting platform-specific privacy preferences. Your orchestration is seamless and compliant."
+      }
+    }
+  },
+  "campaign-manager": {
+    "receive-request": {
+      "preAI": {
+        "summary": "You assess if requests fit into current campaign plans.",
+        "detail": "Requests arrive without campaign context. You manually check calendars and budgets to see if the request aligns with planned initiatives or requires new campaign creation."
+      },
+      "aiAgents": {
+        "summary": "AI maps requests to campaigns and flags conflicts.",
+        "detail": "An agent matches incoming requests to active campaigns or suggests creating new ones based on objectives. You review the mapping and decide resource allocation."
+      },
+      "aiAgentic": {
+        "summary": "Agents route requests to campaigns with budget impact shown.",
+        "detail": "The system automatically assigns requests to appropriate campaigns, surfacing budget and timeline implications. You approve allocations while agents handle operational routing."
+      }
+    },
+    "research-insights": {
+      "preAI": {
+        "summary": "You manually gather insights to inform campaign strategy.",
+        "detail": "You pull reports from multiple tools to understand audience behavior, competitive positioning, and market trends before planning campaigns. This research is time-consuming and often incomplete."
+      },
+      "aiAgents": {
+        "summary": "AI aggregates insights for campaign planning you review.",
+        "detail": "An agent compiles audience data, competitive intelligence, and performance trends with campaign recommendations. You analyze the insights and shape strategic direction."
+      },
+      "aiAgentic": {
+        "summary": "Agents surface strategic insights with campaign blueprints.",
+        "detail": "The system continuously analyzes market conditions and automatically generates campaign opportunity briefs with budget estimates and success projections. You evaluate opportunities and approve strategic bets."
+      }
+    },
+    "write-brief": {
+      "preAI": {
+        "summary": "You add campaign context to briefs manually.",
+        "detail": "Writers draft briefs without campaign framing. You review and add campaign objectives, audience targets, and how the piece fits the broader strategy."
+      },
+      "aiAgents": {
+        "summary": "AI pre-fills campaign context in briefs you validate.",
+        "detail": "An agent adds relevant campaign goals, audience segments, and success metrics to briefs based on active campaigns. You review the context and refine strategic alignment."
+      },
+      "aiAgentic": {
+        "summary": "Agents write briefs with campaign strategy embedded.",
+        "detail": "The system automatically generates briefs that align with campaign objectives, including audience targeting, messaging themes, and performance goals. You set campaign strategy; agents ensure every brief supports it."
+      }
+    },
+    "draft-content": {
+      "preAI": {
+        "summary": "You receive drafts that miss campaign messaging themes.",
+        "detail": "Writers create content without understanding how it connects to campaign narratives. You request revisions to align messaging, delaying timelines and frustrating creators."
+      },
+      "aiAgents": {
+        "summary": "AI validates drafts against campaign messaging you approve.",
+        "detail": "An agent checks that content reflects campaign themes and flags misalignment. You review the analysis and provide guidance to bring content in line with strategy."
+      },
+      "aiAgentic": {
+        "summary": "Agents ensure drafts align with campaign messaging automatically.",
+        "detail": "The system validates every draft against campaign message architecture, surfacing gaps or opportunities to strengthen strategic alignment. Your campaign narrative stays consistent across all content."
+      }
+    },
+    "seo-optimization": {
+      "preAI": {
+        "summary": "SEO happens without campaign keyword strategy.",
+        "detail": "SEO teams optimize for generic keywords without understanding campaign messaging priorities or seasonal focus. This creates misalignment between organic and paid campaign strategies."
+      },
+      "aiAgents": {
+        "summary": "AI aligns SEO with campaign keyword priorities.",
+        "detail": "An agent recommends keywords that support current campaign themes and flags conflicts. You coordinate SEO and campaign messaging to work together."
+      },
+      "aiAgentic": {
+        "summary": "Agents optimize SEO within campaign keyword frameworks.",
+        "detail": "The system ensures SEO strategy supports active campaign messaging and priority keywords automatically. Your organic and campaign strategies reinforce each other."
+      }
+    },
+    "brand-compliance": {
+      "preAI": {
+        "summary": "Brand checks delay campaign launches unpredictably.",
+        "detail": "Campaign content gets stuck in brand review without visibility into timelines. You can't coordinate launches across channels when approval timing is uncertain."
+      },
+      "aiAgents": {
+        "summary": "AI predicts brand review timelines for campaign planning.",
+        "detail": "An agent estimates review duration based on content complexity and reviewer workload. You adjust campaign timelines proactively to account for brand approval."
+      },
+      "aiAgentic": {
+        "summary": "Agents coordinate brand review with campaign deadlines.",
+        "detail": "The system automatically prioritizes brand reviews based on campaign launch dates and surfaces risks early. Your campaigns clear brand approval without missing deadlines."
+      }
+    },
+    "final-edit": {
+      "preAI": {
+        "summary": "Final edits happen without campaign launch coordination.",
+        "detail": "Content finishes on its own timeline, sometimes too late for planned campaign launches. You scramble to adjust campaign schedules or launch with incomplete asset sets."
+      },
+      "aiAgents": {
+        "summary": "AI tracks content readiness against campaign timelines.",
+        "detail": "An agent monitors editing progress and alerts you when content is at risk of missing campaign deadlines. You intervene early or adjust schedules proactively."
+      },
+      "aiAgentic": {
+        "summary": "Agents ensure content is ready for campaign launches.",
+        "detail": "The system automatically prioritizes editing based on campaign launch dates and escalates delays. Your campaigns always have complete asset packages at launch."
+      }
+    },
+    "schedule-publish": {
+      "preAI": {
+        "summary": "You manually coordinate publishing across campaign touchpoints.",
+        "detail": "Each channel publishes independently without campaign synchronization. You use spreadsheets and calendar invites to align timing, but inevitably pieces go live early or late."
+      },
+      "aiAgents": {
+        "summary": "AI suggests campaign publishing sequences you approve.",
+        "detail": "An agent recommends coordinated launch timing across all campaign channels based on campaign strategy. You review the orchestration plan and adjust for priorities."
+      },
+      "aiAgentic": {
+        "summary": "Agents orchestrate campaign launches across all channels.",
+        "detail": "The system automatically schedules and publishes all campaign content with perfect timing coordination. You set the campaign launch strategy; agents execute flawlessly."
+      }
+    },
+    "distribute": {
+      "preAI": {
+        "summary": "Distribution happens without campaign performance tracking.",
+        "detail": "Content goes to channels but isn't tagged for campaign attribution. You can't measure which campaigns are working because distribution lacks campaign identifiers."
+      },
+      "aiAgents": {
+        "summary": "AI tags distribution with campaign tracking you validate.",
+        "detail": "An agent adds campaign UTM parameters and tracking tags to all distributed content. You review the tracking setup and ensure proper attribution."
+      },
+      "aiAgentic": {
+        "summary": "Agents distribute content with campaign attribution built in.",
+        "detail": "The system automatically tags all distribution with proper campaign identifiers for perfect attribution. Your campaign performance is always measurable."
+      }
+    },
+    "track-performance": {
+      "preAI": {
+        "summary": "You manually aggregate performance by campaign.",
+        "detail": "Channel teams report metrics without campaign context. You export data and manually tag it to campaigns to understand what's working at the campaign level."
+      },
+      "aiAgents": {
+        "summary": "AI rolls up performance by campaign you analyze.",
+        "detail": "An agent aggregates metrics across channels into campaign-level views with key performance indicators. You review the data and make campaign optimization decisions."
+      },
+      "aiAgentic": {
+        "summary": "Agents track and surface campaign performance in real-time.",
+        "detail": "The system provides live campaign dashboards showing performance across all touchpoints with automated insights. You monitor strategic metrics while agents handle tactical tracking."
+      }
+    },
+    "generate-report": {
+      "preAI": {
+        "summary": "You manually compile campaign performance reports.",
+        "detail": "You gather data from multiple channels, calculate campaign-level ROI, and build presentations showing progress against goals. This consumes days each reporting cycle."
+      },
+      "aiAgents": {
+        "summary": "AI generates campaign reports you customize and share.",
+        "detail": "An agent creates campaign performance summaries with progress against objectives and budget pacing. You add strategic context and distribute to stakeholders."
+      },
+      "aiAgentic": {
+        "summary": "Agents deliver automated campaign reports to stakeholders.",
+        "detail": "The system generates and distributes campaign performance reports automatically with role-specific views. Executives see ROI, teams see tactics, and you focus on strategic recommendations."
+      }
+    },
+    "optimize": {
+      "preAI": {
+        "summary": "Campaign optimization happens on slow review cycles.",
+        "detail": "You review campaign performance weekly or monthly and make adjustments. This reactive approach means underperforming campaigns waste budget between reviews."
+      },
+      "aiAgents": {
+        "summary": "AI recommends campaign optimizations you implement.",
+        "detail": "An agent identifies optimization opportunities like reallocating budget or adjusting messaging. You review suggestions, make strategic calls, then implement changes."
+      },
+      "aiAgentic": {
+        "summary": "Agents optimize campaigns continuously within your strategy.",
+        "detail": "The system autonomously adjusts campaign tactics based on performance while respecting strategic constraints. You set goals and guardrails; agents handle continuous optimization."
+      }
+    },
+    "brief-approval": {
+      "preAI": {
+        "summary": "You review briefs to ensure campaign alignment.",
+        "detail": "Briefs reach approval without campaign context. You check that content serves campaign objectives and add missing strategic direction before approval."
+      },
+      "aiAgents": {
+        "summary": "AI validates campaign alignment before routing for approval.",
+        "detail": "An agent checks that briefs support active campaign goals and flags misalignment. You review flagged briefs and either adjust campaigns or reject briefs."
+      },
+      "aiAgentic": {
+        "summary": "Agents ensure campaign alignment before brief approval.",
+        "detail": "The system validates that all briefs map to campaign objectives and include proper campaign context before approval routing. You only review briefs that meet campaign standards."
+      }
+    },
+    "quality-check": {
+      "preAI": {
+        "summary": "QA doesn't validate campaign message consistency.",
+        "detail": "Quality checks focus on functionality but miss whether content delivers on campaign messaging. You discover narrative gaps after content launches."
+      },
+      "aiAgents": {
+        "summary": "AI adds campaign message validation to QA you review.",
+        "detail": "An agent checks that finalized content reflects campaign themes and calls-to-action. You review the campaign alignment assessment and approve or request revisions."
+      },
+      "aiAgentic": {
+        "summary": "Agents validate campaign messaging in every quality check.",
+        "detail": "The system automatically verifies that all content aligns with campaign narrative and strategic goals before release. Your campaign story stays consistent across all touchpoints."
+      }
+    },
+    "brand-review": {
+      "preAI": {
+        "summary": "Brand reviews happen without campaign context.",
+        "detail": "Brand teams review content in isolation without understanding campaign strategy. This sometimes results in brand feedback that contradicts campaign messaging priorities."
+      },
+      "aiAgents": {
+        "summary": "AI provides campaign context during brand review.",
+        "detail": "An agent adds campaign objectives and messaging frameworks to brand review packets. You coordinate with brand to balance consistency and campaign effectiveness."
+      },
+      "aiAgentic": {
+        "summary": "Agents integrate campaign and brand review processes.",
+        "detail": "The system provides brand reviewers with full campaign context, helping them balance guidelines with strategic messaging. Brand and campaign alignment is validated together."
+      }
+    },
+    "stakeholder-signoff": {
+      "preAI": {
+        "summary": "You brief stakeholders on campaigns manually before signoff.",
+        "detail": "Stakeholders approve content without understanding campaign strategy or ROI projections. You schedule meetings to explain how pieces fit campaigns, slowing approvals."
+      },
+      "aiAgents": {
+        "summary": "AI generates campaign context for approval packets.",
+        "detail": "An agent creates summaries showing how content supports campaign goals with expected impact. You review the briefing materials and customize for stakeholder approval."
+      },
+      "aiAgentic": {
+        "summary": "Agents deliver campaign-aware approval packets automatically.",
+        "detail": "The system provides stakeholders with campaign performance context, strategic rationale, and impact projections for every approval. Your signoffs are faster and more informed."
+      }
+    },
+    "performance-review": {
+      "preAI": {
+        "summary": "Campaign performance reviews lack cross-functional insights.",
+        "detail": "You present campaign results but teams report channel metrics separately. Understanding campaign effectiveness requires manually connecting disparate data points."
+      },
+      "aiAgents": {
+        "summary": "AI provides integrated campaign performance analysis.",
+        "detail": "An agent aggregates cross-channel campaign data and highlights what worked and what didn't. You lead performance reviews with comprehensive insights prepared."
+      },
+      "aiAgentic": {
+        "summary": "Agents deliver holistic campaign performance reviews automatically.",
+        "detail": "The system generates complete campaign retrospectives with cross-channel attribution and strategic recommendations. Your reviews focus on learning and next steps, not data gathering."
+      }
+    },
+    "social-listening": {
+      "preAI": {
+        "summary": "Social insights aren't connected to campaign planning.",
+        "detail": "Social teams surface trends but don't map them to campaign opportunities. You manually assess which social conversations warrant campaign responses."
+      },
+      "aiAgents": {
+        "summary": "AI maps social trends to campaign opportunities you evaluate.",
+        "detail": "An agent identifies trending topics and suggests campaign angles or rapid responses. You review the opportunities and decide which merit campaign investment."
+      },
+      "aiAgentic": {
+        "summary": "Agents auto-generate campaign briefs from social insights.",
+        "detail": "The system detects trending conversations and automatically creates campaign opportunity briefs with audience sizing and budget recommendations. You evaluate strategic opportunities while agents handle trend monitoring."
+      }
+    },
+    "visual-asset-creation": {
+      "preAI": {
+        "summary": "Visual assets are created without campaign style guidance.",
+        "detail": "Designers work from briefs without understanding campaign visual themes or brand evolution. Assets don't feel cohesive across campaign touchpoints."
+      },
+      "aiAgents": {
+        "summary": "AI provides campaign visual guidelines to designers.",
+        "detail": "An agent adds campaign mood boards, color palettes, and style references to creative briefs. You review the visual direction and ensure campaign cohesion."
+      },
+      "aiAgentic": {
+        "summary": "Agents ensure visual assets match campaign themes automatically.",
+        "detail": "The system validates that all campaign visuals align with established campaign aesthetic and automatically flags style drift. Your campaigns maintain visual consistency across all assets."
+      }
+    },
+    "legal-review": {
+      "preAI": {
+        "summary": "Legal reviews delay campaigns without timeline visibility.",
+        "detail": "You submit campaign content to legal and wait with no clarity on approval timing. This makes coordinating campaign launches across markets nearly impossible."
+      },
+      "aiAgents": {
+        "summary": "AI predicts legal review timelines for campaign scheduling.",
+        "detail": "An agent estimates how long legal review will take based on content type and market. You adjust campaign timelines proactively to account for legal approval."
+      },
+      "aiAgentic": {
+        "summary": "Agents coordinate legal review with campaign launch dates.",
+        "detail": "The system automatically prioritizes legal reviews based on campaign deadlines and escalates delays. Your campaigns clear legal without missing launch windows."
+      }
+    },
+    "accessibility-check": {
+      "preAI": {
+        "summary": "Accessibility isn't considered in campaign planning.",
+        "detail": "Campaigns launch and then fail accessibility audits, requiring post-launch fixes. You don't include accessibility in campaign timelines or budgets."
+      },
+      "aiAgents": {
+        "summary": "AI adds accessibility validation to campaign workflows.",
+        "detail": "An agent checks that campaign assets meet accessibility standards and flags issues. You build accessibility fixes into campaign timelines before launch."
+      },
+      "aiAgentic": {
+        "summary": "Agents ensure campaigns are accessible by design.",
+        "detail": "The system validates accessibility during campaign asset creation, preventing launches with compliance issues. Your campaigns reach all audiences without post-launch fixes."
+      }
+    },
+    "localize-content": {
+      "preAI": {
+        "summary": "Campaign localization happens slowly and inconsistently.",
+        "detail": "You plan campaigns for primary markets first, then attempt to adapt for other regions. Translation and cultural adaptation delay global launches by weeks or months."
+      },
+      "aiAgents": {
+        "summary": "AI accelerates localization for simultaneous launches.",
+        "detail": "An agent translates and culturally adapts campaign content for all markets in parallel. You review with regional stakeholders and launch globally on schedule."
+      },
+      "aiAgentic": {
+        "summary": "Agents enable day-one global campaign launches.",
+        "detail": "The system automatically localizes campaigns for all target markets during creation, enabling coordinated worldwide launches. You plan globally; agents execute locally."
+      }
+    },
+    "ab-variant-creation": {
+      "preAI": {
+        "summary": "A/B tests aren't coordinated across campaign touchpoints.",
+        "detail": "Different teams run tests without campaign-level learning plans. You can't aggregate insights across variants to understand campaign effectiveness."
+      },
+      "aiAgents": {
+        "summary": "AI coordinates testing strategy across campaign channels.",
+        "detail": "An agent recommends aligned test plans that answer campaign-level questions across touchpoints. You approve the testing strategy and ensure coordinated learning."
+      },
+      "aiAgentic": {
+        "summary": "Agents orchestrate campaign-wide testing automatically.",
+        "detail": "The system designs and executes coordinated A/B tests across all campaign channels to answer strategic questions. You set learning priorities; agents deliver campaign insights."
+      }
+    },
+    "content-repurposing": {
+      "preAI": {
+        "summary": "Campaign content isn't systematically repurposed.",
+        "detail": "Successful campaign assets are used once and archived. You miss opportunities to extend high-performing campaign content across channels or time periods."
+      },
+      "aiAgents": {
+        "summary": "AI identifies campaign content worth repurposing.",
+        "detail": "An agent flags high-performing campaign assets and suggests repurposing opportunities. You review recommendations and allocate budget to extend campaign life."
+      },
+      "aiAgentic": {
+        "summary": "Agents auto-extend successful campaigns through repurposing.",
+        "detail": "The system identifies winning campaign content and automatically creates repurposed versions for additional channels or audiences. Your best campaigns continue generating value autonomously."
+      }
+    },
+    "archive-tag": {
+      "preAI": {
+        "summary": "Campaign content is poorly tagged, hindering reuse.",
+        "detail": "Assets are archived by channel or date without campaign metadata. When planning new campaigns, you can't easily find past campaign content to reference or repurpose."
+      },
+      "aiAgents": {
+        "summary": "AI tags content with campaign metadata you validate.",
+        "detail": "An agent adds campaign names, objectives, performance data, and audience info to archived content. You review the tagging and ensure proper organization."
+      },
+      "aiAgentic": {
+        "summary": "Agents auto-tag content with comprehensive campaign data.",
+        "detail": "The system tags all campaign content with strategic context and performance metrics, creating a searchable campaign library. You easily find and reuse past campaign elements."
+      }
+    },
+    "legal-compliance-gate": {
+      "preAI": {
+        "summary": "Legal gates block campaigns without clear resolution paths.",
+        "detail": "Campaign content gets stuck in legal compliance without guidance on fixes. You can't move forward or adjust timelines without understanding what's wrong."
+      },
+      "aiAgents": {
+        "summary": "AI identifies legal issues and suggests resolutions.",
+        "detail": "An agent explains what's blocking legal approval and recommends fixes with timeline estimates. You make informed decisions about campaign adjustments or delays."
+      },
+      "aiAgentic": {
+        "summary": "Agents resolve legal issues automatically when possible.",
+        "detail": "The system fixes common legal compliance problems automatically and only escalates true edge cases. Your campaigns move through legal gates faster with less manual intervention."
+      }
+    },
+    "localization-quality-gate": {
+      "preAI": {
+        "summary": "Localization quality issues delay global campaigns.",
+        "detail": "You discover translation errors or cultural problems during final review, forcing last-minute fixes that delay launches. Coordinating global campaigns is unpredictable."
+      },
+      "aiAgents": {
+        "summary": "AI validates localization quality before campaign launch.",
+        "detail": "An agent checks translations and cultural appropriateness early, surfacing issues with time to fix. You adjust campaign timelines based on reliable quality feedback."
+      },
+      "aiAgentic": {
+        "summary": "Agents ensure localization quality for on-time launches.",
+        "detail": "The system validates all localized campaign content continuously, fixing issues proactively. Your global campaigns launch simultaneously without quality compromises."
+      }
+    },
+    "segment-mapping": {
+      "preAI": {
+        "summary": "Audience segments are built without campaign strategy input.",
+        "detail": "Data teams create segments based on available data, not campaign needs. You struggle to map campaigns to audiences that don't align with strategic priorities."
+      },
+      "aiAgents": {
+        "summary": "AI builds segments aligned with campaign objectives.",
+        "detail": "An agent creates audience segments based on campaign goals and targets. You review the segment definitions and refine based on strategic priorities."
+      },
+      "aiAgentic": {
+        "summary": "Agents maintain campaign-aligned segments automatically.",
+        "detail": "The system continuously updates audience segments to reflect campaign priorities and performance learnings. Your campaigns always target the right people."
+      }
+    },
+    "dynamic-assembly": {
+      "preAI": {
+        "summary": "Personalization happens without campaign message control.",
+        "detail": "Dynamic content systems assemble experiences without understanding campaign narratives. Users get personalized content that doesn't align with current campaign messaging."
+      },
+      "aiAgents": {
+        "summary": "AI assembles personalized content within campaign frameworks.",
+        "detail": "An agent ensures dynamic content reflects active campaign themes and calls-to-action. You review the personalization logic and validate campaign alignment."
+      },
+      "aiAgentic": {
+        "summary": "Agents personalize while maintaining campaign coherence.",
+        "detail": "The system dynamically assembles content that's both personalized and aligned with current campaign messaging. Your users get relevant experiences that support strategic goals."
+      }
+    },
+    "paid-creative-production": {
+      "preAI": {
+        "summary": "Paid creative is developed separately from campaigns.",
+        "detail": "Media teams create ads without understanding integrated campaign strategy. Paid creative doesn't reinforce owned and earned campaign touchpoints."
+      },
+      "aiAgents": {
+        "summary": "AI aligns paid creative with campaign messaging.",
+        "detail": "An agent provides campaign messaging frameworks and visual themes to paid media teams. You ensure paid creative reinforces broader campaign narratives."
+      },
+      "aiAgentic": {
+        "summary": "Agents integrate paid creative into campaign narratives.",
+        "detail": "The system automatically aligns paid media creative with campaign themes and coordinates messaging across all touchpoints. Your campaigns tell consistent stories across paid, owned, and earned."
+      }
+    },
+    "attribution-modeling": {
+      "preAI": {
+        "summary": "Campaign attribution is limited to last-touch metrics.",
+        "detail": "You know campaigns drove results but can't prove which touchpoints mattered most. Budget allocation is based on incomplete understanding of campaign effectiveness."
+      },
+      "aiAgents": {
+        "summary": "AI models campaign attribution across touchpoints.",
+        "detail": "An agent analyzes multi-touch journeys and assigns value to campaign interactions. You use attribution insights to optimize campaign mix and budget allocation."
+      },
+      "aiAgentic": {
+        "summary": "Agents provide real-time campaign attribution for optimization.",
+        "detail": "The system continuously models attribution and automatically optimizes budget toward highest-impact campaign touchpoints. You understand true campaign ROI at all times."
+      }
+    },
+    "executive-reporting": {
+      "preAI": {
+        "summary": "Campaign results are presented without strategic context.",
+        "detail": "You compile campaign performance data but struggle to connect results to business objectives. Executive reports are tactical, not strategic."
+      },
+      "aiAgents": {
+        "summary": "AI generates strategic campaign narratives for executives.",
+        "detail": "An agent creates executive summaries connecting campaign results to business goals and market impact. You customize the strategic framing and present with confidence."
+      },
+      "aiAgentic": {
+        "summary": "Agents deliver strategic campaign insights automatically.",
+        "detail": "The system provides executives with campaign performance in business context, showing impact on awareness, consideration, and revenue. Your reporting is always strategic, not just tactical."
+      }
+    },
+    "competitive-response": {
+      "preAI": {
+        "summary": "Competitive moves require rapid campaign creation.",
+        "detail": "You scramble to plan and execute reactive campaigns when competitors launch. By the time your response goes live, the moment has often passed."
+      },
+      "aiAgents": {
+        "summary": "AI enables faster competitive response campaigns.",
+        "detail": "An agent detects competitor moves and drafts rapid-response campaign briefs. You review and approve, then agents accelerate execution to competitive speed."
+      },
+      "aiAgentic": {
+        "summary": "Agents auto-launch pre-approved competitive responses.",
+        "detail": "The system detects competitive threats and automatically triggers response campaigns from your playbook. You set the response strategy; agents execute at market speed."
+      }
+    },
+    "governance-gate": {
+      "preAI": {
+        "summary": "Governance reviews don't consider campaign urgency.",
+        "detail": "Time-sensitive campaign content gets stuck in standard governance processes. You can't prioritize campaign launches without special pleading."
+      },
+      "aiAgents": {
+        "summary": "AI prioritizes governance based on campaign timelines.",
+        "detail": "An agent flags campaign content with launch deadlines and expedites review. You coordinate with governance to balance compliance and campaign timing."
+      },
+      "aiAgentic": {
+        "summary": "Agents route campaign content through prioritized governance.",
+        "detail": "The system automatically prioritizes governance reviews based on campaign launch dates while maintaining quality standards. Your campaigns clear governance on time."
+      }
+    },
+    "sentiment-monitoring": {
+      "preAI": {
+        "summary": "Campaign sentiment tracking is manual and incomplete.",
+        "detail": "You search mentions and read comments to gauge campaign reception. This reactive approach means you miss early warning signs of campaign problems."
+      },
+      "aiAgents": {
+        "summary": "AI monitors campaign sentiment and alerts you to issues.",
+        "detail": "An agent tracks audience response to campaigns in real-time and flags unexpected sentiment. You review the data and decide whether to adjust campaign tactics."
+      },
+      "aiAgentic": {
+        "summary": "Agents auto-adjust campaigns based on sentiment signals.",
+        "detail": "The system monitors campaign sentiment continuously and autonomously pauses problematic elements or scales successful ones. You set sentiment thresholds; agents handle real-time response."
+      }
+    },
+    "sales-enablement": {
+      "preAI": {
+        "summary": "Sales enablement isn't integrated into campaign planning.",
+        "detail": "You plan campaigns without considering sales team needs. Enablement content is created separately, missing opportunities to align marketing campaigns with sales conversations."
+      },
+      "aiAgents": {
+        "summary": "AI coordinates campaigns with sales enablement needs.",
+        "detail": "An agent identifies when campaigns should generate sales enablement assets and recommends content. You ensure campaigns support both marketing and sales objectives."
+      },
+      "aiAgentic": {
+        "summary": "Agents auto-generate sales enablement from campaigns.",
+        "detail": "The system automatically creates sales-ready versions of campaign content, enabling sales teams to leverage marketing campaigns. Your campaigns serve both demand gen and sales enablement."
+      }
+    },
+    "influencer-brief": {
+      "preAI": {
+        "summary": "Influencer campaigns run separately from brand campaigns.",
+        "detail": "Partnerships team creates influencer programs without coordination with your campaign calendar. Influencer and brand campaigns don't reinforce each other."
+      },
+      "aiAgents": {
+        "summary": "AI aligns influencer programs with campaign timing.",
+        "detail": "An agent recommends influencer activations that support active campaigns and flags conflicts. You coordinate influencer and brand campaign calendars for maximum impact."
+      },
+      "aiAgentic": {
+        "summary": "Agents integrate influencer activity into campaign plans.",
+        "detail": "The system automatically coordinates influencer programs with brand campaign launches, creating unified go-to-market moments. Your influencer and owned campaigns amplify each other."
+      }
+    },
+    "ugc-moderation": {
+      "preAI": {
+        "summary": "UGC isn't leveraged in campaign planning.",
+        "detail": "User content is moderated for safety but not analyzed for campaign opportunities. You miss chances to feature authentic voices in campaigns."
+      },
+      "aiAgents": {
+        "summary": "AI identifies UGC that supports campaign themes.",
+        "detail": "An agent surfaces user content that aligns with active campaigns and recommends featuring it. You review opportunities and integrate authentic voices into campaigns."
+      },
+      "aiAgentic": {
+        "summary": "Agents auto-incorporate UGC into campaign assets.",
+        "detail": "The system identifies on-brand user content and automatically integrates it into campaign touchpoints with proper permissions. Your campaigns benefit from authentic customer voices."
+      }
+    },
+    "content-scoring": {
+      "preAI": {
+        "summary": "Content prioritization doesn't consider campaign strategy.",
+        "detail": "Teams score content based on generic criteria without understanding campaign priorities. High-scoring content might not support current strategic initiatives."
+      },
+      "aiAgents": {
+        "summary": "AI scores content based on campaign alignment you validate.",
+        "detail": "An agent prioritizes content using campaign objectives as weighting factors. You review the scoring logic and ensure strategic content gets resources."
+      },
+      "aiAgentic": {
+        "summary": "Agents score content with campaign strategy as primary factor.",
+        "detail": "The system continuously evaluates content against active campaign priorities, ensuring strategic content gets produced and promoted. Your resources flow to campaign-critical content."
+      }
+    },
+    "channel-orchestration": {
+      "preAI": {
+        "summary": "Channel coordination is manual and error-prone.",
+        "detail": "You use spreadsheets to coordinate when campaign content hits different channels. Inevitably something publishes early or late, undermining campaign impact."
+      },
+      "aiAgents": {
+        "summary": "AI recommends channel orchestration sequences you approve.",
+        "detail": "An agent designs optimal sequencing for campaign touchpoints across channels. You review the orchestration plan and adjust based on strategic priorities."
+      },
+      "aiAgentic": {
+        "summary": "Agents execute perfect campaign orchestration automatically.",
+        "detail": "The system manages complex multi-channel campaign sequences with precise timing and message progression. You design campaign strategy; agents handle flawless execution."
+      }
+    }
+  }
+}

@@ -12,12 +12,15 @@ import { GraphNode, StepMeta, GateMeta, AgentMeta, InputMeta } from '@/lib/graph
 import {
   ArrowRight, BookOpen, Database, Wrench, ChevronDown, ChevronUp,
   Lightbulb, AlertTriangle, ArrowRightLeft, BarChart3, GitFork,
-  Zap, MessageSquareQuote, Eye, Target, Link2,
+  Zap, MessageSquareQuote, Eye,
 } from 'lucide-react';
 
 export default function CampaignNodeCard() {
-  const { currentNodeId, advanceToNext, makeGateDecision } = useCampaignStore();
-  const { graphData, selectNode } = useGraphStore();
+  const currentNodeId = useCampaignStore(s => s.currentNodeId);
+  const advanceToNext = useCampaignStore(s => s.advanceToNext);
+  const makeGateDecision = useCampaignStore(s => s.makeGateDecision);
+  const graphData = useGraphStore(s => s.graphData);
+  const selectNode = useGraphStore(s => s.selectNode);
   const [showDetails, setShowDetails] = useState(false);
 
   const currentNode = graphData.nodes.find(n => n.id === currentNodeId);

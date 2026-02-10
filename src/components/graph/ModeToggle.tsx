@@ -1,5 +1,6 @@
 'use client';
 
+import { useShallow } from 'zustand/react/shallow';
 import { usePresentationStore } from '@/lib/store/presentation-store';
 import { useGraphStore } from '@/lib/store/graph-store';
 import { useCampaignStore } from '@/lib/store/campaign-store';
@@ -11,9 +12,21 @@ type Mode = 'guided' | 'explore' | 'campaign';
 
 export default function ModeToggle() {
   const isMobile = useIsMobile();
-  const { mode, setMode, reset } = usePresentationStore();
-  const { loadFullGraph, loadLinearView, resetFilters, clearHighlights, clearNavigation, selectNode, initCoreNodes, fullGraphData } = useGraphStore();
-  const { startCampaign, resetCampaign } = useCampaignStore();
+  const { mode } = usePresentationStore(useShallow((s) => ({ mode: s.mode })));
+  const setMode = usePresentationStore(s => s.setMode);
+  const reset = usePresentationStore(s => s.reset);
+
+  const { fullGraphData } = useGraphStore(useShallow((s) => ({ fullGraphData: s.fullGraphData })));
+  const loadFullGraph = useGraphStore(s => s.loadFullGraph);
+  const loadLinearView = useGraphStore(s => s.loadLinearView);
+  const resetFilters = useGraphStore(s => s.resetFilters);
+  const clearHighlights = useGraphStore(s => s.clearHighlights);
+  const clearNavigation = useGraphStore(s => s.clearNavigation);
+  const selectNode = useGraphStore(s => s.selectNode);
+  const initCoreNodes = useGraphStore(s => s.initCoreNodes);
+
+  const startCampaign = useCampaignStore(s => s.startCampaign);
+  const resetCampaign = useCampaignStore(s => s.resetCampaign);
 
   const handleModeChange = (newMode: Mode) => {
     if (newMode === mode) return;

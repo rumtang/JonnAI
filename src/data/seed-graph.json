@@ -162,6 +162,7 @@
       "meta": {
         "phase": "Publish",
         "owner": "shared",
+        "agentName": "Publishing Ops Agent",
         "estimatedTime": "10 min",
         "inputs": [
           "Final content",
@@ -182,6 +183,7 @@
       "meta": {
         "phase": "Publish",
         "owner": "shared",
+        "agentName": "Publishing Ops Agent",
         "estimatedTime": "15 min",
         "inputs": [
           "Published content",
@@ -245,6 +247,7 @@
       "meta": {
         "phase": "Optimize",
         "owner": "shared",
+        "agentName": "Optimization Agent",
         "estimatedTime": "20 min",
         "inputs": [
           "Performance report",
@@ -524,6 +527,7 @@
       "meta": {
         "phase": "Create",
         "owner": "shared",
+        "agentName": "Visual Assets Agent",
         "estimatedTime": "45 min",
         "inputs": [
           "Approved brief",
@@ -667,6 +671,7 @@
       "meta": {
         "phase": "Measure",
         "owner": "shared",
+        "agentName": "Governance Agent",
         "estimatedTime": "5 min",
         "inputs": [
           "Performance report",
@@ -1121,6 +1126,96 @@
       }
     },
     {
+      "id": "publishing-ops-agent",
+      "type": "agent",
+      "label": "Publishing Ops Agent",
+      "description": "Manages publication scheduling, CMS configuration, and multi-channel distribution sequencing to ensure content reaches the right channels at the right time.",
+      "group": "AI Agents",
+      "val": 5,
+      "meta": {
+        "capability": "Automates publication workflows including CMS scheduling, channel distribution sequencing, and delivery confirmation tracking",
+        "autonomy": "supervised",
+        "tools": [
+          "CMS scheduler",
+          "Channel distributor",
+          "Delivery tracker",
+          "Publication validator"
+        ]
+      }
+    },
+    {
+      "id": "optimization-agent",
+      "type": "agent",
+      "label": "Optimization Agent",
+      "description": "Analyzes content performance data to recommend and execute headline, CTA, distribution mix, and repurposing optimizations based on real-time analytics.",
+      "group": "AI Agents",
+      "val": 5,
+      "meta": {
+        "capability": "Identifies underperforming content elements and generates data-driven optimization recommendations including headline rewrites, CTA variants, and channel reallocation",
+        "autonomy": "supervised",
+        "tools": [
+          "Performance analyzer",
+          "Headline optimizer",
+          "CTA variant generator",
+          "Channel mix recommender"
+        ]
+      }
+    },
+    {
+      "id": "visual-assets-agent",
+      "type": "agent",
+      "label": "Visual Assets Agent",
+      "description": "Creates and sources supporting imagery, graphics, infographics, and video thumbnails aligned with content briefs and brand guidelines.",
+      "group": "AI Agents",
+      "val": 5,
+      "meta": {
+        "capability": "Generates brand-compliant visual assets including hero images, infographics, social graphics, and video thumbnails from content briefs",
+        "autonomy": "supervised",
+        "tools": [
+          "Image generator",
+          "Brand template engine",
+          "Asset search",
+          "Alt-text writer"
+        ]
+      }
+    },
+    {
+      "id": "governance-agent",
+      "type": "agent",
+      "label": "Governance Agent",
+      "description": "Performs periodic content governance reviews, classifies and archives content, and flags items for refresh, retirement, or compliance remediation.",
+      "group": "AI Agents",
+      "val": 5,
+      "meta": {
+        "capability": "Audits live content for accuracy decay, regulatory currency, and brand alignment drift, then classifies and archives content into the taxonomy",
+        "autonomy": "autonomous",
+        "tools": [
+          "Content auditor",
+          "Taxonomy classifier",
+          "Compliance checker",
+          "Decay detector"
+        ]
+      }
+    },
+    {
+      "id": "journey-mapping-agent",
+      "type": "agent",
+      "label": "Journey Mapping Agent",
+      "description": "Maps content assets to customer journey stages using CDP lifecycle data, content taxonomy, and audience personas to identify coverage gaps and prioritize content requests.",
+      "group": "AI Agents",
+      "val": 5,
+      "meta": {
+        "capability": "Analyzes customer journey stages against available content to identify gaps, prioritize production requests, and ensure full lifecycle coverage",
+        "autonomy": "supervised",
+        "tools": [
+          "Journey stage analyzer",
+          "Content gap detector",
+          "Lifecycle mapper",
+          "Priority scorer"
+        ]
+      }
+    },
+    {
       "id": "paid-creative-production",
       "type": "step",
       "label": "Paid Media Creative",
@@ -1246,6 +1341,7 @@
       "meta": {
         "phase": "Measure",
         "owner": "shared",
+        "agentName": "Governance Agent",
         "estimatedTime": "30 min",
         "inputs": [
           "Content Taxonomy",
@@ -1291,6 +1387,7 @@
       "meta": {
         "phase": "Plan",
         "owner": "shared",
+        "agentName": "Journey Mapping Agent",
         "estimatedTime": "20 min",
         "inputs": [
           "CDP Profiles",
@@ -2742,6 +2839,141 @@
     {
       "source": "optimize",
       "target": "analytics-data",
+      "type": "uses"
+    },
+    {
+      "source": "publishing-ops-agent",
+      "target": "schedule-publish",
+      "type": "performs"
+    },
+    {
+      "source": "publishing-ops-agent",
+      "target": "distribute",
+      "type": "performs"
+    },
+    {
+      "source": "optimization-agent",
+      "target": "optimize",
+      "type": "performs"
+    },
+    {
+      "source": "visual-assets-agent",
+      "target": "visual-asset-creation",
+      "type": "performs"
+    },
+    {
+      "source": "governance-agent",
+      "target": "content-governance",
+      "type": "performs"
+    },
+    {
+      "source": "governance-agent",
+      "target": "archive-tag",
+      "type": "performs"
+    },
+    {
+      "source": "journey-mapping-agent",
+      "target": "journey-mapping",
+      "type": "performs"
+    },
+    {
+      "source": "publishing-ops-agent",
+      "target": "approval-matrix",
+      "type": "uses"
+    },
+    {
+      "source": "publishing-ops-agent",
+      "target": "channel-benchmarks",
+      "type": "uses"
+    },
+    {
+      "source": "publishing-ops-agent",
+      "target": "orchestration-rules",
+      "type": "uses"
+    },
+    {
+      "source": "publishing-ops-agent",
+      "target": "media-plan",
+      "type": "uses"
+    },
+    {
+      "source": "optimization-agent",
+      "target": "analytics-data",
+      "type": "uses"
+    },
+    {
+      "source": "optimization-agent",
+      "target": "channel-benchmarks",
+      "type": "uses"
+    },
+    {
+      "source": "optimization-agent",
+      "target": "content-strategy",
+      "type": "uses"
+    },
+    {
+      "source": "optimization-agent",
+      "target": "budget-allocation",
+      "type": "uses"
+    },
+    {
+      "source": "visual-assets-agent",
+      "target": "brand-guide",
+      "type": "uses"
+    },
+    {
+      "source": "visual-assets-agent",
+      "target": "asset-library",
+      "type": "uses"
+    },
+    {
+      "source": "visual-assets-agent",
+      "target": "content-strategy",
+      "type": "uses"
+    },
+    {
+      "source": "visual-assets-agent",
+      "target": "audience-personas",
+      "type": "uses"
+    },
+    {
+      "source": "governance-agent",
+      "target": "content-taxonomy",
+      "type": "uses"
+    },
+    {
+      "source": "governance-agent",
+      "target": "legal-guidelines",
+      "type": "uses"
+    },
+    {
+      "source": "governance-agent",
+      "target": "brand-guide",
+      "type": "uses"
+    },
+    {
+      "source": "governance-agent",
+      "target": "analytics-data",
+      "type": "uses"
+    },
+    {
+      "source": "journey-mapping-agent",
+      "target": "cdp-profiles",
+      "type": "uses"
+    },
+    {
+      "source": "journey-mapping-agent",
+      "target": "content-taxonomy",
+      "type": "uses"
+    },
+    {
+      "source": "journey-mapping-agent",
+      "target": "content-strategy",
+      "type": "uses"
+    },
+    {
+      "source": "journey-mapping-agent",
+      "target": "audience-personas",
       "type": "uses"
     }
   ]

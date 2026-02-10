@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useRef } from 'react';
+import { useShallow } from 'zustand/react/shallow';
 import ForceGraph3D from './ForceGraph3DWrapper';
 import { useGraphStore } from '@/lib/store/graph-store';
 import { usePresentationStore } from '@/lib/store/presentation-store';
@@ -41,15 +42,12 @@ export default function GraphScene() {
   const fgRef = useRef<any>(null);
   const rotationRef = useRef<number | null>(null);
 
+  // State values — re-render only when these change
   const {
     graphData,
     selectedNode,
     hoveredNode,
     highlightedNodeIds,
-    selectNode,
-    hoverNode,
-    setHighlightedNodeIds,
-    clearHighlights,
     visibleNodeTypes,
     visibleLinkTypes,
     searchQuery,
@@ -57,15 +55,35 @@ export default function GraphScene() {
     highlightedLinkTypes,
     revealedNodeIds,
     progressiveReveal,
-    expandNode,
-  } = useGraphStore();
+  } = useGraphStore(
+    useShallow((s) => ({
+      graphData: s.graphData,
+      selectedNode: s.selectedNode,
+      hoveredNode: s.hoveredNode,
+      highlightedNodeIds: s.highlightedNodeIds,
+      visibleNodeTypes: s.visibleNodeTypes,
+      visibleLinkTypes: s.visibleLinkTypes,
+      searchQuery: s.searchQuery,
+      flashingLinkKey: s.flashingLinkKey,
+      highlightedLinkTypes: s.highlightedLinkTypes,
+      revealedNodeIds: s.revealedNodeIds,
+      progressiveReveal: s.progressiveReveal,
+    }))
+  );
 
-  const { mode } = usePresentationStore();
+  // Actions — stable references, no useShallow needed
+  const selectNode = useGraphStore(s => s.selectNode);
+  const hoverNode = useGraphStore(s => s.hoverNode);
+  const setHighlightedNodeIds = useGraphStore(s => s.setHighlightedNodeIds);
+  const clearHighlights = useGraphStore(s => s.clearHighlights);
+  const expandNode = useGraphStore(s => s.expandNode);
+
+  const mode = usePresentationStore(s => s.mode);
   // Use individual selectors to avoid re-rendering on every campaign store change
   const campaignActive = useCampaignStore(s => s.isActive);
   const campaignNodeId = useCampaignStore(s => s.currentNodeId);
   const campaignVisited = useCampaignStore(s => s.visitedNodes);
-  const { setDetailPanelOpen } = useUIStore();
+  const setDetailPanelOpen = useUIStore(s => s.setDetailPanelOpen);
 
   // In campaign mode, build sets for highlighting
   const campaignVisitedSet = useMemo(

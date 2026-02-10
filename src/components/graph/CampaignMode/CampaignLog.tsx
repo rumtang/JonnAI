@@ -5,8 +5,9 @@ import { useGraphStore } from '@/lib/store/graph-store';
 import { navigateToNode } from '@/lib/utils/camera-navigation';
 
 export default function CampaignLog() {
-  const { log } = useCampaignStore();
-  const { graphData, selectNode } = useGraphStore();
+  const log = useCampaignStore(s => s.log);
+  const graphData = useGraphStore(s => s.graphData);
+  const selectNode = useGraphStore(s => s.selectNode);
 
   if (log.length === 0) return null;
 

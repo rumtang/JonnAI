@@ -1,8 +1,9 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import { useIsMobile } from '@/lib/hooks/use-is-mobile';
 import GraphScene from '@/components/graph/GraphScene';
+import { ErrorBoundary } from '@/components/ErrorBoundary';
 import NodeDetailPanel from '@/components/graph/NodeDetailPanel';
 import GraphControls from '@/components/graph/GraphControls';
 import LegendPanel from '@/components/graph/LegendPanel';
@@ -145,7 +146,15 @@ export default function GraphPage() {
     <>
       {/* Main 3D Graph — fills the layout, sits above crystalline bg */}
       <div className="absolute inset-0 z-10">
-        <GraphScene />
+        <ErrorBoundary>
+          <Suspense fallback={
+            <div className="flex items-center justify-center h-screen">
+              <div className="animate-pulse text-foreground/50">Loading visualization...</div>
+            </div>
+          }>
+            <GraphScene />
+          </Suspense>
+        </ErrorBoundary>
       </div>
 
       {/* UI Overlays */}

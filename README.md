@@ -1,36 +1,54 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Agentic — Knowledge Graph Visualization
 
-## Getting Started
+Interactive 3D visualization of AI-powered content production workflows. Built to demonstrate
+how AI agents, human-in-the-loop gates, and knowledge inputs work together in a marketing
+content lifecycle.
 
-First, run the development server:
+## Quick Start
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Modes
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **Guided Presentation** — Narrated walkthrough of the content production lifecycle,
+  from linear pipeline to full knowledge graph
+- **Free Exploration** — Interactive 3D graph with search, filtering, and node inspection
+- **Campaign Walkthrough** — Step through a workflow node-by-node, making gate decisions
+  at each checkpoint
 
-## Learn More
+## Tech Stack
 
-To learn more about Next.js, take a look at the following resources:
+- **Framework:** Next.js 16 (App Router) + React 19 + TypeScript 5
+- **3D Visualization:** react-force-graph-3d + Three.js + three-spritetext
+- **State Management:** Zustand 5
+- **UI:** shadcn/ui + Tailwind CSS 4 + Framer Motion
+- **Icons:** Lucide React
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Project Structure
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```
+src/
+├── app/            # Next.js pages and API routes
+├── components/     # React components (graph, presentation, campaign, UI)
+├── lib/            # Stores, graph utilities, types, styling configs
+└── data/           # Graph data (seed-graph.json), presentation steps
+```
 
-## Deploy on Vercel
+## Data Model
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- **4 Node Types:** step (actions), gate (checkpoints), agent (AI), input (data/references)
+- **7 Link Types:** flows-to, reviews, escalates-to, uses, performs, returns-to, linear-flow
+- **5 Lifecycle Phases:** Brief → Creation → Review → Publish → Measure
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Development
+
+```bash
+npm run dev      # Start dev server
+npm run build    # Production build
+npm run lint     # Run ESLint
+```

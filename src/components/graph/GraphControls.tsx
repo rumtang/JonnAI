@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import { useShallow } from 'zustand/react/shallow';
 import { motion } from 'framer-motion';
 import { useGraphStore } from '@/lib/store/graph-store';
 import { useUIStore } from '@/lib/store/ui-store';
@@ -19,7 +20,14 @@ const NODE_TYPE_LABELS: Record<NodeType, string> = {
 };
 
 export default function GraphControls() {
-  const { visibleNodeTypes, toggleNodeTypeVisibility, resetFilters, clearHighlights, progressiveReveal, showAllNodes, resetToCore } = useGraphStore();
+  const { visibleNodeTypes, progressiveReveal } = useGraphStore(
+    useShallow((s) => ({ visibleNodeTypes: s.visibleNodeTypes, progressiveReveal: s.progressiveReveal }))
+  );
+  const toggleNodeTypeVisibility = useGraphStore(s => s.toggleNodeTypeVisibility);
+  const resetFilters = useGraphStore(s => s.resetFilters);
+  const clearHighlights = useGraphStore(s => s.clearHighlights);
+  const showAllNodes = useGraphStore(s => s.showAllNodes);
+  const resetToCore = useGraphStore(s => s.resetToCore);
   const { controlsVisible, toggleControls } = useUIStore();
   const isMobile = useIsMobile();
   const didCollapse = useRef(false);

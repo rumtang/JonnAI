@@ -19,8 +19,13 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "Organizational Intelligence Layer",
-  description: "Interactive 3D visualization of why semantic knowledge layers matter more than linear AI agent deployment",
+  title: "Agentic — Knowledge Graph Visualization",
+  description: "Interactive 3D visualization of AI-powered content production workflows with human-in-the-loop gates",
+  openGraph: {
+    title: "Agentic — Knowledge Graph Visualization",
+    description: "Interactive 3D visualization of AI-powered content production workflows",
+    type: "website",
+  },
 };
 
 export default function RootLayout({

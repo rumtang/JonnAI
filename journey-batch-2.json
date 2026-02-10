@@ -1,0 +1,1730 @@
+{
+  "marketing-ops": {
+    "receive-request": {
+      "preAI": {
+        "summary": "You receive requests in multiple formats and manually route them into your scheduling queue.",
+        "detail": "Requests arrive via email, Slack, and meetings without standard formatting. You spend time normalizing them so they can flow through your distribution workflows."
+      },
+      "aiAgents": {
+        "summary": "An intake agent structures requests before they reach your operational queue.",
+        "detail": "Requests arrive pre-categorized with delivery requirements already identified. You validate scheduling constraints instead of extracting them from raw asks."
+      },
+      "aiAgentic": {
+        "summary": "Requests auto-route to your orchestration system with delivery parameters already defined.",
+        "detail": "The system handles intake classification end-to-end. You only see requests that trigger operational conflicts your orchestration rules can't resolve automatically."
+      }
+    },
+    "research-insights": {
+      "preAI": {
+        "summary": "You receive audience insights as static documents that inform your channel selection decisions.",
+        "detail": "Insights update periodically but don't integrate with your scheduling systems. You manually reference persona docs when deciding channel mix and timing."
+      },
+      "aiAgents": {
+        "summary": "Research insights feed directly into your distribution rules and channel selection logic.",
+        "detail": "Persona data influences which channels get prioritized for each content type. You adjust rules when audience behavior shifts rather than reconfiguring every campaign."
+      },
+      "aiAgentic": {
+        "summary": "Audience insights auto-update your orchestration parameters in real time.",
+        "detail": "Channel mix adjusts automatically as audience behavior changes. You monitor whether persona-driven orchestration is improving delivery performance, not whether insights were referenced."
+      }
+    },
+    "write-brief": {
+      "preAI": {
+        "summary": "You receive completed briefs and extract delivery requirements manually.",
+        "detail": "Briefs don't standardize operational requirements. You chase down details about format needs, channel targets, and timing constraints before scheduling."
+      },
+      "aiAgents": {
+        "summary": "Briefs arrive with delivery requirements already structured for your orchestration workflows.",
+        "detail": "Operational metadata is built into the brief template. You validate delivery feasibility instead of extracting requirements from narrative text."
+      },
+      "aiAgentic": {
+        "summary": "Briefs include machine-readable delivery parameters that feed directly into your orchestration system.",
+        "detail": "The brief creation process enforces operational standards at the source. Delivery requirements flow into your systems automatically, eliminating manual translation."
+      }
+    },
+    "draft-content": {
+      "preAI": {
+        "summary": "You receive draft content and manually adapt it for each distribution channel.",
+        "detail": "A single draft requires manual reformatting for blog, email, social, and paid media. Channel-specific adaptation is tedious and error-prone at scale."
+      },
+      "aiAgents": {
+        "summary": "A formatting agent generates channel-specific variants from the master draft based on your templates.",
+        "detail": "You define format rules once; agents handle per-channel adaptation. Multi-channel launches that required a team now take configuration updates."
+      },
+      "aiAgentic": {
+        "summary": "Content automatically generates in all required channel formats during the drafting process.",
+        "detail": "The system produces channel-ready variants as drafting completes. You validate edge cases where automated formatting produces unexpected results."
+      }
+    },
+    "seo-optimization": {
+      "preAI": {
+        "summary": "You receive SEO-optimized content and ensure metadata is correctly configured for each distribution channel.",
+        "detail": "SEO tags often need channel-specific adjustments. You manually verify that meta descriptions, OG tags, and structured data are properly set before distribution."
+      },
+      "aiAgents": {
+        "summary": "An SEO agent handles channel-specific metadata configuration based on your distribution rules.",
+        "detail": "Metadata adapts per channel automatically. You spot-check high-priority launches rather than configuring every tag manually."
+      },
+      "aiAgentic": {
+        "summary": "SEO metadata generates and distributes across channels without manual configuration.",
+        "detail": "The system handles all technical SEO setup per channel. You monitor whether automated SEO is driving expected organic performance across your distribution footprint."
+      }
+    },
+    "brand-compliance": {
+      "preAI": {
+        "summary": "You receive brand-approved content and ensure it maintains compliance during distribution reformatting.",
+        "detail": "Brand compliance can break when content is adapted for different channels. You manually verify that reformatting didn't introduce off-brand elements."
+      },
+      "aiAgents": {
+        "summary": "A compliance agent monitors brand standards during channel adaptation and reformatting.",
+        "detail": "Automated checks flag when format changes introduce brand violations. You focus on edge cases where operational needs conflict with brand requirements."
+      },
+      "aiAgentic": {
+        "summary": "Brand compliance is enforced during channel adaptation — violations block distribution automatically.",
+        "detail": "The system prevents off-brand content from reaching distribution channels. You handle rare cases where channel-specific constraints require brand guideline exceptions."
+      }
+    },
+    "final-edit": {
+      "preAI": {
+        "summary": "You receive finalized content and prepare it for multi-channel distribution.",
+        "detail": "Final content often requires operational adjustments before it's distribution-ready. You handle last-minute formatting and metadata corrections before scheduling."
+      },
+      "aiAgents": {
+        "summary": "A distribution prep agent handles operational setup tasks before content enters your scheduling queue.",
+        "detail": "Content arrives distribution-ready with metadata, tags, and channel-specific formatting pre-configured. You validate instead of configuring."
+      },
+      "aiAgentic": {
+        "summary": "Finalized content flows directly into distribution workflows without manual operational prep.",
+        "detail": "The system handles all pre-distribution setup automatically. You monitor for edge cases where automated prep produces delivery issues."
+      }
+    },
+    "track-performance": {
+      "preAI": {
+        "summary": "You pull performance data from each distribution channel and consolidate it manually.",
+        "detail": "Channel-specific dashboards don't talk to each other. You spend hours aggregating data before you can assess whether your distribution strategy worked."
+      },
+      "aiAgents": {
+        "summary": "A performance agent aggregates metrics across all distribution channels in real time.",
+        "detail": "You see unified performance dashboards automatically. Channel-specific metrics are contextualized within your overall distribution strategy."
+      },
+      "aiAgentic": {
+        "summary": "Performance tracking runs continuously and feeds directly into your orchestration optimization loops.",
+        "detail": "The system monitors distribution effectiveness across channels and triggers adjustments automatically. You review trends rather than building reports."
+      }
+    },
+    "generate-report": {
+      "preAI": {
+        "summary": "You build operational performance reports showing distribution effectiveness and channel performance.",
+        "detail": "Reports require manual data assembly from multiple channel sources. By the time you complete them, the operational window for adjustments has often closed."
+      },
+      "aiAgents": {
+        "summary": "Reports auto-generate from your distribution dashboards — you add operational context and recommendations.",
+        "detail": "The agent handles data visualization and metric compilation. You focus on explaining why certain channels performed differently than expected."
+      },
+      "aiAgentic": {
+        "summary": "Operational reports generate and distribute automatically with AI-written performance summaries.",
+        "detail": "Routine reporting happens without you. You engage when distribution anomalies require operational interpretation that data alone can't provide."
+      }
+    },
+    "brief-approval": {
+      "preAI": {
+        "summary": "You validate that approved briefs include all necessary operational requirements before work begins.",
+        "detail": "Briefs often lack delivery details, forcing you to loop back for clarification. Missing operational specs delay your ability to plan distribution."
+      },
+      "aiAgents": {
+        "summary": "An intake agent flags briefs missing operational requirements before they reach approval.",
+        "detail": "Briefs arrive with delivery parameters validated. You spot-check instead of auditing every brief for operational completeness."
+      },
+      "aiAgentic": {
+        "summary": "Briefs with incomplete delivery requirements are blocked from approval automatically.",
+        "detail": "The system enforces operational metadata standards at the brief stage. You only see briefs that pass automated completeness checks."
+      }
+    },
+    "quality-check": {
+      "preAI": {
+        "summary": "You verify that quality-approved content is technically ready for distribution across all target channels.",
+        "detail": "Quality review doesn't catch operational issues like missing metadata or incompatible formats. You discover distribution blockers late in the process."
+      },
+      "aiAgents": {
+        "summary": "A distribution readiness agent checks technical requirements during quality review.",
+        "detail": "Operational validation happens in parallel with quality checks. Content reaches you with both editorial quality and distribution readiness confirmed."
+      },
+      "aiAgentic": {
+        "summary": "Quality checks include automated distribution readiness validation — incomplete content is blocked from proceeding.",
+        "detail": "The system ensures content passing quality review is also operationally ready to distribute. You handle edge cases where quality and distribution requirements conflict."
+      }
+    },
+    "brand-review": {
+      "preAI": {
+        "summary": "You ensure brand-approved content maintains compliance when adapted for different distribution channels.",
+        "detail": "Brand review happens before channel adaptation, so compliance can break during formatting. You catch brand violations only when preparing distribution."
+      },
+      "aiAgents": {
+        "summary": "An agent monitors brand compliance throughout channel adaptation and reformatting workflows.",
+        "detail": "Brand violations are caught during distribution prep, not after. You validate edge cases where channel requirements push against brand guidelines."
+      },
+      "aiAgentic": {
+        "summary": "Brand compliance is continuously enforced during channel adaptation — violations block distribution automatically.",
+        "detail": "The system prevents brand-violating variants from reaching distribution queues. You adjudicate rare cases where operational needs require brand exceptions."
+      }
+    },
+    "stakeholder-signoff": {
+      "preAI": {
+        "summary": "You wait for stakeholder approval before scheduling distribution, even when operationally ready.",
+        "detail": "Distribution timing depends on stakeholder availability. Operational windows close while content waits in the approval queue."
+      },
+      "aiAgents": {
+        "summary": "Automated approval routing accelerates stakeholder sign-off so distribution isn't operationally delayed.",
+        "detail": "Content arrives at stakeholder review with distribution plans already prepared. Approval triggers immediate scheduling instead of a new planning cycle."
+      },
+      "aiAgentic": {
+        "summary": "Standard content auto-schedules upon approval — stakeholder sign-off triggers distribution workflows instantly.",
+        "detail": "The system eliminates operational lag between approval and distribution. You maintain the orchestration rules that convert approvals into automated action."
+      }
+    },
+    "performance-review": {
+      "preAI": {
+        "summary": "You provide operational context during performance reviews, explaining which distribution factors affected outcomes.",
+        "detail": "Your perspective connects content performance to channel-specific constraints. You explain when underperformance was operational, not content quality."
+      },
+      "aiAgents": {
+        "summary": "Performance data arrives pre-classified by operational factors — you add context only ops can provide.",
+        "detail": "The agent separates content quality signals from distribution execution issues. You explain which channel constraints limited performance."
+      },
+      "aiAgentic": {
+        "summary": "Performance review feeds directly into your orchestration rules — creating a continuous optimization loop.",
+        "detail": "The system connects performance insights to distribution parameter adjustments automatically. You validate when operational changes should override performance data."
+      }
+    },
+    "social-listening": {
+      "preAI": {
+        "summary": "You receive social signals and manually adjust distribution timing or channel mix in response.",
+        "detail": "Social insights arrive too late to affect distribution decisions. By the time you learn about audience sentiment shifts, content is already scheduled."
+      },
+      "aiAgents": {
+        "summary": "A social listening agent surfaces signals that inform your real-time distribution adjustments.",
+        "detail": "You receive alerts when social trends suggest timing or channel changes. Distribution becomes responsive rather than pre-planned."
+      },
+      "aiAgentic": {
+        "summary": "Social signals auto-trigger distribution parameter adjustments within your orchestration rules.",
+        "detail": "The system adjusts channel priority and timing based on real-time social trends. You set the rules for when social signals should override planned distribution."
+      }
+    },
+    "visual-asset-creation": {
+      "preAI": {
+        "summary": "You receive visual assets and ensure they're properly formatted for each distribution channel.",
+        "detail": "Visual specs vary by channel — aspect ratios, file sizes, and format requirements differ. You manually adapt or request channel-specific variants."
+      },
+      "aiAgents": {
+        "summary": "An asset optimization agent generates channel-specific visual formats from master files automatically.",
+        "detail": "Visual assets arrive with all channel variants pre-generated. You validate edge cases where automated resizing produces quality issues."
+      },
+      "aiAgentic": {
+        "summary": "Visual assets generate in all required channel formats during creation — distribution-ready from the start.",
+        "detail": "The system produces channel-optimized visuals as part of the creation workflow. You monitor whether automated formatting maintains visual quality across channels."
+      }
+    },
+    "legal-review": {
+      "preAI": {
+        "summary": "You wait for legal clearance before finalizing distribution plans, even when operationally ready.",
+        "detail": "Legal review timing doesn't align with distribution windows. Operational readiness doesn't guarantee legal clearance will arrive in time."
+      },
+      "aiAgents": {
+        "summary": "Automated legal screening accelerates clearance so distribution timing isn't legally delayed.",
+        "detail": "Routine legal checks happen faster. You build distribution plans with more predictable legal clearance timelines."
+      },
+      "aiAgentic": {
+        "summary": "Legal screening runs during content creation — distribution workflows only see legally cleared content.",
+        "detail": "The system blocks distribution until legal compliance is confirmed. You design orchestration rules knowing legal holds are architecturally enforced."
+      }
+    },
+    "accessibility-check": {
+      "preAI": {
+        "summary": "You ensure accessibility-compliant content is properly configured for each distribution channel.",
+        "detail": "Accessibility metadata often breaks during channel reformatting. You manually verify alt text, captions, and semantic structure per channel."
+      },
+      "aiAgents": {
+        "summary": "An accessibility agent maintains compliance during channel adaptation and reformatting.",
+        "detail": "Accessibility standards are enforced across all channel variants automatically. You validate edge cases where channel constraints conflict with accessibility requirements."
+      },
+      "aiAgentic": {
+        "summary": "Accessibility compliance is preserved during automated channel adaptation — violations block distribution.",
+        "detail": "The system ensures all channel variants maintain accessibility standards. You handle rare cases where operational needs require accessibility trade-offs."
+      }
+    },
+    "localize-content": {
+      "preAI": {
+        "summary": "You coordinate multi-market distribution, ensuring each localized variant reaches the right regional channels.",
+        "detail": "Localization multiplies your distribution complexity. Each market has different channel requirements and timing constraints."
+      },
+      "aiAgents": {
+        "summary": "A localization agent handles market-specific distribution logistics based on your regional orchestration rules.",
+        "detail": "Regional variants distribute automatically per market. You manage global orchestration strategy rather than per-market execution."
+      },
+      "aiAgentic": {
+        "summary": "Localized content distributes across regional channels automatically based on market-specific orchestration rules.",
+        "detail": "The system handles multi-market distribution coordination. You maintain regional orchestration parameters and monitor cross-market performance."
+      }
+    },
+    "ab-variant-creation": {
+      "preAI": {
+        "summary": "You manage A/B test distribution logistics, ensuring each variant reaches the correct audience segment.",
+        "detail": "Variant distribution requires manual audience segmentation and channel configuration. Testing complexity is limited by your operational bandwidth."
+      },
+      "aiAgents": {
+        "summary": "A testing agent handles variant distribution and audience segmentation based on your test designs.",
+        "detail": "You define test parameters; agents execute distribution. Testing scales because operational complexity is automated."
+      },
+      "aiAgentic": {
+        "summary": "A/B variants distribute and rotate automatically based on your experimentation orchestration rules.",
+        "detail": "The system handles variant delivery, audience assignment, and performance tracking. You design test strategies rather than managing test execution."
+      }
+    },
+    "content-repurposing": {
+      "preAI": {
+        "summary": "You coordinate repurposed content distribution across new channels and formats.",
+        "detail": "Repurposing creates operational overhead — each new format requires separate scheduling and distribution workflows."
+      },
+      "aiAgents": {
+        "summary": "A repurposing agent handles format conversion and schedules distribution across target channels.",
+        "detail": "Repurposed variants flow through distribution automatically. You set repurposing rules rather than managing each reformatting project."
+      },
+      "aiAgentic": {
+        "summary": "Content repurposing and redistribution happen automatically based on performance-triggered orchestration rules.",
+        "detail": "The system identifies repurposing opportunities and executes redistribution without manual coordination. You maintain the rules that determine what gets repurposed and where."
+      }
+    },
+    "archive-tag": {
+      "preAI": {
+        "summary": "You archive distributed content and tag it for operational reference and potential reuse.",
+        "detail": "Archive tagging is manual and inconsistent. Finding previously distributed content for repurposing requires institutional memory."
+      },
+      "aiAgents": {
+        "summary": "An archival agent tags content with distribution metadata automatically as it's published.",
+        "detail": "Content arrives in your archive pre-tagged with channel performance, timing, and audience data. Operational history is searchable instead of tribal knowledge."
+      },
+      "aiAgentic": {
+        "summary": "Content auto-archives with full distribution telemetry — creating a performance-indexed asset library.",
+        "detail": "The system maintains a queryable archive of what was distributed where and how it performed. You use archive data to optimize future orchestration decisions."
+      }
+    },
+    "legal-compliance-gate": {
+      "preAI": {
+        "summary": "You wait for legal gate clearance before finalizing distribution schedules and channel configurations.",
+        "detail": "Legal holds block all distribution planning. You build contingency schedules knowing legal delays are unpredictable."
+      },
+      "aiAgents": {
+        "summary": "Automated legal screening accelerates gate passage so distribution timing is more predictable.",
+        "detail": "Routine legal clearances happen faster. You plan distribution with higher confidence in legal timeline predictability."
+      },
+      "aiAgentic": {
+        "summary": "Legal compliance is enforced continuously — distribution workflows only process legally cleared content.",
+        "detail": "The system architecturally prevents distribution of non-compliant content. You design orchestration knowing legal gates are non-negotiable."
+      }
+    },
+    "localization-quality-gate": {
+      "preAI": {
+        "summary": "You wait for localization approval before distributing content to regional markets.",
+        "detail": "Localization reviews delay global distribution. Markets wait for clearance even when regional content is operationally ready."
+      },
+      "aiAgents": {
+        "summary": "Automated localization quality checks accelerate regional distribution approval.",
+        "detail": "Routine localization issues are caught earlier. Regional distribution schedules become more predictable as gate passage speeds up."
+      },
+      "aiAgentic": {
+        "summary": "Localization quality is validated continuously — regional variants auto-distribute upon gate passage.",
+        "detail": "The system eliminates lag between localization approval and regional distribution. You orchestrate global launches knowing localization gates operate at pipeline speed."
+      }
+    },
+    "segment-mapping": {
+      "preAI": {
+        "summary": "You manually map content to audience segments and configure segment-specific distribution rules.",
+        "detail": "Segment mapping is tedious and error-prone at scale. Each campaign requires manual audience-to-content assignments across channels."
+      },
+      "aiAgents": {
+        "summary": "A segmentation agent handles audience mapping based on your targeting rules and personas.",
+        "detail": "You define segment criteria; agents handle assignment. Segment mapping scales from manual spreadsheets to automated orchestration logic."
+      },
+      "aiAgentic": {
+        "summary": "Segment mapping happens automatically based on real-time CDP signals and your orchestration rules.",
+        "detail": "The system assigns content to segments dynamically as audience attributes update. You maintain mapping rules rather than managing individual segment assignments."
+      }
+    },
+    "personalization-qa": {
+      "preAI": {
+        "summary": "You manually test personalized content variants before distribution to ensure targeting logic works correctly.",
+        "detail": "Testing personalization requires manually triggering each segment combination. QA is limited by how many variants you can physically validate."
+      },
+      "aiAgents": {
+        "summary": "A QA agent tests personalization logic automatically, validating that segment targeting delivers the right variants.",
+        "detail": "Automated testing covers more segment combinations than manual QA. You review test results rather than executing tests yourself."
+      },
+      "aiAgentic": {
+        "summary": "Personalization QA runs continuously in production — the system validates targeting accuracy in real time.",
+        "detail": "The system monitors whether personalization delivers correctly and auto-corrects targeting errors. You investigate anomalies when personalization performance deviates from expected patterns."
+      }
+    },
+    "campaign-planning": {
+      "preAI": {
+        "summary": "You translate campaign plans into operational distribution schedules and channel configurations.",
+        "detail": "Campaign plans often lack operational detail. You spend time converting strategic plans into executable distribution workflows."
+      },
+      "aiAgents": {
+        "summary": "A planning agent converts strategic campaign plans into distribution schedules and orchestration configs.",
+        "detail": "Plans arrive with operational parameters pre-defined. You validate feasibility instead of translating strategy into operations from scratch."
+      },
+      "aiAgentic": {
+        "summary": "Campaign plans auto-generate distribution orchestration rules — strategy flows directly into execution.",
+        "detail": "The system converts strategic plans into operational configs automatically. You validate that automated planning aligns with campaign intent."
+      }
+    },
+    "consent-check": {
+      "preAI": {
+        "summary": "You verify consent and privacy compliance before distributing content to audience segments.",
+        "detail": "Consent validation is manual and inconsistent across channels. You risk privacy violations when segment targeting bypasses consent checks."
+      },
+      "aiAgents": {
+        "summary": "A consent agent validates audience permissions before content is distributed to any segment.",
+        "detail": "Distribution only reaches consented audiences. You design consent rules; agents enforce them at delivery time."
+      },
+      "aiAgentic": {
+        "summary": "Consent validation is embedded in distribution orchestration — non-compliant delivery is architecturally blocked.",
+        "detail": "The system enforces consent requirements automatically across all channels. You maintain consent rules knowing distribution can't violate them."
+      }
+    },
+    "paid-creative-production": {
+      "preAI": {
+        "summary": "You coordinate paid media distribution, ensuring creative assets are properly configured for each platform.",
+        "detail": "Paid platforms have strict format requirements. You manually adapt creative for each paid channel and manage asset uploads."
+      },
+      "aiAgents": {
+        "summary": "A media agent handles platform-specific formatting and asset delivery for paid channels.",
+        "detail": "Paid creative adapts per platform automatically. You focus on budget allocation and bid strategy rather than asset logistics."
+      },
+      "aiAgentic": {
+        "summary": "Paid creative distributes across platforms automatically with orchestration rules governing budget and targeting.",
+        "detail": "The system handles creative delivery, format adaptation, and initial bid management. You govern paid strategy and intervene when performance requires reallocation."
+      }
+    },
+    "attribution-modeling": {
+      "preAI": {
+        "summary": "You use attribution data to optimize channel mix and distribution timing.",
+        "detail": "Attribution insights arrive after distribution decisions are made. Your orchestration strategy evolves slowly because feedback loops are manual."
+      },
+      "aiAgents": {
+        "summary": "Attribution data feeds directly into your distribution optimization recommendations.",
+        "detail": "You see which channels are driving conversions in real time. Distribution decisions shift from planned to performance-responsive."
+      },
+      "aiAgentic": {
+        "summary": "Attribution insights auto-adjust your orchestration rules — channel mix optimizes continuously based on conversion data.",
+        "detail": "The system reallocates distribution priority based on attribution performance automatically. You design the optimization logic and validate that attribution-driven changes align with strategic goals."
+      }
+    },
+    "executive-reporting": {
+      "preAI": {
+        "summary": "You contribute operational performance data to executive reports, showing distribution effectiveness.",
+        "detail": "Your operational metrics are often secondary to content performance. Distribution efficiency is under-reported because it's hard to quantify."
+      },
+      "aiAgents": {
+        "summary": "Agents generate operational performance summaries showing distribution ROI and channel efficiency.",
+        "detail": "Your contribution to executive reporting is data-driven and quantified. Distribution effectiveness becomes a reportable metric, not anecdotal context."
+      },
+      "aiAgentic": {
+        "summary": "Executive reports include auto-generated orchestration performance metrics — distribution is a strategic KPI.",
+        "detail": "The system quantifies operational efficiency automatically. You engage when distribution anomalies require strategic interpretation."
+      }
+    },
+    "competitive-response": {
+      "preAI": {
+        "summary": "You execute rapid distribution when competitive response content is approved.",
+        "detail": "Speed is critical for competitive response, but your distribution workflows aren't optimized for urgency. Manual processes slow down reactive campaigns."
+      },
+      "aiAgents": {
+        "summary": "Fast-track distribution rules prioritize competitive response content across all channels.",
+        "detail": "You configure expedited orchestration for reactive content. Competitive responses distribute faster because automation removes manual bottlenecks."
+      },
+      "aiAgentic": {
+        "summary": "Competitive response content auto-distributes on approval — minimizing time from decision to market.",
+        "detail": "The system prioritizes reactive content through your orchestration workflows automatically. You maintain fast-track rules that balance speed with quality gates."
+      }
+    },
+    "content-governance": {
+      "preAI": {
+        "summary": "You ensure distributed content complies with governance standards across all channels.",
+        "detail": "Governance violations are often caught after distribution. You manage takedowns and corrections when non-compliant content goes live."
+      },
+      "aiAgents": {
+        "summary": "A governance agent monitors compliance during distribution preparation and blocks violating content.",
+        "detail": "Violations are caught before distribution, not after. You handle governance exceptions rather than post-distribution cleanup."
+      },
+      "aiAgentic": {
+        "summary": "Governance compliance is enforced continuously — non-compliant content is blocked from distribution automatically.",
+        "detail": "The system prevents governance violations from reaching distribution channels. You maintain governance rules and adjudicate edge cases where distribution needs conflict with standards."
+      }
+    },
+    "governance-gate": {
+      "preAI": {
+        "summary": "You wait for governance approval before finalizing distribution schedules and channel configurations.",
+        "detail": "Governance reviews delay distribution even when operationally ready. You build buffer time into schedules to account for governance holds."
+      },
+      "aiAgents": {
+        "summary": "Automated governance checks accelerate gate passage so distribution timing is more predictable.",
+        "detail": "Routine governance clearances happen faster. You plan distribution with higher confidence in governance timeline predictability."
+      },
+      "aiAgentic": {
+        "summary": "Governance is validated continuously — distribution workflows only process compliant content.",
+        "detail": "The system architecturally prevents distribution of non-compliant content. You design orchestration knowing governance gates are enforced automatically."
+      }
+    },
+    "journey-mapping": {
+      "preAI": {
+        "summary": "You receive journey stage assignments and configure distribution timing to align with customer lifecycle.",
+        "detail": "Journey mapping is often theoretical. Your distribution execution doesn't reliably connect to where prospects are in their buying journey."
+      },
+      "aiAgents": {
+        "summary": "A journey agent maps content to lifecycle stages and recommends distribution timing based on audience progression.",
+        "detail": "Distribution timing aligns with journey stage automatically. You validate that journey-driven orchestration matches customer experience intent."
+      },
+      "aiAgentic": {
+        "summary": "Distribution orchestration adapts based on real-time journey stage signals from your CDP.",
+        "detail": "The system delivers content when prospects reach relevant journey stages, not on fixed schedules. You design journey-responsive orchestration rules and monitor whether they improve conversion paths."
+      }
+    },
+    "sentiment-monitoring": {
+      "preAI": {
+        "summary": "You receive sentiment alerts and manually pause or adjust distribution in response.",
+        "detail": "Sentiment signals arrive too late to prevent distribution issues. By the time you learn sentiment shifted negatively, problematic content is already live."
+      },
+      "aiAgents": {
+        "summary": "A sentiment agent monitors brand health in real time and recommends distribution pauses when sentiment drops.",
+        "detail": "You receive alerts before negative sentiment becomes a crisis. Distribution becomes responsive to audience reaction, not just planned schedules."
+      },
+      "aiAgentic": {
+        "summary": "Sentiment signals auto-trigger distribution pauses or channel adjustments within your orchestration rules.",
+        "detail": "The system pauses distribution automatically when sentiment crosses negative thresholds. You set the rules for when sentiment should override planned orchestration."
+      }
+    },
+    "sales-enablement": {
+      "preAI": {
+        "summary": "You distribute sales enablement content to internal teams through separate workflows from customer-facing channels.",
+        "detail": "Sales content distribution is manual and disconnected from your customer orchestration. Internal distribution doesn't benefit from your operational infrastructure."
+      },
+      "aiAgents": {
+        "summary": "Sales enablement distribution runs on the same orchestration infrastructure as customer-facing channels.",
+        "detail": "Internal and external distribution workflows unify. Sales content benefits from the same automation and tracking as customer content."
+      },
+      "aiAgentic": {
+        "summary": "Sales enablement distributes automatically based on deal stage signals and sales team orchestration rules.",
+        "detail": "The system delivers sales content when CRM signals indicate readiness, not on fixed schedules. You orchestrate internal distribution as a first-class workflow."
+      }
+    },
+    "influencer-brief": {
+      "preAI": {
+        "summary": "You coordinate influencer content distribution timing to align with owned channel launches.",
+        "detail": "Influencer timing is unpredictable. Your distribution schedules have to flex around when influencers actually post."
+      },
+      "aiAgents": {
+        "summary": "An influencer tracking agent monitors when creator content goes live and adjusts your owned distribution accordingly.",
+        "detail": "You receive alerts when influencer posts are live. Your owned channels amplify in coordination rather than operating independently."
+      },
+      "aiAgentic": {
+        "summary": "Influencer posts auto-trigger coordinated distribution across your owned channels based on orchestration rules.",
+        "detail": "The system detects influencer content going live and executes synchronized distribution automatically. You design coordination rules that amplify influencer reach through owned channels."
+      }
+    },
+    "ugc-moderation": {
+      "preAI": {
+        "summary": "You distribute curated UGC across channels, ensuring proper attribution and rights compliance.",
+        "detail": "UGC distribution requires manual rights verification and channel-specific formatting. Distribution complexity limits how much UGC you can amplify."
+      },
+      "aiAgents": {
+        "summary": "A UGC agent handles rights validation and formats curated content for distribution across channels.",
+        "detail": "UGC distribution scales because operational overhead is automated. You define curation criteria; agents handle distribution logistics."
+      },
+      "aiAgentic": {
+        "summary": "Curated UGC auto-distributes across channels with rights compliance and attribution enforced automatically.",
+        "detail": "The system amplifies approved UGC at scale across your distribution footprint. You maintain curation standards and monitor whether UGC distribution drives expected engagement."
+      }
+    },
+    "content-scoring": {
+      "preAI": {
+        "summary": "You receive content scores and use them to prioritize distribution schedules and channel allocation.",
+        "detail": "Scoring data often doesn't integrate with your scheduling systems. Distribution prioritization is manual despite having scoring data available."
+      },
+      "aiAgents": {
+        "summary": "Content scores feed directly into your orchestration rules, auto-prioritizing high-value content in distribution queues.",
+        "detail": "High-scoring content gets priority scheduling and premium channel placement automatically. You validate that score-driven orchestration aligns with strategic priorities."
+      },
+      "aiAgentic": {
+        "summary": "Content scoring dynamically adjusts distribution priority in real time based on performance predictions.",
+        "detail": "The system reallocates distribution resources to high-potential content automatically. You design score-responsive orchestration rules and monitor whether predicted performance matches actual results."
+      }
+    }
+  },
+  "consumer-insights": {
+    "receive-request": {
+      "preAI": {
+        "summary": "You receive content requests and manually validate whether requesters have provided audience context.",
+        "detail": "Most requests lack audience specificity. You chase down stakeholders to clarify which personas or segments they're actually targeting."
+      },
+      "aiAgents": {
+        "summary": "An intake agent flags requests missing audience data before they reach the content workflow.",
+        "detail": "Requests arrive pre-validated for audience alignment. You focus on interpreting ambiguous audience asks rather than enforcing basic requirements."
+      },
+      "aiAgentic": {
+        "summary": "Requests without valid audience context are blocked from entering the workflow automatically.",
+        "detail": "The system enforces audience-first thinking at intake. Your involvement starts when audience targeting requires strategic interpretation, not basic validation."
+      }
+    },
+    "write-brief": {
+      "preAI": {
+        "summary": "You review briefs to ensure they reference the correct personas and audience insights.",
+        "detail": "Brief quality varies based on whether writers remembered to check your persona docs. Audience alignment is inconsistent across briefs."
+      },
+      "aiAgents": {
+        "summary": "Briefs auto-populate with relevant persona data from your frameworks during creation.",
+        "detail": "Writers can't skip audience context because it's built into the template. Your insights reach every brief automatically."
+      },
+      "aiAgentic": {
+        "summary": "Briefs that don't align with validated personas are flagged before reaching approval.",
+        "detail": "The system enforces persona alignment architecturally. You engage only when briefs target edge-case audiences not covered in your frameworks."
+      }
+    },
+    "draft-content": {
+      "preAI": {
+        "summary": "You review drafted content to validate that messaging resonates with the intended audience.",
+        "detail": "Content often misses the mark on audience tone or pain points. You catch audience misalignment only after drafts are complete."
+      },
+      "aiAgents": {
+        "summary": "A writing agent drafts content using your personas as input — audience voice is embedded from the start.",
+        "detail": "Drafts arrive with persona-aligned messaging. You validate whether automated audience targeting captured nuance correctly."
+      },
+      "aiAgentic": {
+        "summary": "Content drafts against validated personas automatically — audience misalignment is caught during creation.",
+        "detail": "The system enforces persona fit during drafting. You review only content where persona data suggests conflicting audience approaches."
+      }
+    },
+    "seo-optimization": {
+      "preAI": {
+        "summary": "You ensure SEO optimization aligns with how your target audiences actually search.",
+        "detail": "SEO keywords often reflect search volume rather than audience intent. You reconcile SEO targets with persona-specific search behavior manually."
+      },
+      "aiAgents": {
+        "summary": "An SEO agent uses your audience search behavior data to optimize keywords for persona relevance, not just volume.",
+        "detail": "SEO optimization considers audience context automatically. You validate that keyword targeting matches how specific personas discover content."
+      },
+      "aiAgentic": {
+        "summary": "SEO optimization integrates real-time audience search patterns from your persona frameworks.",
+        "detail": "The system adjusts keyword strategy as persona search behavior evolves. You monitor whether persona-driven SEO outperforms volume-based approaches."
+      }
+    },
+    "brand-compliance": {
+      "preAI": {
+        "summary": "You validate that brand-compliant content still resonates with your target audience personas.",
+        "detail": "Brand voice sometimes conflicts with audience preferences. You identify when brand compliance reduces audience relevance."
+      },
+      "aiAgents": {
+        "summary": "An agent flags when brand tone diverges from persona-preferred communication styles.",
+        "detail": "Conflicts between brand voice and audience expectations surface early. You advise on where brand should flex to maintain audience connection."
+      },
+      "aiAgentic": {
+        "summary": "The system monitors brand-audience alignment continuously and escalates when compliance reduces persona fit.",
+        "detail": "Brand drift that alienates audiences is caught automatically. You interpret whether brand should evolve or audiences should be educated."
+      }
+    },
+    "final-edit": {
+      "preAI": {
+        "summary": "You review finalized content to ensure audience insights were correctly applied throughout editing.",
+        "detail": "Editorial changes often dilute audience specificity. You catch when editing made content more generic and less persona-aligned."
+      },
+      "aiAgents": {
+        "summary": "An editing agent maintains persona alignment during revisions and flags when changes reduce audience fit.",
+        "detail": "Edits are monitored for audience drift. You validate whether editorial polish preserved persona-specific messaging."
+      },
+      "aiAgentic": {
+        "summary": "Editing workflows enforce persona alignment — changes that reduce audience relevance trigger review.",
+        "detail": "The system prevents editing from genericizing content. You engage when editorial quality and audience specificity genuinely conflict."
+      }
+    },
+    "schedule-publish": {
+      "preAI": {
+        "summary": "You provide audience activity timing data to inform when content should publish.",
+        "detail": "Scheduling often ignores audience behavior patterns. Your timing insights are consulted inconsistently."
+      },
+      "aiAgents": {
+        "summary": "Scheduling agents use your audience engagement timing data to optimize publication windows.",
+        "detail": "Content publishes when target personas are most active. Your behavioral insights influence scheduling automatically."
+      },
+      "aiAgentic": {
+        "summary": "Publication timing auto-optimizes based on real-time audience activity patterns from your frameworks.",
+        "detail": "The system schedules content when target segments are most receptive. You monitor whether persona-driven timing improves engagement."
+      }
+    },
+    "distribute": {
+      "preAI": {
+        "summary": "You ensure distribution channels match where your target personas actually consume content.",
+        "detail": "Channel selection often follows platform trends rather than audience behavior. Your persona channel preferences are underutilized."
+      },
+      "aiAgents": {
+        "summary": "Distribution agents prioritize channels based on your persona media consumption patterns.",
+        "detail": "Content reaches audiences where they actually are. Your channel preference data drives distribution decisions automatically."
+      },
+      "aiAgentic": {
+        "summary": "Distribution channel mix auto-adjusts based on evolving persona media consumption behaviors.",
+        "detail": "The system reallocates channel priority as audience platform preferences shift. You monitor whether persona-driven distribution outperforms blanket approaches."
+      }
+    },
+    "track-performance": {
+      "preAI": {
+        "summary": "You manually correlate performance metrics with audience segments to understand which personas responded.",
+        "detail": "Performance reporting rarely segments by persona. You build custom analyses to see which audience groups actually engaged."
+      },
+      "aiAgents": {
+        "summary": "Performance dashboards auto-segment results by persona, showing which audiences responded best.",
+        "detail": "You see persona-level performance automatically. Analysis shifts from compiling segment data to interpreting audience behavior."
+      },
+      "aiAgentic": {
+        "summary": "Performance tracking attributes results to personas in real time, creating a continuous audience learning loop.",
+        "detail": "The system connects content performance to persona engagement automatically. You use these insights to refine persona frameworks based on actual behavior."
+      }
+    },
+    "generate-report": {
+      "preAI": {
+        "summary": "You build custom reports showing which audience segments engaged with content.",
+        "detail": "Audience-level reporting is manual and time-consuming. By the time you complete persona performance analysis, insights are stale."
+      },
+      "aiAgents": {
+        "summary": "Reports auto-generate with persona-level breakdowns showing segment-specific engagement.",
+        "detail": "Audience analysis happens automatically. You add interpretation about why certain personas responded differently than expected."
+      },
+      "aiAgentic": {
+        "summary": "Audience performance reports generate automatically with AI-written persona engagement summaries.",
+        "detail": "Routine persona reporting happens without you. You engage when audience behavior reveals insights that require framework updates."
+      }
+    },
+    "optimize": {
+      "preAI": {
+        "summary": "You recommend content optimizations based on which audience segments are under-engaging.",
+        "detail": "Optimization decisions often ignore persona-level signals. Your audience insights are consulted inconsistently during optimization cycles."
+      },
+      "aiAgents": {
+        "summary": "An optimization agent recommends changes based on persona-specific engagement patterns.",
+        "detail": "Optimizations target audience-level issues automatically. You validate whether recommended changes align with persona strategy."
+      },
+      "aiAgentic": {
+        "summary": "Content optimizes automatically to improve engagement with underperforming persona segments.",
+        "detail": "The system adjusts messaging for low-engaging audiences within your strategic guardrails. You interpret whether optimization should target messaging or persona definitions."
+      }
+    },
+    "brief-approval": {
+      "preAI": {
+        "summary": "You validate that approved briefs correctly target the intended audience segments.",
+        "detail": "Briefs get approved even when audience targeting is vague. You catch persona misalignment only when reviewing final content."
+      },
+      "aiAgents": {
+        "summary": "An approval agent flags briefs with weak or missing audience specificity before they proceed.",
+        "detail": "Persona validation happens at brief approval. Content creation doesn't start until audience targeting is clear."
+      },
+      "aiAgentic": {
+        "summary": "Briefs without validated persona alignment are blocked from approval automatically.",
+        "detail": "The system enforces audience-first standards at the gate. You engage only when briefs target ambiguous or emerging audience segments."
+      }
+    },
+    "quality-check": {
+      "preAI": {
+        "summary": "You ensure quality-checked content accurately reflects the needs and preferences of target personas.",
+        "detail": "Quality review focuses on technical metrics, not audience fit. Content can pass quality checks while missing persona relevance."
+      },
+      "aiAgents": {
+        "summary": "Quality scoring includes persona alignment metrics showing how well content matches audience frameworks.",
+        "detail": "Audience fit is measured alongside editorial quality. You validate whether scoring correctly captures persona relevance."
+      },
+      "aiAgentic": {
+        "summary": "Quality checks include automated persona alignment validation — audience-misfit content is flagged.",
+        "detail": "The system prevents audience-irrelevant content from passing quality review. You interpret edge cases where persona fit conflicts with quality standards."
+      }
+    },
+    "brand-review": {
+      "preAI": {
+        "summary": "You validate that brand-approved content maintains audience relevance and persona alignment.",
+        "detail": "Brand review can approve content that's on-brand but off-audience. You catch persona drift only after brand clearance."
+      },
+      "aiAgents": {
+        "summary": "An agent monitors audience alignment during brand review and flags when brand compliance reduces persona fit.",
+        "detail": "Brand and audience validation happen in parallel. You advise when brand evolution is needed to maintain audience connection."
+      },
+      "aiAgentic": {
+        "summary": "Brand review includes automated persona alignment checks — off-audience content triggers escalation.",
+        "detail": "The system prevents brand-compliant but audience-irrelevant content from passing. You interpret when brand should flex versus when personas need updating."
+      }
+    },
+    "stakeholder-signoff": {
+      "preAI": {
+        "summary": "You provide audience validation input during stakeholder reviews to ensure strategic alignment.",
+        "detail": "Stakeholder preferences sometimes override audience data. You advocate for persona-driven decisions against executive intuition."
+      },
+      "aiAgents": {
+        "summary": "Stakeholders receive persona performance data alongside content during sign-off reviews.",
+        "detail": "Audience evidence is presented automatically. Stakeholder decisions are informed by persona data rather than intuition alone."
+      },
+      "aiAgentic": {
+        "summary": "Stakeholder reviews include automated audience impact predictions based on persona frameworks.",
+        "detail": "The system shows expected persona response before approval. You interpret when stakeholder judgment should override audience data."
+      }
+    },
+    "visual-asset-creation": {
+      "preAI": {
+        "summary": "You validate that visual assets align with aesthetic and cultural preferences of target personas.",
+        "detail": "Visual choices are often based on design trends rather than audience preferences. Your persona visual guidelines are underutilized."
+      },
+      "aiAgents": {
+        "summary": "Visual creation agents reference your persona aesthetic preferences during asset development.",
+        "detail": "Visuals are created with audience preferences embedded. You validate whether automated visual targeting captures persona nuance."
+      },
+      "aiAgentic": {
+        "summary": "Visual assets generate with persona-specific aesthetic adjustments based on your audience frameworks.",
+        "detail": "The system adapts visual style to match persona preferences automatically. You monitor whether persona-driven visuals outperform generic approaches."
+      }
+    },
+    "legal-review": {
+      "preAI": {
+        "summary": "You ensure legally cleared content doesn't include claims or messaging that alienates target personas.",
+        "detail": "Legal compliance sometimes requires language that doesn't resonate with audiences. You identify when legal safety reduces audience connection."
+      },
+      "aiAgents": {
+        "summary": "An agent flags when legal language diverges from persona communication preferences.",
+        "detail": "Legal-audience conflicts surface early. You advise on how to meet compliance without sacrificing persona relevance."
+      },
+      "aiAgentic": {
+        "summary": "The system monitors legal-audience alignment and escalates when compliance language reduces persona fit.",
+        "detail": "Legal changes that alienate audiences are caught automatically. You interpret whether messaging should be legally safer or more audience-friendly."
+      }
+    },
+    "accessibility-check": {
+      "preAI": {
+        "summary": "You validate that accessibility-compliant content serves all segments within your target personas.",
+        "detail": "Accessibility is often treated as compliance, not audience consideration. You ensure inclusive language actually connects with diverse persona segments."
+      },
+      "aiAgents": {
+        "summary": "Accessibility agents validate inclusive language using your persona diversity frameworks.",
+        "detail": "Accessibility checks consider persona-specific needs automatically. You validate whether compliance actually improves audience experience."
+      },
+      "aiAgentic": {
+        "summary": "Accessibility validation includes persona-specific inclusive communication checks beyond technical compliance.",
+        "detail": "The system ensures accessibility serves actual audience diversity, not just standards. You interpret when inclusive communication requires persona framework updates."
+      }
+    },
+    "localize-content": {
+      "preAI": {
+        "summary": "You ensure localized content adapts personas to reflect regional audience differences.",
+        "detail": "Localization often translates language but not persona relevance. Regional audience nuances are missed when personas aren't adapted per market."
+      },
+      "aiAgents": {
+        "summary": "A localization agent adapts content using region-specific persona variants from your frameworks.",
+        "detail": "Regional personas guide cultural adaptation automatically. You validate whether localized content captures market-specific audience nuances."
+      },
+      "aiAgentic": {
+        "summary": "Localization uses regionally adapted persona frameworks automatically, ensuring cultural audience fit.",
+        "detail": "The system maintains persona alignment across markets using your regional variants. You monitor whether regional personas need updates based on localized content performance."
+      }
+    },
+    "ab-variant-creation": {
+      "preAI": {
+        "summary": "You design A/B test variants that isolate which persona attributes drive better engagement.",
+        "detail": "Testing often focuses on creative elements rather than audience hypotheses. Your persona insights don't systematically inform test design."
+      },
+      "aiAgents": {
+        "summary": "A testing agent generates variants based on your persona attribute hypotheses.",
+        "detail": "Tests isolate audience variables systematically. You design persona-driven experiments; agents create the test variants."
+      },
+      "aiAgentic": {
+        "summary": "A/B tests auto-generate to validate persona assumptions and refine audience frameworks continuously.",
+        "detail": "The system creates audience-focused experiments based on persona uncertainty. You use test results to evolve persona definitions with data-driven confidence."
+      }
+    },
+    "content-repurposing": {
+      "preAI": {
+        "summary": "You ensure repurposed content maintains persona relevance across new formats and channels.",
+        "detail": "Repurposing often dilutes audience specificity. Content optimized for one persona gets genericized when adapted for other uses."
+      },
+      "aiAgents": {
+        "summary": "A repurposing agent maintains persona alignment when adapting content for new formats.",
+        "detail": "Repurposed content preserves audience targeting automatically. You validate whether format changes maintained persona relevance."
+      },
+      "aiAgentic": {
+        "summary": "Content repurposes with persona-specific adaptations for each new format and channel automatically.",
+        "detail": "The system ensures repurposing strengthens rather than dilutes audience targeting. You monitor whether multi-format persona consistency improves engagement."
+      }
+    },
+    "archive-tag": {
+      "preAI": {
+        "summary": "You tag archived content with persona metadata so historical performance can inform future audience strategies.",
+        "detail": "Archive tagging rarely includes audience data. Finding persona-relevant precedents requires institutional memory rather than searchable tags."
+      },
+      "aiAgents": {
+        "summary": "An archival agent tags content with persona engagement data automatically as it's published.",
+        "detail": "Content arrives in archives pre-tagged with audience performance. Historical persona insights are searchable instead of anecdotal."
+      },
+      "aiAgentic": {
+        "summary": "Content auto-archives with full persona engagement telemetry, creating an audience performance knowledge base.",
+        "detail": "The system maintains queryable persona performance history. You use archive data to refine audience frameworks based on what actually resonated historically."
+      }
+    },
+    "legal-compliance-gate": {
+      "preAI": {
+        "summary": "You ensure legally cleared content doesn't sacrifice the audience connection that drives engagement.",
+        "detail": "Legal gates prioritize compliance over audience resonance. You advocate for persona-friendly language after legal clearance."
+      },
+      "aiAgents": {
+        "summary": "Legal agents consider persona communication preferences when recommending compliant language.",
+        "detail": "Legal clearance balances compliance with audience fit automatically. You validate whether legal-approved language maintains persona connection."
+      },
+      "aiAgentic": {
+        "summary": "Legal compliance includes automated audience impact assessment — overly cautious language triggers review.",
+        "detail": "The system prevents legal language from alienating audiences unnecessarily. You interpret when safety should override persona preferences."
+      }
+    },
+    "localization-quality-gate": {
+      "preAI": {
+        "summary": "You validate that localization quality includes cultural persona fit, not just translation accuracy.",
+        "detail": "Localization quality focuses on language correctness rather than audience relevance. Regional persona alignment is inconsistently validated."
+      },
+      "aiAgents": {
+        "summary": "Localization quality checks include persona cultural fit validation using your regional frameworks.",
+        "detail": "Quality review assesses audience alignment alongside translation accuracy. You validate whether localized content resonates with regional personas."
+      },
+      "aiAgentic": {
+        "summary": "Localization quality automatically validates regional persona alignment — culturally off-target content is flagged.",
+        "detail": "The system ensures localized content serves regional audiences, not just translated words. You interpret when regional personas need framework updates."
+      }
+    },
+    "segment-mapping": {
+      "preAI": {
+        "summary": "You manually map content to audience segments based on your persona frameworks.",
+        "detail": "Segment assignment is tedious and inconsistent. Different campaigns map to personas differently based on who does the mapping."
+      },
+      "aiAgents": {
+        "summary": "A segmentation agent maps content to personas automatically using your audience classification rules.",
+        "detail": "Segment assignment is consistent and scalable. You define persona criteria; agents handle classification."
+      },
+      "aiAgentic": {
+        "summary": "Segment mapping happens automatically using real-time CDP signals and your evolving persona frameworks.",
+        "detail": "The system assigns content to audiences dynamically as persona definitions update. You maintain classification rules rather than managing individual mappings."
+      }
+    },
+    "dynamic-assembly": {
+      "preAI": {
+        "summary": "You design segment-specific content variations that reflect different persona preferences.",
+        "detail": "Personalization is limited by production bandwidth. Only major persona differences get unique content variations."
+      },
+      "aiAgents": {
+        "summary": "An assembly agent creates persona-specific content experiences using your variant rules and frameworks.",
+        "detail": "Personalization scales to serve more persona nuances. You define which persona attributes warrant unique content; agents assemble variations."
+      },
+      "aiAgentic": {
+        "summary": "Content assembles dynamically per persona in real time using your frameworks and CDP signals.",
+        "detail": "The system delivers persona-optimized experiences at scale without manual production. You monitor whether persona-driven assembly improves engagement across segments."
+      }
+    },
+    "personalization-qa": {
+      "preAI": {
+        "summary": "You validate that personalized content actually matches the intended persona characteristics.",
+        "detail": "Personalization QA focuses on technical delivery, not audience fit. Content can target the right segment while missing persona relevance."
+      },
+      "aiAgents": {
+        "summary": "A QA agent validates persona alignment for each personalized variant using your frameworks.",
+        "detail": "Personalization testing includes audience relevance checks automatically. You validate whether automated targeting captured persona nuance."
+      },
+      "aiAgentic": {
+        "summary": "Personalization QA continuously validates persona fit in production using real engagement signals.",
+        "detail": "The system monitors whether delivered experiences match persona expectations and auto-corrects targeting errors. You investigate when persona-driven personalization underperforms."
+      }
+    },
+    "campaign-planning": {
+      "preAI": {
+        "summary": "You ensure campaign plans target validated personas and include audience-specific success metrics.",
+        "detail": "Campaign planning often skips rigorous audience definition. Persona targeting is aspirational rather than operationalized."
+      },
+      "aiAgents": {
+        "summary": "Planning agents build campaigns using your personas as the foundational targeting layer.",
+        "detail": "Campaigns start with audience definition, not creative concepts. Your persona frameworks drive strategic planning automatically."
+      },
+      "aiAgentic": {
+        "summary": "Campaign plans auto-generate with persona-specific strategies and success metrics from your frameworks.",
+        "detail": "The system enforces audience-first planning architecturally. You validate whether automated persona targeting captures strategic nuance."
+      }
+    },
+    "consent-check": {
+      "preAI": {
+        "summary": "You ensure consent data is properly segmented so persona targeting doesn't violate privacy preferences.",
+        "detail": "Consent and persona data live in separate systems. Audience targeting sometimes conflicts with consent because integration is manual."
+      },
+      "aiAgents": {
+        "summary": "A consent agent validates persona targeting against privacy permissions before delivery.",
+        "detail": "Persona segmentation respects consent boundaries automatically. You design audience strategies knowing privacy is enforced."
+      },
+      "aiAgentic": {
+        "summary": "Consent validation is embedded in persona targeting — non-compliant audience delivery is architecturally blocked.",
+        "detail": "The system prevents persona targeting from violating consent automatically. You maintain audience strategies knowing privacy trumps personalization."
+      }
+    },
+    "paid-creative-production": {
+      "preAI": {
+        "summary": "You ensure paid creative targets the correct personas and reflects audience preferences in messaging.",
+        "detail": "Paid creative often prioritizes platform best practices over audience fit. Your persona insights are inconsistently applied to paid campaigns."
+      },
+      "aiAgents": {
+        "summary": "Paid creative agents generate ads using your persona frameworks to guide messaging and targeting.",
+        "detail": "Paid campaigns are persona-driven from inception. You validate whether automated creative captures audience nuance."
+      },
+      "aiAgentic": {
+        "summary": "Paid creative auto-generates with persona-specific messaging and targeting based on your frameworks.",
+        "detail": "The system produces audience-optimized paid campaigns at scale. You monitor whether persona-driven creative outperforms generic approaches."
+      }
+    },
+    "attribution-modeling": {
+      "preAI": {
+        "summary": "You manually correlate attribution data with persona segments to understand audience conversion paths.",
+        "detail": "Attribution models rarely segment by persona. You build custom analyses to see which audiences convert through which paths."
+      },
+      "aiAgents": {
+        "summary": "Attribution models auto-segment by persona, showing conversion path differences across audiences.",
+        "detail": "You see persona-level attribution automatically. Analysis shifts from building segment views to interpreting audience journey differences."
+      },
+      "aiAgentic": {
+        "summary": "Attribution continuously tracks persona-specific conversion paths, creating an audience journey knowledge base.",
+        "detail": "The system connects touchpoints to personas automatically. You use attribution insights to refine persona journey frameworks based on actual conversion behavior."
+      }
+    },
+    "executive-reporting": {
+      "preAI": {
+        "summary": "You build custom executive reports showing which audience segments are driving business outcomes.",
+        "detail": "Persona performance is rarely executive-visible. Your audience insights don't systematically inform strategic decisions."
+      },
+      "aiAgents": {
+        "summary": "Executive reports auto-include persona performance breakdowns showing segment-specific business impact.",
+        "detail": "Audience insights reach leadership automatically. You add interpretation about which persona strategies are driving results."
+      },
+      "aiAgentic": {
+        "summary": "Executive reports auto-generate with persona-level business impact analysis and strategic recommendations.",
+        "detail": "The system quantifies audience contribution to business goals automatically. You engage when persona insights reveal strategic opportunities."
+      }
+    },
+    "competitive-response": {
+      "preAI": {
+        "summary": "You ensure competitive response content targets the personas most likely to be influenced by competitor moves.",
+        "detail": "Reactive content often lacks audience precision in the rush to respond. Persona targeting is sacrificed for speed."
+      },
+      "aiAgents": {
+        "summary": "Competitive response briefs auto-populate with affected persona data to maintain audience targeting under time pressure.",
+        "detail": "Speed doesn't sacrifice persona precision. You validate whether automated audience targeting correctly identified affected segments."
+      },
+      "aiAgentic": {
+        "summary": "Competitive signals auto-generate persona-targeted response briefs based on which audiences are most at risk.",
+        "detail": "The system identifies vulnerable persona segments and prioritizes response content automatically. You validate whether AI correctly assessed audience competitive exposure."
+      }
+    },
+    "content-governance": {
+      "preAI": {
+        "summary": "You ensure governance standards don't inadvertently exclude or alienate key persona segments.",
+        "detail": "Governance rules sometimes create unintended audience barriers. You catch when compliance reduces persona inclusivity."
+      },
+      "aiAgents": {
+        "summary": "Governance agents flag when compliance rules conflict with persona accessibility or inclusivity.",
+        "detail": "Audience impact is considered during governance review. You advise when rules should evolve to serve personas better."
+      },
+      "aiAgentic": {
+        "summary": "Governance validation includes automated persona impact assessment — audience-exclusionary rules trigger review.",
+        "detail": "The system prevents governance from inadvertently alienating personas. You interpret when standards should flex to maintain audience connection."
+      }
+    },
+    "governance-gate": {
+      "preAI": {
+        "summary": "You validate that governance-approved content maintains the audience relevance that drives engagement.",
+        "detail": "Governance gates prioritize compliance over persona fit. You advocate for audience-friendly approaches after governance clearance."
+      },
+      "aiAgents": {
+        "summary": "Governance agents consider persona impact when enforcing standards and flag audience trade-offs.",
+        "detail": "Compliance balances governance with audience connection automatically. You validate whether approved content maintains persona relevance."
+      },
+      "aiAgentic": {
+        "summary": "Governance includes automated persona impact analysis — overly restrictive compliance triggers audience review.",
+        "detail": "The system prevents governance from alienating audiences unnecessarily. You interpret when compliance should override persona preferences."
+      }
+    },
+    "journey-mapping": {
+      "preAI": {
+        "summary": "You define journey stage personas showing how audience needs evolve through the buying process.",
+        "detail": "Journey maps and personas are often disconnected. Lifecycle stage considerations don't systematically update persona frameworks."
+      },
+      "aiAgents": {
+        "summary": "Journey mapping agents integrate your personas with lifecycle stages to create dynamic audience models.",
+        "detail": "Personas evolve by journey stage automatically. You validate whether journey-aware personas better predict content needs."
+      },
+      "aiAgentic": {
+        "summary": "Journey-stage personas auto-update based on real customer progression patterns from your CDP.",
+        "detail": "The system maintains dynamic persona models that reflect actual journey behavior. You monitor whether journey-adaptive personas improve content relevance."
+      }
+    },
+    "sales-enablement": {
+      "preAI": {
+        "summary": "You ensure sales enablement content reflects buyer personas sales teams actually encounter.",
+        "detail": "Sales content often uses different personas than marketing. Audience frameworks aren't consistently shared across teams."
+      },
+      "aiAgents": {
+        "summary": "Sales enablement agents use your buyer personas to create audience-aligned sales content.",
+        "detail": "Marketing and sales share unified persona frameworks. You validate whether sales content maintains audience accuracy."
+      },
+      "aiAgentic": {
+        "summary": "Sales enablement auto-generates with persona-specific messaging and objection handling from your frameworks.",
+        "detail": "The system ensures sales and marketing use consistent audience models. You monitor whether unified personas improve sales effectiveness."
+      }
+    },
+    "influencer-brief": {
+      "preAI": {
+        "summary": "You ensure influencer briefs communicate your audience personas so creator content resonates with your targets.",
+        "detail": "Influencers often don't receive detailed persona guidance. Creator content misses your audience nuances."
+      },
+      "aiAgents": {
+        "summary": "Influencer briefs auto-populate with your persona frameworks to guide creator audience alignment.",
+        "detail": "Creators receive clear audience profiles. You validate whether influencer content maintains persona relevance."
+      },
+      "aiAgentic": {
+        "summary": "Influencer briefs auto-generate with persona-specific content guidance and audience examples.",
+        "detail": "The system translates your personas into creator-friendly guidance automatically. You monitor whether persona-briefed influencers drive better audience engagement."
+      }
+    },
+    "ugc-moderation": {
+      "preAI": {
+        "summary": "You ensure curated UGC reflects diverse persona segments and doesn't over-index on specific audiences.",
+        "detail": "UGC curation can inadvertently exclude personas. You manually audit for audience representation balance."
+      },
+      "aiAgents": {
+        "summary": "A moderation agent flags when UGC curation under-represents key persona segments.",
+        "detail": "Audience diversity is monitored automatically. You validate whether curated content serves all personas equitably."
+      },
+      "aiAgentic": {
+        "summary": "UGC curation automatically balances representation across your persona framework.",
+        "detail": "The system ensures curated content reflects your full audience spectrum. You monitor whether balanced UGC improves cross-persona engagement."
+      }
+    },
+    "content-scoring": {
+      "preAI": {
+        "summary": "You ensure content scoring includes persona fit as a primary evaluation criterion.",
+        "detail": "Scoring often prioritizes business metrics over audience relevance. Your persona insights don't systematically influence prioritization."
+      },
+      "aiAgents": {
+        "summary": "Scoring agents include persona alignment as a weighted factor in content prioritization.",
+        "detail": "Audience fit influences scoring automatically. You validate whether persona-weighted scoring improves content performance."
+      },
+      "aiAgentic": {
+        "summary": "Content scoring dynamically adjusts based on real-time persona engagement patterns and strategic priorities.",
+        "detail": "The system prioritizes content for high-value personas automatically. You monitor whether persona-driven scoring drives business outcomes."
+      }
+    }
+  },
+  "consulting-dd": {
+    "receive-request": {
+      "preAI": {
+        "summary": "You review incoming requests periodically to assess whether the intake process maintains strategic standards.",
+        "detail": "Your external perspective catches when request quality degrades systematically. Internal teams normalize declining intake standards because they see it daily."
+      },
+      "aiAgents": {
+        "summary": "An intake agent provides request quality metrics you review for systemic patterns.",
+        "detail": "You analyze intake trends rather than individual requests. Your value is spotting when automated intake starts accepting requests that shouldn't qualify."
+      },
+      "aiAgentic": {
+        "summary": "You audit the intake system's decision rules to ensure automation isn't systematically lowering standards.",
+        "detail": "The system handles individual requests. You validate whether automated intake criteria reflect strategic intent or have drifted toward convenience."
+      }
+    },
+    "research-insights": {
+      "preAI": {
+        "summary": "You validate that research insights are actually being applied consistently across content creation.",
+        "detail": "Your cross-gate view reveals when insights are referenced but not operationalized. Internal teams claim to use research while producing generic content."
+      },
+      "aiAgents": {
+        "summary": "You audit whether AI-generated content genuinely reflects research insights or just patterns from training data.",
+        "detail": "Agents can cite research without understanding it. You catch when automated content uses persona language but misses persona substance."
+      },
+      "aiAgentic": {
+        "summary": "You evaluate whether the research-to-content pipeline maintains strategic integrity at scale.",
+        "detail": "The system connects insights to output automatically. You validate whether automation strengthened or diluted the connection between research and creation."
+      }
+    },
+    "write-brief": {
+      "preAI": {
+        "summary": "You review brief quality trends to identify whether briefing standards are improving or degrading over time.",
+        "detail": "Your periodic reviews catch slow drift the internal team has normalized. Briefs get progressively weaker because no one compares current quality to historical standards."
+      },
+      "aiAgents": {
+        "summary": "You audit AI-generated briefs for systemic quality patterns invisible to daily reviewers.",
+        "detail": "Automated briefs are consistent, which masks when consistency becomes formulaic. You identify when template-driven briefs lose strategic specificity."
+      },
+      "aiAgentic": {
+        "summary": "You assess whether automated briefing maintains strategic rigor or optimizes for approval speed.",
+        "detail": "The system generates briefs at scale. You validate whether automation improved brief quality or just accelerated mediocrity."
+      }
+    },
+    "draft-content": {
+      "preAI": {
+        "summary": "You periodically review drafted content to assess whether creative standards are being maintained.",
+        "detail": "Your external lens catches quality drift the internal team has grown accustomed to. Drafts that would have failed review a year ago now pass routinely."
+      },
+      "aiAgents": {
+        "summary": "You audit AI-drafted content for patterns that automated quality checks miss.",
+        "detail": "Agents optimize for passing quality gates, which can create content that scores well but lacks substance. You catch when optimization replaced creativity."
+      },
+      "aiAgentic": {
+        "summary": "You evaluate whether autonomous content creation maintains creative differentiation or trends toward safe mediocrity.",
+        "detail": "The system produces content at scale. You assess whether automation enabled better creativity or just more volume of acceptable work."
+      }
+    },
+    "seo-optimization": {
+      "preAI": {
+        "summary": "You validate that SEO optimization isn't systematically degrading content quality or strategic messaging.",
+        "detail": "Your cross-function perspective reveals when SEO and editorial teams optimize independently toward conflicting goals."
+      },
+      "aiAgents": {
+        "summary": "You audit whether automated SEO maintains the balance between search performance and content quality.",
+        "detail": "Agents can over-optimize for search at editorial expense. You catch when automation pushed too far toward ranking over readability."
+      },
+      "aiAgentic": {
+        "summary": "You assess whether SEO automation improved content or just gamed metrics at quality's expense.",
+        "detail": "The system optimizes search performance automatically. You validate whether SEO gains came from better content or from sacrificing editorial integrity."
+      }
+    },
+    "brand-compliance": {
+      "preAI": {
+        "summary": "You provide independent validation that brand compliance standards are being applied consistently.",
+        "detail": "Internal teams can normalize brand drift because they see it gradually. Your periodic reviews provide external calibration checkpoints."
+      },
+      "aiAgents": {
+        "summary": "You audit whether automated brand checking maintains standards or optimizes for approval speed.",
+        "detail": "Agents learn to pass brand review, which can create content that's technically compliant but strategically off-brand. You catch the difference."
+      },
+      "aiAgentic": {
+        "summary": "You evaluate whether continuous brand enforcement strengthened identity or calcified into rigid formulas.",
+        "detail": "The system enforces brand rules automatically. You assess whether automation protected brand integrity or prevented necessary evolution."
+      }
+    },
+    "final-edit": {
+      "preAI": {
+        "summary": "You periodically review finalized content to validate that editorial standards are consistently maintained.",
+        "detail": "Your fresh perspective catches when \"final\" quality has degraded. Internal editors normalize declining standards because they see every incremental slip."
+      },
+      "aiAgents": {
+        "summary": "You audit whether AI-assisted editing improves quality or just accelerates approval of mediocre work.",
+        "detail": "Automated editing can make content technically correct while losing narrative craft. You identify when editorial efficiency came at quality's expense."
+      },
+      "aiAgentic": {
+        "summary": "You assess whether autonomous editing maintains editorial judgment or optimizes for passing quality gates.",
+        "detail": "The system produces polished content at scale. You validate whether automation elevated editorial standards or just made mediocrity more consistent."
+      }
+    },
+    "schedule-publish": {
+      "preAI": {
+        "summary": "You validate that publication scheduling aligns with strategic timing priorities, not just operational convenience.",
+        "detail": "Your external view reveals when scheduling optimizes for workflow efficiency at the expense of strategic impact."
+      },
+      "aiAgents": {
+        "summary": "You audit whether automated scheduling serves strategic goals or just optimizes operational metrics.",
+        "detail": "Agents schedule for efficiency, which can conflict with strategic timing. You catch when automation prioritized convenience over competitive positioning."
+      },
+      "aiAgentic": {
+        "summary": "You evaluate whether autonomous scheduling improved strategic timing or just made the pipeline more predictable.",
+        "detail": "The system schedules publication automatically. You assess whether timing decisions serve business strategy or operational comfort."
+      }
+    },
+    "distribute": {
+      "preAI": {
+        "summary": "You validate that distribution strategies serve strategic goals, not just channel availability.",
+        "detail": "Your cross-organization perspective reveals when distribution defaults to easy channels rather than strategic ones."
+      },
+      "aiAgents": {
+        "summary": "You audit whether automated distribution expands reach strategically or just scales what's easiest.",
+        "detail": "Agents distribute efficiently, which can mean doubling down on existing channels rather than strategic expansion. You catch when automation reduced channel innovation."
+      },
+      "aiAgentic": {
+        "summary": "You assess whether autonomous distribution improved strategic reach or just optimized for existing channel performance.",
+        "detail": "The system distributes content automatically. You validate whether distribution serves evolving strategy or perpetuates historical channel bias."
+      }
+    },
+    "track-performance": {
+      "preAI": {
+        "summary": "You validate that performance tracking measures strategic outcomes, not just operational metrics.",
+        "detail": "Your external lens catches when teams optimize for metrics that don't connect to business goals."
+      },
+      "aiAgents": {
+        "summary": "You audit whether automated tracking surfaces strategic insights or just operational dashboards.",
+        "detail": "Agents track what's measurable, which can miss strategic impact. You identify when measurement optimized the wrong things."
+      },
+      "aiAgentic": {
+        "summary": "You assess whether continuous performance monitoring improved strategic learning or just created metric fixation.",
+        "detail": "The system tracks everything automatically. You validate whether comprehensive measurement drove better strategy or just more dashboards."
+      }
+    },
+    "generate-report": {
+      "preAI": {
+        "summary": "You review reporting quality to ensure insights reach decision-makers effectively.",
+        "detail": "Your external perspective catches when internal reports become ritualistic rather than decision-driving."
+      },
+      "aiAgents": {
+        "summary": "You audit whether automated reporting communicates strategic insights or just assembles data.",
+        "detail": "Agents generate reports efficiently, which can produce technically correct but strategically empty documents. You catch when automation replaced interpretation with data dumps."
+      },
+      "aiAgentic": {
+        "summary": "You evaluate whether autonomous reporting improved decision-making or just accelerated information without insight.",
+        "detail": "The system reports continuously. You assess whether automated reporting drove better decisions or just created more content to ignore."
+      }
+    },
+    "optimize": {
+      "preAI": {
+        "summary": "You validate that optimization decisions serve strategic goals, not just metric improvement.",
+        "detail": "Your cross-function view reveals when teams optimize locally at the expense of system-wide strategy."
+      },
+      "aiAgents": {
+        "summary": "You audit whether automated optimization improves strategic outcomes or just chases short-term metrics.",
+        "detail": "Agents optimize what's measurable, which can conflict with strategic intent. You catch when automation optimized the wrong things efficiently."
+      },
+      "aiAgentic": {
+        "summary": "You assess whether continuous optimization drove strategic improvement or just metric gaming.",
+        "detail": "The system optimizes automatically. You validate whether optimization served business strategy or devolved into A/B testing without purpose."
+      }
+    },
+    "brief-approval": {
+      "preAI": {
+        "summary": "You audit brief approval decisions to ensure the gate maintains strategic standards consistently.",
+        "detail": "Your periodic reviews catch when approval criteria drift. Briefs that would have been rejected previously start passing because standards eroded gradually."
+      },
+      "aiAgents": {
+        "summary": "You validate whether automated brief screening improves approval quality or just accelerates mediocre briefs.",
+        "detail": "Agents can approve briefs that pass technical checks but lack strategic substance. You identify when approval speed came at strategic cost."
+      },
+      "aiAgentic": {
+        "summary": "You assess whether autonomous approval maintained strategic rigor or optimized for workflow velocity.",
+        "detail": "The system approves briefs automatically. You validate whether automation raised strategic standards or just made weak briefs flow faster."
+      }
+    },
+    "performance-review": {
+      "preAI": {
+        "summary": "You validate that performance reviews drive strategic learning, not just operational reporting.",
+        "detail": "Your external perspective catches when performance reviews become retrospective rather than forward-looking."
+      },
+      "aiAgents": {
+        "summary": "You audit whether performance reviews surface strategic insights or just operational metrics.",
+        "detail": "Agents classify performance efficiently, which can miss strategic patterns. You identify when performance review optimized for speed over learning."
+      },
+      "aiAgentic": {
+        "summary": "You assess whether continuous performance feedback created strategic learning loops or just faster reporting cycles.",
+        "detail": "The system reviews performance automatically. You validate whether feedback loops drove strategic evolution or just accelerated tactical adjustments."
+      }
+    },
+    "social-listening": {
+      "preAI": {
+        "summary": "You validate that social listening informs strategic decisions, not just reactive content.",
+        "detail": "Your external view reveals when social monitoring becomes noise collection rather than strategic intelligence."
+      },
+      "aiAgents": {
+        "summary": "You audit whether automated social listening surfaces strategic signals or just trending topics.",
+        "detail": "Agents detect patterns, which can amplify noise as much as signal. You catch when automation increased volume without improving strategic insight."
+      },
+      "aiAgentic": {
+        "summary": "You assess whether continuous social monitoring improved strategic awareness or just created alert fatigue.",
+        "detail": "The system monitors social constantly. You validate whether listening drove better strategy or just more reactive distractions."
+      }
+    },
+    "visual-asset-creation": {
+      "preAI": {
+        "summary": "You periodically review visual assets to ensure creative standards are maintained consistently.",
+        "detail": "Your external lens catches when visual quality drifts. Internal teams normalize declining creative standards because they see incremental changes daily."
+      },
+      "aiAgents": {
+        "summary": "You audit whether AI-generated visuals maintain creative differentiation or trend toward generic templates.",
+        "detail": "Agents can produce technically proficient but creatively safe visuals. You identify when automation reduced creative risk-taking."
+      },
+      "aiAgentic": {
+        "summary": "You evaluate whether autonomous visual creation elevated creative standards or just scaled mediocrity efficiently.",
+        "detail": "The system generates visuals at scale. You assess whether automation enabled better creativity or just more volume of acceptable work."
+      }
+    },
+    "legal-review": {
+      "preAI": {
+        "summary": "You validate that legal reviews maintain appropriate risk tolerance without becoming overly cautious.",
+        "detail": "Your cross-organization perspective reveals when legal becomes a bottleneck optimizing for zero risk rather than appropriate risk."
+      },
+      "aiAgents": {
+        "summary": "You audit whether automated legal screening maintains risk balance or defaults to excessive caution.",
+        "detail": "Agents can flag everything potentially risky, which slows legitimate content. You catch when automation optimized for legal safety at business cost."
+      },
+      "aiAgentic": {
+        "summary": "You assess whether continuous legal validation improved risk management or just increased compliance friction.",
+        "detail": "The system screens legal risk automatically. You validate whether automation enabled smarter risk-taking or just more conservative decisions."
+      }
+    },
+    "accessibility-check": {
+      "preAI": {
+        "summary": "You validate that accessibility compliance serves genuine inclusion, not just checklist completion.",
+        "detail": "Your external view catches when accessibility becomes compliance theater rather than inclusive design."
+      },
+      "aiAgents": {
+        "summary": "You audit whether automated accessibility checking improves actual usability or just technical compliance.",
+        "detail": "Agents can pass WCAG standards while producing poor user experiences. You identify when automation optimized for metrics over genuine accessibility."
+      },
+      "aiAgentic": {
+        "summary": "You evaluate whether continuous accessibility validation improved inclusive communication or just automated checkboxes.",
+        "detail": "The system enforces accessibility automatically. You assess whether automation made content genuinely more inclusive or just technically compliant."
+      }
+    },
+    "localize-content": {
+      "preAI": {
+        "summary": "You validate that localized content maintains strategic quality across all markets.",
+        "detail": "Your cross-market perspective reveals when localization quality varies by region. Markets with less oversight get progressively weaker content."
+      },
+      "aiAgents": {
+        "summary": "You audit whether automated localization maintains consistent quality or creates translation-grade output everywhere.",
+        "detail": "Agents can produce technically correct but culturally flat translations. You catch when automation reduced localization to language conversion."
+      },
+      "aiAgentic": {
+        "summary": "You assess whether autonomous localization maintained cultural nuance at scale or just accelerated generic translations.",
+        "detail": "The system localizes content automatically. You validate whether automation improved regional relevance or just scaled one-size-fits-all faster."
+      }
+    },
+    "ab-variant-creation": {
+      "preAI": {
+        "summary": "You validate that A/B testing serves strategic learning, not just incremental optimization.",
+        "detail": "Your external perspective catches when testing devolves into endless tweaking without strategic direction."
+      },
+      "aiAgents": {
+        "summary": "You audit whether automated testing explores meaningful strategic questions or just tactical variations.",
+        "detail": "Agents can test efficiently without testing strategically. You identify when automation optimized for test volume over learning value."
+      },
+      "aiAgentic": {
+        "summary": "You evaluate whether continuous experimentation drove strategic breakthroughs or just tactical refinements.",
+        "detail": "The system tests constantly. You assess whether testing served strategic innovation or devolved into optimization theater."
+      }
+    },
+    "content-repurposing": {
+      "preAI": {
+        "summary": "You validate that repurposed content maintains quality standards, not just recycling volume.",
+        "detail": "Your external lens catches when repurposing degrades quality. Internal teams normalize lower standards for repurposed content."
+      },
+      "aiAgents": {
+        "summary": "You audit whether automated repurposing maintains creative integrity or just scales content efficiently.",
+        "detail": "Agents repurpose quickly, which can dilute quality. You catch when automation prioritized volume over maintaining original content value."
+      },
+      "aiAgentic": {
+        "summary": "You assess whether autonomous repurposing extended content value or just multiplied mediocrity.",
+        "detail": "The system repurposes content automatically. You validate whether repurposing served strategic reach or just created more forgettable content."
+      }
+    },
+    "archive-tag": {
+      "preAI": {
+        "summary": "You validate that archive systems support strategic learning, not just content storage.",
+        "detail": "Your external view reveals when archives become digital landfills rather than institutional knowledge."
+      },
+      "aiAgents": {
+        "summary": "You audit whether automated archiving creates useful knowledge systems or just organized digital clutter.",
+        "detail": "Agents tag everything, which can bury signal in noise. You identify when comprehensive archiving reduced findability rather than improving it."
+      },
+      "aiAgentic": {
+        "summary": "You evaluate whether automated archiving improved institutional learning or just created searchable garbage.",
+        "detail": "The system archives everything automatically. You assess whether comprehensive archives drove better decisions or just paralyzed teams with options."
+      }
+    },
+    "legal-compliance-gate": {
+      "preAI": {
+        "summary": "You validate that legal gates maintain appropriate risk standards across all content types.",
+        "detail": "Your cross-gate view reveals when legal standards vary inconsistently. Some content gets excessive scrutiny while risky content slips through."
+      },
+      "aiAgents": {
+        "summary": "You audit whether automated legal gates apply consistent standards or create false confidence.",
+        "detail": "Agents can pass compliant content without understanding context. You catch when automation cleared technically safe but strategically risky content."
+      },
+      "aiAgentic": {
+        "summary": "You assess whether autonomous legal validation improved risk management or just created compliance illusion.",
+        "detail": "The system enforces legal standards automatically. You validate whether automation maintained appropriate risk tolerance or defaulted to excessive caution."
+      }
+    },
+    "localization-quality-gate": {
+      "preAI": {
+        "summary": "You validate that localization quality standards are applied consistently across all markets.",
+        "detail": "Your cross-market perspective catches when quality varies by region. Strategic markets get scrutiny while smaller markets get rubber stamps."
+      },
+      "aiAgents": {
+        "summary": "You audit whether automated localization review maintains consistent global standards.",
+        "detail": "Agents can approve technically correct translations that lack cultural resonance. You identify when automation passed language-correct but market-wrong content."
+      },
+      "aiAgentic": {
+        "summary": "You evaluate whether autonomous localization quality maintained global brand consistency or allowed regional drift.",
+        "detail": "The system validates localization automatically. You assess whether automation improved global quality or just accelerated uneven regional standards."
+      }
+    },
+    "segment-mapping": {
+      "preAI": {
+        "summary": "You validate that audience segmentation serves strategic targeting, not just data categorization.",
+        "detail": "Your external view reveals when segmentation becomes over-engineered. Complex personas that don't drive different content decisions."
+      },
+      "aiAgents": {
+        "summary": "You audit whether automated segmentation improves targeting precision or just creates complexity.",
+        "detail": "Agents can create micro-segments that don't warrant different treatment. You catch when automation optimized for granularity over actionability."
+      },
+      "aiAgentic": {
+        "summary": "You assess whether autonomous segmentation improved strategic targeting or just multiplied audience categories pointlessly.",
+        "detail": "The system segments audiences automatically. You validate whether segmentation drove better personalization or just created operational overhead."
+      }
+    },
+    "dynamic-assembly": {
+      "preAI": {
+        "summary": "You validate that personalized content genuinely differs in meaningful ways, not just cosmetically.",
+        "detail": "Your cross-segment view catches when personalization is technically implemented but strategically shallow."
+      },
+      "aiAgents": {
+        "summary": "You audit whether automated assembly creates genuinely personalized experiences or just swaps variables in templates.",
+        "detail": "Agents can personalize efficiently without personalizing meaningfully. You identify when automation created the illusion of customization."
+      },
+      "aiAgentic": {
+        "summary": "You evaluate whether autonomous personalization drove better engagement or just scaled template variations.",
+        "detail": "The system assembles personalized content automatically. You assess whether personalization served audience needs or just demonstrated technical capability."
+      }
+    },
+    "personalization-qa": {
+      "preAI": {
+        "summary": "You validate that personalization QA ensures genuine audience fit, not just technical delivery accuracy.",
+        "detail": "Your external lens catches when QA validates that personalization works technically while missing whether it works strategically."
+      },
+      "aiAgents": {
+        "summary": "You audit whether automated personalization testing validates strategic value or just technical correctness.",
+        "detail": "Agents test delivery precision, which can miss whether personalization actually resonates. You catch when QA optimized for technical success over audience impact."
+      },
+      "aiAgentic": {
+        "summary": "You assess whether continuous personalization validation improved audience relevance or just verified technical plumbing.",
+        "detail": "The system tests personalization automatically. You validate whether QA ensured genuine customization or just that templates assembled correctly."
+      }
+    },
+    "campaign-planning": {
+      "preAI": {
+        "summary": "You validate that campaign plans serve strategic goals, not just operational efficiency.",
+        "detail": "Your external perspective reveals when planning optimizes for ease of execution rather than strategic impact."
+      },
+      "aiAgents": {
+        "summary": "You audit whether automated planning improves strategic thinking or just accelerates tactical execution.",
+        "detail": "Agents plan efficiently, which can mean defaulting to proven approaches rather than strategic innovation. You catch when planning optimized for speed over strategy."
+      },
+      "aiAgentic": {
+        "summary": "You evaluate whether autonomous campaign planning drove strategic innovation or just scaled historical approaches.",
+        "detail": "The system plans campaigns automatically. You assess whether planning served evolving strategy or perpetuated what worked historically."
+      }
+    },
+    "consent-check": {
+      "preAI": {
+        "summary": "You validate that consent practices balance privacy compliance with audience engagement opportunities.",
+        "detail": "Your cross-function view catches when consent becomes overly restrictive, blocking legitimate engagement out of excessive caution."
+      },
+      "aiAgents": {
+        "summary": "You audit whether automated consent checking maintains appropriate balance or defaults to maximum restriction.",
+        "detail": "Agents can over-interpret consent requirements, blocking permissible engagement. You identify when automation optimized for zero privacy risk at business cost."
+      },
+      "aiAgentic": {
+        "summary": "You assess whether continuous consent validation improved privacy protection or just created engagement friction.",
+        "detail": "The system enforces consent automatically. You validate whether automation balanced privacy and engagement or defaulted to excessive restriction."
+      }
+    },
+    "paid-creative-production": {
+      "preAI": {
+        "summary": "You validate that paid creative maintains strategic differentiation, not just platform compliance.",
+        "detail": "Your external lens catches when paid creative optimizes for platform algorithms at the expense of brand differentiation."
+      },
+      "aiAgents": {
+        "summary": "You audit whether automated paid creative creation maintains brand uniqueness or trends toward platform templates.",
+        "detail": "Agents can produce ads that perform algorithmically while losing brand distinctiveness. You catch when automation optimized for platform approval over strategic positioning."
+      },
+      "aiAgentic": {
+        "summary": "You evaluate whether autonomous paid creative improved campaign effectiveness or just scaled safe creative efficiently.",
+        "detail": "The system produces paid creative automatically. You assess whether automation enabled creative breakthroughs or just multiplied mediocre ads."
+      }
+    },
+    "attribution-modeling": {
+      "preAI": {
+        "summary": "You validate that attribution models measure strategic impact, not just technical touchpoint tracking.",
+        "detail": "Your cross-function perspective reveals when attribution optimizes for measurability rather than strategic accuracy."
+      },
+      "aiAgents": {
+        "summary": "You audit whether automated attribution improves strategic understanding or just creates false precision.",
+        "detail": "Agents can build complex models that appear rigorous while making unjustified assumptions. You catch when modeling complexity masked strategic uncertainty."
+      },
+      "aiAgentic": {
+        "summary": "You assess whether continuous attribution modeling improved decision-making or just created metric illusions.",
+        "detail": "The system attributes conversions automatically. You validate whether attribution served strategic learning or just justified existing budget allocations."
+      }
+    },
+    "executive-reporting": {
+      "preAI": {
+        "summary": "You validate that executive reporting drives strategic decisions, not just satisfies reporting rituals.",
+        "detail": "Your external view catches when executive reports become performative rather than decision-driving."
+      },
+      "aiAgents": {
+        "summary": "You audit whether automated executive reporting improves strategic communication or just accelerates information without insight.",
+        "detail": "Agents generate reports efficiently, which can produce data-rich but insight-poor documents. You identify when automation replaced interpretation with dashboards."
+      },
+      "aiAgentic": {
+        "summary": "You evaluate whether autonomous reporting improved executive decision-making or just created more polished noise.",
+        "detail": "The system reports to leadership automatically. You assess whether reporting drove better strategy or just made busy executives busier."
+      }
+    },
+    "competitive-response": {
+      "preAI": {
+        "summary": "You validate that competitive responses serve strategic positioning, not just reactive matching.",
+        "detail": "Your external perspective catches when competitive response becomes reflexive rather than strategic."
+      },
+      "aiAgents": {
+        "summary": "You audit whether automated competitive monitoring improves strategic awareness or just creates reactive noise.",
+        "detail": "Agents detect competitor moves efficiently, which can trigger responses to everything rather than strategic priorities. You catch when monitoring created alert fatigue."
+      },
+      "aiAgentic": {
+        "summary": "You assess whether autonomous competitive response strengthened strategic positioning or just automated reactivity.",
+        "detail": "The system responds to competitors automatically. You validate whether responses served strategic differentiation or just matched competitor moves thoughtlessly."
+      }
+    },
+    "content-governance": {
+      "preAI": {
+        "summary": "You validate that governance serves strategic goals, not just risk avoidance.",
+        "detail": "Your external lens reveals when governance becomes restrictive rather than enabling. Rules that protect nothing but prevent innovation."
+      },
+      "aiAgents": {
+        "summary": "You audit whether automated governance maintains strategic balance or defaults to maximum restriction.",
+        "detail": "Agents can enforce rules without understanding their purpose. You catch when governance automation optimized for compliance over strategic enablement."
+      },
+      "aiAgentic": {
+        "summary": "You evaluate whether continuous governance improved strategic quality or just multiplied approval gates.",
+        "detail": "The system enforces governance automatically. You assess whether automation protected strategic value or just created bureaucracy at scale."
+      }
+    },
+    "governance-gate": {
+      "preAI": {
+        "summary": "You validate that the governance gate maintains strategic standards without becoming a bottleneck.",
+        "detail": "Your cross-gate perspective reveals when governance optimizes for risk avoidance at the expense of strategic velocity."
+      },
+      "aiAgents": {
+        "summary": "You audit whether automated governance approval improves quality or just accelerates risk-averse decisions.",
+        "detail": "Agents can pass safe content while blocking strategic innovation. You identify when automation made the gate faster but more conservative."
+      },
+      "aiAgentic": {
+        "summary": "You assess whether autonomous governance maintained strategic rigor or just scaled cautious decision-making.",
+        "detail": "The system governs automatically. You validate whether the gate enabled strategic quality or just protected against imagined risks efficiently."
+      }
+    },
+    "journey-mapping": {
+      "preAI": {
+        "summary": "You validate that journey mapping drives content strategy, not just creates theoretical frameworks.",
+        "detail": "Your external view catches when journey maps become artifacts rather than operational tools."
+      },
+      "aiAgents": {
+        "summary": "You audit whether automated journey mapping improves content targeting or just creates complex diagrams.",
+        "detail": "Agents can build sophisticated journey maps that don't actually inform content decisions. You catch when mapping became exercise over insight."
+      },
+      "aiAgentic": {
+        "summary": "You evaluate whether continuous journey mapping improved audience understanding or just automated persona complexity.",
+        "detail": "The system maps journeys automatically. You assess whether mapping drove better content strategy or just created more frameworks to maintain."
+      }
+    },
+    "sentiment-monitoring": {
+      "preAI": {
+        "summary": "You validate that sentiment monitoring informs strategic decisions, not just creates reactive alerts.",
+        "detail": "Your external perspective reveals when sentiment tracking becomes noise collection rather than strategic intelligence."
+      },
+      "aiAgents": {
+        "summary": "You audit whether automated sentiment analysis surfaces strategic signals or just trending emotions.",
+        "detail": "Agents detect sentiment shifts efficiently, which can amplify noise as much as signal. You identify when monitoring increased volume without improving strategic insight."
+      },
+      "aiAgentic": {
+        "summary": "You assess whether continuous sentiment monitoring improved strategic awareness or just created alert fatigue.",
+        "detail": "The system monitors sentiment constantly. You validate whether monitoring drove better strategy or just more reactive distractions."
+      }
+    },
+    "sales-enablement": {
+      "preAI": {
+        "summary": "You validate that sales enablement content actually enables sales, not just satisfies content production quotas.",
+        "detail": "Your cross-function view catches when sales content is produced but not used. Internal teams measure creation, not adoption."
+      },
+      "aiAgents": {
+        "summary": "You audit whether automated sales content creation improves sales effectiveness or just scales unused assets.",
+        "detail": "Agents can produce sales content efficiently without validating whether sales actually needs it. You catch when automation created volume without utility."
+      },
+      "aiAgentic": {
+        "summary": "You evaluate whether autonomous sales enablement improved win rates or just automated content sales doesn't use.",
+        "detail": "The system generates sales content automatically. You assess whether enablement served sales needs or just demonstrated marketing productivity."
+      }
+    },
+    "influencer-brief": {
+      "preAI": {
+        "summary": "You validate that influencer briefs maintain brand standards while enabling authentic creator content.",
+        "detail": "Your external perspective catches when briefs become overly restrictive, blocking the authenticity that makes influencer partnerships valuable."
+      },
+      "aiAgents": {
+        "summary": "You audit whether automated influencer briefing balances brand control with creator authenticity.",
+        "detail": "Agents can create rigid briefs that protect brand but kill creator voice. You identify when automation optimized for compliance over partnership value."
+      },
+      "aiAgentic": {
+        "summary": "You assess whether autonomous influencer briefing improved partnership effectiveness or just scaled brand restrictions.",
+        "detail": "The system briefs creators automatically. You validate whether briefing enabled authentic advocacy or just multiplied brand-safe but ineffective partnerships."
+      }
+    },
+    "ugc-moderation": {
+      "preAI": {
+        "summary": "You validate that UGC moderation balances brand safety with authentic customer voice.",
+        "detail": "Your external lens catches when moderation becomes overly cautious, filtering out genuine customer feedback along with actual risks."
+      },
+      "aiAgents": {
+        "summary": "You audit whether automated moderation maintains appropriate risk balance or defaults to excessive restriction.",
+        "detail": "Agents can flag everything potentially risky, blocking valuable UGC along with actual problems. You catch when automation optimized for zero risk at authenticity's expense."
+      },
+      "aiAgentic": {
+        "summary": "You evaluate whether autonomous moderation improved brand safety or just filtered out authentic customer voice.",
+        "detail": "The system moderates UGC automatically. You assess whether moderation protected brand intelligently or just eliminated anything imperfect."
+      }
+    },
+    "content-scoring": {
+      "preAI": {
+        "summary": "You validate that content scoring serves strategic prioritization, not just metric optimization.",
+        "detail": "Your external view reveals when scoring optimizes for measurability rather than strategic value."
+      },
+      "aiAgents": {
+        "summary": "You audit whether automated scoring improves decision quality or just creates false precision.",
+        "detail": "Agents can build complex scores that appear rigorous while measuring the wrong things. You catch when scoring optimized for objectivity over strategic accuracy."
+      },
+      "aiAgentic": {
+        "summary": "You assess whether continuous content scoring improved strategic allocation or just justified existing biases with numbers.",
+        "detail": "The system scores content automatically. You validate whether scoring drove better prioritization or just made subjective decisions appear data-driven."
+      }
+    },
+    "channel-orchestration": {
+      "preAI": {
+        "summary": "You validate that channel orchestration serves integrated strategy, not just operational coordination.",
+        "detail": "Your cross-channel perspective catches when orchestration optimizes for workflow efficiency at the expense of customer experience."
+      },
+      "aiAgents": {
+        "summary": "You audit whether automated orchestration improves customer journey or just coordinates internal workflows.",
+        "detail": "Agents can orchestrate channels efficiently while missing how customers actually experience them. You identify when coordination optimized for ops over audience."
+      },
+      "aiAgentic": {
+        "summary": "You evaluate whether autonomous orchestration improved customer experience or just automated channel silos.",
+        "detail": "The system orchestrates channels automatically. You assess whether orchestration served integrated strategy or just made uncoordinated execution more efficient."
+      }
+    }
+  },
+  "legal-counsel": {
+    "receive-request": {
+      "preAI": {
+        "summary": "You receive content requests and manually flag those requiring legal review based on subject matter.",
+        "detail": "Early identification of legal risk is inconsistent because it depends on requesters knowing to involve you. Risky projects start without legal awareness."
+      },
+      "aiAgents": {
+        "summary": "An intake agent flags requests with legal keywords or topics that trigger automatic legal involvement.",
+        "detail": "Legal screening starts at intake rather than late in creation. You see potentially risky projects early enough to guide them, not just approve or block final work."
+      },
+      "aiAgentic": {
+        "summary": "Requests are auto-classified for legal risk level — only medium and high-risk items reach your queue.",
+        "detail": "The system routes low-risk content away from legal review automatically. Your time concentrates on genuinely complex regulatory questions."
+      }
+    }

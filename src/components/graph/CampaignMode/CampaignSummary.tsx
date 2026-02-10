@@ -1,5 +1,6 @@
 'use client';
 
+import { useShallow } from 'zustand/react/shallow';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useCampaignStore } from '@/lib/store/campaign-store';
 import { usePresentationStore } from '@/lib/store/presentation-store';
@@ -14,11 +15,25 @@ export default function CampaignSummary() {
     revisionCount,
     escalationCount,
     visitedNodes,
-    resetCampaign,
-    startCampaign,
-  } = useCampaignStore();
-  const { setMode } = usePresentationStore();
-  const { loadFullGraph, selectNode, clearHighlights } = useGraphStore();
+  } = useCampaignStore(
+    useShallow((s) => ({
+      isComplete: s.isComplete,
+      stepCount: s.stepCount,
+      totalEstimatedMinutes: s.totalEstimatedMinutes,
+      decisions: s.decisions,
+      revisionCount: s.revisionCount,
+      escalationCount: s.escalationCount,
+      visitedNodes: s.visitedNodes,
+    }))
+  );
+  const resetCampaign = useCampaignStore(s => s.resetCampaign);
+  const startCampaign = useCampaignStore(s => s.startCampaign);
+
+  const setMode = usePresentationStore(s => s.setMode);
+
+  const loadFullGraph = useGraphStore(s => s.loadFullGraph);
+  const selectNode = useGraphStore(s => s.selectNode);
+  const clearHighlights = useGraphStore(s => s.clearHighlights);
 
   const gatesPassed = decisions.filter(d => {
     const dl = d.decision.toLowerCase();

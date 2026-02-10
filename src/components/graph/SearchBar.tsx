@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useMemo, useCallback, useRef, useEffect } from 'react';
+import { useShallow } from 'zustand/react/shallow';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useGraphStore } from '@/lib/store/graph-store';
 import { useUIStore } from '@/lib/store/ui-store';
@@ -15,7 +16,12 @@ export default function SearchBar() {
   const [isOpen, setIsOpen] = useState(false);
   const [mobileExpanded, setMobileExpanded] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
-  const { graphData, fullGraphData, setSearchQuery, selectNode, setHighlightedNodeIds, visibleNodeTypes } = useGraphStore();
+  const { graphData, fullGraphData, visibleNodeTypes } = useGraphStore(
+    useShallow((s) => ({ graphData: s.graphData, fullGraphData: s.fullGraphData, visibleNodeTypes: s.visibleNodeTypes }))
+  );
+  const setSearchQuery = useGraphStore(s => s.setSearchQuery);
+  const selectNode = useGraphStore(s => s.selectNode);
+  const setHighlightedNodeIds = useGraphStore(s => s.setHighlightedNodeIds);
   const { setDetailPanelOpen } = useUIStore();
   const isMobile = useIsMobile();
 

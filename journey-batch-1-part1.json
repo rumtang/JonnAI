@@ -1,0 +1,1154 @@
+{
+  "content-director": {
+    "research-insights": {
+      "preAI": {
+        "summary": "You wait for strategists to deliver research before approving briefs.",
+        "detail": "Research delays brief approval by days or weeks. You can't approve a brief until you see competitive analysis, audience data, and market context. If research is shallow, you send it back and the cycle repeats."
+      },
+      "aiAgents": {
+        "summary": "AI delivers research summaries you review before brief approval.",
+        "detail": "Agents pull competitive intel, audience insights, and trend data in hours instead of days. You review AI-generated research dashboards and flag gaps or questions. This accelerates your brief approval timeline significantly."
+      },
+      "aiAgentic": {
+        "summary": "Research auto-feeds into briefs you govern via strategic parameters.",
+        "detail": "You set research criteria once (competitors to track, audience segments, keyword themes). Agents continuously update research and auto-populate briefs with relevant insights. You audit research quality quarterly and adjust parameters as strategy evolves."
+      }
+    },
+    "draft-content": {
+      "preAI": {
+        "summary": "You're not involved in drafting but delays here cascade to your governance reviews.",
+        "detail": "Writers take days or weeks to produce first drafts. Missed deadlines push back your governance checkpoints and compress time for thoughtful review. You have no visibility until drafts land in review queues."
+      },
+      "aiAgents": {
+        "summary": "Faster AI-assisted drafting means you see content sooner for governance.",
+        "detail": "Agents help writers produce drafts in hours, giving you earlier line of sight. You can flag strategic misalignment before content reaches final review. This reduces last-minute rewrites that derail campaigns."
+      },
+      "aiAgentic": {
+        "summary": "Agents draft autonomously from your approved briefs, flagging edge cases.",
+        "detail": "Agents generate drafts directly from briefs you've approved, following voice and strategy guidelines. They flag content that deviates from brief parameters or requires strategic input. You review flagged items and conduct spot-checks on auto-approved drafts."
+      }
+    },
+    "seo-optimization": {
+      "preAI": {
+        "summary": "SEO happens late and often conflicts with the strategic narrative you approved.",
+        "detail": "SEO specialists optimize after drafts are written, sometimes forcing keyword stuffing that weakens your approved messaging. You discover these conflicts during governance reviews and have to mediate between SEO and brand goals."
+      },
+      "aiAgents": {
+        "summary": "AI suggests SEO changes you can review for strategic alignment.",
+        "detail": "Agents recommend keywords and structural tweaks that balance search and strategy. You review optimization suggestions before they're applied, ensuring SEO doesn't compromise the narrative. This prevents last-minute conflicts between performance and positioning."
+      },
+      "aiAgentic": {
+        "summary": "SEO optimization follows strategic guardrails you define upfront.",
+        "detail": "You set SEO parameters in the brief (acceptable keyword density, protected brand terms, narrative priorities). Agents optimize within those boundaries and flag cases where SEO conflicts with strategy. You audit optimization patterns monthly to refine guardrails."
+      }
+    },
+    "brand-compliance": {
+      "preAI": {
+        "summary": "Brand issues discovered here force rewrites that delay your governance timeline.",
+        "detail": "Brand team finds tone or voice violations after content is drafted, triggering rework that pushes back your final governance review. You lose time to preventable fixes instead of strategic oversight."
+      },
+      "aiAgents": {
+        "summary": "AI pre-checks brand compliance, surfacing only edge cases to you.",
+        "detail": "Agents flag obvious brand violations before human review, reducing rework cycles. You see escalated cases where brand interpretation is ambiguous. This accelerates the path to governance review by eliminating preventable delays."
+      },
+      "aiAgentic": {
+        "summary": "Brand compliance runs automatically from rules you approve and update.",
+        "detail": "You approve brand guardrails (voice, tone, forbidden phrases, visual standards). Agents auto-check all content and auto-approve clear passes. You review flagged cases and quarterly compliance reports to evolve the rule set."
+      }
+    },
+    "final-edit": {
+      "preAI": {
+        "summary": "Editorial delays compress time for your final governance review.",
+        "detail": "Editors take days to polish drafts, pushing content closer to deadlines. When edits finally arrive at your desk, you're rushed to conduct governance reviews and often approve content you haven't fully scrutinized."
+      },
+      "aiAgents": {
+        "summary": "AI-assisted editing speeds content to your governance checkpoint.",
+        "detail": "Agents help editors polish faster, giving you more time for thoughtful governance review. You see cleaner drafts sooner and can focus on strategic alignment rather than fixing typos or structural issues."
+      },
+      "aiAgentic": {
+        "summary": "Editing happens autonomously, delivering governance-ready content faster.",
+        "detail": "Agents edit for clarity, grammar, and style based on your approved guidelines. Editors review only flagged edge cases. You receive polished, governance-ready content with time to assess strategic fit, narrative consistency, and brand alignment."
+      }
+    },
+    "schedule-publish": {
+      "preAI": {
+        "summary": "You're not involved in scheduling but delays here waste the work you governed.",
+        "detail": "Publishing team manually schedules content you've approved, sometimes missing launch windows or optimal timing. Campaign momentum you orchestrated is lost to operational bottlenecks you can't see or control."
+      },
+      "aiAgents": {
+        "summary": "AI suggests optimal timing you can review before scheduling.",
+        "detail": "Agents analyze audience behavior and recommend publish times. You review suggestions to ensure timing aligns with campaign strategy and competitive landscape. This reduces missed opportunities from suboptimal scheduling."
+      },
+      "aiAgentic": {
+        "summary": "Scheduling follows strategic calendars you govern and adjust.",
+        "detail": "You define campaign timing windows, event hooks, and competitive blackout periods. Agents auto-schedule content within those parameters and flag conflicts. You audit scheduling patterns monthly and adjust timing strategies based on performance data."
+      }
+    },
+    "distribute": {
+      "preAI": {
+        "summary": "Distribution is manual and you have no visibility into whether content reaches intended audiences.",
+        "detail": "Teams manually post to channels with inconsistent timing and targeting. You approved content for specific audiences but can't verify it reached them. Misaligned distribution undermines the strategic intent you governed."
+      },
+      "aiAgents": {
+        "summary": "AI recommends distribution plans you approve before execution.",
+        "detail": "Agents suggest channel mix, audience targeting, and distribution cadence based on content type and campaign goals. You review plans to ensure distribution matches strategic priorities. This closes the gap between governance and execution."
+      },
+      "aiAgentic": {
+        "summary": "Distribution executes automatically from audience strategies you define.",
+        "detail": "You set distribution rules (channel priorities by content type, audience segments, frequency caps). Agents auto-distribute approved content and flag anomalies (unexpected low reach, channel conflicts). You review distribution analytics monthly to refine strategies."
+      }
+    },
+    "track-performance": {
+      "preAI": {
+        "summary": "You get performance data weeks late, too slow to inform next brief cycles.",
+        "detail": "Analytics arrive after the next campaign is already briefed and underway. You can't use performance insights to improve current work, only future work. This disconnect between governance and results slows strategic evolution."
+      },
+      "aiAgents": {
+        "summary": "AI delivers performance dashboards you review to inform governance decisions.",
+        "detail": "Agents compile real-time performance metrics and surface trends you can act on. You review dashboards weekly to identify what's working and adjust governance criteria for upcoming briefs. This tightens the feedback loop between execution and strategy."
+      },
+      "aiAgentic": {
+        "summary": "Performance data auto-feeds into your governance frameworks and brief templates.",
+        "detail": "You define success metrics and thresholds for each content type. Agents track performance continuously and auto-update brief templates with winning patterns (topics, formats, CTAs). You review performance-driven template changes quarterly and approve strategic pivots."
+      }
+    },
+    "generate-report": {
+      "preAI": {
+        "summary": "Reports arrive too late to inform your next governance cycle.",
+        "detail": "Analysts spend weeks compiling reports on campaigns you governed. By the time you see results, you've already approved the next wave of briefs. You can't use learnings to improve current governance, only retrospective analysis."
+      },
+      "aiAgents": {
+        "summary": "AI generates reports you review to spot governance improvements.",
+        "detail": "Agents compile performance reports in days instead of weeks, highlighting what worked and what didn't. You review reports to identify patterns (topics that underperform, formats that overperform) and refine governance criteria for upcoming briefs."
+      },
+      "aiAgentic": {
+        "summary": "Reports auto-generate and surface governance insights you act on.",
+        "detail": "Agents produce continuous performance reports and flag governance-level insights (brief elements correlated with success, strategic gaps). You review flagged insights monthly and update governance frameworks, brief templates, and strategic priorities based on data."
+      }
+    },
+    "optimize": {
+      "preAI": {
+        "summary": "Optimization happens ad hoc, disconnected from the governance frameworks you own.",
+        "detail": "Teams tweak underperforming content without consulting original briefs or strategic intent. Optimizations sometimes contradict the positioning you governed. You discover misaligned tweaks only when reviewing final reports."
+      },
+      "aiAgents": {
+        "summary": "AI suggests optimizations you review for strategic alignment.",
+        "detail": "Agents recommend content tweaks based on performance data (headlines, CTAs, visuals). You review suggestions to ensure changes align with brand strategy and original brief intent. This prevents optimization from drifting off-strategy."
+      },
+      "aiAgentic": {
+        "summary": "Optimization follows strategic boundaries you set in governance frameworks.",
+        "detail": "You define optimization guardrails (protected messaging, acceptable A/B test ranges, brand-critical elements). Agents auto-optimize within boundaries and flag cases that require strategic judgment. You review optimization outcomes quarterly to refine guardrails."
+      }
+    },
+    "quality-check": {
+      "preAI": {
+        "summary": "Quality issues discovered here delay content you've already invested governance time in.",
+        "detail": "Errors surface late in the process, forcing rework on content you've approved at the brief stage. You lose time to preventable quality failures instead of strategic oversight on new campaigns."
+      },
+      "aiAgents": {
+        "summary": "AI pre-checks quality, escalating only complex cases to human review.",
+        "detail": "Agents catch typos, broken links, and formatting issues before human quality checks. You see fewer rework cycles and can trust that content reaching governance review has cleared basic quality bars."
+      },
+      "aiAgentic": {
+        "summary": "Quality gates run automatically from standards you approve and evolve.",
+        "detail": "You set quality criteria (readability scores, link checking, image specs). Agents auto-check all content and auto-approve clear passes. You review flagged edge cases and quarterly quality reports to update standards."
+      }
+    },
+    "brand-review": {
+      "preAI": {
+        "summary": "Brand team escalates issues to you when they can't resolve conflicts with other stakeholders.",
+        "detail": "Brand violations discovered here often conflict with SEO or performance goals. You mediate between brand and growth teams, making judgment calls on trade-offs. This pulls you into tactical disputes instead of strategic governance."
+      },
+      "aiAgents": {
+        "summary": "AI flags brand edge cases and suggests resolutions you approve.",
+        "detail": "Agents identify brand-performance conflicts and propose balanced solutions. You review recommendations and set precedents that guide future agent decisions. This reduces escalations and keeps you focused on governance."
+      },
+      "aiAgentic": {
+        "summary": "Brand review follows governance rules you set, escalating true edge cases.",
+        "detail": "You define brand-performance trade-off frameworks (when to prioritize voice over SEO, protected vs. flexible brand elements). Agents apply frameworks and auto-resolve clear cases. You review flagged conflicts and update frameworks quarterly."
+      }
+    },
+    "stakeholder-signoff": {
+      "preAI": {
+        "summary": "Stakeholders request changes that contradict briefs you've already approved.",
+        "detail": "Executives or partners see content late and demand revisions that conflict with strategic direction you governed. You re-litigate brief decisions and negotiate compromises, undermining the governance process you invested in."
+      },
+      "aiAgents": {
+        "summary": "AI surfaces potential stakeholder concerns early, before final review.",
+        "detail": "Agents flag content that might trigger stakeholder pushback (sensitive topics, competitive positioning, legal risk). You can address concerns proactively or prepare rationale for your governance decisions. This reduces surprise rejections."
+      },
+      "aiAgentic": {
+        "summary": "Stakeholder feedback is incorporated into governance rules you maintain.",
+        "detail": "You codify stakeholder priorities and constraints into governance frameworks (legal sensitivities, executive communication styles, partner expectations). Agents apply these rules during content creation. You review stakeholder feedback quarterly and update rules."
+      }
+    },
+    "performance-review": {
+      "preAI": {
+        "summary": "Performance reviews happen too late to inform your current governance work.",
+        "detail": "You review campaign results months after approving the briefs, too late to apply learnings to in-flight campaigns. Insights are retrospective, not actionable. You can't close the loop between governance decisions and outcomes."
+      },
+      "aiAgents": {
+        "summary": "AI surfaces performance patterns you use to refine governance criteria.",
+        "detail": "Agents highlight which brief elements correlated with success or failure across campaigns. You review patterns monthly and adjust governance frameworks (brief templates, approval criteria, strategic priorities) based on data."
+      },
+      "aiAgentic": {
+        "summary": "Performance insights auto-update governance frameworks you oversee.",
+        "detail": "Agents continuously analyze what's working and propose updates to governance rules (winning topics, effective CTAs, high-performing formats). You review proposed changes monthly and approve strategic pivots. Governance evolves based on evidence, not intuition."
+      }
+    },
+    "social-listening": {
+      "preAI": {
+        "summary": "Social insights arrive too late to inform briefs you're approving now.",
+        "detail": "Teams monitor social conversations manually and compile reports weeks after trends emerge. You can't incorporate real-time sentiment or emerging topics into current brief approvals. Strategic opportunities slip by."
+      },
+      "aiAgents": {
+        "summary": "AI delivers social insights you review when approving briefs.",
+        "detail": "Agents monitor brand mentions, competitor activity, and trending topics in real-time. You review social intelligence dashboards when approving briefs to ensure content aligns with current conversations and sentiment."
+      },
+      "aiAgentic": {
+        "summary": "Social signals auto-feed into brief templates and governance alerts.",
+        "detail": "You set listening parameters (competitors, topics, sentiment thresholds). Agents monitor continuously and flag governance-level signals (brand crises, competitive shifts, emerging opportunities). You review alerts weekly and adjust brief priorities accordingly."
+      }
+    },
+    "visual-asset-creation": {
+      "preAI": {
+        "summary": "Visual delays compress time for your governance review of final campaigns.",
+        "detail": "Designers work in parallel with writers but often miss deadlines, forcing you to approve campaigns with placeholder visuals or rush final reviews. You can't assess narrative-visual alignment until the last minute."
+      },
+      "aiAgents": {
+        "summary": "AI accelerates visual production, giving you more time for holistic governance.",
+        "detail": "Agents help designers produce assets faster (image generation, template automation, brand-compliant variations). You see complete campaigns sooner and can evaluate how visuals support strategic messaging."
+      },
+      "aiAgentic": {
+        "summary": "Visuals generate automatically from briefs you approve, flagging edge cases.",
+        "detail": "You approve visual guidelines in briefs (brand style, image themes, layout principles). Agents generate assets that match approved briefs and flag cases that need creative judgment. You review flagged items and conduct spot-checks on auto-approved visuals."
+      }
+    },
+    "legal-review": {
+      "preAI": {
+        "summary": "Legal flags issues late, forcing rewrites on content you've already governed.",
+        "detail": "Legal team reviews after drafts are complete, discovering compliance problems that require major revisions. You re-approve content you've already invested governance time in. Legal becomes a bottleneck you can't control."
+      },
+      "aiAgents": {
+        "summary": "AI pre-screens for legal risk, escalating only complex cases.",
+        "detail": "Agents flag potential legal issues (claims, disclosures, IP conflicts) before human legal review. You see fewer last-minute legal rejections because obvious problems are caught early. Your governance timeline becomes more predictable."
+      },
+      "aiAgentic": {
+        "summary": "Legal compliance runs automatically from rules you co-own with legal counsel.",
+        "detail": "You work with legal to define compliance guardrails (claim substantiation, disclosure requirements, restricted topics). Agents auto-check all content and auto-approve clear passes. You review flagged cases and update rules quarterly with legal."
+      }
+    },
+    "accessibility-check": {
+      "preAI": {
+        "summary": "Accessibility issues discovered late delay campaigns you've approved.",
+        "detail": "Teams check accessibility after content is finalized, finding violations that require rework. Fixes delay publication and compress your governance review windows. You can't ensure inclusive content until the last minute."
+      },
+      "aiAgents": {
+        "summary": "AI checks accessibility early, preventing late-stage delays.",
+        "detail": "Agents scan for accessibility issues (alt text, color contrast, readability) during creation. You see fewer rework cycles and can trust content reaching governance review meets accessibility standards."
+      },
+      "aiAgentic": {
+        "summary": "Accessibility validation runs automatically from standards you approve.",
+        "detail": "You set accessibility requirements (WCAG level, readability targets, inclusive language rules). Agents auto-check all content and auto-approve compliant work. You review flagged edge cases and quarterly accessibility reports to evolve standards."
+      }
+    },
+    "localize-content": {
+      "preAI": {
+        "summary": "Localization happens in silos, sometimes contradicting the global strategy you governed.",
+        "detail": "Regional teams translate and adapt content without visibility into your original brief or strategic intent. Localized versions drift off-message. You discover strategic misalignment only when reviewing final reports."
+      },
+      "aiAgents": {
+        "summary": "AI assists localization while preserving strategic elements you flag.",
+        "detail": "Agents help translators adapt content while protecting core messaging you've marked as strategic. You review localized versions to ensure cultural adaptation doesn't compromise global brand positioning."
+      },
+      "aiAgentic": {
+        "summary": "Localization follows global-local rules you define in governance frameworks.",
+        "detail": "You set localization guardrails (protected messaging, adaptable elements, regional constraints). Agents auto-localize within boundaries and flag cases where cultural adaptation conflicts with strategy. You review flagged items and regional performance quarterly."
+      }
+    },
+    "ab-variant-creation": {
+      "preAI": {
+        "summary": "Teams create A/B tests without consulting the strategic hypotheses in your approved briefs.",
+        "detail": "Variants test tactical elements (headlines, CTAs) without clear connection to strategic questions you care about. You can't learn whether your governance decisions improved outcomes because tests aren't designed to answer strategic questions."
+      },
+      "aiAgents": {
+        "summary": "AI suggests test variants you review for strategic relevance.",
+        "detail": "Agents propose A/B tests based on performance hypotheses and strategic questions from briefs. You review test designs to ensure variants will generate governance-level insights, not just tactical wins."
+      },
+      "aiAgentic": {
+        "summary": "Test variants auto-generate from strategic hypotheses you define.",
+        "detail": "You set strategic testing priorities in briefs (positioning tests, audience hypotheses, narrative experiments). Agents create variants that test those hypotheses and flag cases needing strategic input. You review test results to refine governance frameworks."
+      }
+    },
+    "content-repurposing": {
+      "preAI": {
+        "summary": "Repurposing happens ad hoc, wasting the strategic thinking you invested in original briefs.",
+        "detail": "Teams reuse content opportunistically without referencing original strategy or adapting messaging for new contexts. Repurposed content sometimes contradicts current positioning. You discover off-strategy reuse only when reviewing reports."
+      },
+      "aiAgents": {
+        "summary": "AI suggests repurposing opportunities you evaluate for strategic fit.",
+        "detail": "Agents identify high-performing content worth repurposing and propose new contexts or channels. You review suggestions to ensure repurposing aligns with current strategy and doesn't dilute original messaging."
+      },
+      "aiAgentic": {
+        "summary": "Repurposing follows strategic rules you set for content lifecycle management.",
+        "detail": "You define repurposing criteria (evergreen vs. timely content, channels for reuse, adaptation requirements). Agents auto-identify candidates and create adapted versions within strategic boundaries. You review repurposing patterns quarterly to optimize content ROI."
+      }
+    },
+    "archive-tag": {
+      "preAI": {
+        "summary": "Archiving is inconsistent, making it hard to learn from past campaigns you governed.",
+        "detail": "Teams tag and archive content haphazardly, losing metadata about strategic intent, performance, and governance decisions. You can't easily analyze what governance approaches worked because historical data is incomplete or inaccessible."
+      },
+      "aiAgents": {
+        "summary": "AI suggests archive tags you review to preserve governance context.",
+        "detail": "Agents recommend tags that capture strategic elements (campaign goals, audience, positioning) alongside performance data. You review tagging to ensure future teams can learn from your governance decisions."
+      },
+      "aiAgentic": {
+        "summary": "Archiving follows governance-focused taxonomy you maintain.",
+        "detail": "You define metadata schemas that preserve strategic context (brief elements, governance decisions, performance outcomes). Agents auto-tag all content consistently. You query the archive to analyze which governance approaches drive results and evolve frameworks accordingly."
+      }
+    },
+    "legal-compliance-gate": {
+      "preAI": {
+        "summary": "Legal rejections here force you to re-govern content you've already approved.",
+        "detail": "Legal team blocks publication after you've signed off, requiring major revisions or killing campaigns entirely. You lose governance time and team trust when legal overrules your decisions at the last minute."
+      },
+      "aiAgents": {
+        "summary": "AI pre-screens legal risk, reducing surprises at the gate.",
+        "detail": "Agents flag legal concerns early in the process, before you invest governance time. You see fewer last-minute legal rejections because obvious issues are caught during creation. Legal gates become faster and more predictable."
+      },
+      "aiAgentic": {
+        "summary": "Legal gates apply rules you co-own, escalating only true edge cases.",
+        "detail": "You work with legal to codify compliance criteria into governance frameworks. Agents apply rules automatically and escalate only ambiguous cases. You review escalations with legal counsel and update rules quarterly based on regulatory changes."
+      }
+    },
+    "localization-quality-gate": {
+      "preAI": {
+        "summary": "Localization quality failures here delay global campaigns you've strategically coordinated.",
+        "detail": "Regional teams catch translation errors or cultural missteps late in the process, forcing rework on localized versions. Global launch windows you orchestrated slip. You can't ensure quality at scale."
+      },
+      "aiAgents": {
+        "summary": "AI checks localization quality, flagging issues before the gate.",
+        "detail": "Agents verify translations and cultural adaptation, catching errors before human review. You see fewer delays from localization rework and can coordinate global launches more reliably."
+      },
+      "aiAgentic": {
+        "summary": "Localization quality validates automatically from standards you approve.",
+        "detail": "You set localization quality criteria (translation accuracy, cultural appropriateness, strategic message integrity). Agents auto-check all localized content and escalate only edge cases. You review flagged items and regional quality reports quarterly."
+      }
+    },
+    "segment-mapping": {
+      "preAI": {
+        "summary": "Audience segmentation happens in silos, disconnected from strategic priorities in your briefs.",
+        "detail": "Marketing ops maps segments without visibility into which audiences you prioritized in the brief. Distribution misses strategic targets. You discover misalignment only when reviewing campaign results."
+      },
+      "aiAgents": {
+        "summary": "AI suggests segment mappings you review for strategic alignment.",
+        "detail": "Agents recommend audience-content mappings based on brief priorities and performance data. You review suggestions to ensure high-value segments get the right content. This tightens the connection between governance and execution."
+      },
+      "aiAgentic": {
+        "summary": "Segment mapping follows audience strategies you define in governance frameworks.",
+        "detail": "You set segment priorities and content-audience fit rules in briefs. Agents auto-map approved content to target segments and flag conflicts (content-audience mismatches, over-saturation). You review segment performance quarterly and adjust targeting strategies."
+      }
+    },
+    "dynamic-assembly": {
+      "preAI": {
+        "summary": "Personalization happens without your oversight, sometimes contradicting brand strategy.",
+        "detail": "Teams assemble personalized experiences using rules and content you didn't approve. Dynamic variations drift off-brand or off-message. You discover strategic inconsistencies only when reviewing customer complaints or performance data."
+      },
+      "aiAgents": {
+        "summary": "AI assembles personalized content from components you've approved.",
+        "detail": "Agents combine modular content elements to create personalized experiences, drawing only from content you've governed. You review personalization logic to ensure dynamic assembly preserves strategic intent across all variations."
+      },
+      "aiAgentic": {
+        "summary": "Dynamic assembly follows personalization rules you govern and evolve.",
+        "detail": "You define personalization boundaries (approved content modules, assembly rules, strategic non-negotiables). Agents auto-generate personalized experiences within those boundaries. You review personalization outcomes quarterly and refine rules based on brand consistency and performance."
+      }
+    },
+    "personalization-qa": {
+      "preAI": {
+        "summary": "Personalization quality issues surface after launch, undermining campaigns you governed.",
+        "detail": "Teams can't manually QA all personalized variations before launch. Broken experiences reach customers, damaging the brand you're responsible for governing. You discover quality failures through customer feedback, too late to prevent harm."
+      },
+      "aiAgents": {
+        "summary": "AI checks personalized variations, flagging issues before launch.",
+        "detail": "Agents validate personalization logic and test representative variations for quality and brand consistency. You see fewer post-launch failures and can trust that personalized experiences meet governance standards."
+      },
+      "aiAgentic": {
+        "summary": "Personalization QA runs automatically from quality criteria you define.",
+        "detail": "You set QA standards for personalized content (brand consistency across variations, technical validation, message coherence). Agents auto-check all variations and escalate only edge cases. You review flagged items and personalization quality reports quarterly."
+      }
+    },
+    "campaign-planning": {
+      "preAI": {
+        "summary": "Campaign plans arrive for your approval without clear connection to strategic priorities.",
+        "detail": "Teams plan campaigns in silos, presenting you with tactical execution plans that don't reference strategic goals or competitive context. You spend governance time realigning campaigns with strategy you've already communicated."
+      },
+      "aiAgents": {
+        "summary": "AI helps teams build campaign plans that incorporate your strategic priorities.",
+        "detail": "Agents suggest campaign structures based on strategic frameworks you've approved (audience priorities, competitive positioning, brand themes). You review plans that are pre-aligned with governance criteria, reducing realignment cycles."
+      },
+      "aiAgentic": {
+        "summary": "Campaign plans auto-generate from strategic frameworks you maintain.",
+        "detail": "You define campaign planning rules (audience targeting logic, channel strategies, competitive responses). Agents generate campaign plans that align with those rules and flag cases requiring strategic judgment. You review flagged plans and quarterly campaign performance to evolve frameworks."
+      }
+    },
+    "consent-check": {
+      "preAI": {
+        "summary": "Consent failures discovered late force you to kill campaigns you've already governed.",
+        "detail": "Privacy team catches consent violations after content is approved and scheduled, blocking publication. You lose governance time and campaign momentum to preventable compliance failures."
+      },
+      "aiAgents": {
+        "summary": "AI pre-checks consent requirements, reducing late-stage rejections.",
+        "detail": "Agents flag potential consent or privacy issues before you invest governance time. You see fewer campaigns killed at the last minute due to privacy violations. Governance becomes more predictable."
+      },
+      "aiAgentic": {
+        "summary": "Consent validation runs automatically from privacy rules you co-own.",
+        "detail": "You work with privacy counsel to define consent requirements and data handling rules. Agents auto-check all campaigns and escalate only ambiguous cases. You review escalations and update privacy frameworks quarterly based on regulatory changes."
+      }
+    },
+    "paid-creative-production": {
+      "preAI": {
+        "summary": "Paid creative is produced in silos, disconnected from organic content strategy you govern.",
+        "detail": "Paid media team creates ads without referencing briefs or messaging you've approved for organic content. Brand narrative fragments across paid and organic. You discover inconsistencies when reviewing campaign results."
+      },
+      "aiAgents": {
+        "summary": "AI helps align paid creative with organic strategy you've governed.",
+        "detail": "Agents surface approved messaging and visual themes from organic briefs when paid creative is developed. You review paid creative to ensure it reinforces organic narrative and brand positioning."
+      },
+      "aiAgentic": {
+        "summary": "Paid creative follows cross-channel narrative rules you define.",
+        "detail": "You set creative consistency requirements (shared themes, complementary messaging, visual continuity) across paid and organic. Agents auto-generate paid creative aligned with organic strategy and flag conflicts. You review paid-organic alignment quarterly."
+      }
+    },
+    "attribution-modeling": {
+      "preAI": {
+        "summary": "Attribution data arrives too late to inform briefs you're approving now.",
+        "detail": "Analysts spend weeks modeling attribution across channels and touchpoints. By the time you see which channels drove conversions, you've already approved new campaign briefs. You can't use attribution insights to optimize current governance decisions."
+      },
+      "aiAgents": {
+        "summary": "AI delivers attribution insights you use when approving briefs.",
+        "detail": "Agents model attribution continuously and surface channel performance trends. You review attribution dashboards when approving briefs to allocate budget and creative emphasis across channels strategically."
+      },
+      "aiAgentic": {
+        "summary": "Attribution insights auto-update channel strategies in your governance frameworks.",
+        "detail": "You define channel investment thresholds and performance benchmarks. Agents continuously model attribution and recommend channel strategy adjustments. You review recommendations monthly and approve strategic pivots based on attribution data."
+      }
+    },
+    "executive-reporting": {
+      "preAI": {
+        "summary": "Executive reports don't surface the governance decisions you made or their impact.",
+        "detail": "Analysts compile performance metrics without context about which strategic choices drove results. You can't demonstrate the value of governance or learn which approval criteria correlate with success."
+      },
+      "aiAgents": {
+        "summary": "AI helps you build executive reports that connect governance to outcomes.",
+        "detail": "Agents correlate performance data with brief elements and governance decisions you made. You review reports that show which strategic choices worked, giving you evidence to refine governance frameworks and communicate value to leadership."
+      },
+      "aiAgentic": {
+        "summary": "Executive reports auto-generate governance insights you present to leadership.",
+        "detail": "Agents track which governance decisions (brief elements, approval criteria, strategic pivots) correlate with performance outcomes. Reports auto-highlight governance effectiveness. You review insights quarterly and use them to evolve governance strategy and demonstrate ROI to executives."
+      }
+    },
+    "competitive-response": {
+      "preAI": {
+        "summary": "You learn about competitive moves too late to factor them into current brief approvals.",
+        "detail": "Teams monitor competitors manually and report findings weeks after launches occur. You can't adjust strategic positioning in briefs you're approving now. Competitive opportunities and threats slip by."
+      },
+      "aiAgents": {
+        "summary": "AI monitors competitors and surfaces insights when you approve briefs.",
+        "detail": "Agents track competitor content launches, messaging shifts, and campaign activity in real-time. You review competitive intelligence dashboards when approving briefs to ensure positioning is responsive and differentiated."
+      },
+      "aiAgentic": {
+        "summary": "Competitive signals auto-trigger governance alerts and brief adjustments.",
+        "detail": "You set competitive monitoring parameters (key competitors, strategic themes, threat thresholds). Agents track continuously and flag governance-level competitive moves. You review alerts weekly and adjust brief priorities or approve rapid response campaigns."
+      }
+    },
+    "journey-mapping": {
+      "preAI": {
+        "summary": "Journey mapping happens in silos, disconnected from briefs you approve.",
+        "detail": "Customer experience teams map journeys without consulting content strategy or involving you in the process. Content you approve doesn't align with journey stages or customer needs. You discover misalignment when reviewing performance data."
+      },
+      "aiAgents": {
+        "summary": "AI surfaces journey context when you approve content briefs.",
+        "detail": "Agents map content to customer journey stages and highlight gaps or overlaps. You review journey alignment when approving briefs to ensure content serves strategic touchpoints and customer needs."
+      },
+      "aiAgentic": {
+        "summary": "Journey mapping auto-informs brief templates you govern.",
+        "detail": "You define journey-content mapping rules (stages, content types, success metrics per touchpoint). Agents auto-populate briefs with journey context and flag content gaps. You review journey coverage quarterly and adjust content strategies to address underserved stages."
+      }
+    },
+    "sentiment-monitoring": {
+      "preAI": {
+        "summary": "Sentiment data arrives too late to inform briefs you're approving today.",
+        "detail": "Teams track brand sentiment manually and report findings weeks after sentiment shifts occur. You can't adjust messaging or tone in current briefs to respond to audience mood. Strategic agility is lost."
+      },
+      "aiAgents": {
+        "summary": "AI delivers sentiment insights you consider when approving briefs.",
+        "detail": "Agents monitor brand sentiment across channels in real-time and surface trends or anomalies. You review sentiment dashboards when approving briefs to ensure tone and messaging match current audience mood."
+      },
+      "aiAgentic": {
+        "summary": "Sentiment signals auto-trigger governance alerts and brief adjustments.",
+        "detail": "You set sentiment monitoring parameters (sentiment thresholds, crisis triggers, opportunity signals). Agents track continuously and flag governance-level sentiment shifts. You review alerts weekly and approve messaging pivots or crisis response campaigns."
+      }
+    },
+    "sales-enablement": {
+      "preAI": {
+        "summary": "Sales content is created in silos, disconnected from marketing strategy you govern.",
+        "detail": "Sales teams produce collateral without consulting marketing briefs or brand guidelines you've approved. Messaging fragments across marketing and sales. You discover inconsistencies when prospects mention conflicting narratives."
+      },
+      "aiAgents": {
+        "summary": "AI helps align sales content with marketing strategy you govern.",
+        "detail": "Agents surface approved messaging, positioning, and themes from marketing briefs when sales content is developed. You review sales enablement materials to ensure they reinforce marketing narrative and brand positioning."
+      },
+      "aiAgentic": {
+        "summary": "Sales enablement follows cross-functional narrative rules you define.",
+        "detail": "You set messaging consistency requirements (shared positioning, complementary benefits, tone alignment) across marketing and sales. Agents auto-generate sales content aligned with marketing strategy and flag conflicts. You review marketing-sales alignment quarterly."
+      }
+    },
+    "influencer-brief": {
+      "preAI": {
+        "summary": "Influencer briefs are created without your strategic oversight, risking off-brand content.",
+        "detail": "Partnership teams brief influencers without consulting brand strategy or messaging you've approved. Influencer content sometimes contradicts positioning or tone. You discover off-strategy creator content when it's already published."
+      },
+      "aiAgents": {
+        "summary": "AI helps teams build influencer briefs aligned with your brand strategy.",
+        "detail": "Agents suggest influencer brief elements based on brand guidelines and messaging you've approved. You review influencer briefs to ensure creators receive clear strategic guardrails before producing content."
+      },
+      "aiAgentic": {
+        "summary": "Influencer briefs auto-generate from brand rules you maintain.",
+        "detail": "You define influencer content requirements (messaging guardrails, visual standards, prohibited topics). Agents auto-populate influencer briefs with approved guidelines and flag high-risk partnerships. You review flagged briefs and quarterly influencer content for brand alignment."
+      }
+    },
+    "ugc-moderation": {
+      "preAI": {
+        "summary": "UGC moderation happens reactively, sometimes allowing off-brand content to represent you.",
+        "detail": "Teams manually review user-generated content and miss posts that contradict brand values or positioning. Off-brand UGC reaches audiences before you can intervene. Your brand governance extends only to owned content."
+      },
+      "aiAgents": {
+        "summary": "AI flags problematic UGC for your review before it's featured.",
+        "detail": "Agents scan user-generated content for brand misalignment, policy violations, or reputational risk. You review flagged UGC and set moderation precedents that guide future agent decisions. This extends governance to earned content."
+      },
+      "aiAgentic": {
+        "summary": "UGC moderation follows brand safety rules you define and evolve.",
+        "detail": "You set UGC standards (brand-aligned themes, prohibited content, quality thresholds). Agents auto-moderate and auto-approve clear cases, flagging edge cases for human review. You review moderation decisions quarterly and update standards based on community evolution."
+      }
+    },
+    "channel-orchestration": {
+      "preAI": {
+        "summary": "Channel execution happens in silos, undermining the integrated strategy you govern.",
+        "detail": "Teams manage channels independently, creating timing conflicts and message fragmentation. You approved a coordinated campaign but execution doesn't reflect that. You discover channel misalignment when reviewing performance or customer feedback."
+      },
+      "aiAgents": {
+        "summary": "AI suggests channel orchestration plans you review for strategic coherence.",
+        "detail": "Agents recommend channel timing, sequencing, and message variations based on campaign strategy. You review orchestration plans to ensure channels work together to amplify strategic narrative."
+      },
+      "aiAgentic": {
+        "summary": "Channel orchestration follows cross-channel rules you define in governance.",
+        "detail": "You set orchestration requirements (message sequencing, channel priority, timing coordination). Agents auto-execute coordinated campaigns within those rules and flag conflicts. You review orchestration outcomes quarterly and refine strategies based on cross-channel performance."
+      }
+    }
+  },
+  "brand-manager": {
+    "receive-request": {
+      "preAI": {
+        "summary": "You're not involved when requests arrive, missing early brand risk signals.",
+        "detail": "Requests bypass you entirely until content is drafted, giving you no chance to flag brand concerns early. By the time you review, teams have invested time in directions that may conflict with brand strategy."
+      },
+      "aiAgents": {
+        "summary": "AI flags requests that may pose brand risks before work begins.",
+        "detail": "Agents scan incoming requests for brand-sensitive topics, competitor mentions, or high-risk claims. You review flagged requests early and provide brand guidance before teams invest time in off-brand directions."
+      },
+      "aiAgentic": {
+        "summary": "Requests auto-route to you based on brand risk criteria you define.",
+        "detail": "You set brand escalation triggers (regulated claims, competitor positioning, sensitive topics, new product launches). Agents auto-flag matching requests for your early input. You review flagged requests weekly and provide brand guardrails before creation begins."
+      }
+    },
+    "research-insights": {
+      "preAI": {
+        "summary": "Research happens without brand context, sometimes missing competitive brand threats.",
+        "detail": "Strategists pull market data and audience insights without consulting brand positioning or monitoring competitor brand moves. Research may miss brand-critical signals (competitor repositioning, category perception shifts)."
+      },
+      "aiAgents": {
+        "summary": "AI surfaces brand-relevant research insights you review.",
+        "detail": "Agents highlight research findings that impact brand positioning, perception, or differentiation. You review brand-focused research summaries and flag gaps (missing competitive brand analysis, audience brand sentiment)."
+      },
+      "aiAgentic": {
+        "summary": "Research auto-includes brand monitoring data you specify.",
+        "detail": "You define brand research requirements (competitor brand tracking, category perception, brand health metrics). Agents auto-pull brand-specific insights and flag brand threats or opportunities. You review brand research quarterly to track positioning effectiveness."
+      }
+    },
+    "write-brief": {
+      "preAI": {
+        "summary": "Briefs are written without brand input, forcing you to correct brand issues later.",
+        "detail": "Content directors write briefs without consulting brand guidelines or positioning frameworks. You discover brand misalignment when reviewing drafts, triggering rewrites that waste team time."
+      },
+      "aiAgents": {
+        "summary": "AI suggests brand elements teams should include in briefs.",
+        "detail": "Agents recommend brand voice, tone, and positioning guidance when briefs are written. You review briefs to ensure brand strategy is embedded upfront, preventing downstream brand violations."
+      },
+      "aiAgentic": {
+        "summary": "Briefs auto-populate with brand requirements you maintain.",
+        "detail": "You define brief templates with mandatory brand elements (voice, tone, visual standards, protected messaging). Agents auto-populate briefs with relevant brand guidelines and flag briefs that conflict with brand strategy. You review flagged briefs and update templates quarterly."
+      }
+    },
+    "draft-content": {
+      "preAI": {
+        "summary": "You see drafts only after they're written, discovering brand violations too late.",
+        "detail": "Writers draft content without brand oversight, using off-brand language, tone, or positioning. You catch violations during review but teams have already invested significant time in off-brand directions."
+      },
+      "aiAgents": {
+        "summary": "AI flags brand issues in drafts before you review them.",
+        "detail": "Agents scan drafts for brand voice violations, off-brand terminology, or tone mismatches. You review pre-flagged content and focus your brand review on edge cases rather than catching obvious errors."
+      },
+      "aiAgentic": {
+        "summary": "Drafts auto-check against brand rules you define, flagging violations.",
+        "detail": "You set brand guardrails (approved voice, forbidden phrases, tone frameworks, positioning boundaries). Agents auto-check drafts and flag violations. Writers fix issues before you review. You see only edge cases requiring brand judgment."
+      }
+    },
+    "seo-optimization": {
+      "preAI": {
+        "summary": "SEO often conflicts with brand voice and you mediate disputes late in the process.",
+        "detail": "SEO specialists optimize for keywords without regard for brand voice or messaging quality. You discover keyword stuffing, awkward phrasing, or off-brand language during brand review and fight to preserve voice."
+      },
+      "aiAgents": {
+        "summary": "AI balances SEO and brand, flagging conflicts for you to resolve.",
+        "detail": "Agents optimize for search while monitoring brand voice violations. You review flagged SEO-brand conflicts and set precedents (when to prioritize voice over keywords) that guide future agent decisions."
+      },
+      "aiAgentic": {
+        "summary": "SEO optimization follows brand-first rules you define.",
+        "detail": "You set SEO-brand trade-off frameworks (protected phrases, acceptable keyword density, voice-critical content types). Agents optimize within brand boundaries and flag cases where SEO conflicts with voice. You review conflicts monthly and update frameworks."
+      }
+    },
+    "final-edit": {
+      "preAI": {
+        "summary": "Editors may introduce subtle brand voice drift you catch too late.",
+        "detail": "Editors polish language and structure without deep brand expertise, sometimes making word choices that shift tone or voice. You discover drift during final brand review, forcing last-minute revisions."
+      },
+      "aiAgents": {
+        "summary": "AI alerts editors to brand voice concerns before final edits.",
+        "detail": "Agents flag potential brand voice changes when editors revise language. Editors review suggestions and preserve brand voice during polishing. You see fewer voice violations in final brand review."
+      },
+      "aiAgentic": {
+        "summary": "Editing follows brand voice rules that protect tone and identity.",
+        "detail": "You define brand-critical editing guidelines (protected phrases, tone frameworks, voice principles). Agents alert editors to potential brand impact when revising language. You review editing patterns quarterly to ensure voice consistency."
+      }
+    },
+    "schedule-publish": {
+      "preAI": {
+        "summary": "You're not involved in scheduling but poorly timed launches can damage brand perception.",
+        "detail": "Publishing teams schedule content without brand calendar awareness, sometimes launching campaigns during brand-sensitive moments (competitive crises, industry controversies, cultural events). Brand damage from poor timing falls on you."
+      },
+      "aiAgents": {
+        "summary": "AI flags scheduling conflicts with brand-sensitive moments.",
+        "detail": "Agents monitor brand calendar and external events, flagging potential timing conflicts (competitive brand launches, industry crises, cultural sensitivities). You review flagged schedules and recommend timing adjustments to protect brand."
+      },
+      "aiAgentic": {
+        "summary": "Scheduling respects brand calendar rules you maintain.",
+        "detail": "You define brand-sensitive timing criteria (competitive blackout periods, cultural awareness dates, brand moment exclusions). Agents auto-flag scheduling conflicts with brand calendar. You review flagged items and update brand calendar quarterly."
+      }
+    },
+    "distribute": {
+      "preAI": {
+        "summary": "Distribution happens without brand channel strategy, fragmenting brand presence.",
+        "detail": "Teams distribute content across channels without coordinating brand message or respecting channel-brand fit. Your carefully governed brand voice reaches audiences inconsistently. You discover fragmentation through customer feedback."
+      },
+      "aiAgents": {
+        "summary": "AI suggests distribution plans you review for brand consistency.",
+        "detail": "Agents recommend channel selection and message adaptation based on channel-brand fit and audience expectations. You review distribution plans to ensure brand shows up coherently across touchpoints."
+      },
+      "aiAgentic": {
+        "summary": "Distribution follows channel-brand rules you define.",
+        "detail": "You set channel strategy requirements (brand voice adaptation by channel, channel priorities, cross-channel consistency rules). Agents auto-distribute within those rules and flag channel conflicts. You review distribution patterns quarterly to refine channel-brand fit."
+      }
+    },
+    "track-performance": {
+      "preAI": {
+        "summary": "Performance tracking misses brand health metrics you care about.",
+        "detail": "Analytics focus on engagement and conversion, ignoring brand perception, sentiment, or voice consistency. You can't measure whether content strengthens or weakens brand. Performance data doesn't inform your brand governance."
+      },
+      "aiAgents": {
+        "summary": "AI tracks brand health metrics alongside performance data.",
+        "detail": "Agents monitor brand sentiment, voice consistency, and perception metrics in addition to standard performance KPIs. You review brand health dashboards to see whether content is building or eroding brand equity."
+      },
+      "aiAgentic": {
+        "summary": "Brand health metrics auto-track based on criteria you define.",
+        "detail": "You set brand tracking requirements (sentiment thresholds, brand attribute scores, voice consistency metrics). Agents continuously monitor brand health and flag degradation. You review brand performance monthly and adjust brand strategy based on data."
+      }
+    },
+    "generate-report": {
+      "preAI": {
+        "summary": "Reports don't connect performance to brand outcomes you're responsible for.",
+        "detail": "Analysts compile engagement metrics without analyzing brand impact. You can't demonstrate whether brand governance improved brand perception or drove preference. Your brand work is invisible in reporting."
+      },
+      "aiAgents": {
+        "summary": "AI helps you build reports that show brand governance impact.",
+        "detail": "Agents correlate brand compliance with brand health metrics and performance outcomes. You review reports that demonstrate the ROI of brand consistency and voice adherence."
+      },
+      "aiAgentic": {
+        "summary": "Reports auto-generate brand governance insights you present to leadership.",
+        "detail": "Agents track which brand decisions (voice choices, compliance actions, escalations) correlate with brand health and business outcomes. Reports auto-highlight brand governance effectiveness. You review insights quarterly and use them to evolve brand strategy."
+      }
+    },
+    "optimize": {
+      "preAI": {
+        "summary": "Optimization often sacrifices brand for performance without consulting you.",
+        "detail": "Teams tweak underperforming content to boost metrics, sometimes compromising brand voice or positioning. You discover off-brand optimizations when reviewing reports or customer feedback, too late to prevent brand dilution."
+      },
+      "aiAgents": {
+        "summary": "AI suggests optimizations you review for brand impact.",
+        "detail": "Agents recommend content tweaks to improve performance while flagging potential brand voice or positioning concerns. You review suggestions to ensure optimization doesn't erode brand equity for short-term gains."
+      },
+      "aiAgentic": {
+        "summary": "Optimization follows brand-first rules you define.",
+        "detail": "You set optimization guardrails (protected brand elements, acceptable voice range, positioning non-negotiables). Agents optimize within brand boundaries and flag cases where performance conflicts with brand. You review brand-performance trade-offs quarterly."
+      }
+    },
+    "brief-approval": {
+      "preAI": {
+        "summary": "You're not involved in brief approval, missing the chance to embed brand early.",
+        "detail": "Content directors approve briefs without brand input. Brand strategy is treated as a review checkpoint, not a planning input. You catch brand misalignment only after teams have invested time in off-brand directions."
+      },
+      "aiAgents": {
+        "summary": "AI flags briefs with brand risks for your early review.",
+        "detail": "Agents scan briefs for brand-sensitive topics, voice conflicts, or positioning gaps. You review flagged briefs before approval and provide brand guidance that prevents downstream brand violations."
+      },
+      "aiAgentic": {
+        "summary": "Briefs auto-route to you based on brand risk criteria you define.",
+        "detail": "You set brief escalation triggers (new positioning, competitor mentions, regulated claims, high-visibility campaigns). Agents auto-flag matching briefs for your review before director approval. You review flagged briefs weekly and provide brand input upfront."
+      }
+    },
+    "quality-check": {
+      "preAI": {
+        "summary": "Quality checks focus on errors, not brand voice or tone consistency.",
+        "detail": "Teams check for typos and broken links but miss subtle brand voice drift. You catch tone inconsistencies during brand review, triggering rework that quality checks should have prevented."
+      },
+      "aiAgents": {
+        "summary": "AI adds brand voice checks to quality gates.",
+        "detail": "Agents validate brand voice, tone, and terminology alongside traditional quality checks. You see fewer brand violations reaching final review because voice issues are caught earlier."
+      },
+      "aiAgentic": {
+        "summary": "Quality gates auto-validate brand voice from rules you maintain.",
+        "detail": "You define brand quality criteria (voice consistency, approved terminology, tone frameworks). Agents auto-check all content for brand quality and flag violations. You review flagged items and quarterly brand quality reports."
+      }
+    },
+    "stakeholder-signoff": {
+      "preAI": {
+        "summary": "Stakeholders request brand changes late, forcing you to defend or compromise brand decisions.",
+        "detail": "Executives see content at the last minute and demand changes that conflict with brand strategy. You either fight to preserve brand or compromise positioning to meet deadlines. Brand governance erodes under deadline pressure."
+      },
+      "aiAgents": {
+        "summary": "AI surfaces potential stakeholder brand concerns early.",
+        "detail": "Agents flag content likely to trigger stakeholder pushback on brand grounds (new positioning, tone shifts, competitive claims). You can address concerns proactively or prepare brand rationale before stakeholder review."
+      },
+      "aiAgentic": {
+        "summary": "Stakeholder brand expectations are codified into rules you co-own.",
+        "detail": "You work with leadership to define brand non-negotiables and acceptable flexibility. Agents apply these rules during creation. You review stakeholder feedback quarterly and update brand frameworks to reflect executive brand priorities."
+      }
+    },
+    "performance-review": {
+      "preAI": {
+        "summary": "Performance reviews miss brand health signals you need to govern effectively.",
+        "detail": "Reviews focus on engagement and conversion without analyzing brand perception or sentiment trends. You can't connect brand decisions to brand outcomes or identify which brand governance actions drive brand equity."
+      },
+      "aiAgents": {
+        "summary": "AI highlights brand performance patterns you use to refine brand strategy.",
+        "detail": "Agents correlate brand compliance with brand health metrics (sentiment, awareness, preference). You review brand performance insights to identify which brand decisions strengthen positioning and which don't."
+      },
+      "aiAgentic": {
+        "summary": "Brand performance insights auto-update brand governance frameworks.",
+        "detail": "Agents continuously analyze brand health data and recommend brand strategy adjustments (voice evolution, positioning refinements, compliance criteria updates). You review recommendations quarterly and approve brand evolution based on evidence."
+      }
+    },
+    "social-listening": {
+      "preAI": {
+        "summary": "Social listening misses brand perception signals until they become crises.",
+        "detail": "Teams monitor mentions and engagement but don't systematically track brand sentiment or perception shifts. You discover brand threats when they've already escalated, limiting your ability to respond proactively."
+      },
+      "aiAgents": {
+        "summary": "AI surfaces brand health signals from social conversations.",
+        "detail": "Agents monitor brand mentions for sentiment shifts, perception trends, and competitive brand comparisons. You review brand listening dashboards weekly to spot early signals of brand threats or opportunities."
+      },
+      "aiAgentic": {
+        "summary": "Social listening auto-tracks brand health metrics you define.",
+        "detail": "You set brand monitoring parameters (sentiment thresholds, brand attribute tracking, competitive brand benchmarks). Agents continuously monitor and flag brand health changes. You review alerts weekly and adjust brand strategy proactively."
+      }
+    },
+    "visual-asset-creation": {
+      "preAI": {
+        "summary": "Visuals are created without brand oversight until late review stages.",
+        "detail": "Designers work from briefs without brand input, sometimes producing assets that don't align with brand visual identity. You catch brand visual violations during review, forcing expensive redesigns."
+      },
+      "aiAgents": {
+        "summary": "AI checks visual brand compliance before you review.",
+        "detail": "Agents validate visuals against brand style guidelines (colors, typography, imagery themes, layout principles). You review flagged visual brand issues and focus your brand review on strategic visual decisions."
+      },
+      "aiAgentic": {
+        "summary": "Visual assets auto-check against brand visual identity you maintain.",
+        "detail": "You define visual brand standards (color palettes, typography rules, imagery guidelines, layout principles). Agents auto-validate all visuals and flag violations. You review flagged items and quarterly visual brand consistency reports."
+      }
+    },
+    "legal-review": {
+      "preAI": {
+        "summary": "Legal review catches claim issues but misses brand positioning problems.",
+        "detail": "Legal team validates regulatory compliance but doesn't assess whether claims align with brand positioning or voice. Content can be legally compliant but brand-misaligned. You discover positioning drift during brand review."
+      },
+      "aiAgents": {
+        "summary": "AI coordinates legal and brand review to catch both compliance and brand issues.",
+        "detail": "Agents flag content for both legal compliance and brand alignment review. You review brand aspects while legal reviews regulatory aspects. This parallel review prevents brand issues from slipping through."
+      },
+      "aiAgentic": {
+        "summary": "Legal and brand rules are coordinated in frameworks you co-own with legal.",
+        "detail": "You work with legal to define rules that balance compliance and brand positioning (claim substantiation that maintains brand voice, disclosures that preserve brand experience). Agents apply coordinated rules. You review edge cases with legal quarterly."
+      }
+    },
+    "accessibility-check": {
+      "preAI": {
+        "summary": "Accessibility fixes sometimes compromise brand visual identity.",
+        "detail": "Teams make accessibility changes (color contrast, font sizes, alt text) without consulting brand guidelines. Fixes may weaken brand visual impact. You discover brand-accessibility conflicts during final review."
+      },
+      "aiAgents": {
+        "summary": "AI flags accessibility changes that impact brand identity.",
+        "detail": "Agents recommend accessibility fixes while flagging potential brand visual impact (color changes, typography adjustments). You review flagged changes to find solutions that balance accessibility and brand."
+      },
+      "aiAgentic": {
+        "summary": "Accessibility standards incorporate brand visual requirements you define.",
+        "detail": "You work with accessibility experts to define standards that meet accessibility requirements while preserving brand identity. Agents apply coordinated rules and flag unresolvable conflicts. You review conflicts quarterly and evolve standards."
+      }
+    },
+    "localize-content": {
+      "preAI": {
+        "summary": "Localization often sacrifices global brand consistency for regional adaptation.",
+        "detail": "Regional teams translate and adapt without visibility into global brand strategy. Localized versions drift from brand voice or positioning. You discover brand fragmentation across markets when reviewing global reports."
+      },
+      "aiAgents": {
+        "summary": "AI helps translators preserve brand voice during localization.",
+        "detail": "Agents provide brand voice guidance and flag translations that shift tone or positioning. You review localized versions to ensure cultural adaptation doesn't compromise global brand consistency."
+      },
+      "aiAgentic": {
+        "summary": "Localization follows global brand rules you define and adapt by market.",
+        "detail": "You set global brand non-negotiables and regional flexibility ranges. Agents auto-localize within those boundaries and flag cases where cultural adaptation conflicts with global brand. You review regional brand health quarterly."
+      }
+    },
+    "ab-variant-creation": {
+      "preAI": {
+        "summary": "A/B tests create off-brand variants to test performance hypotheses.",
+        "detail": "Teams create test variants without brand oversight, sometimes producing off-brand language or visuals to test performance. Even losing variants can damage brand if seen by audiences. You discover off-brand tests after they've run."
+      },
+      "aiAgents": {
+        "summary": "AI validates test variants for brand compliance before tests run.",
+        "detail": "Agents check all test variants against brand guidelines and flag off-brand variations. You review flagged variants and ensure all versions meeting audiences are brand-compliant, even if they're testing hypotheses."
+      },
+      "aiAgentic": {
+        "summary": "Test variants auto-validate against brand rules before exposure to audiences.",
+        "detail": "You define brand testing boundaries (acceptable voice range, protected positioning elements, visual flexibility limits). Agents auto-check all variants and block off-brand versions from reaching audiences. You review test results to identify brand-safe performance optimizations."
+      }
+    },
+    "content-repurposing": {
+      "preAI": {
+        "summary": "Repurposed content drifts from original brand strategy without your oversight.",
+        "detail": "Teams reuse content across channels and contexts without validating brand fit. Repurposed content may land in contexts that shift brand perception or contradict current positioning. You discover misaligned reuse through customer feedback."
+      },
+      "aiAgents": {
+        "summary": "AI validates repurposed content for brand consistency across contexts.",
+        "detail": "Agents check whether repurposed content maintains brand voice and positioning in new contexts. You review repurposing plans to ensure brand translates appropriately across channels and audiences."
+      },
+      "aiAgentic": {
+        "summary": "Repurposing follows brand adaptation rules you define by channel and context.",
+        "detail": "You set repurposing brand requirements (voice adaptation by channel, positioning consistency rules, context-brand fit criteria). Agents auto-validate repurposed content and flag brand conflicts. You review repurposing patterns quarterly."
+      }
+    },
+    "archive-tag": {
+      "preAI": {
+        "summary": "Archiving loses brand context, making it hard to learn from brand decisions.",
+        "detail": "Teams archive content without tagging brand elements (voice, positioning, compliance decisions). You can't analyze which brand approaches worked or track brand evolution over time."
+      },
+      "aiAgents": {
+        "summary": "AI suggests brand tags you review to preserve brand context.",
+        "detail": "Agents recommend tags that capture brand elements (voice used, positioning themes, brand compliance issues). You review tagging to ensure future teams can learn from your brand governance decisions."
+      },
+      "aiAgentic": {
+        "summary": "Archiving follows brand-focused taxonomy you maintain.",
+        "detail": "You define metadata schemas that preserve brand context (voice variants, positioning evolution, compliance precedents). Agents auto-tag all content consistently. You query the archive to analyze brand governance effectiveness and track brand evolution."
+      }
+    },
+    "legal-compliance-gate": {
+      "preAI": {
+        "summary": "Legal gates focus on compliance, not brand-legal alignment.",
+        "detail": "Legal team blocks content for regulatory reasons without considering brand impact of changes. Legally-driven revisions sometimes weaken brand voice or positioning. You fight to preserve brand within legal constraints."
+      },
+      "aiAgents": {
+        "summary": "AI coordinates legal and brand considerations at the gate.",
+        "detail": "Agents flag both legal compliance issues and brand impact of legal changes. You review brand implications of legal revisions and work with legal to find solutions that meet both requirements."
+      },
+      "aiAgentic": {
+        "summary": "Legal gates apply coordinated legal-brand rules you co-own.",
+        "detail": "You work with legal to define compliance frameworks that preserve brand voice and positioning. Agents apply coordinated rules and escalate only cases where legal and brand conflict. You resolve conflicts with legal quarterly and update frameworks."
+      }
+    },
+    "localization-quality-gate": {
+      "preAI": {
+        "summary": "Localization quality focuses on translation accuracy, not brand voice preservation.",
+        "detail": "Teams validate translations for linguistic quality but miss brand voice drift. Localized content is accurate but off-brand. You discover brand voice fragmentation across markets when reviewing global brand health."
+      },
+      "aiAgents": {
+        "summary": "AI adds brand voice validation to localization quality checks.",
+        "detail": "Agents verify translations for both linguistic accuracy and brand voice consistency. You review localized versions to ensure quality gates preserve global brand identity across markets."
+      },
+      "aiAgentic": {
+        "summary": "Localization quality validates both translation and brand voice automatically.",
+        "detail": "You define localization quality criteria (translation accuracy, brand voice preservation, cultural brand appropriateness). Agents auto-validate all localized content and flag violations. You review flagged items and regional brand voice reports."
+      }
+    },
+    "segment-mapping": {
+      "preAI": {
+        "summary": "Audience segmentation happens without brand persona alignment.",
+        "detail": "Marketing ops defines segments based on demographics and behavior without consulting brand positioning or persona strategy. Content may reach wrong audiences for brand. You discover segment-brand misalignment in performance data."
+      },
+      "aiAgents": {
+        "summary": "AI suggests segment mappings you review for brand-audience fit.",
+        "detail": "Agents recommend content-audience mappings based on both performance data and brand persona alignment. You review suggestions to ensure high-value audiences receive brand-appropriate content."
+      },
+      "aiAgentic": {
+        "summary": "Segment mapping follows brand persona frameworks you maintain.",
+        "detail": "You define brand-audience fit rules (priority personas, content-audience matching, off-brand segment exclusions). Agents auto-map content to brand-aligned segments and flag conflicts. You review segment performance quarterly and refine persona-content strategies."
+      }
+    },
+    "dynamic-assembly": {
+      "preAI": {
+        "summary": "Personalization creates brand fragmentation across customer experiences.",
+        "detail": "Teams assemble personalized content using rules that don't account for brand consistency. Different customers see different brand voices or positioning. You discover brand fragmentation through customer feedback or audits."
+      },
+      "aiAgents": {
+        "summary": "AI validates personalized variations for brand consistency.",
+        "detail": "Agents check assembled personalized experiences against brand voice and positioning guidelines. You review personalization logic to ensure all variations maintain brand identity regardless of customization."
+      },
+      "aiAgentic": {
+        "summary": "Dynamic assembly follows brand consistency rules you define.",
+        "detail": "You set personalization brand boundaries (voice consistency requirements, positioning non-negotiables, visual brand standards across variations). Agents auto-assemble within brand boundaries and flag brand violations. You review personalization brand health quarterly."
+      }
+    },
+    "personalization-qa": {
+      "preAI": {
+        "summary": "Personalization QA misses brand voice drift across variations.",
+        "detail": "Teams validate technical functionality but don't systematically check brand consistency across thousands of personalized variations. Off-brand experiences reach customers. You discover brand issues through complaints or audits."
+      },
+      "aiAgents": {
+        "summary": "AI checks personalized variations for brand compliance at scale.",
+        "detail": "Agents validate representative personalized variations for brand voice, tone, and visual consistency. You review brand QA reports and spot-check variations to ensure personalization maintains brand identity."
+      },
+      "aiAgentic": {
+        "summary": "Personalization QA auto-validates brand consistency across all variations.",
+        "detail": "You define brand QA criteria for personalized content (voice consistency thresholds, visual brand compliance, positioning integrity). Agents auto-check all variations and flag brand violations. You review flagged items and personalization brand reports quarterly."
+      }
+    },
+    "campaign-planning": {
+      "preAI": {
+        "summary": "Campaign plans lack brand strategy, treating brand as a late-stage review.",
+        "detail": "Teams plan campaigns around channels and tactics without embedding brand positioning or voice strategy upfront. You review plans late and have to retrofit brand thinking into tactical execution plans."
+      },
+      "aiAgents": {
+        "summary": "AI suggests brand strategy elements teams should include in campaign plans.",
+        "detail": "Agents recommend brand positioning, voice direction, and visual themes when campaigns are planned. You review plans that incorporate brand strategy from the start, reducing downstream brand conflicts."
+      },
+      "aiAgentic": {
+        "summary": "Campaign plans auto-include brand strategy components you define.",
+        "detail": "You define campaign planning requirements (brand positioning by campaign type, voice strategy, visual identity, brand measurement). Agents auto-populate plans with brand elements and flag brand strategy gaps. You review flagged plans and update planning templates quarterly."
+      }
+    },
+    "consent-check": {
+      "preAI": {
+        "summary": "Consent processes impact brand experience but aren't designed with brand in mind.",
+        "detail": "Privacy team implements consent flows focused on compliance, not brand experience. Consent requests may feel off-brand or create friction that damages brand perception. You discover brand-consent conflicts through user feedback."
+      },
+      "aiAgents": {
+        "summary": "AI flags consent implementations that may impact brand experience.",
+        "detail": "Agents review consent flows for brand voice and user experience alignment. You provide input on consent language and design to ensure privacy compliance doesn't compromise brand experience."
+      },
+      "aiAgentic": {
+        "summary": "Consent implementations follow brand experience rules you co-own with privacy.",
+        "detail": "You work with privacy team to define consent standards that balance compliance and brand experience (brand voice in consent language, seamless consent UX). Agents apply coordinated rules. You review consent brand experience quarterly."
+      }
+    },
+    "paid-creative-production": {
+      "preAI": {
+        "summary": "Paid creative often diverges from organic brand voice and visual identity.",
+        "detail": "Paid media team creates ads optimized for performance without consulting brand guidelines. Paid creative uses different voice, visuals, or positioning than organic content. Brand fragments across paid and owned channels."
+      },
+      "aiAgents": {
+        "summary": "AI validates paid creative for brand consistency with organic content.",
+        "detail": "Agents check paid creative against brand voice, visual, and positioning guidelines used in organic content. You review paid creative to ensure it reinforces unified brand across channels."
+      },
+      "aiAgentic": {
+        "summary": "Paid creative follows cross-channel brand rules you maintain.",
+        "detail": "You define brand consistency requirements across paid and organic (unified voice, complementary visuals, consistent positioning). Agents auto-validate paid creative and flag brand divergence. You review paid-organic brand alignment quarterly."
+      }
+    },
+    "attribution-modeling": {
+      "preAI": {
+        "summary": "Attribution models miss brand-building impact, focusing only on conversion paths.",
+        "detail": "Analysts model which touchpoints drive conversions but don't measure brand awareness, perception, or consideration lift. You can't demonstrate ROI of brand-building content that doesn't immediately convert."
+      },
+      "aiAgents": {
+        "summary": "AI incorporates brand metrics into attribution analysis.",
+        "detail": "Agents model attribution including brand health metrics (awareness lift, perception shifts, consideration growth). You review attribution that shows both conversion impact and brand-building value."
+      },
+      "aiAgentic": {
+        "summary": "Attribution models auto-track brand outcomes you define.",
+        "detail": "You set brand attribution requirements (awareness metrics, brand lift studies, perception tracking by touchpoint). Agents continuously model brand impact alongside conversion. You review brand attribution quarterly to optimize channel strategy."
+      }
+    },
+    "executive-reporting": {
+      "preAI": {
+        "summary": "Executive reports focus on performance metrics, not brand health outcomes you own.",
+        "detail": "Analysts compile engagement and conversion data without reporting brand perception, voice consistency, or competitive brand positioning. Your brand governance work is invisible to leadership."
+      },
+      "aiAgents": {
+        "summary": "AI helps you add brand health metrics to executive reports.",
+        "detail": "Agents compile brand health data (sentiment trends, brand awareness, perception scores) alongside performance metrics. You review reports that demonstrate brand outcomes and governance ROI."
+      },
+      "aiAgentic": {
+        "summary": "Executive reports auto-include brand governance insights you present to leadership.",
+        "detail": "Agents track brand health metrics and correlate brand governance decisions with brand outcomes. Reports auto-highlight brand governance effectiveness. You review insights quarterly and use them to communicate brand ROI to executives."
+      }
+    },
+    "competitive-response": {
+      "preAI": {
+        "summary": "Competitive responses focus on tactics, not brand differentiation or positioning.",
+        "detail": "Teams react to competitor moves with tactical matching (price, features) without considering brand positioning implications. Responses may erode brand differentiation. You discover brand-competitive conflicts too late."
+      },
+      "aiAgents": {
+        "summary": "AI surfaces competitive brand moves you review for positioning implications.",
+        "detail": "Agents track competitor brand positioning changes and flag potential threats or opportunities. You review competitive brand intelligence and provide positioning guidance for response campaigns."
+      },
+      "aiAgentic": {
+        "summary": "Competitive response follows brand positioning frameworks you maintain.",
+        "detail": "You define competitive brand strategy (differentiation priorities, response triggers, positioning boundaries). Agents monitor competitors and recommend brand-aligned responses. You review recommendations weekly and approve positioning pivots."
+      }
+    },
+    "content-governance": {
+      "preAI": {
+        "summary": "Governance reviews focus on compliance, not brand health or long-term brand equity.",
+        "detail": "Directors review content for strategic alignment but may miss brand perception risks or voice drift patterns. Brand governance is reactive, not strategic. You catch brand issues one piece at a time."
+      },
+      "aiAgents": {
+        "summary": "AI surfaces brand governance patterns you review with content directors.",
+        "detail": "Agents track brand compliance trends, voice consistency patterns, and brand risk signals across content. You review brand governance insights with directors to identify systemic brand issues."
+      },
+      "aiAgentic": {
+        "summary": "Governance reviews auto-include brand health insights you co-own with directors.",
+        "detail": "You define brand governance criteria directors should review (voice consistency, positioning alignment, brand risk). Agents auto-surface brand insights during governance reviews. You review brand governance effectiveness quarterly with directors."
+      }
+    },
+    "governance-gate": {
+      "preAI": {
+        "summary": "Governance gates may approve strategically sound content that's brand-risky.",
+        "detail": "Directors approve content that meets strategic goals but poses brand perception risks or creates long-term brand equity concerns. You catch brand issues late or not at all."
+      },
+      "aiAgents": {
+        "summary": "AI adds brand health checks to governance gates.",
+        "detail": "Agents flag potential brand perception risks or long-term brand equity concerns alongside strategic review. You review flagged brand risks with directors before final approval."
+      },
+      "aiAgentic": {
+        "summary": "Governance gates apply coordinated strategic-brand criteria you co-own.",
+        "detail": "You work with directors to define governance criteria that balance strategic goals and brand health. Agents apply coordinated rules and escalate strategy-brand conflicts. You review conflicts quarterly and evolve governance frameworks."
+      }
+    },
+    "journey-mapping": {
+      "preAI": {
+        "summary": "Journey mapping focuses on touchpoints and tactics, not brand experience continuity.",
+        "detail": "Teams map customer journeys without ensuring brand voice and positioning flow consistently across stages. Brand experience fragments across the journey. You discover journey-brand disconnects through customer feedback."
+      },
+      "aiAgents": {
+        "summary": "AI validates journey maps for brand consistency across touchpoints.",
+        "detail": "Agents check whether brand voice, positioning, and visual identity remain consistent across journey stages. You review journey maps to ensure brand experience flows coherently from awareness to advocacy."
+      },
+      "aiAgentic": {
+        "summary": "Journey mapping auto-incorporates brand continuity rules you define.",
+        "detail": "You set journey brand requirements (voice evolution by stage, positioning consistency, visual identity progression). Agents auto-validate journey maps for brand continuity and flag disconnects. You review journey brand health quarterly."
+      }
+    },
+    "sentiment-monitoring": {
+      "preAI": {
+        "summary": "Sentiment monitoring misses brand perception signals until they become crises.",
+        "detail": "Teams track mentions and engagement but don't systematically monitor brand health, perception shifts, or competitive brand comparison. You discover brand threats when they've escalated."
+      },
+      "aiAgents": {
+        "summary": "AI monitors brand-specific sentiment and perception signals.",
+        "detail": "Agents track brand health metrics (brand sentiment, perception trends, competitive brand positioning) in real-time. You review brand monitoring dashboards weekly to spot early signals of brand threats or opportunities."
+      },
+      "aiAgentic": {
+        "summary": "Sentiment monitoring auto-tracks brand health metrics you define.",
+        "detail": "You set brand monitoring parameters (sentiment thresholds, brand attribute tracking, competitive brand benchmarks, crisis triggers). Agents continuously monitor and flag brand health changes. You review alerts weekly and respond proactively to brand threats."
+      }
+    },
+    "sales-enablement": {
+      "preAI": {
+        "summary": "Sales content fragments brand, using different voice and positioning than marketing.",
+        "detail": "Sales team produces collateral without consulting brand guidelines or marketing positioning. Sales uses different language, claims, or brand personality than marketing. Brand fragments at the most critical customer touchpoint."
+      },
+      "aiAgents": {
+        "summary": "AI validates sales content for brand consistency with marketing materials.",
+        "detail": "Agents check sales enablement content against brand voice, positioning, and visual guidelines used in marketing. You review sales materials to ensure unified brand across marketing and sales."
+      },
+      "aiAgentic": {
+        "summary": "Sales enablement follows cross-functional brand rules you co-own with sales.",
+        "detail": "You work with sales leadership to define brand consistency requirements across marketing and sales. Agents auto-validate sales content and flag brand divergence. You review marketing-sales brand alignment quarterly with sales leadership."
+      }
+    },
+    "influencer-brief": {
+      "preAI": {
+        "summary": "Influencer briefs lack brand guardrails, risking off-brand creator content.",
+        "detail": "Partnership teams brief influencers on campaign goals but don't provide clear brand voice, visual, or messaging guidelines. Influencer content sometimes contradicts brand positioning or uses off-brand tone."
+      },
+      "aiAgents": {
+        "summary": "AI helps teams build influencer briefs with embedded brand guidelines.",
+        "detail": "Agents suggest brand voice, visual, and messaging guardrails when influencer briefs are created. You review influencer briefs to ensure creators receive clear brand direction before producing content."
+      },
+      "aiAgentic": {
+        "summary": "Influencer briefs auto-populate with brand requirements you maintain.",
+        "detail": "You define influencer brand guidelines (voice guardrails, visual standards, messaging boundaries, prohibited topics). Agents auto-populate influencer briefs with brand requirements and flag high-risk partnerships. You review flagged briefs and influencer content quarterly."
+      }
+    },
+    "ugc-moderation": {
+      "preAI": {
+        "summary": "UGC moderation focuses on policy violations, not brand representation quality.",
+        "detail": "Teams moderate user content for prohibited material but don't assess whether featured UGC reflects brand values or positioning. Off-brand UGC may be featured, diluting brand perception."
+      },
+      "aiAgents": {
+        "summary": "AI flags UGC that conflicts with brand values or positioning.",
+        "detail": "Agents scan user-generated content for both policy violations and brand misalignment. You review flagged UGC and set moderation precedents that balance community inclusion and brand integrity."
+      },
+      "aiAgentic": {
+        "summary": "UGC moderation follows brand representation standards you define.",
+        "detail": "You set UGC brand criteria (brand-aligned themes, values representation, quality thresholds). Agents auto-moderate and flag content that's policy-compliant but brand-misaligned. You review moderation decisions quarterly and update brand standards."
+      }
+    },
+    "content-scoring": {
+      "preAI": {
+        "summary": "Content scoring prioritizes performance metrics over brand health measures.",
+        "detail": "Teams score content based on engagement and conversion potential without considering brand impact. High-scoring content may perform well but damage long-term brand equity. Your brand concerns are deprioritized."
+      },
+      "aiAgents": {
+        "summary": "AI adds brand health scores to content prioritization.",
+        "detail": "Agents score content on both performance potential and brand alignment (voice consistency, positioning strength, brand risk). You review scoring to ensure brand-building content isn't deprioritized for short-term performance."
+      },
+      "aiAgentic": {
+        "summary": "Content scoring incorporates brand metrics you define and weight.",
+        "detail": "You set brand scoring criteria (voice quality, positioning alignment, brand equity potential) and weightings versus performance metrics. Agents auto-score all content. You review scoring patterns quarterly to balance performance and brand priorities."
+      }
+    },
+    "channel-orchestration": {
+      "preAI": {
+        "summary": "Channel orchestration fragments brand, with each channel using different voice or visuals.",
+        "detail": "Teams manage channels independently, creating inconsistent brand experiences across touchpoints. Customers see different brand personalities or positioning depending on channel. Brand coherence is lost."
+      },
+      "aiAgents": {
+        "summary": "AI validates orchestration plans for brand consistency across channels.",
+        "detail": "Agents check channel orchestration for brand voice, visual, and positioning continuity. You review orchestration plans to ensure coordinated channels present unified brand to audiences."
+      },
+      "aiAgentic": {
+        "summary": "Channel orchestration follows cross-channel brand rules you define.",
+        "detail": "You set orchestration brand requirements (voice consistency across channels, visual identity continuity, positioning alignment). Agents auto-orchestrate within brand boundaries and flag channel-brand conflicts. You review orchestration brand health quarterly."
+      }
+    }
+  }
+}

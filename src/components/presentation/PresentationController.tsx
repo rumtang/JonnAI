@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useCallback, useState, useRef } from 'react';
+import { useShallow } from 'zustand/react/shallow';
 import { motion, AnimatePresence } from 'framer-motion';
 import { usePresentationStore } from '@/lib/store/presentation-store';
 import { useGraphStore } from '@/lib/store/graph-store';
@@ -87,25 +88,37 @@ export default function PresentationController() {
     steps,
     isPlaying,
     mode,
-    setMode,
-    nextStep,
-    prevStep,
-    goToStep,
-    toggleAutoPlay,
-    setTransitioning,
-  } = usePresentationStore();
+  } = usePresentationStore(
+    useShallow((s) => ({
+      currentStepIndex: s.currentStepIndex,
+      steps: s.steps,
+      isPlaying: s.isPlaying,
+      mode: s.mode,
+    }))
+  );
+  const setMode = usePresentationStore(s => s.setMode);
+  const nextStep = usePresentationStore(s => s.nextStep);
+  const prevStep = usePresentationStore(s => s.prevStep);
+  const goToStep = usePresentationStore(s => s.goToStep);
+  const toggleAutoPlay = usePresentationStore(s => s.toggleAutoPlay);
+  const setTransitioning = usePresentationStore(s => s.setTransitioning);
 
   const {
-    setGraphData,
     fullGraphData,
     linearGraphData,
-    highlightByTypes,
-    highlightLinksByTypes,
-    clearHighlights,
-    resetFilters,
-    loadFullGraph,
-    setHighlightedNodeIds,
-  } = useGraphStore();
+  } = useGraphStore(
+    useShallow((s) => ({
+      fullGraphData: s.fullGraphData,
+      linearGraphData: s.linearGraphData,
+    }))
+  );
+  const setGraphData = useGraphStore(s => s.setGraphData);
+  const highlightByTypes = useGraphStore(s => s.highlightByTypes);
+  const highlightLinksByTypes = useGraphStore(s => s.highlightLinksByTypes);
+  const clearHighlights = useGraphStore(s => s.clearHighlights);
+  const resetFilters = useGraphStore(s => s.resetFilters);
+  const loadFullGraph = useGraphStore(s => s.loadFullGraph);
+  const setHighlightedNodeIds = useGraphStore(s => s.setHighlightedNodeIds);
 
   const currentStep = steps[currentStepIndex];
   const isTitleSlide = currentStep?.action === 'show-title-slide';

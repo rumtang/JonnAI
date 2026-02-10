@@ -1,3 +1,9 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Graph Explorer — Agentic",
+};
+
 export default function GraphLayout({
   children,
 }: {
