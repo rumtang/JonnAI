@@ -1,11 +1,12 @@
 // ─── ROI Simulator Step Definitions ──────────────────────────────────
-// 6 slides across 4 acts. Enterprise-grade financial model for S&P 100+.
+// 7 slides across 5 acts. Enterprise-grade financial model for S&P 100+.
 
 export type RoiLayout =
   | 'org-budget-profile'
   | 'martech-media'
   | 'ops-content'
   | 'timeline-dual'
+  | 'playbook'
   | 'before-after'
   | 'executive-card';
 
@@ -75,6 +76,20 @@ export const ROI_STEPS: RoiStep[] = [
     themeColor: '#14B8A6',
     content: {
       tagline: 'The knowledge graph pays for itself. The question is when, not if.',
+    },
+  },
+
+  // ─── ACT 3b: The Transformation Playbook ──────────────────────────
+  {
+    id: 'transformation-playbook',
+    act: 3,
+    actLabel: 'The Transformation',
+    title: 'The Transformation Playbook',
+    subtitle: 'Seven actions that deliver the ROI — what you build, how it changes operations, and what it unlocks',
+    layout: 'playbook',
+    themeColor: '#14B8A6',
+    content: {
+      tagline: 'Every dollar in the model traces back to a concrete change in how your team works.',
     },
   },
 

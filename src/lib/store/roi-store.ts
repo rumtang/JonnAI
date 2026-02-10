@@ -25,6 +25,7 @@ const DEFAULT_ORG: OrganizationProfile = {
   marketingHeadcount: 200,               // ~10 FTEs per $100M budget
   avgLoadedFteCost: 180_000,             // Enterprise fully loaded
   industry: 'B2B Average',              // Default industry vertical
+  companyName: '',                       // Optional — personalizes outputs
 };
 
 const DEFAULT_MARTECH: MartechAndMedia = {

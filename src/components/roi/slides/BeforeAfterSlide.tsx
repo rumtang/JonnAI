@@ -159,6 +159,29 @@ export default function BeforeAfterSlide({ step }: BeforeAfterSlideProps) {
         </div>
       </motion.div>
 
+      {/* ─── Competitive Context Callout ─────────────────────── */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.65 }}
+        className="glass-panel rounded-lg p-4 mb-6"
+        style={{ borderLeft: '3px solid #ef4444' }}
+      >
+        <div className="flex items-start gap-3">
+          <span className="text-lg shrink-0">&#x26A0;&#xFE0F;</span>
+          <div>
+            <h4 className="text-[10px] font-semibold text-[#ef4444] uppercase tracking-wider mb-1">
+              Meanwhile, Your Competitors...
+            </h4>
+            <p className="text-[10px] text-muted-foreground leading-relaxed">
+              Organizations that delay knowledge infrastructure by 12+ months face compounding disadvantages
+              as AI-native competitors encode operational knowledge faster. The efficiency gaps shown above
+              widen each quarter — what is a 60% speed advantage today becomes a structural moat within 18 months.
+            </p>
+          </div>
+        </div>
+      </motion.div>
+
       {/* ─── Allocation Shift Section ────────────────────────── */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}

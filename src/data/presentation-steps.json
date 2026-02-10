@@ -90,7 +90,7 @@
   {
     "id": "act4-intelligence-layer",
     "title": "The Intelligence Layer",
-    "narration": "This is the intelligence layer. Twenty inputs describing your brand voice, audience segments, legal frameworks, and orchestration rules — each connected to the agents that depend on it. Update one input, and every agent that references it picks up the change. The agents themselves will become more interchangeable — you can swap models easily. But this knowledge layer compounds. Refine one input and every agent that touches it improves simultaneously. Your competitors can buy the same models. They can't easily replicate your organization's accumulated context.",
+    "narration": "This is the intelligence layer. Your brand voice, audience segments, legal frameworks, and orchestration rules — each connected to the agents that depend on it. Update one input, and every agent that references it picks up the change. The agents themselves will become more interchangeable — you can swap models easily. But this knowledge layer compounds. Refine one input and every agent that touches it improves simultaneously. Your competitors can buy the same models. They can't easily replicate your organization's accumulated context.",
     "cameraPosition": {
       "x": 60,
       "y": 0,

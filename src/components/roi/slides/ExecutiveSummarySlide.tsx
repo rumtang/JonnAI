@@ -2,10 +2,11 @@
 
 import { useState, useCallback } from 'react';
 import { motion } from 'framer-motion';
-import { Copy, Check, TrendingUp, Clock, DollarSign, BarChart3, Shield } from 'lucide-react';
+import { Copy, Check, TrendingUp, Clock, DollarSign, BarChart3, Shield, Download } from 'lucide-react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { useRoiStore } from '@/lib/store/roi-store';
 import { SCENARIO_MULTIPLIERS, CFO_FRAMEWORK } from '@/lib/roi/engine';
+import { getPrimaryActionsForStream, type ValueStreamKey } from '@/data/roi-actions';
 import AnimatedNumber from '../charts/AnimatedNumber';
 import AnimatedBar from '../charts/AnimatedBar';
 import type { RoiStep } from '@/data/roi-steps';
@@ -114,32 +115,40 @@ function ValueBreakdownBar({ outputs }: { outputs: ReturnType<typeof useRoiStore
 }
 
 // ─── Recommendation Logic ───────────────────────────────────────────
-function getRecommendation(roi: number): { emoji: string; headline: string; body: string } {
+function getRecommendation(
+  roi: number,
+  budgetLabel: string,
+  headcount: number,
+  industry: string,
+): { emoji: string; headline: string; body: string } {
+  // Personalized preamble referencing user's inputs
+  const context = `Based on your ${budgetLabel} marketing budget, ${headcount.toLocaleString()}-person ${industry} team`;
+
   if (roi >= 300) {
     return {
       emoji: '🟢',
       headline: 'Strong Investment Case',
-      body: 'The ROI strongly supports proceeding. The knowledge graph investment pays for itself multiple times over, with compounding returns as the organizational intelligence layer matures.',
+      body: `${context}, the ROI strongly supports proceeding. The knowledge graph investment pays for itself multiple times over, with compounding returns as the organizational intelligence layer matures.`,
     };
   }
   if (roi >= 150) {
     return {
       emoji: '🟡',
       headline: 'Positive Investment Case',
-      body: 'The ROI supports a phased approach. Start with the highest-value workflows and expand as early results validate the model. Consider a pilot before full deployment.',
+      body: `${context}, the ROI supports a phased approach. Start with the highest-value workflows and expand as early results validate the model. Consider a pilot before full deployment.`,
     };
   }
   if (roi >= 50) {
     return {
       emoji: '🟠',
       headline: 'Moderate Investment Case',
-      body: 'The ROI is positive but moderate. Focus on the pain points with the highest cost impact. A targeted pilot can help validate assumptions before committing to the full build.',
+      body: `${context}, the ROI is positive but moderate. Focus on the pain points with the highest cost impact. A targeted pilot can help validate assumptions before committing to the full build.`,
     };
   }
   return {
     emoji: '🔴',
     headline: 'Review Assumptions',
-    body: 'The current inputs suggest the investment may need more justification. Consider whether hidden costs or strategic value (brand consistency, speed-to-market) are underweighted.',
+    body: `${context}, the current inputs suggest the investment may need more justification. Consider whether hidden costs or strategic value (brand consistency, speed-to-market) are underweighted.`,
   };
 }
 
@@ -147,11 +156,19 @@ function getRecommendation(roi: number): { emoji: string; headline: string; body
 export default function ExecutiveSummarySlide({ step }: ExecutiveSummarySlideProps) {
   const outputs = useRoiStore(s => s.outputs);
   const baseline = useRoiStore(s => s.baseline);
+  const org = useRoiStore(s => s.org);
   const viewMode = useRoiStore(s => s.viewMode);
   const setViewMode = useRoiStore(s => s.setViewMode);
   const [copied, setCopied] = useState(false);
 
-  const recommendation = getRecommendation(outputs.threeYearRoi);
+  const companyName = org.companyName?.trim() || '';
+  const budgetLabel = formatCompact(baseline.derived.totalMarketingBudget);
+  const recommendation = getRecommendation(
+    outputs.threeYearRoi,
+    budgetLabel,
+    org.marketingHeadcount,
+    org.industry ?? 'B2B Average',
+  );
   const vs = outputs.valueStreams;
   const { roas, enterpriseModel, doNothing, irr } = outputs;
 
@@ -164,7 +181,9 @@ export default function ExecutiveSummarySlide({ step }: ExecutiveSummarySlidePro
   const buildClipboardText = useCallback(() => {
     if (viewMode === 'cfo') {
       const lines = [
-        'INVESTMENT ANALYSIS - Organizational Intelligence Infrastructure',
+        companyName
+          ? `INVESTMENT ANALYSIS — Prepared for ${companyName}`
+          : 'INVESTMENT ANALYSIS - Organizational Intelligence Infrastructure',
         '='.repeat(60),
         '',
         'FINANCIAL SUMMARY',
@@ -190,7 +209,7 @@ export default function ExecutiveSummarySlide({ step }: ExecutiveSummarySlidePro
         `  Year 3 Revenue at Risk: ${formatCompact(doNothing.year3Loss)} (-${doNothing.year3ErosionPct}%)`,
         '',
         '-'.repeat(60),
-        'Generated by the Organizational Intelligence ROI Simulator',
+        `Generated by the Organizational Intelligence ROI Simulator${companyName ? ` for ${companyName}` : ''}`,
       ];
       return lines.join('\n');
     }
@@ -200,7 +219,9 @@ export default function ExecutiveSummarySlide({ step }: ExecutiveSummarySlidePro
       : '–';
 
     const lines = [
-      'ROI EXECUTIVE SUMMARY - Knowledge Graph Infrastructure',
+      companyName
+        ? `ROI EXECUTIVE SUMMARY — Prepared for ${companyName}`
+        : 'ROI EXECUTIVE SUMMARY - Knowledge Graph Infrastructure',
       '='.repeat(55),
       '',
       `3-Year ROI: ${Math.round(outputs.threeYearRoi)}%`,
@@ -230,10 +251,10 @@ export default function ExecutiveSummarySlide({ step }: ExecutiveSummarySlidePro
       recommendation.body,
       '',
       '-'.repeat(55),
-      'Generated by the Organizational Intelligence ROI Simulator',
+      `Generated by the Organizational Intelligence ROI Simulator${companyName ? ` for ${companyName}` : ''}`,
     ];
     return lines.join('\n');
-  }, [outputs, baseline, recommendation, vs, roas, viewMode, irr, enterpriseModel, doNothing, riskAdjustedNpv, riskAdjustedAnnualValue]);
+  }, [outputs, baseline, recommendation, vs, roas, viewMode, irr, enterpriseModel, doNothing, riskAdjustedNpv, riskAdjustedAnnualValue, companyName]);
 
   const handleCopy = useCallback(async () => {
     try {
@@ -244,6 +265,20 @@ export default function ExecutiveSummarySlide({ step }: ExecutiveSummarySlidePro
       // Fallback: silent fail (clipboard may be blocked in some contexts)
     }
   }, [buildClipboardText]);
+
+  const [downloading, setDownloading] = useState(false);
+  const handleDownloadPdf = useCallback(async () => {
+    setDownloading(true);
+    try {
+      // Dynamic import keeps the PDF library out of the main bundle
+      const { downloadRoiReport } = await import('../RoiReport');
+      await downloadRoiReport({ org, baseline, outputs, viewMode });
+    } catch (err) {
+      console.error('PDF generation failed:', err);
+    } finally {
+      setDownloading(false);
+    }
+  }, [org, baseline, outputs, viewMode]);
 
   return (
     <div className="max-w-5xl mx-auto px-6 py-4 overflow-y-auto max-h-[calc(100vh-10rem)]">
@@ -265,6 +300,11 @@ export default function ExecutiveSummarySlide({ step }: ExecutiveSummarySlidePro
         transition={{ delay: 0.2, type: 'spring', stiffness: 200, damping: 20 }}
         className="text-center mb-4"
       >
+        {companyName && (
+          <p className="text-sm font-semibold text-foreground/80 mb-1">
+            Investment Case for {companyName}
+          </p>
+        )}
         <p className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1">
           3-Year Return on Investment
         </p>
@@ -350,6 +390,7 @@ export default function ExecutiveSummarySlide({ step }: ExecutiveSummarySlidePro
               <thead>
                 <tr className="border-b border-muted-foreground/10">
                   <th className="text-left py-1.5 text-muted-foreground font-medium">Value Stream</th>
+                  <th className="text-left py-1.5 text-muted-foreground font-medium">Enabled By</th>
                   <th className="text-left py-1.5 text-muted-foreground font-medium">Type</th>
                   <th className="text-right py-1.5 text-muted-foreground font-medium">Annual Value</th>
                   <th className="text-right py-1.5 text-muted-foreground font-medium">% of Total</th>
@@ -357,38 +398,49 @@ export default function ExecutiveSummarySlide({ step }: ExecutiveSummarySlidePro
               </thead>
               <tbody>
                 {[
-                  { label: 'ROAS Improvement', value: vs.roasImprovement, type: 'Revenue', color: '#9B7ACC' },
-                  { label: 'Personalization Lift', value: vs.personalizationLift, type: 'Revenue', color: '#4CAF50' },
-                  { label: 'Campaign Speed', value: vs.campaignSpeed, type: 'Revenue', color: '#C9A04E' },
-                  { label: 'Martech Optimization', value: vs.martechOptimization, type: 'Savings', color: '#E88D67' },
-                  { label: 'Content Velocity', value: vs.contentVelocity, type: 'Savings', color: '#5B9ECF' },
-                  { label: 'Operational Efficiency', value: vs.operationalEfficiency, type: 'Savings', color: '#D4856A' },
-                  { label: 'Attribution Improvement', value: vs.attributionImprovement, type: 'Savings', color: '#f59e0b' },
-                ].filter(s => s.value > 0).map((stream) => (
-                  <tr key={stream.label} className="border-b border-muted-foreground/5">
-                    <td className="py-1.5 font-medium" style={{ color: stream.color }}>
-                      {stream.label}
-                    </td>
-                    <td className="py-1.5 text-muted-foreground">
-                      <span className={`px-1.5 py-0.5 rounded text-[8px] ${
-                        stream.type === 'Revenue'
-                          ? 'bg-[#4CAF50]/10 text-[#4CAF50]'
-                          : 'bg-[#5B9ECF]/10 text-[#5B9ECF]'
-                      }`}>
-                        {stream.type}
-                      </span>
-                    </td>
-                    <td className="py-1.5 text-right font-semibold" style={{ color: stream.color }}>
-                      {formatCompact(stream.value)}
-                    </td>
-                    <td className="py-1.5 text-right text-muted-foreground">
-                      {outputs.totalAnnualValue > 0 ? `${((stream.value / outputs.totalAnnualValue) * 100).toFixed(1)}%` : '–'}
-                    </td>
-                  </tr>
-                ))}
+                  { label: 'ROAS Improvement', streamKey: 'roasImprovement' as ValueStreamKey, value: vs.roasImprovement, type: 'Revenue', color: '#9B7ACC' },
+                  { label: 'Personalization Lift', streamKey: 'personalizationLift' as ValueStreamKey, value: vs.personalizationLift, type: 'Revenue', color: '#4CAF50' },
+                  { label: 'Campaign Speed', streamKey: 'campaignSpeed' as ValueStreamKey, value: vs.campaignSpeed, type: 'Revenue', color: '#C9A04E' },
+                  { label: 'Martech Optimization', streamKey: 'martechOptimization' as ValueStreamKey, value: vs.martechOptimization, type: 'Savings', color: '#E88D67' },
+                  { label: 'Content Velocity', streamKey: 'contentVelocity' as ValueStreamKey, value: vs.contentVelocity, type: 'Savings', color: '#5B9ECF' },
+                  { label: 'Operational Efficiency', streamKey: 'operationalEfficiency' as ValueStreamKey, value: vs.operationalEfficiency, type: 'Savings', color: '#D4856A' },
+                  { label: 'Attribution Improvement', streamKey: 'attributionImprovement' as ValueStreamKey, value: vs.attributionImprovement, type: 'Savings', color: '#f59e0b' },
+                ].filter(s => s.value > 0).map((stream) => {
+                  const enablers = getPrimaryActionsForStream(stream.streamKey);
+                  return (
+                    <tr key={stream.label} className="border-b border-muted-foreground/5">
+                      <td className="py-1.5 font-medium" style={{ color: stream.color }}>
+                        {stream.label}
+                      </td>
+                      <td className="py-1.5">
+                        <span className="flex gap-0.5" title={enablers.map(a => a.title).join(', ')}>
+                          {enablers.slice(0, 3).map(a => (
+                            <span key={a.id} className="text-[10px]" title={a.title}>{a.icon}</span>
+                          ))}
+                        </span>
+                      </td>
+                      <td className="py-1.5 text-muted-foreground">
+                        <span className={`px-1.5 py-0.5 rounded text-[8px] ${
+                          stream.type === 'Revenue'
+                            ? 'bg-[#4CAF50]/10 text-[#4CAF50]'
+                            : 'bg-[#5B9ECF]/10 text-[#5B9ECF]'
+                        }`}>
+                          {stream.type}
+                        </span>
+                      </td>
+                      <td className="py-1.5 text-right font-semibold" style={{ color: stream.color }}>
+                        {formatCompact(stream.value)}
+                      </td>
+                      <td className="py-1.5 text-right text-muted-foreground">
+                        {outputs.totalAnnualValue > 0 ? `${((stream.value / outputs.totalAnnualValue) * 100).toFixed(1)}%` : '–'}
+                      </td>
+                    </tr>
+                  );
+                })}
                 {/* Total row */}
                 <tr className="border-t-2 border-muted-foreground/20">
                   <td className="py-2 font-semibold text-foreground">Total Annual Value</td>
+                  <td></td>
                   <td></td>
                   <td className="py-2 text-right font-bold text-[#14B8A6]">
                     {formatCompact(outputs.totalAnnualValue)}
@@ -469,20 +521,37 @@ export default function ExecutiveSummarySlide({ step }: ExecutiveSummarySlidePro
             </div>
           </motion.div>
 
-          {/* Do-nothing callout */}
+          {/* Cost of Inaction — expanded panel */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.9 }}
-            className="glass-panel rounded-lg p-3 mb-4"
+            className="glass-panel rounded-lg p-4 mb-4"
             style={{ borderLeft: '4px solid #ef4444' }}
           >
-            <div className="flex items-center justify-between">
-              <span className="text-[9px] text-muted-foreground">Cost of inaction (3-year revenue at risk):</span>
-              <span className="text-sm font-bold text-[#ef4444]">
-                {formatCompact(doNothing.year3Loss)} (-{doNothing.year3ErosionPct}%)
-              </span>
+            <h4 className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-3 flex items-center gap-2">
+              <span className="text-[#ef4444]">Competitive Exposure — Cost of Inaction</span>
+            </h4>
+            <div className="grid grid-cols-3 gap-3 mb-3">
+              {[
+                { label: 'Year 1', pct: doNothing.year1ErosionPct, loss: doNothing.year1Loss },
+                { label: 'Year 2', pct: doNothing.year2ErosionPct, loss: doNothing.year2Loss },
+                { label: 'Year 3', pct: doNothing.year3ErosionPct, loss: doNothing.year3Loss },
+              ].map(({ label, pct, loss }) => (
+                <div key={label} className="text-center p-2 rounded-lg bg-[#ef4444]/5">
+                  <p className="text-[8px] text-muted-foreground uppercase tracking-wider mb-1">{label} at Risk</p>
+                  <p className="text-lg font-bold text-[#ef4444]">-{pct}%</p>
+                  <p className="text-[9px] text-muted-foreground">{formatCompact(loss)}</p>
+                </div>
+              ))}
             </div>
+            <div className="flex items-center justify-between pt-2 border-t border-[#ef4444]/10">
+              <span className="text-[9px] text-muted-foreground">Cumulative 3-year marketing budget at risk</span>
+              <span className="text-sm font-bold text-[#ef4444]">{formatCompact(doNothing.year3Loss)}</span>
+            </div>
+            <p className="text-[8px] text-muted-foreground/50 mt-2 leading-relaxed italic">
+              Based on quarterly competitive erosion model. Organizations that delay knowledge infrastructure face compounding disadvantages as AI-native competitors encode operational knowledge faster.
+            </p>
           </motion.div>
         </TabsContent>
 
@@ -635,31 +704,42 @@ export default function ExecutiveSummarySlide({ step }: ExecutiveSummarySlidePro
         transition={{ delay: 1.0 }}
         className="text-center"
       >
-        <button
-          onClick={handleCopy}
-          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full glass-panel text-sm font-semibold transition-all hover:shadow-lg"
-          style={{
-            color: copied ? '#4CAF50' : '#14B8A6',
-            backgroundColor: copied ? '#4CAF5010' : '#14B8A610',
-          }}
-        >
-          {copied ? (
-            <>
-              <Check className="w-4 h-4" />
-              Copied to Clipboard
-            </>
-          ) : (
-            <>
-              <Copy className="w-4 h-4" />
-              Copy {viewMode === 'cfo' ? 'Investment Analysis' : 'Executive Summary'}
-            </>
-          )}
-        </button>
+        <div className="flex items-center justify-center gap-3 flex-wrap">
+          <button
+            onClick={handleDownloadPdf}
+            disabled={downloading}
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full glass-panel text-sm font-semibold transition-all hover:shadow-lg"
+            style={{
+              color: '#C9A04E',
+              backgroundColor: '#C9A04E10',
+            }}
+          >
+            <Download className="w-4 h-4" />
+            {downloading ? 'Generating...' : 'Download Your Investment Case'}
+          </button>
+          <button
+            onClick={handleCopy}
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full glass-panel text-sm font-semibold transition-all hover:shadow-lg"
+            style={{
+              color: copied ? '#4CAF50' : '#14B8A6',
+              backgroundColor: copied ? '#4CAF5010' : '#14B8A610',
+            }}
+          >
+            {copied ? (
+              <>
+                <Check className="w-4 h-4" />
+                Copied to Clipboard
+              </>
+            ) : (
+              <>
+                <Copy className="w-4 h-4" />
+                Copy {viewMode === 'cfo' ? 'Investment Analysis' : 'Executive Summary'}
+              </>
+            )}
+          </button>
+        </div>
         <p className="text-[9px] text-muted-foreground/40 mt-2">
-          {viewMode === 'cfo'
-            ? 'Board-ready investment analysis'
-            : 'Share this summary with your leadership team'
-          }
+          Download a branded PDF to share with your buying committee, or copy as text
         </p>
       </motion.div>
     </div>

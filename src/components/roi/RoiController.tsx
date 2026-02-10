@@ -13,16 +13,17 @@ import BaselineInputsSlide from './slides/BaselineInputsSlide';
 import MartechMediaSlide from './slides/MartechMediaSlide';
 import OpsContentSlide from './slides/OpsContentSlide';
 import TimelineSlide from './slides/TimelineSlide';
+import PlaybookSlide from './slides/PlaybookSlide';
 import BeforeAfterSlide from './slides/BeforeAfterSlide';
 import ExecutiveSummarySlide from './slides/ExecutiveSummarySlide';
 
-// ─── Act Definitions (6 slides, 5 acts) ────────────────────────────
+// ─── Act Definitions (7 slides, 5 acts) ────────────────────────────
 const ACTS = [
   { label: 'Your Marketing Machine', slides: [0] },
   { label: 'Where the Money Goes', slides: [1, 2] },
-  { label: 'The Transformation', slides: [3] },
-  { label: 'Before & After', slides: [4] },
-  { label: 'Your Investment Case', slides: [5] },
+  { label: 'The Transformation', slides: [3, 4] },
+  { label: 'Before & After', slides: [5] },
+  { label: 'Your Investment Case', slides: [6] },
 ];
 
 // Input slides are indices 0, 1, 2 — show "Skip to Results" on these
@@ -88,6 +89,8 @@ export default function RoiController() {
         return <OpsContentSlide step={step} />;
       case 'timeline-dual':
         return <TimelineSlide step={step} />;
+      case 'playbook':
+        return <PlaybookSlide step={step} />;
       case 'before-after':
         return <BeforeAfterSlide step={step} />;
       case 'executive-card':

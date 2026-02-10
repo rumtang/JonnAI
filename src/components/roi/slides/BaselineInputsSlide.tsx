@@ -246,6 +246,23 @@ export default function BaselineInputsSlide({ step }: BaselineInputsSlideProps) 
               <span>🏢</span> Organization Profile
             </h4>
             <div className="space-y-3">
+              {/* Company name — optional, personalizes outputs */}
+              <div className="space-y-1">
+                <div className="flex items-center justify-between">
+                  <span className="text-[9px] text-muted-foreground">Company Name <span className="text-muted-foreground/40">(optional)</span></span>
+                </div>
+                <input
+                  type="text"
+                  value={org.companyName ?? ''}
+                  onChange={(e) => setOrg({ companyName: e.target.value })}
+                  placeholder="e.g. Acme Corp"
+                  className="w-full text-[10px] font-semibold bg-white/5 border border-muted-foreground/20 rounded px-2 py-1.5 backdrop-blur-sm text-foreground focus:outline-none focus:ring-1 focus:ring-[#5B9ECF]/50 placeholder:text-muted-foreground/30"
+                />
+                <p className="text-[8px] text-muted-foreground/50 italic">
+                  Personalizes your investment case and downloadable report
+                </p>
+              </div>
+
               {/* Industry selector — cascades budget % */}
               <div className="space-y-1">
                 <div className="flex items-center justify-between">

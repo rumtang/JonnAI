@@ -33,7 +33,7 @@ export default function TimelineSlide({ step }: TimelineSlideProps) {
   const activeScenario = useRoiStore(s => s.activeScenario);
   const setActiveScenario = useRoiStore(s => s.setActiveScenario);
 
-  const { timeline, breakEvenMonth, totalInvestment, implementationWeeks } = outputs;
+  const { timeline, breakEvenMonth, totalInvestment, implementationWeeks, doNothing } = outputs;
 
   // Build phase in months — derived from user-configurable implementation weeks
   const buildMonths = Math.ceil(implementationWeeks / 4.33);
@@ -74,6 +74,21 @@ export default function TimelineSlide({ step }: TimelineSlideProps) {
     timeline.map(p => ({ month: p.month, value: p.valueAggressive })),
     xScale, yScale,
   );
+
+  // Do-nothing baseline: cumulative quarterly erosion shown as negative/declining line
+  // Interpolate the quarterly losses across months for smooth rendering
+  const doNothingPoints = timeline.map(p => {
+    const quarter = p.month / 3; // fractional quarter
+    if (quarter <= 0) return { month: p.month, value: 0 };
+    const qFloor = Math.min(Math.floor(quarter) - 1, 7);
+    const qCeil = Math.min(qFloor + 1, 7);
+    const qFrac = quarter - Math.floor(quarter);
+    const floorVal = qFloor >= 0 ? (doNothing.quarterlyLosses[qFloor] ?? 0) : 0;
+    const ceilVal = doNothing.quarterlyLosses[qCeil] ?? floorVal;
+    return { month: p.month, value: floorVal + (ceilVal - floorVal) * qFrac };
+  });
+
+  const doNothingPath = buildLinePath(doNothingPoints, xScale, yScale);
 
   // Confidence band (area between conservative and aggressive)
   const bandPath =
@@ -197,6 +212,9 @@ export default function TimelineSlide({ step }: TimelineSlideProps) {
               transition={{ delay: 0.6, duration: 0.5 }}
             />
 
+            {/* Do-nothing baseline (always shown) — cost of inaction */}
+            <AnimatedPath d={doNothingPath} stroke="#ef4444" strokeWidth={1.5} delay={0.3} dashed />
+
             {/* Investment line (always shown) */}
             <AnimatedPath d={investmentPath} stroke="#D4856A" strokeWidth={2.5} delay={0.3} />
 
@@ -240,6 +258,8 @@ export default function TimelineSlide({ step }: TimelineSlideProps) {
               <text x={12} y={4} fontSize={7} fill="currentColor" className="text-muted-foreground/60">Investment</text>
               <rect x={70} y={0} width={8} height={3} rx={1} fill={SCENARIO_LABELS[activeScenario].color} />
               <text x={82} y={4} fontSize={7} fill="currentColor" className="text-muted-foreground/60">Cumulative Value</text>
+              <line x1={170} y1={1.5} x2={178} y2={1.5} stroke="#ef4444" strokeWidth={1.5} strokeDasharray="3 2" />
+              <text x={182} y={4} fontSize={7} fill="currentColor" className="text-muted-foreground/60">Do Nothing (Cost of Inaction)</text>
             </g>
 
             {/* Build phase marker — uses dynamic implementationWeeks */}

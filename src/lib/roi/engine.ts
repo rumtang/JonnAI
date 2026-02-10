@@ -111,6 +111,7 @@ export interface OrganizationProfile {
   marketingHeadcount: number;         // 10–5,000
   avgLoadedFteCost: number;           // $80K–$400K fully loaded
   industry?: string;                  // Industry vertical for benchmark defaults
+  companyName?: string;               // Optional — personalizes outputs and PDF report
 }
 
 /** Martech stack and paid media spend — drives optimization + ROAS streams. */
