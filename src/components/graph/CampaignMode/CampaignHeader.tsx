@@ -4,7 +4,7 @@ import { useCampaignStore, getPhaseForNode } from '@/lib/store/campaign-store';
 import { useGraphStore } from '@/lib/store/graph-store';
 import { useState } from 'react';
 
-const PHASES = ['Strategy', 'Create', 'Review', 'Publish', 'Measure', 'Optimize'];
+const PHASES = ['Plan', 'Create', 'Review', 'Publish', 'Measure', 'Optimize'];
 
 export default function CampaignHeader() {
   const { campaignName, setCampaignName, currentNodeId, stepCount, revisionCount, totalEstimatedMinutes } = useCampaignStore();

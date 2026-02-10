@@ -29,7 +29,7 @@ export interface StepNarrative {
 }
 
 export const STEP_NARRATIVES: Record<string, StepNarrative> = {
-  /* ── STRATEGY PHASE ────────────────────────────────────── */
+  /* ── PLAN PHASE ────────────────────────────────────────── */
 
   'campaign-planning': {
     headline: 'Campaign Planning',

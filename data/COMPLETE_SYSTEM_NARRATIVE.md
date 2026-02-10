@@ -84,7 +84,7 @@ Used for the simplified "pipeline everyone draws" view in early presentation sli
 
 | ID | Label | Description | Position |
 |----|-------|-------------|----------|
-| ls-strategy | Strategy | Define scope, research audience, and write the content brief | x: -500 |
+| ls-plan | Plan | Define scope, research audience, and write the content brief | x: -500 |
 | ls-create | Create | Draft content, optimize for SEO, and produce assets | x: -300 |
 | ls-review | Review | Check brand compliance, edit, and approve for publication | x: -100 |
 | ls-publish | Publish | Schedule, publish, and distribute across channels | x: 100 |
@@ -1252,7 +1252,7 @@ The presentation is a guided narrative delivered through 6 slides. Each slide co
 - Graph state: linear | Action: show-title-slide
 
 ### Slide 2: "The Marketing Lifecycle" (act1-lifecycle)
-- Narration: Every marketing team draws the same pipeline: Strategy, Create, Review, Publish, Measure, Optimize. Six stages, left to right. Clean columns. But behind each stage are teams, handoffs, and dependencies — and the complexity compounds fast. Thirty-one steps, not six. This is the operational reality most process documents never show.
+- Narration: Every marketing team draws the same pipeline: Plan, Create, Review, Publish, Measure, Optimize. Six stages, left to right. Clean columns. But behind each stage are teams, handoffs, and dependencies — and the complexity compounds fast. Thirty-one steps, not six. This is the operational reality most process documents never show.
 - Graph state: linear | Shows: steps | Highlights: flows-to | Action: show-teams-by-phase
 - *Merges former slides 2 (pipeline) + 3 (teams). show-teams-by-phase is a visual superset of show-linear-pipeline.*
 

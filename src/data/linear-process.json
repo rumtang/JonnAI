@@ -1,6 +1,6 @@
 {
   "steps": [
-    { "id": "ls-strategy", "label": "Strategy",  "description": "Define scope, research audience, and write the content brief", "x": -500 },
+    { "id": "ls-plan", "label": "Plan",  "description": "Define scope, research audience, and write the content brief", "x": -500 },
     { "id": "ls-create",   "label": "Create",    "description": "Draft content, optimize for SEO, and produce assets",        "x": -300 },
     { "id": "ls-review",   "label": "Review",    "description": "Check brand compliance, edit, and approve for publication",   "x": -100 },
     { "id": "ls-publish",  "label": "Publish",   "description": "Schedule, publish, and distribute across channels",          "x": 100 },
@@ -8,7 +8,7 @@
     { "id": "ls-optimize", "label": "Optimize",  "description": "Review results, optimize content, and govern live assets",   "x": 500 }
   ],
   "agents": [
-    { "id": "la-research",    "label": "Research Agent",       "parentStep": "ls-strategy" },
+    { "id": "la-research",    "label": "Research Agent",       "parentStep": "ls-plan" },
     { "id": "la-writer",      "label": "Content Writer",       "parentStep": "ls-create" },
     { "id": "la-seo",         "label": "SEO Optimizer",        "parentStep": "ls-create" },
     { "id": "la-performance", "label": "Performance Analyst",  "parentStep": "ls-measure" }

@@ -12,7 +12,7 @@ import { GraphNode, GraphLink, StepMeta } from '@/lib/graph/types';
 // Positions 12 step nodes in 6 phase columns for a traditional
 // left-to-right process chart feel on slides 2-3.
 const PROCESS_CHART_LAYOUT: Record<string, { fx: number; fy: number; fz: number }> = {
-  // Strategy column (x = -500)
+  // Plan column (x = -500)
   'receive-request':   { fx: -500, fy:  200, fz: 0 },
   'research-insights': { fx: -500, fy:    0, fz: 0 },
   'write-brief':       { fx: -500, fy: -200, fz: 0 },
@@ -65,7 +65,7 @@ const AGENT_PRIMARY_LINKS: Array<[string, string]> = [
 
 // Lifecycle stages shown on slides 1-3 as the "map everyone draws"
 const PIPELINE_STAGES = [
-  { label: 'Strategy', icon: '\uD83C\uDFAF' },
+  { label: 'Plan', icon: '\uD83C\uDFAF' },
   { label: 'Create', icon: '\u270F\uFE0F' },
   { label: 'Review', icon: '\u2714\uFE0F' },
   { label: 'Publish', icon: '\uD83D\uDE80' },
