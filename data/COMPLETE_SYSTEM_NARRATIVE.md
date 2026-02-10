@@ -1252,7 +1252,7 @@ The presentation is a guided narrative delivered through 6 slides. Each slide co
 - Graph state: linear | Action: show-title-slide
 
 ### Slide 2: "The Marketing Lifecycle" (act1-lifecycle)
-- Narration: Every marketing team could draw a similar pipeline: Plan, Create, Review, Publish, Measure, Optimize. Six stages, left to right. Clean columns. But behind each stage are teams, handoffs, and dependencies — and the complexity compounds fast. Thirty-one steps, not six. This is the operational reality most process documents never show.
+- Narration: Every marketing team could draw a similar pipeline: Plan, Create, Review, Publish, Measure, Optimize. Six stages, left to right. Clean columns. But behind each stage are teams, handoffs, and dependencies — and the complexity compounds fast. 50+ steps, not six. This is the operational reality, and one we can encode.
 - Graph state: linear | Shows: steps | Highlights: flows-to | Action: show-teams-by-phase
 - *Merges former slides 2 (pipeline) + 3 (teams). show-teams-by-phase is a visual superset of show-linear-pipeline.*
 
