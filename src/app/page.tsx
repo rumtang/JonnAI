@@ -97,22 +97,22 @@ export default function Home() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.35 }}
-          className="flex flex-wrap justify-center gap-4 max-w-4xl mx-auto"
+          className="flex flex-wrap justify-center gap-3 max-w-3xl mx-auto"
         >
           {modes.map(({ key, label, description, color }) => (
             <button
               key={key}
               onClick={() => handleStart(key)}
-              className="group relative px-6 py-4 rounded-2xl glass-panel hover:shadow-lg transition-all duration-300 w-full sm:w-[calc(50%-0.5rem)] lg:w-[calc(33.333%-0.75rem)]"
+              className="group relative px-4 py-2.5 rounded-xl glass-panel hover:shadow-lg transition-all duration-300 w-full sm:w-[calc(50%-0.375rem)] lg:w-[calc(33.333%-0.5rem)]"
             >
               <div className="text-left">
                 <p
-                  className="text-base font-semibold transition-colors"
+                  className="text-sm font-semibold transition-colors"
                   style={{ color }}
                 >
                   {label}
                 </p>
-                <p className="text-sm text-muted-foreground mt-1">
+                <p className="text-xs text-muted-foreground mt-0.5 leading-snug">
                   {description}
                 </p>
               </div>
