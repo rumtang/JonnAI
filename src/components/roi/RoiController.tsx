@@ -2,31 +2,33 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronLeft, ChevronRight, Compass, BookOpen } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Compass, BookOpen, FastForward } from 'lucide-react';
 import MethodologyPanel from './MethodologyPanel';
 import { useRoiStore } from '@/lib/store/roi-store';
 import { usePresentationStore } from '@/lib/store/presentation-store';
 import { useGraphStore } from '@/lib/store/graph-store';
 import { useIsMobile } from '@/lib/hooks/use-is-mobile';
 import { ROI_STEPS } from '@/data/roi-steps';
-import RoiTitleSlide from './slides/RoiTitleSlide';
 import BaselineInputsSlide from './slides/BaselineInputsSlide';
 import MartechMediaSlide from './slides/MartechMediaSlide';
-import SankeySlide from './slides/SankeySlide';
+import OpsContentSlide from './slides/OpsContentSlide';
 import TimelineSlide from './slides/TimelineSlide';
 import BeforeAfterSlide from './slides/BeforeAfterSlide';
 import ExecutiveSummarySlide from './slides/ExecutiveSummarySlide';
-import DoNothingSlide from './slides/DoNothingSlide';
 
-// ─── Act Definitions ────────────────────────────────────────────────
+// ─── Act Definitions (6 slides, 5 acts) ────────────────────────────
 const ACTS = [
-  { label: 'Your Marketing Machine', slides: [0, 1] },
-  { label: 'Where the Money Goes', slides: [2, 3] },
-  { label: 'The Transformation', slides: [4] },
-  { label: 'Before & After', slides: [5] },
-  { label: 'The Cost of Inaction', slides: [6] },
-  { label: 'Your Investment Case', slides: [7] },
+  { label: 'Your Marketing Machine', slides: [0] },
+  { label: 'Where the Money Goes', slides: [1, 2] },
+  { label: 'The Transformation', slides: [3] },
+  { label: 'Before & After', slides: [4] },
+  { label: 'Your Investment Case', slides: [5] },
 ];
+
+// Input slides are indices 0, 1, 2 — show "Skip to Results" on these
+const INPUT_SLIDE_INDICES = [0, 1, 2];
+// The timeline slide is the first results slide
+const TIMELINE_SLIDE_INDEX = 3;
 
 export default function RoiController() {
   const currentStepIndex = useRoiStore(s => s.currentStepIndex);
@@ -73,24 +75,21 @@ export default function RoiController() {
   if (!step) return null;
 
   const currentAct = ACTS.find(a => a.slides.includes(currentStepIndex));
+  const isInputSlide = INPUT_SLIDE_INDICES.includes(currentStepIndex);
 
   // ─── Slide Router ──────────────────────────────────────────────
   const renderSlide = () => {
     switch (step.layout) {
-      case 'roi-title':
-        return <RoiTitleSlide step={step} />;
       case 'org-budget-profile':
         return <BaselineInputsSlide step={step} />;
       case 'martech-media':
         return <MartechMediaSlide step={step} />;
       case 'ops-content':
-        return <SankeySlide step={step} />;
+        return <OpsContentSlide step={step} />;
       case 'timeline-dual':
         return <TimelineSlide step={step} />;
       case 'before-after':
         return <BeforeAfterSlide step={step} />;
-      case 'do-nothing':
-        return <DoNothingSlide step={step} />;
       case 'executive-card':
         return <ExecutiveSummarySlide step={step} />;
       default:
@@ -133,25 +132,34 @@ export default function RoiController() {
           <span className="text-xs text-muted-foreground/50">
             {currentStepIndex + 1} / {ROI_STEPS.length}
           </span>
+
+          {/* Skip to Results — shown only on input slides */}
+          {isInputSlide && (
+            <button
+              onClick={() => goToStep(TIMELINE_SLIDE_INDEX)}
+              className="ml-auto flex items-center gap-1 text-[10px] text-muted-foreground/60 hover:text-[#14B8A6] transition-colors"
+            >
+              <FastForward className="w-3 h-3" />
+              Skip to Results
+            </button>
+          )}
         </motion.div>
 
-        {/* Slide title (non-title slides) */}
-        {step.layout !== 'roi-title' && (
-          <motion.div
-            key={`title-${step.id}`}
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.2 }}
-            className="px-6 pb-2"
-          >
-            <h2 className="text-2xl md:text-3xl font-bold text-foreground font-[family-name:var(--font-playfair)]">
-              {step.title}
-            </h2>
-            {step.subtitle && (
-              <p className="text-sm text-muted-foreground mt-1">{step.subtitle}</p>
-            )}
-          </motion.div>
-        )}
+        {/* Slide title */}
+        <motion.div
+          key={`title-${step.id}`}
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.2 }}
+          className="px-6 pb-2"
+        >
+          <h2 className="text-2xl md:text-3xl font-bold text-foreground font-[family-name:var(--font-playfair)]">
+            {step.title}
+          </h2>
+          {step.subtitle && (
+            <p className="text-sm text-muted-foreground mt-1">{step.subtitle}</p>
+          )}
+        </motion.div>
 
         {/* Slide body */}
         <div className="flex-1 overflow-hidden">

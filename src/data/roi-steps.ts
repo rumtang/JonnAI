@@ -1,14 +1,12 @@
 // ─── ROI Simulator Step Definitions ──────────────────────────────────
-// 8 slides across 6 acts. Enterprise-grade financial model for S&P 100+.
+// 6 slides across 4 acts. Enterprise-grade financial model for S&P 100+.
 
 export type RoiLayout =
-  | 'roi-title'
   | 'org-budget-profile'
   | 'martech-media'
   | 'ops-content'
   | 'timeline-dual'
   | 'before-after'
-  | 'do-nothing'
   | 'executive-card';
 
 export interface RoiStep {
@@ -27,19 +25,6 @@ export interface RoiStep {
 
 export const ROI_STEPS: RoiStep[] = [
   // ─── ACT 1: Your Marketing Machine Today ──────────────────────────
-  {
-    id: 'roi-title',
-    act: 1,
-    actLabel: 'Your Marketing Machine',
-    title: 'The ROI of Organizational Intelligence',
-    subtitle: 'Model the enterprise financial case for knowledge graph infrastructure',
-    layout: 'roi-title',
-    themeColor: '#14B8A6',
-    content: {
-      tagline: 'The cost of not knowing what your organization knows compounds every single day.',
-      headline: 'This simulator builds a revenue-anchored financial model based on your marketing organization, spend allocation, and operational metrics. Adjust the inputs to match your reality — the math speaks for itself.',
-    },
-  },
   {
     id: 'org-budget-profile',
     act: 1,
@@ -107,24 +92,10 @@ export const ROI_STEPS: RoiStep[] = [
     },
   },
 
-  // ─── ACT 5: The Cost of Inaction ─────────────────────────────────
-  {
-    id: 'do-nothing',
-    act: 5,
-    actLabel: 'The Cost of Inaction',
-    title: 'The Cost of Doing Nothing',
-    subtitle: 'Revenue erosion from competitive AI adoption gap',
-    layout: 'do-nothing',
-    themeColor: '#ef4444',
-    content: {
-      tagline: 'Every quarter without action widens the gap. The cost of inaction compounds faster than the cost of investment.',
-    },
-  },
-
-  // ─── ACT 6: Your Investment Case ──────────────────────────────────
+  // ─── ACT 5: Your Investment Case ──────────────────────────────────
   {
     id: 'executive-summary',
-    act: 6,
+    act: 5,
     actLabel: 'Your Investment Case',
     title: 'Your Investment Case',
     subtitle: 'Executive summary based on your inputs',

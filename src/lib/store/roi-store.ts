@@ -60,17 +60,17 @@ const DEFAULT_INVESTMENT: TransformationInvestment = {
   implementationWeeks: 28,               // ~7 months default
 };
 
-// Research-backed improvement assumptions — not exposed in UI
+// Improvement assumptions — independently-verified conservative levels
 const DEFAULT_ASSUMPTIONS: ImprovementAssumptions = {
-  roasLiftPct: 20,                       // Meta AI 22%, Google AI 17% → conservative 20%
-  contentTimeSavingsPct: 65,             // Documented 75-80% → conservative 65%
-  personalizationRevLiftPct: 12,         // McKinsey 10-15% → midpoint 12%
-  cycleTimeReductionPct: 40,             // Enterprise documented improvements
-  reworkReductionPct: 70,                // At full maturity
-  adminToStrategicShiftPct: 50,          // 60% admin → 30% = 50% shift
-  attributionImprovementPct: 15,         // Conservative estimate
-  martechUtilizationTargetPct: 60,       // From 33% → 60% target
-  martechToolConsolidationPct: 30,       // 30% overlap rate
+  roasLiftPct: 12,                       // Independent studies 10-15% (vendor claims stripped)
+  contentTimeSavingsPct: 40,             // Full production (not just first-draft text)
+  personalizationRevLiftPct: 8,          // McKinsey 10-15% is top quartile; median is lower
+  cycleTimeReductionPct: 25,             // Achievable with AI-assisted steps (not full automation)
+  reworkReductionPct: 40,                // Realistic for Year 1-2 (not full maturity 70%)
+  adminToStrategicShiftPct: 30,          // 60% admin → ~42% (not aspirational 30%)
+  attributionImprovementPct: 10,         // Conservative; attribution is hard to fix even with AI
+  martechUtilizationTargetPct: 50,       // 33% → 50% is achievable (not aspirational 60%)
+  martechToolConsolidationPct: 20,       // License contracts + inertia limit consolidation
 };
 
 // ─── Compute initial outputs ─────────────────────────────────────────

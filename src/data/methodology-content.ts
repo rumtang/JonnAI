@@ -31,16 +31,16 @@ export interface SlideMethodology {
 }
 
 export const METHODOLOGY: SlideMethodology[] = [
-  // ── Slide: ROI Title ──────────────────────────────────────────────
+  // ── Slide: Baseline Inputs ────────────────────────────────────────
   {
-    slideId: 'roi-title',
-    overview: 'Model overview: 7 value streams, key assumptions, scenario framework.',
+    slideId: 'org-budget-profile',
+    overview: 'How we derive your marketing cost structure from revenue and team inputs.',
     sections: [
       {
         id: 'model-overview',
         title: 'Model Architecture',
         description:
-          'Revenue-anchored enterprise model with 7 independent value streams. All projections use a 36-month horizon, 10% annual discount rate, and S-curve ramp function for realistic value realization.',
+          'Revenue-anchored enterprise model with 7 independent value streams. All projections use a 36-month horizon, 10% annual discount rate, and S-curve ramp function for realistic value realization. Labor-related savings are capped at 40% of team cost to prevent double-counting.',
         formula: 'Total Annual Value = Σ (7 Value Streams)',
         variables: [
           { name: 'Projection Period', storeKey: '_constant.projectionMonths', format: 'months' },
@@ -53,31 +53,6 @@ export const METHODOLOGY: SlideMethodology[] = [
         sourceKey: 'marketingBudgetPct',
         confidence: 'high',
       },
-      {
-        id: 'scenario-multipliers',
-        title: 'Scenario Multipliers',
-        description:
-          'Three scenarios let you stress-test the model. Conservative applies a 0.6× haircut, Expected uses 1.0×, and Aggressive scales to 1.4×.',
-        formula: 'Scenario Value = Base Value × Multiplier',
-        variables: [
-          { name: 'Conservative', storeKey: '_constant.scenarioConservative', format: 'multiplier' },
-          { name: 'Expected', storeKey: '_constant.scenarioExpected', format: 'multiplier' },
-          { name: 'Aggressive', storeKey: '_constant.scenarioAggressive', format: 'multiplier' },
-        ],
-        resultLabel: 'Total Annual Value',
-        resultKey: 'outputs.totalAnnualValue',
-        resultFormat: 'currency',
-        sourceKey: 'marketingBudgetPct',
-        confidence: 'high',
-      },
-    ],
-  },
-
-  // ── Slide: Baseline Inputs ────────────────────────────────────────
-  {
-    slideId: 'org-budget-profile',
-    overview: 'How we derive your marketing cost structure from revenue and team inputs.',
-    sections: [
       {
         id: 'marketing-budget',
         title: 'Marketing Budget',
@@ -143,6 +118,23 @@ export const METHODOLOGY: SlideMethodology[] = [
         confidence: 'medium',
       },
       {
+        id: 'approval-bottleneck',
+        title: 'Approval Bottleneck',
+        description:
+          'Cost of team members blocked during approval cycles. Capped at available person-hours: 30% of headcount × 2,080 hours/year. Raw bottleneck hours cannot exceed what blocked FTEs can physically contribute.',
+        formula: 'Cost = min(Campaigns/yr × Days × 8hr, Blocked FTEs × 2080) × Hourly Rate',
+        variables: [
+          { name: 'Headcount', storeKey: 'org.marketingHeadcount', format: 'number' },
+          { name: 'Approval Days', storeKey: 'pain.approvalCycleDays', format: 'number' },
+          { name: 'Hourly Rate', storeKey: 'baseline.derived.hourlyRate', format: 'currency' },
+        ],
+        resultLabel: 'Annual Approval Bottleneck',
+        resultKey: 'baseline.annualApprovalBottleneckCost',
+        resultFormat: 'currency',
+        sourceKey: 'adminTimePct',
+        confidence: 'medium',
+      },
+      {
         id: 'rework-cost',
         title: 'Rework Cost',
         description:
@@ -186,7 +178,7 @@ export const METHODOLOGY: SlideMethodology[] = [
         id: 'martech-optimization',
         title: 'Martech Optimization Value',
         description:
-          'Value recovered by closing the utilization gap (33% → 60%) and consolidating redundant tools (30% overlap). Only 50% of the gap is considered recoverable due to license minimums.',
+          'Value recovered by closing the utilization gap (33% → 50%) and consolidating redundant tools (20% overlap). Only 50% of the gap is considered recoverable due to license minimums.',
         formula: 'Value = (Spend × Utilization Gap × 50%) + (Spend × Consolidation % × 30%)',
         variables: [
           { name: 'Martech Spend', storeKey: 'baseline.derived.annualMartechSpend', format: 'currency' },
@@ -204,7 +196,7 @@ export const METHODOLOGY: SlideMethodology[] = [
         id: 'roas-improvement',
         title: 'ROAS Improvement',
         description:
-          'Incremental ad revenue from AI-optimized campaigns. Meta Advantage+ shows 22% lift, Google PMax 17% — we use a conservative blended 20%.',
+          'Incremental ad revenue from AI-optimized campaigns. Based on platform vendor case studies (Meta, Google) — not independently verified. Default assumes 12% lift.',
         formula: 'ROAS Lift = Media Spend × (Projected ROAS − Current ROAS)',
         variables: [
           { name: 'Paid Media Spend', storeKey: 'baseline.derived.annualPaidMediaSpend', format: 'currency' },
@@ -215,7 +207,7 @@ export const METHODOLOGY: SlideMethodology[] = [
         resultKey: 'outputs.valueStreams.roasImprovement',
         resultFormat: 'currency',
         sourceKey: 'roasLift',
-        confidence: 'medium',
+        confidence: 'emerging',
       },
       {
         id: 'channel-roas',
@@ -230,7 +222,7 @@ export const METHODOLOGY: SlideMethodology[] = [
         resultKey: 'outputs.roas.projectedRoas',
         resultFormat: 'multiplier',
         sourceKey: 'blendedRoas',
-        confidence: 'medium',
+        confidence: 'emerging',
       },
     ],
   },
@@ -238,13 +230,13 @@ export const METHODOLOGY: SlideMethodology[] = [
   // ── Slide: Ops & Content ──────────────────────────────────────────
   {
     slideId: 'ops-content',
-    overview: 'Content velocity, campaign speed, operational efficiency, and attribution.',
+    overview: 'Content velocity, campaign speed, operational efficiency, and attribution. Labor-related savings are capped at 40% of team cost.',
     sections: [
       {
         id: 'content-velocity',
         title: 'Content Velocity Savings',
         description:
-          'Time savings on content production from AI-assisted creation. HubSpot documents 75-80% savings; we use a conservative 65%.',
+          'Time savings on content production from AI-assisted creation. HubSpot documents savings for first-draft text; full production (strategy, review, design, distribution) saves less. Default 40%.',
         formula: 'Savings = Content Team Cost × Time Savings %',
         variables: [
           { name: 'Content Team Cost', storeKey: 'baseline.derived.contentTeamCost', format: 'currency' },
@@ -254,19 +246,19 @@ export const METHODOLOGY: SlideMethodology[] = [
         resultKey: 'outputs.valueStreams.contentVelocity',
         resultFormat: 'currency',
         sourceKey: 'contentTimeSavings',
-        confidence: 'high',
+        confidence: 'medium',
       },
       {
         id: 'campaign-speed',
         title: 'Campaign Speed Value',
         description:
-          'Revenue captured earlier by reducing campaign cycle times. Each day saved per campaign translates to incremental daily marketing-attributed revenue.',
-        formula: 'Value = Campaigns/yr × Days Saved × Daily Revenue × 1%',
+          'Revenue captured earlier by reducing campaign cycle times. Each day saved per campaign captures 0.1% of daily marketing budget (conservative attribution).',
+        formula: 'Value = Campaigns/yr × Days Saved × Daily Mktg Budget × 0.1%',
         variables: [
           { name: 'Monthly Campaigns', storeKey: 'ops.monthlyCampaigns', format: 'number' },
           { name: 'Avg Cycle (weeks)', storeKey: 'ops.avgCampaignCycleWeeks', format: 'weeks' },
           { name: 'Cycle Reduction %', storeKey: 'assumptions.cycleTimeReductionPct', format: 'percent' },
-          { name: 'Daily Campaign Revenue', storeKey: 'baseline.derived.dailyCampaignRevenue', format: 'currency' },
+          { name: 'Daily Marketing Budget', storeKey: 'baseline.derived.dailyMarketingBudget', format: 'currency' },
         ],
         resultLabel: 'Campaign Speed Value',
         resultKey: 'outputs.valueStreams.campaignSpeed',
@@ -278,7 +270,7 @@ export const METHODOLOGY: SlideMethodology[] = [
         id: 'operational-efficiency',
         title: 'Operational Efficiency',
         description:
-          'Combined value of shifting admin time to strategic work (50% of admin overhead) plus reducing rework (70% reduction at maturity).',
+          'Combined value of shifting admin time to strategic work (30% of admin overhead) plus reducing rework (40% reduction). Total labor savings are capped at 40% of team cost to prevent double-counting with content velocity.',
         formula: 'Value = (Admin Overhead × Shift %) + (Rework Cost × Reduction %)',
         variables: [
           { name: 'Admin Overhead', storeKey: 'baseline.annualAdminOverheadCost', format: 'currency' },
@@ -296,12 +288,13 @@ export const METHODOLOGY: SlideMethodology[] = [
         id: 'attribution-improvement',
         title: 'Attribution Improvement',
         description:
-          'Reduced media waste from better attribution. Manual attribution affects a portion of media spend; AI improves allocation accuracy.',
-        formula: 'Value = Media Spend × Manual Attribution % × Improvement %',
+          'Reduced media waste from better attribution. Discounted by ROAS lift percentage to avoid double-counting with the ROAS Improvement stream.',
+        formula: 'Value = Media Spend × Manual % × Improvement % × (1 − ROAS Lift %)',
         variables: [
           { name: 'Paid Media Spend', storeKey: 'baseline.derived.annualPaidMediaSpend', format: 'currency' },
           { name: 'Manual Attribution %', storeKey: 'pain.manualAttributionPct', format: 'percent' },
           { name: 'Improvement %', storeKey: 'assumptions.attributionImprovementPct', format: 'percent' },
+          { name: 'ROAS Lift %', storeKey: 'assumptions.roasLiftPct', format: 'percent' },
         ],
         resultLabel: 'Attribution Improvement',
         resultKey: 'outputs.valueStreams.attributionImprovement',
@@ -321,8 +314,8 @@ export const METHODOLOGY: SlideMethodology[] = [
         id: 'ramp-factor',
         title: 'S-Curve Ramp Factor',
         description:
-          'Value doesn\'t start at 100%. The S-curve models realistic adoption: 0-30% in months 1-7 (foundation), 30-70% months 7-12 (adoption), 70-90% months 12-18 (optimization), 90-100% months 18-36 (maturity).',
-        formula: 'Monthly Value = (Annual Value / 12) × Ramp(month) × Year Multiplier',
+          'Value doesn\'t start at 100%. The S-curve models realistic adoption: 0-30% in months 1-7 (foundation), 30-70% months 7-12 (adoption), 70-90% months 12-18 (optimization), 90-100% months 18-36 (maturity). No additional year multipliers are applied.',
+        formula: 'Monthly Value = (Annual Value / 12) × Ramp(month)',
         variables: [
           { name: 'Total Annual Value', storeKey: 'outputs.totalAnnualValue', format: 'currency' },
           { name: 'Implementation Weeks', storeKey: 'investment.implementationWeeks', format: 'weeks' },
@@ -399,7 +392,7 @@ export const METHODOLOGY: SlideMethodology[] = [
         resultKey: '_workflow.1.savingsPct',
         resultFormat: 'percent',
         sourceKey: 'contentTimeSavings',
-        confidence: 'high',
+        confidence: 'medium',
       },
       {
         id: 'budget-reallocation',
@@ -460,75 +453,16 @@ export const METHODOLOGY: SlideMethodology[] = [
     ],
   },
 
-  // ── Slide: Do Nothing ─────────────────────────────────────────────
-  {
-    slideId: 'do-nothing',
-    overview: 'The compounding cost of not investing in organizational intelligence.',
-    sections: [
-      {
-        id: 'quarterly-erosion',
-        title: 'Quarterly Erosion',
-        description:
-          'Competitors adopting AI create a widening performance gap. Each quarter of inaction compounds at 2% erosion on marketing effectiveness.',
-        formula: 'Quarter Loss = Budget × 2% × Quarter Number (compounding)',
-        variables: [
-          { name: 'Annual Revenue', storeKey: 'org.annualRevenue', format: 'currency' },
-          { name: 'Marketing Budget %', storeKey: 'org.marketingBudgetPct', format: 'percent' },
-        ],
-        resultLabel: 'Year 1 Loss',
-        resultKey: 'outputs.doNothing.year1Loss',
-        resultFormat: 'currency',
-        sourceKey: 'doNothingErosion',
-        confidence: 'medium',
-      },
-      {
-        id: 'multi-year-loss',
-        title: 'Multi-Year Revenue Loss',
-        description:
-          'Cumulative revenue at risk grows from 16% in Year 1 to 25% in Year 2 and 34% by Year 3. Based on PwC/ANA Digital Maturity Study.',
-        formula: 'Year N Loss = Revenue × Erosion % (16% / 25% / 34%)',
-        variables: [
-          { name: 'Annual Revenue', storeKey: 'org.annualRevenue', format: 'currency' },
-          { name: 'Year 1 Erosion', storeKey: '_constant.doNothingYear1Pct', format: 'percent' },
-          { name: 'Year 2 Erosion', storeKey: '_constant.doNothingYear2Pct', format: 'percent' },
-          { name: 'Year 3 Erosion', storeKey: '_constant.doNothingYear3Pct', format: 'percent' },
-        ],
-        resultLabel: 'Year 3 Loss',
-        resultKey: 'outputs.doNothing.year3Loss',
-        resultFormat: 'currency',
-        sourceKey: 'doNothingErosion',
-        confidence: 'medium',
-      },
-      {
-        id: 'cost-inflation',
-        title: 'Cost Inflation Context',
-        description:
-          'Digital advertising costs are rising independently: Google CPC +13% YoY, Meta CPM +19.2% YoY, marketing labor +4.5% YoY. Inaction means paying more for the same results.',
-        formula: 'Compounding cost pressure on existing spend',
-        variables: [
-          { name: 'Google CPC Inflation', storeKey: '_constant.googleCpcYoY', format: 'percent' },
-          { name: 'Meta CPM Inflation', storeKey: '_constant.metaCpmYoY', format: 'percent' },
-          { name: 'Labor Cost Inflation', storeKey: '_constant.laborCostYoY', format: 'percent' },
-        ],
-        resultLabel: 'Combined Pressure',
-        resultKey: '_constant.combinedInflation',
-        resultFormat: 'percent',
-        sourceKey: 'doNothingErosion',
-        confidence: 'medium',
-      },
-    ],
-  },
-
   // ── Slide: Executive Summary ──────────────────────────────────────
   {
     slideId: 'executive-summary',
-    overview: 'Final investment case: ROI, risk-adjusted returns, and CFO framework.',
+    overview: 'Final investment case: ROI, risk-adjusted returns, cost of inaction, and CFO framework.',
     sections: [
       {
         id: 'three-year-roi',
         title: '3-Year ROI',
         description:
-          'Total return on investment over the 36-month projection period. Includes S-curve ramp and year-over-year knowledge compound premiums (5% Year 2, 10% Year 3).',
+          'Total return on investment over the 36-month projection period. Uses S-curve ramp for realistic adoption. No artificial year multipliers are applied.',
         formula: 'ROI = ((3-Year Value − Investment) / Investment) × 100',
         variables: [
           { name: 'Total Investment', storeKey: 'investment.totalInvestmentAmount', format: 'currency' },
@@ -541,10 +475,25 @@ export const METHODOLOGY: SlideMethodology[] = [
         confidence: 'high',
       },
       {
+        id: 'do-nothing-cost',
+        title: 'Cost of Inaction',
+        description:
+          'Illustrative erosion model: competitors adopting AI create a widening performance gap. Erosion is applied to marketing-attributable revenue (budget), not total company revenue. The quarterly compound model (2% per quarter, escalating) drives all year-over-year figures.',
+        formula: 'Year N Loss = Σ quarterly(Marketing Budget × 2% × Quarter#)',
+        variables: [
+          { name: 'Marketing Budget', storeKey: 'baseline.derived.totalMarketingBudget', format: 'currency' },
+        ],
+        resultLabel: 'Year 1 Loss',
+        resultKey: 'outputs.doNothing.year1Loss',
+        resultFormat: 'currency',
+        sourceKey: 'doNothingErosion',
+        confidence: 'emerging',
+      },
+      {
         id: 'enterprise-value',
         title: 'Enterprise Value Creation',
         description:
-          'Top-down enterprise model: AI waste recovery (50% of identified waste), content cost reduction (65%), and headcount optimization (20% through automation).',
+          'Top-down enterprise model: AI waste recovery (50% of identified waste), content cost reduction, and headcount optimization (20% through automation).',
         formula: 'Value = Waste Recovery + Content Savings + Headcount Savings',
         variables: [
           { name: 'Budget Waste Total', storeKey: 'outputs.enterpriseModel.budgetWasteTotal', format: 'currency' },

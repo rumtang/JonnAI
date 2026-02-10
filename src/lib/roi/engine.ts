@@ -48,21 +48,6 @@ export const CHANNEL_ROAS_BENCHMARKS: Record<string, { current: number; aiOptimi
   'Connected TV': { current: 1.5, aiOptimized: 2.0 },
 };
 
-export const BUDGET_ALLOCATION = {
-  paidMedia: 30.6,
-  martech: 22.4,
-  labor: 21.9,
-  agencies: 20.7,
-  other: 4.4,
-} as const;
-
-export const MARTECH_WASTE_BENCHMARKS = {
-  avgUtilization: 33,       // Gartner: 33% of capability used
-  wasteRangeLow: 26,        // % of budget wasted (low estimate)
-  wasteRangeHigh: 47,       // % of budget wasted (high estimate)
-  toolOverlapPct: 30,       // average redundancy across stack
-} as const;
-
 export const AI_IMPACT_BENCHMARKS = {
   contentCostReduction: 65,     // % reduction in content production cost
   headcountSavings: 20,         // % headcount reduction through automation
@@ -86,42 +71,6 @@ export const COST_INFLATION = {
   laborCostYoY: 4.5,      // % annual salary inflation for marketing roles
 } as const;
 
-export const EFFICIENCY_METRICS = {
-  merTarget: 5.0,             // marketing efficiency ratio target
-  cacByIndustry: {
-    'B2B Average': 536,
-    'B2C Average': 148,
-    'Technology': 395,
-    'Financial Services': 644,
-    'Healthcare / Pharma': 580,
-    'Consumer Packaged Goods': 98,
-    'Retail': 120,
-  } as Record<string, number>,
-  ltvCacRatioTarget: 3.0,     // healthy LTV:CAC
-  pipelineContributionPct: 40, // marketing-sourced pipeline %
-} as const;
-
-export const OPERATING_COSTS = {
-  fteRanges: {
-    'Content Strategist': { low: 85_000, high: 140_000 },
-    'Marketing Ops': { low: 95_000, high: 160_000 },
-    'Paid Media Manager': { low: 90_000, high: 150_000 },
-    'Data Analyst': { low: 100_000, high: 170_000 },
-    'Creative Director': { low: 130_000, high: 220_000 },
-    'Campaign Manager': { low: 80_000, high: 130_000 },
-  } as Record<string, { low: number; high: number }>,
-  headcountPer100M: 10,        // ~10 FTEs per $100M budget
-  contentTeamPct: 25,          // % of marketing headcount
-  opsTeamPct: 20,              // % of marketing headcount
-} as const;
-
-export const COMPLIANCE_COSTS = {
-  financialServicesReviewCostPerAsset: 2_500,
-  pharmaReviewCostPerAsset: 3_500,
-  avgReviewDelayDays: 14,
-  aiReviewReductionPct: 60,
-} as const;
-
 export const CFO_FRAMEWORK = {
   wacc: 10,               // weighted average cost of capital %
   hurdle_rate: 15,        // minimum IRR for investment approval %
@@ -143,14 +92,14 @@ export const SOURCE_ATTRIBUTION: Record<string, { source: string; confidence: Co
   martechUtilization: { source: 'Gartner 2024 Martech Survey', confidence: 'high', sampleSize: '400+ enterprises' },
   toolCount: { source: 'ChiefMartec / MartechMap 2024', confidence: 'medium' },
   paidMediaPct: { source: 'Gartner 2025 CMO Spend Survey', confidence: 'high', sampleSize: '400+ CMOs' },
-  blendedRoas: { source: 'Google/Nielsen Cross-Channel Study', confidence: 'medium' },
+  blendedRoas: { source: 'Google/Nielsen Cross-Channel Study (blended estimate)', confidence: 'emerging' },
   adminTimePct: { source: 'Salesforce State of Marketing 2025', confidence: 'high', sampleSize: '4,800+ marketers' },
-  contentTimeSavings: { source: 'HubSpot State of Marketing 2025', confidence: 'high', sampleSize: '1,400+ marketers' },
-  personalizationLift: { source: 'McKinsey Personalization Analysis 2023', confidence: 'high' },
-  roasLift: { source: 'Meta Advantage+ / Google PMax results 2024', confidence: 'medium' },
+  contentTimeSavings: { source: 'HubSpot State of Marketing 2025 (first-draft text only)', confidence: 'medium', sampleSize: '1,400+ marketers' },
+  personalizationLift: { source: 'McKinsey Personalization Analysis 2023 (top quartile)', confidence: 'high' },
+  roasLift: { source: 'Platform vendor case studies (Meta, Google) — not independently verified', confidence: 'emerging' },
   reworkRate: { source: 'Lucidpress Brand Consistency Report', confidence: 'medium' },
   marketingWaste: { source: 'Rakuten/ANA Programmatic Study', confidence: 'medium', sampleSize: '1,000+ advertisers' },
-  doNothingErosion: { source: 'PwC/ANA Digital Maturity Study', confidence: 'medium' },
+  doNothingErosion: { source: 'PwC/ANA Digital Maturity Study (illustrative erosion model)', confidence: 'emerging' },
 };
 
 // ─── Input Types ─────────────────────────────────────────────────────
@@ -219,17 +168,17 @@ export interface TransformationInvestment {
   implementationWeeks: number;        // 12–104 (~3–24 months), default 28
 }
 
-/** Hidden improvement assumptions — research-backed, not UI-exposed. */
+/** Improvement assumptions — independently-verified conservative levels, not UI-exposed. */
 export interface ImprovementAssumptions {
-  roasLiftPct: number;               // Meta AI: 22%, Google AI: 17% → default 20%
-  contentTimeSavingsPct: number;      // Documented 75-80% → conservative 65%
-  personalizationRevLiftPct: number;  // McKinsey 10-15% → default 12%
-  cycleTimeReductionPct: number;      // Enterprise documented: 40%
-  reworkReductionPct: number;         // 70% at full maturity
-  adminToStrategicShiftPct: number;   // 60% admin → 30% = 50% shift
-  attributionImprovementPct: number;  // Conservative: 15%
-  martechUtilizationTargetPct: number;// From 33% → 60%
-  martechToolConsolidationPct: number;// 30% overlap rate
+  roasLiftPct: number;               // Independent studies: 10-15% → default 12%
+  contentTimeSavingsPct: number;      // Full production savings → default 40%
+  personalizationRevLiftPct: number;  // McKinsey median (not top quartile) → default 8%
+  cycleTimeReductionPct: number;      // AI-assisted (not full automation) → default 25%
+  reworkReductionPct: number;         // Year 1-2 realistic → default 40%
+  adminToStrategicShiftPct: number;   // Achievable shift → default 30%
+  attributionImprovementPct: number;  // Conservative → default 10%
+  martechUtilizationTargetPct: number;// Achievable: 33% → 50%
+  martechToolConsolidationPct: number;// Realistic consolidation: 20%
 }
 
 // ─── Output Types ────────────────────────────────────────────────────
@@ -244,7 +193,7 @@ export interface DerivedMetrics {
   currentAdRevenue: number;
   contentTeamCost: number;
   hourlyRate: number;
-  dailyCampaignRevenue: number;
+  dailyMarketingBudget: number;
 }
 
 export interface WaterfallSegment {
@@ -392,9 +341,8 @@ function computeDerived(
   // Content team is roughly 25% of marketing headcount
   const contentTeamCost = totalTeamCost * 0.25;
 
-  // Marketing contribution to revenue: use budget-to-revenue ratio as proxy
-  const marketingContribPct = org.marketingBudgetPct / 100;
-  const dailyCampaignRevenue = (org.annualRevenue * marketingContribPct) / 365;
+  // Daily marketing budget (used for campaign speed value calculation)
+  const dailyMarketingBudget = totalMarketingBudget / 365;
 
   return {
     totalMarketingBudget,
@@ -405,7 +353,7 @@ function computeDerived(
     currentAdRevenue,
     contentTeamCost,
     hourlyRate,
-    dailyCampaignRevenue,
+    dailyMarketingBudget,
   };
 }
 
@@ -437,14 +385,13 @@ export function computeBaseline(
   // Admin overhead: the opportunity cost of admin time (subset of team cost)
   const annualAdminOverheadCost = annualTeamCost * (pain.adminTimePct / 100);
 
-  // Approval bottleneck: cost of waiting for approvals per campaign
+  // Approval bottleneck: cost of waiting for approvals, capped at available person-hours
   const annualCampaignsCount = ops.monthlyCampaigns * 12;
-  const teamBlockedPct = 0.3; // ~30% of team blocked during approvals
-  const annualApprovalBottleneckCost =
-    annualCampaignsCount *
-    pain.approvalCycleDays * 8 *
-    derived.hourlyRate *
-    Math.ceil(org.marketingHeadcount * teamBlockedPct);
+  const blockedFTEs = Math.ceil(org.marketingHeadcount * 0.3); // ~30% of team blocked
+  const availableBlockedHours = blockedFTEs * HOURS_PER_YEAR;
+  const rawBottleneckHours = annualCampaignsCount * pain.approvalCycleDays * 8;
+  const actualBlockedHours = Math.min(rawBottleneckHours, availableBlockedHours);
+  const annualApprovalBottleneckCost = actualBlockedHours * derived.hourlyRate;
 
   // Attribution waste: cost of poor attribution decisions on media spend
   const annualAttributionWaste =
@@ -519,8 +466,8 @@ function computeValueStreams(
   const currentCycleDays = ops.avgCampaignCycleWeeks * 7;
   const daysSaved = currentCycleDays * (assumptions.cycleTimeReductionPct / 100);
   const campaignsPerYear = ops.monthlyCampaigns * 12;
-  // Each campaign captures a small fraction of daily company marketing-attributed revenue
-  const campaignSpeed = campaignsPerYear * daysSaved * d.dailyCampaignRevenue * 0.01;
+  // Each campaign captures 0.1% of daily marketing budget per day launched earlier
+  const campaignSpeed = campaignsPerYear * daysSaved * d.dailyMarketingBudget * 0.001;
 
   // 5. Operational Efficiency — admin-to-strategic shift + rework reduction
   const adminShiftValue =
@@ -530,21 +477,36 @@ function computeValueStreams(
   const operationalEfficiency = adminShiftValue + reworkReduction;
 
   // 6. Attribution Improvement — reduce waste from better measurement
+  // Discount by ROAS lift % to avoid double-counting with ROAS Improvement stream
   const attributionImprovement =
     d.annualPaidMediaSpend *
     (pain.manualAttributionPct / 100) *
-    (assumptions.attributionImprovementPct / 100);
+    (assumptions.attributionImprovementPct / 100) *
+    (1 - assumptions.roasLiftPct / 100);
 
   // 7. Personalization Lift — revenue uplift from personalized experiences
   const personalizationLift =
     d.currentAdRevenue * (assumptions.personalizationRevLiftPct / 100);
 
+  // ── Double-count guardrail: cap labor-related savings at 40% of team cost ──
+  // Content velocity + operational efficiency both draw from team cost;
+  // a person can't have all their content time, admin time, and rework time saved simultaneously.
+  const maxLaborSavings = d.totalTeamCost * 0.40;
+  const rawLaborSavings = contentVelocity + operationalEfficiency;
+  let finalContentVelocity = contentVelocity;
+  let finalOperationalEfficiency = operationalEfficiency;
+  if (rawLaborSavings > maxLaborSavings && rawLaborSavings > 0) {
+    const scaleFactor = maxLaborSavings / rawLaborSavings;
+    finalContentVelocity = contentVelocity * scaleFactor;
+    finalOperationalEfficiency = operationalEfficiency * scaleFactor;
+  }
+
   return {
     martechOptimization,
     roasImprovement,
-    contentVelocity,
+    contentVelocity: finalContentVelocity,
     campaignSpeed,
-    operationalEfficiency,
+    operationalEfficiency: finalOperationalEfficiency,
     attributionImprovement,
     personalizationLift,
   };
@@ -655,10 +617,11 @@ export function computeDoNothingCost(
   annualRevenue: number,
   marketingBudgetPct: number,
 ): DoNothingOutputs {
+  // Apply erosion to marketing-attributable revenue (budget), not total company revenue
   const marketingBudget = annualRevenue * (marketingBudgetPct / 100);
   const quarterlyErosionRate = DO_NOTHING_EROSION.quarterlyPct / 100;
 
-  // 8-quarter cumulative losses (compound erosion)
+  // 8-quarter cumulative losses (compound erosion on marketing budget)
   const quarterlyLosses: number[] = [];
   let cumulative = 0;
   for (let q = 1; q <= 8; q++) {
@@ -666,9 +629,16 @@ export function computeDoNothingCost(
     quarterlyLosses.push(cumulative);
   }
 
-  const year1Loss = annualRevenue * (DO_NOTHING_EROSION.year1Pct / 100);
-  const year2Loss = annualRevenue * (DO_NOTHING_EROSION.year2Pct / 100);
-  const year3Loss = annualRevenue * (DO_NOTHING_EROSION.year3Pct / 100);
+  // Yearly losses derived from the quarterly compound model for consistency
+  // Year 1 = sum of Q1-Q4 quarterly erosion, Year 2 = sum of Q1-Q8, etc.
+  const year1Loss = quarterlyLosses[3]; // end of Q4
+  const year2Loss = quarterlyLosses[7]; // end of Q8
+  // Year 3: extrapolate compound model for Q9-Q12
+  let year3Cumulative = cumulative;
+  for (let q = 9; q <= 12; q++) {
+    year3Cumulative += marketingBudget * quarterlyErosionRate * q;
+  }
+  const year3Loss = year3Cumulative;
 
   return {
     quarterlyLosses,
@@ -727,12 +697,7 @@ export function computeRoi(
   for (let m = 0; m <= PROJECTION_MONTHS; m++) {
     const ramp = rampFactor(m);
 
-    // Knowledge compound premium in years 2-3
-    let yearMultiplier = 1.0;
-    if (m > 12 && m <= 24) yearMultiplier = 1.05;
-    if (m > 24) yearMultiplier = 1.10;
-
-    const monthlyBaseValue = (totalAnnualValue / 12) * ramp * yearMultiplier;
+    const monthlyBaseValue = (totalAnnualValue / 12) * ramp;
 
     cumulativeConservative += monthlyBaseValue * SCENARIO_MULTIPLIERS.conservative;
     cumulativeExpected += monthlyBaseValue * SCENARIO_MULTIPLIERS.expected;

@@ -21,8 +21,6 @@ import {
   DISCOUNT_RATE,
   PROJECTION_MONTHS,
   SCENARIO_MULTIPLIERS,
-  DO_NOTHING_EROSION,
-  COST_INFLATION,
 } from '@/lib/roi/engine';
 import { METHODOLOGY } from '@/data/methodology-content';
 import type { FormulaVariable } from '@/data/methodology-content';
@@ -77,16 +75,6 @@ function resolveStoreKey(
       scenarioConservative: SCENARIO_MULTIPLIERS.conservative,
       scenarioExpected: SCENARIO_MULTIPLIERS.expected,
       scenarioAggressive: SCENARIO_MULTIPLIERS.aggressive,
-      doNothingYear1Pct: DO_NOTHING_EROSION.year1Pct,
-      doNothingYear2Pct: DO_NOTHING_EROSION.year2Pct,
-      doNothingYear3Pct: DO_NOTHING_EROSION.year3Pct,
-      googleCpcYoY: COST_INFLATION.googleCpcYoY,
-      metaCpmYoY: COST_INFLATION.metaCpmYoY,
-      laborCostYoY: COST_INFLATION.laborCostYoY,
-      combinedInflation:
-        COST_INFLATION.googleCpcYoY +
-        COST_INFLATION.metaCpmYoY +
-        COST_INFLATION.laborCostYoY,
     };
     return CONSTANTS[constant];
   }

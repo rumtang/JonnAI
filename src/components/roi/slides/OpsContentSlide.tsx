@@ -9,7 +9,7 @@ import AnimatedNumber from '../charts/AnimatedNumber';
 import SourceTooltip from '../shared/SourceTooltip';
 import type { RoiStep } from '@/data/roi-steps';
 
-interface SankeySlideProps {
+interface OpsContentSlideProps {
   step: RoiStep;
 }
 
@@ -61,7 +61,7 @@ function SliderRow({
 }
 
 // ─── Main Slide ──────────────────────────────────────────────────────
-export default function SankeySlide({ step }: SankeySlideProps) {
+export default function OpsContentSlide({ step }: OpsContentSlideProps) {
   const ops = useRoiStore(s => s.ops);
   const pain = useRoiStore(s => s.pain);
   const setOps = useRoiStore(s => s.setOps);
