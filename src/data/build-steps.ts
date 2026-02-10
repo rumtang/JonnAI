@@ -93,6 +93,12 @@ export interface TimelinePhase {
   color: string;
 }
 
+export interface Prerequisite {
+  item: string;
+  owner: string;     // 'Client' | 'Consultant' | 'Joint'
+  leadTime: string;  // e.g., '2-4 weeks before kickoff'
+}
+
 export interface BuildStep {
   id: string;
   act: number;
@@ -120,6 +126,8 @@ export interface BuildStep {
     phases?: PhaseCard[];
     teamRoles?: TeamRole[];
     maturityLevels?: MaturityLevel[];
+    prerequisites?: Prerequisite[];
+    assumptions?: string[];
   };
 }
 
@@ -136,7 +144,7 @@ export const BUILD_STEPS: BuildStep[] = [
     act: 1,
     actLabel: 'The Vision',
     title: 'Building the Organizational Intelligence Layer',
-    subtitle: 'A 16-week engagement that transforms how marketing operations work',
+    subtitle: 'A phased engagement that transforms how marketing operations work',
     layout: 'title',
     themeColor: '#E88D67',
     content: {
@@ -166,28 +174,28 @@ export const BUILD_STEPS: BuildStep[] = [
       adoptionTimeline: [
         {
           name: 'Build',
-          duration: 'Weeks 1-16',
-          description: 'Knowledge graph built, validated, MCP servers configured, agent test suite passing.',
-          humanRole: 'Humans doing 100% of the work. Consultants building, client SMEs validating.',
+          duration: 'Weeks 1-28 (two tiers)',
+          description: 'Tier 1 (Weeks 1-16): Knowledge graph built for 2-3 priority domains, validated, MCP servers configured, agent test suite passing. Tier 2 (Weeks 17-28): Expand to remaining domains, full digital twin, governance maturation.',
+          humanRole: 'Humans doing 100% of the work. Tier 1 delivers supervised agents on priority workflows. Tier 2 extends coverage.',
           color: '#E88D67',
         },
         {
           name: 'Supervised Launch',
-          duration: 'Months 4-7',
+          duration: 'Months 7-10',
           description: 'Agents making recommendations on live workflows. Every recommendation reviewed by a human before execution.',
           humanRole: 'Humans reviewing 100% of agent outputs. Agents functioning as smart recommendation engines.',
           color: '#5B9ECF',
         },
         {
           name: 'Graduated Autonomy',
-          duration: 'Months 7-12',
+          duration: 'Months 10-15',
           description: 'Low-risk workflows move to autonomous. Medium-risk to supervised. High-risk stays approval-gated.',
           humanRole: 'Humans reviewing 40-60% of decisions. Focus shifts to exceptions and high-stakes choices.',
           color: '#9B7ACC',
         },
         {
           name: 'Operational Maturity',
-          duration: 'Months 12-18+',
+          duration: 'Months 15-24+',
           description: 'Agent handles 70-80% of operational decisions. Knowledge graph self-maintains via automated feeds.',
           humanRole: 'Humans reviewing 15-25% of decisions. Role has shifted to strategic oversight and creative direction.',
           color: '#4CAF50',
@@ -912,23 +920,24 @@ export const BUILD_STEPS: BuildStep[] = [
     id: 'build-timeline',
     act: 4,
     actLabel: 'The Build',
-    title: 'The 16-Week Build',
-    subtitle: 'From domain discovery to validated, agent-ready knowledge graph',
+    title: 'The Phased Build',
+    subtitle: 'Foundation in 16 weeks, full coverage in 28 — then 12-18 months to operational maturity',
     layout: 'gantt',
     themeColor: '#E88D67',
     content: {
-      tagline: 'The knowledge graph can be built in 16 weeks. Getting the organization to trust it, adopt it, and evolve with it takes 12-18 months beyond that.',
+      tagline: 'The knowledge graph is built in two tiers. Tier 1 delivers a working foundation in 16 weeks. Tier 2 completes the full organizational intelligence layer by Week 28. Getting the organization to trust it and evolve with it takes 12-18 months beyond that.',
       phases: [
         {
           id: 'phase-1',
-          name: 'Domain Discovery',
-          weeks: 'Weeks 1-3',
+          name: 'Domain Discovery & Prerequisites',
+          weeks: 'Weeks 1-5',
           startWeek: 1,
-          endWeek: 3,
+          endWeek: 5,
           activities: [
-            'Discovery across all 7 domains',
+            'Discovery across priority 2-3 domains',
             'Stakeholder mapping and kickoff workshop',
             'Process walk-throughs for 3-5 core workflows',
+            'Data access provisioning and infrastructure setup',
           ],
           deliverables: [
             'Domain inventory (YAML)',
@@ -936,18 +945,18 @@ export const BUILD_STEPS: BuildStep[] = [
             'Resistance mitigation plan',
             'AS-IS process maps',
           ],
-          teamRoles: ['Context Engineer', 'Domain Analyst', 'Engagement Manager'],
+          teamRoles: ['Context Engineer', 'Domain Analyst', 'Engagement Manager', 'Client Liaison'],
         },
         {
           id: 'phase-2',
           name: 'Ontology Design',
-          weeks: 'Weeks 3-5',
-          startWeek: 3,
-          endWeek: 5,
+          weeks: 'Weeks 4-8',
+          startWeek: 4,
+          endWeek: 8,
           activities: [
             'Cross-domain junction entity definition',
-            'Brand and compliance rule decomposition',
-            'Interview remaining domain SMEs',
+            'Brand and compliance rule decomposition (2-3 days per brand)',
+            'SME interviews and ontology validation (3 cycles)',
           ],
           deliverables: [
             'Cross-domain ontology (YAML + TTL)',
@@ -958,31 +967,34 @@ export const BUILD_STEPS: BuildStep[] = [
         },
         {
           id: 'phase-3',
-          name: 'KG Population',
-          weeks: 'Weeks 5-8',
-          startWeek: 5,
-          endWeek: 8,
+          name: 'KG Population (Priority Domains)',
+          weeks: 'Weeks 7-12',
+          startWeek: 7,
+          endWeek: 12,
           activities: [
             'Population in dependency order: Structural → Process → Rules → Metrics',
-            'Automated feeds where possible',
+            'Automated ETL feeds for structured data',
             'Provenance metadata for all assertions',
+            'Incremental validation with domain SMEs',
           ],
           deliverables: [
-            'Populated KG (JSON-LD + graph DB)',
+            'Populated KG for priority domains (JSON-LD + graph DB)',
             'Provenance metadata',
+            'Data quality report',
           ],
-          teamRoles: ['Graph Engineer', 'Context Engineer'],
+          teamRoles: ['Graph Engineer', 'Data Engineer', 'Context Engineer'],
         },
         {
           id: 'phase-4',
-          name: 'Digital Twin Assembly',
-          weeks: 'Weeks 8-12',
-          startWeek: 8,
-          endWeek: 12,
+          name: 'Digital Twin & Agent Integration',
+          weeks: 'Weeks 10-14',
+          startWeek: 10,
+          endWeek: 14,
           activities: [
             'Agent affordance mapping per layer',
-            'Autonomy tier assignment for every workflow',
+            'Autonomy tier assignment for priority workflows',
             'MCP server configuration',
+            'Stakeholder sign-off on autonomy tiers',
           ],
           deliverables: [
             'Digital twin architecture doc',
@@ -994,19 +1006,59 @@ export const BUILD_STEPS: BuildStep[] = [
         },
         {
           id: 'phase-5',
-          name: 'Validation & Testing',
-          weeks: 'Weeks 12-16',
-          startWeek: 12,
+          name: 'Validation & Tier 1 Delivery',
+          weeks: 'Weeks 13-16 ★',
+          startWeek: 13,
           endWeek: 16,
           activities: [
             'Ontology consistency checks',
             'Data freshness and cross-domain integrity',
-            'Agent test suite (50+ scenarios)',
+            'Agent test suite (30+ scenarios for priority domains)',
+            'Supervised launch preparation',
           ],
           deliverables: [
             'Agent test suite (YAML)',
-            'Validation report',
-            'Governance and maintenance playbook',
+            'Tier 1 validation report',
+            'Supervised launch runbook',
+          ],
+          teamRoles: ['Context Engineer', 'Graph Engineer', 'Engagement Manager'],
+        },
+        {
+          id: 'phase-6',
+          name: 'Domain Expansion',
+          weeks: 'Weeks 17-22',
+          startWeek: 17,
+          endWeek: 22,
+          activities: [
+            'Discovery + population for remaining 4-5 domains',
+            'Shadow process extraction via practitioner interviews',
+            'Cross-domain integration testing',
+            'Governance playbook draft',
+          ],
+          deliverables: [
+            'Full 7-domain KG',
+            'Shadow process inventory',
+            'Cross-domain test results',
+          ],
+          teamRoles: ['Context Engineer', 'Domain Analyst', 'Graph Engineer', 'Data Engineer'],
+        },
+        {
+          id: 'phase-7',
+          name: 'Full Validation & Governance',
+          weeks: 'Weeks 22-28 ★',
+          startWeek: 22,
+          endWeek: 28,
+          activities: [
+            'Full agent test suite (50+ scenarios)',
+            'Legal/compliance review of KG content',
+            'Governance playbook finalization',
+            'Maintenance handoff and training',
+          ],
+          deliverables: [
+            'Complete agent test suite',
+            'Governance & maintenance playbook',
+            'Training materials',
+            'Handoff documentation',
           ],
           teamRoles: ['Context Engineer', 'Graph Engineer', 'Engagement Manager'],
         },
@@ -1015,22 +1067,32 @@ export const BUILD_STEPS: BuildStep[] = [
         {
           role: 'Context Engineer (Lead)',
           responsibility: 'Ontology design, cross-domain architecture, validation, agent affordance mapping',
-          allocation: '100% — Weeks 1-16',
+          allocation: '100% — Weeks 1-28',
         },
         {
           role: 'Domain Analyst',
           responsibility: 'Discovery interviews, process mapping, document analysis, shadow process extraction',
-          allocation: '100% — Weeks 1-8',
+          allocation: '100% Wk 1-8, 75% Wk 17-22, 25% Wk 22-28',
         },
         {
           role: 'Graph Engineer',
           responsibility: 'KG population, MCP server development, agent integration, test suite',
-          allocation: '100% — Weeks 5-16',
+          allocation: '100% — Weeks 7-28',
+        },
+        {
+          role: 'Data Engineer',
+          responsibility: 'ETL pipelines, automated data feeds, system integrations, data transformation',
+          allocation: '100% Wk 7-16, 50% Wk 17-28',
         },
         {
           role: 'Engagement Manager',
           responsibility: 'Client relationship, cross-domain stakeholder coordination, scope management',
-          allocation: '50% — Weeks 1-16',
+          allocation: '75% Wk 1-16, 50% Wk 17-28',
+        },
+        {
+          role: 'Client Liaison (client obligation)',
+          responsibility: 'Internal access, stakeholder scheduling, blocker escalation, output validation',
+          allocation: '50% — Weeks 1-28',
         },
       ],
       maturityLevels: [
@@ -1039,7 +1101,7 @@ export const BUILD_STEPS: BuildStep[] = [
           name: 'Cataloged',
           kgCharacteristics: 'Structural layer populated. Systems, teams, and data assets inventoried.',
           agentCapability: 'Agent can answer "what exists" questions. Equivalent to a smart search tool.',
-          timeline: 'Weeks 1-4',
+          timeline: 'Weeks 1-5',
           color: '#5B9ECF',
         },
         {
@@ -1047,7 +1109,7 @@ export const BUILD_STEPS: BuildStep[] = [
           name: 'Mapped',
           kgCharacteristics: 'Structural + Process + Rules populated for primary domain. Cross-domain junctions designed.',
           agentCapability: 'Agent can walk through workflows and check constraints. Tier 1 decisions possible.',
-          timeline: 'Weeks 4-10',
+          timeline: 'Weeks 5-14',
           color: '#9B7ACC',
         },
         {
@@ -1055,7 +1117,7 @@ export const BUILD_STEPS: BuildStep[] = [
           name: 'Connected',
           kgCharacteristics: 'All five layers populated. Cross-domain dependencies active. Provenance tracked.',
           agentCapability: 'Cross-domain decisions (budget + compliance + strategy). Tiers 1-3 operational.',
-          timeline: 'Weeks 10-16',
+          timeline: 'Weeks 14-28',
           color: '#C9A04E',
         },
         {
@@ -1063,9 +1125,23 @@ export const BUILD_STEPS: BuildStep[] = [
           name: 'Autonomous',
           kgCharacteristics: 'KG self-maintaining via automated population. Ontology evolves with organizational change.',
           agentCapability: 'Full agentic operations. Tiers 1-3 independent. Continuous learning loop.',
-          timeline: 'Months 6-12+',
+          timeline: 'Months 8-18+',
           color: '#4CAF50',
         },
+      ],
+      prerequisites: [
+        { item: 'Executive sponsor with VP-level authority identified', owner: 'Client', leadTime: 'Before kickoff' },
+        { item: 'Stakeholder calendar pre-booked for Weeks 1-5 (7 domain leads)', owner: 'Client', leadTime: '2 weeks before kickoff' },
+        { item: 'Data access requests submitted for priority systems (CRM, HRIS, BPM)', owner: 'Joint', leadTime: '3-4 weeks before kickoff' },
+        { item: 'Cloud environment provisioned (graph DB, dev environment)', owner: 'Joint', leadTime: '2-3 weeks before kickoff' },
+        { item: 'Priority domains selected (2-3 for Tier 1 focus)', owner: 'Joint', leadTime: 'During scoping' },
+      ],
+      assumptions: [
+        'Client assigns a dedicated liaison with cross-departmental access',
+        'Priority domain SMEs available within 48 hours of request during Weeks 1-8',
+        'Existing documentation is reasonably current (< 18 months stale)',
+        'Ontology builds on existing standards (schema.org or industry-specific), not designed from scratch',
+        'Scope locked after Week 5 — additions go to Tier 2',
       ],
     },
   },
