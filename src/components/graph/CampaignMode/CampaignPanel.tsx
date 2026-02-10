@@ -1,5 +1,6 @@
 'use client';
 
+import { useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useCampaignStore } from '@/lib/store/campaign-store';
 import CampaignHeader from './CampaignHeader';
@@ -7,7 +8,15 @@ import CampaignNodeCard from './CampaignNodeCard';
 import CampaignLog from './CampaignLog';
 
 export default function CampaignPanel() {
-  const { isActive } = useCampaignStore();
+  const { isActive, currentNodeId } = useCampaignStore();
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  // Reset scroll to top whenever the active node changes
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = 0;
+    }
+  }, [currentNodeId]);
 
   if (!isActive) return null;
 
@@ -29,7 +38,7 @@ export default function CampaignPanel() {
         <div className="border-t border-border my-3" />
 
         {/* Scrollable content area */}
-        <div className="flex-1 overflow-y-auto min-h-0">
+        <div ref={scrollRef} className="flex-1 overflow-y-auto min-h-0">
           <CampaignNodeCard />
           <CampaignLog />
         </div>

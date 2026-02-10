@@ -1267,7 +1267,7 @@ The presentation is a guided narrative delivered through 6 slides. Each slide co
 - *Unchanged — the single most dramatic moment keeps its own slide.*
 
 ### Slide 5: "The Intelligence Layer" (act4-intelligence-layer)
-- Narration: This is the intelligence layer. Twenty inputs capturing how your organization actually works — brand voice, audience understanding, legal frameworks, orchestration rules — each connected to every agent that depends on it. Update one input, and the entire system gets smarter. The agents will become interchangeable — you can swap models next quarter. But the knowledge graph compounds. Refine one input and every agent that touches it improves simultaneously. Agents commoditize. Infrastructure compounds. Your competitors can buy the same models. They cannot replicate the way your organization thinks.
+- Narration: This is the intelligence layer. Twenty inputs describing your brand voice, audience segments, legal frameworks, and orchestration rules — each connected to the agents that depend on it. Update one input, and every agent that references it picks up the change. The agents themselves will become more interchangeable — you can swap models easily. But this knowledge layer compounds. Refine one input and every agent that touches it improves simultaneously. Your competitors can buy the same models. They can't easily replicate your organization's accumulated context.
 - Graph state: full-graph | Shows: inputs, agents | Highlights: uses, performs | Action: show-infrastructure-vs-agents
 - *Merges former slides 7 (intelligence layer) + 8 (thesis). show-infrastructure-vs-agents highlights both inputs and agents with all connecting links.*
 
