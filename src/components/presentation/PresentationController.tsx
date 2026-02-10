@@ -110,6 +110,7 @@ interface FlyingAgent {
 // ─── Flying Agent Badge ───────────────────────────────────
 // Independent motion.div that flies from its pipeline position
 // to viewport center, shrinking and fading as it converges.
+// Rendered at z-[60] so it sits above the exiting pipeline overlay.
 function FlyingAgentBadge({
   agent,
   index,
@@ -122,12 +123,12 @@ function FlyingAgentBadge({
 
   return (
     <motion.div
-      className="absolute px-2 py-1 rounded-md bg-[#5B9ECF]/10 border border-[#5B9ECF]/25 text-[10px] font-medium text-[#5B9ECF] whitespace-nowrap"
+      className="absolute px-3 py-1.5 rounded-lg bg-[#5B9ECF]/25 border border-[#5B9ECF]/50 text-xs font-semibold text-[#5B9ECF] whitespace-nowrap shadow-[0_0_16px_rgba(91,158,207,0.4)]"
       style={{
-        left: agent.startX,
-        top: agent.startY,
-        // Center the badge on its position
-        transform: 'translate(-50%, -50%)',
+        // Position the badge centered on its column. Framer Motion's x/y
+        // are additive offsets from this CSS position.
+        left: agent.startX - 35,
+        top: agent.startY - 12,
       }}
       initial={{
         x: 0,
@@ -138,13 +139,13 @@ function FlyingAgentBadge({
       animate={{
         x: centerX - agent.startX,
         y: centerY - agent.startY,
-        scale: 0.2,
+        scale: 0.15,
         opacity: 0,
       }}
       transition={{
-        duration: 1.2,
-        delay: index * 0.03,
-        ease: [0.25, 0.1, 0.25, 1], // ease-out with slight acceleration
+        duration: 1.4,
+        delay: index * 0.04,
+        ease: [0.4, 0, 0.2, 1],
       }}
     >
       {agent.label}
@@ -204,6 +205,10 @@ export default function PresentationController() {
   // that fly from their 2D column positions toward viewport center.
   const [flyingAgents, setFlyingAgents] = useState<FlyingAgent[] | null>(null);
   const prevStepIdRef = useRef<string | null>(null);
+
+  // Track whether the full graph has been exploded already so
+  // back-navigation doesn't restart the force simulation and scatter nodes.
+  const hasExplodedRef = useRef(false);
 
   // Show interaction hint once when entering full-graph view
   const hintShownRef = useRef(false);
@@ -269,10 +274,10 @@ export default function PresentationController() {
 
       setFlyingAgents(agents);
 
-      // Clear after cascade + animation completes
+      // Clear after cascade (16 * 40ms = 640ms) + animation (1400ms) completes
       const clearTimer = setTimeout(() => {
         setFlyingAgents(null);
-      }, 1700);
+      }, 2100);
 
       return () => clearTimeout(clearTimer);
     }
@@ -368,6 +373,8 @@ export default function PresentationController() {
     switch (action) {
       // ─── Act 1: Linear Pipeline ──────────────────────────────
       case 'show-title-slide': {
+        // Going back to pipeline slides means next forward visit should re-explode
+        hasExplodedRef.current = false;
         if (linearGraphData) {
           setGraphData({ ...linearGraphData });
         }
@@ -384,6 +391,8 @@ export default function PresentationController() {
 
       case 'show-process-chart':
       case 'show-teams-by-phase': {
+        // Going back to pipeline slides means next forward visit should re-explode
+        hasExplodedRef.current = false;
         clearHighlights();
         const chart = buildProcessChart();
         if (chart) setGraphData(chart);
@@ -446,7 +455,11 @@ export default function PresentationController() {
       case 'explode-to-graph': {
         clearHighlights();
         resetFilters();
-        loadExplodedGraph();
+        // Only explode on first visit — revisits keep settled node positions
+        if (!hasExplodedRef.current) {
+          loadExplodedGraph();
+          hasExplodedRef.current = true;
+        }
         break;
       }
 
@@ -611,9 +624,10 @@ export default function PresentationController() {
       </AnimatePresence>
 
       {/* ─── Flying Agent Badges (slide 3→4 transition) ─────── */}
+      {/* z-[60] so badges render above the exiting pipeline (z-[55]) */}
       <AnimatePresence>
         {flyingAgents && (
-          <div className="fixed inset-0 z-[52] pointer-events-none">
+          <div className="fixed inset-0 z-[60] pointer-events-none">
             {flyingAgents.map((agent, i) => (
               <FlyingAgentBadge key={agent.id} agent={agent} index={i} />
             ))}
