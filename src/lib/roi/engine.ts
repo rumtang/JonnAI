@@ -1,14 +1,16 @@
-// ─── ROI Economic Calculation Engine ─────────────────────────────────
+// ─── Enterprise ROI Economic Calculation Engine ─────────────────────
+// Revenue-anchored model for S&P 100+ marketing organizations.
 // Pure functions — no side effects, fully testable.
 // All monetary values in USD. All time values in months unless noted.
+//
+// Benchmark sources: Gartner 2025 CMO Spend Survey, McKinsey
+// Personalization Analysis, Salesforce State of Marketing,
+// Forrester, HubSpot State of Marketing 2025.
 
 // ─── Constants ───────────────────────────────────────────────────────
-export const CONSULTING_RATE = 275;       // $/hr blended rate
-export const BUILD_WEEKS = 28;            // total engagement
-export const FTE_YEARS = 5.2;             // total consultant effort
-export const HOURS_PER_YEAR = 2080;       // 40hr × 52wk
 export const DISCOUNT_RATE = 0.10;        // 10% annual for NPV
 export const PROJECTION_MONTHS = 36;      // 3-year model
+export const HOURS_PER_YEAR = 2080;       // 40hr × 52wk
 
 export const SCENARIO_MULTIPLIERS = {
   conservative: 0.6,
@@ -19,40 +21,76 @@ export const SCENARIO_MULTIPLIERS = {
 export type Scenario = keyof typeof SCENARIO_MULTIPLIERS;
 
 // ─── Input Types ─────────────────────────────────────────────────────
-export interface TeamProfile {
-  headcount: number;
-  avgSalary: number;
-  managerCount: number;
-  specialistCount: number;
-  coordinatorCount: number;
+
+/** Revenue-anchored org profile. Everything cascades from annualRevenue. */
+export interface OrganizationProfile {
+  annualRevenue: number;              // $500M – $50B+
+  marketingBudgetPct: number;         // % of revenue (Gartner 2025: 7.7%)
+  marketingHeadcount: number;         // 50–2000+
+  avgLoadedFteCost: number;           // $100K–$400K fully loaded
 }
 
-export interface CampaignVolume {
-  monthlyCampaigns: number;
-  avgCycleTimeDays: number;
-  channelCount: number;
+/** Martech stack and paid media spend — drives optimization + ROAS streams. */
+export interface MartechAndMedia {
+  martechPctOfBudget: number;         // % of mktg budget (Gartner: 23.8%)
+  martechToolCount: number;           // number of tools (avg: 120)
+  martechUtilizationPct: number;      // % of capability used (Gartner: 33%)
+  paidMediaPctOfBudget: number;       // % of mktg budget (Gartner: 30.6%)
+  currentBlendedRoas: number;         // ROAS ratio (cross-channel avg: 2.5)
 }
 
-export interface CurrentPain {
-  reworkRatePct: number;
-  approvalBottleneckDays: number;
-  complianceReviewHours: number;
+/** Campaign and content volume at enterprise scale. */
+export interface ContentAndCampaignOps {
+  monthlyCampaigns: number;           // 10–500
+  monthlyContentAssets: number;       // 50–2000
+  avgCampaignCycleWeeks: number;      // 2–12
+  channelCount: number;               // 3–20
+  agencyPctOfBudget: number;          // 5–30%
 }
 
-export interface HiddenCosts {
-  monthlyAgencySpend: number;
-  toolOverlapCount: number;
-  missedDeadlineCostPerMonth: number;
+/** Quantified operational inefficiencies. */
+export interface OperationalPain {
+  reworkRatePct: number;              // 5–40% (brand consistency research: 20%)
+  approvalCycleDays: number;          // 1–20 (enterprise w/ compliance: 7)
+  adminTimePct: number;               // 30–80% (Salesforce: 60%)
+  marketingWasteRatePct: number;      // 10–50% (mid-range: 30%)
+  manualAttributionPct: number;       // 10–60% (Salesforce: 33%)
 }
 
-export interface TimeAllocation {
-  humanOnlyPct: number;
-  approvalGatedPct: number;
-  supervisedPct: number;
-  autonomousPct: number;
+/** User-configurable investment — no longer hardcoded. */
+export interface TransformationInvestment {
+  totalInvestmentAmount: number;      // $500K – $25M, default ~$3M
+  implementationWeeks: number;        // 12–52, default 28
+}
+
+/** Hidden improvement assumptions — research-backed, not UI-exposed. */
+export interface ImprovementAssumptions {
+  roasLiftPct: number;               // Meta AI: 22%, Google AI: 17% → default 20%
+  contentTimeSavingsPct: number;      // Documented 75-80% → conservative 65%
+  personalizationRevLiftPct: number;  // McKinsey 10-15% → default 12%
+  cycleTimeReductionPct: number;      // Enterprise documented: 40%
+  reworkReductionPct: number;         // 70% at full maturity
+  adminToStrategicShiftPct: number;   // 60% admin → 30% = 50% shift
+  attributionImprovementPct: number;  // Conservative: 15%
+  martechUtilizationTargetPct: number;// From 33% → 60%
+  martechToolConsolidationPct: number;// 30% overlap rate
 }
 
 // ─── Output Types ────────────────────────────────────────────────────
+
+/** Computed once from inputs, reused by all value stream calculations. */
+export interface DerivedMetrics {
+  totalMarketingBudget: number;
+  totalTeamCost: number;
+  annualMartechSpend: number;
+  annualPaidMediaSpend: number;
+  annualAgencySpend: number;
+  currentAdRevenue: number;
+  contentTeamCost: number;
+  hourlyRate: number;
+  dailyCampaignRevenue: number;
+}
+
 export interface WaterfallSegment {
   label: string;
   value: number;
@@ -60,15 +98,29 @@ export interface WaterfallSegment {
 }
 
 export interface BaselineOutputs {
+  derived: DerivedMetrics;
+
   annualTeamCost: number;
-  annualReworkCost: number;
-  annualBottleneckCost: number;
-  annualComplianceCost: number;
+  annualMartechWaste: number;
+  annualMediaWaste: number;
   annualAgencyCost: number;
-  annualToolOverlapCost: number;
-  annualMissedDeadlineCost: number;
+  annualReworkCost: number;
+  annualAdminOverheadCost: number;
+  annualApprovalBottleneckCost: number;
+  annualAttributionWaste: number;
   totalAnnualCost: number;
+
   waterfall: WaterfallSegment[];
+}
+
+export interface ValueStreams {
+  martechOptimization: number;
+  roasImprovement: number;
+  contentVelocity: number;
+  campaignSpeed: number;
+  operationalEfficiency: number;
+  attributionImprovement: number;
+  personalizationLift: number;
 }
 
 export interface TimelinePoint {
@@ -85,7 +137,7 @@ export interface WorkflowComparison {
   icon: string;
   beforeDays: number;
   afterValue: number;
-  afterUnit: 'days' | 'hours';
+  afterUnit: 'days' | 'hours' | 'minutes';
   savingsPct: number;
 }
 
@@ -95,117 +147,228 @@ export interface AllocationSlice {
   color: string;
 }
 
-export interface RoiOutputs {
-  // Investment
-  totalInvestment: number;
+export interface RoasComparison {
+  currentRoas: number;
+  projectedRoas: number;
+  currentAdRevenue: number;
+  projectedAdRevenue: number;
+  incrementalRevenue: number;
+}
 
-  // Annual value streams (at full ramp)
-  timeSavingsAnnual: number;
-  reworkReductionAnnual: number;
-  cycleTimeImprovementAnnual: number;
-  knowledgePremiumAnnual: number;
+export interface RoiOutputs {
+  totalInvestment: number;
+  implementationWeeks: number;
+
+  valueStreams: ValueStreams;
   totalAnnualValue: number;
 
-  // Summary metrics
   threeYearRoi: number;
   paybackMonths: number;
   netPresentValue: number;
 
-  // Timeline data
   timeline: TimelinePoint[];
   breakEvenMonth: number;
 
-  // Workflow comparisons
   workflows: WorkflowComparison[];
+  roas: RoasComparison;
 
-  // Allocation shift
   currentAllocation: AllocationSlice[];
   futureAllocation: AllocationSlice[];
 }
 
 // ─── Ramp Function ───────────────────────────────────────────────────
-// Value doesn't appear instantly — it follows an S-curve as the org
-// builds the KG, trains, and learns to trust agents.
+// S-curve value realization — scale-independent.
 export function rampFactor(month: number): number {
   if (month <= 0) return 0;
-  if (month <= 7) return (month / 7) * 0.3;              // Build phase: 0-30%
-  if (month <= 12) return 0.3 + ((month - 7) / 5) * 0.4; // Supervised: 30-70%
-  if (month <= 18) return 0.7 + ((month - 12) / 6) * 0.2; // Graduated: 70-90%
-  if (month <= 36) return 0.9 + ((month - 18) / 18) * 0.1; // Maturity: 90-100%
+  if (month <= 7) return (month / 7) * 0.3;
+  if (month <= 12) return 0.3 + ((month - 7) / 5) * 0.4;
+  if (month <= 18) return 0.7 + ((month - 12) / 6) * 0.2;
+  if (month <= 36) return 0.9 + ((month - 18) / 18) * 0.1;
   return 1.0;
 }
 
-// ─── Baseline Computation ────────────────────────────────────────────
-// Calculates current annual cost structure from user inputs.
-export function computeBaseline(
-  team: TeamProfile,
-  volume: CampaignVolume,
-  pain: CurrentPain,
-  hidden: HiddenCosts,
-): BaselineOutputs {
-  const annualTeamCost = team.headcount * team.avgSalary;
+// ─── Derived Metrics ─────────────────────────────────────────────────
+// Computed once, reused by baseline + value streams.
+function computeDerived(
+  org: OrganizationProfile,
+  martech: MartechAndMedia,
+  ops: ContentAndCampaignOps,
+): DerivedMetrics {
+  const totalMarketingBudget = org.annualRevenue * (org.marketingBudgetPct / 100);
+  const totalTeamCost = org.marketingHeadcount * org.avgLoadedFteCost;
+  const annualMartechSpend = totalMarketingBudget * (martech.martechPctOfBudget / 100);
+  const annualPaidMediaSpend = totalMarketingBudget * (martech.paidMediaPctOfBudget / 100);
+  const annualAgencySpend = totalMarketingBudget * (ops.agencyPctOfBudget / 100);
+  const currentAdRevenue = annualPaidMediaSpend * martech.currentBlendedRoas;
+  const hourlyRate = org.avgLoadedFteCost / HOURS_PER_YEAR;
 
-  // Rework = % of team cost wasted redoing work
+  // Content team is roughly 25% of marketing headcount
+  const contentTeamCost = totalTeamCost * 0.25;
+
+  // Marketing contribution to revenue: use budget-to-revenue ratio as proxy
+  const marketingContribPct = org.marketingBudgetPct / 100;
+  const dailyCampaignRevenue = (org.annualRevenue * marketingContribPct) / 365;
+
+  return {
+    totalMarketingBudget,
+    totalTeamCost,
+    annualMartechSpend,
+    annualPaidMediaSpend,
+    annualAgencySpend,
+    currentAdRevenue,
+    contentTeamCost,
+    hourlyRate,
+    dailyCampaignRevenue,
+  };
+}
+
+// ─── Baseline Computation ────────────────────────────────────────────
+// Current annual cost structure from user inputs.
+export function computeBaseline(
+  org: OrganizationProfile,
+  martech: MartechAndMedia,
+  ops: ContentAndCampaignOps,
+  pain: OperationalPain,
+): BaselineOutputs {
+  const derived = computeDerived(org, martech, ops);
+
+  const annualTeamCost = derived.totalTeamCost;
+
+  // Martech waste: spend on tools that aren't being utilized
+  const annualMartechWaste =
+    derived.annualMartechSpend * (1 - martech.martechUtilizationPct / 100);
+
+  // Media waste: portion of paid media wasted due to poor targeting/attribution
+  const annualMediaWaste =
+    derived.annualPaidMediaSpend * (pain.marketingWasteRatePct / 100);
+
+  const annualAgencyCost = derived.annualAgencySpend;
+
+  // Rework: % of team cost wasted redoing off-brand/incorrect work
   const annualReworkCost = annualTeamCost * (pain.reworkRatePct / 100);
 
-  // Bottleneck = cost of idle time while waiting for approvals
-  // Each campaign loses X days × hourly rate × team members blocked
-  const hourlyRate = team.avgSalary / HOURS_PER_YEAR;
-  const annualBottleneckCost =
-    volume.monthlyCampaigns * 12 *
-    pain.approvalBottleneckDays * 8 *    // 8 hrs/day blocked
-    hourlyRate * Math.ceil(team.headcount * 0.3); // ~30% of team blocked
+  // Admin overhead: the opportunity cost of admin time (subset of team cost)
+  const annualAdminOverheadCost = annualTeamCost * (pain.adminTimePct / 100);
 
-  // Compliance review = direct time cost
-  const annualComplianceCost =
-    volume.monthlyCampaigns * 12 *
-    pain.complianceReviewHours *
-    hourlyRate * 2; // 2 people typically involved
+  // Approval bottleneck: cost of waiting for approvals per campaign
+  const annualCampaignsCount = ops.monthlyCampaigns * 12;
+  const teamBlockedPct = 0.3; // ~30% of team blocked during approvals
+  const annualApprovalBottleneckCost =
+    annualCampaignsCount *
+    pain.approvalCycleDays * 8 *
+    derived.hourlyRate *
+    Math.ceil(org.marketingHeadcount * teamBlockedPct);
 
-  const annualAgencyCost = hidden.monthlyAgencySpend * 12;
+  // Attribution waste: cost of poor attribution decisions on media spend
+  const annualAttributionWaste =
+    derived.annualPaidMediaSpend * (pain.manualAttributionPct / 100) * 0.15;
 
-  // Tool overlap: estimated $2K/month per overlapping tool
-  const annualToolOverlapCost = hidden.toolOverlapCount * 24000;
-
-  const annualMissedDeadlineCost = hidden.missedDeadlineCostPerMonth * 12;
-
+  // Total: team + waste categories (admin is subset of team, not additive)
   const totalAnnualCost =
     annualTeamCost +
-    annualReworkCost +
-    annualBottleneckCost +
-    annualComplianceCost +
+    annualMartechWaste +
+    annualMediaWaste +
     annualAgencyCost +
-    annualToolOverlapCost +
-    annualMissedDeadlineCost;
+    annualReworkCost +
+    annualApprovalBottleneckCost +
+    annualAttributionWaste;
 
   const waterfall: WaterfallSegment[] = [
     { label: 'Team Salaries', value: annualTeamCost, color: '#5B9ECF' },
-    { label: 'Rework', value: annualReworkCost, color: '#D4856A' },
-    { label: 'Approval Bottleneck', value: annualBottleneckCost, color: '#E88D67' },
-    { label: 'Compliance Review', value: annualComplianceCost, color: '#C9A04E' },
+    { label: 'Martech Waste', value: annualMartechWaste, color: '#E88D67' },
+    { label: 'Media Waste', value: annualMediaWaste, color: '#D4856A' },
     { label: 'Agency Spend', value: annualAgencyCost, color: '#9B7ACC' },
-    { label: 'Tool Overlap', value: annualToolOverlapCost, color: '#4CAF50' },
-    { label: 'Missed Deadlines', value: annualMissedDeadlineCost, color: '#D4856A' },
-  ];
+    { label: 'Rework', value: annualReworkCost, color: '#ef4444' },
+    { label: 'Approval Delays', value: annualApprovalBottleneckCost, color: '#f59e0b' },
+    { label: 'Attribution Waste', value: annualAttributionWaste, color: '#C9A04E' },
+  ].filter(s => s.value > 0);
 
   return {
+    derived,
     annualTeamCost,
-    annualReworkCost,
-    annualBottleneckCost,
-    annualComplianceCost,
+    annualMartechWaste,
+    annualMediaWaste,
     annualAgencyCost,
-    annualToolOverlapCost,
-    annualMissedDeadlineCost,
+    annualReworkCost,
+    annualAdminOverheadCost,
+    annualApprovalBottleneckCost,
+    annualAttributionWaste,
     totalAnnualCost,
-    waterfall: waterfall.filter(s => s.value > 0),
+    waterfall,
+  };
+}
+
+// ─── Value Stream Computations ───────────────────────────────────────
+// The core of the enterprise model — 7 distinct value streams.
+function computeValueStreams(
+  baseline: BaselineOutputs,
+  martech: MartechAndMedia,
+  ops: ContentAndCampaignOps,
+  pain: OperationalPain,
+  assumptions: ImprovementAssumptions,
+): ValueStreams {
+  const d = baseline.derived;
+
+  // 1. Martech Optimization — close utilization gap + consolidate overlapping tools
+  const utilizationGainPct =
+    (assumptions.martechUtilizationTargetPct - martech.martechUtilizationPct) / 100;
+  // Not all unused spend is recoverable (license minimums, etc.)
+  const recoverableValue = d.annualMartechSpend * Math.max(0, utilizationGainPct) * 0.5;
+  const consolidationSavings =
+    d.annualMartechSpend * (assumptions.martechToolConsolidationPct / 100) * 0.3;
+  const martechOptimization = recoverableValue + consolidationSavings;
+
+  // 2. ROAS Improvement — the enterprise "wow" metric
+  const projectedRoas =
+    martech.currentBlendedRoas * (1 + assumptions.roasLiftPct / 100);
+  const roasImprovement =
+    d.annualPaidMediaSpend * (projectedRoas - martech.currentBlendedRoas);
+
+  // 3. Content Velocity — time savings on content production
+  const contentVelocity =
+    d.contentTeamCost * (assumptions.contentTimeSavingsPct / 100);
+
+  // 4. Campaign Speed — faster campaigns = more revenue days captured
+  const currentCycleDays = ops.avgCampaignCycleWeeks * 7;
+  const daysSaved = currentCycleDays * (assumptions.cycleTimeReductionPct / 100);
+  const campaignsPerYear = ops.monthlyCampaigns * 12;
+  // Each campaign captures a small fraction of daily company marketing-attributed revenue
+  const campaignSpeed = campaignsPerYear * daysSaved * d.dailyCampaignRevenue * 0.01;
+
+  // 5. Operational Efficiency — admin-to-strategic shift + rework reduction
+  const adminShiftValue =
+    baseline.annualAdminOverheadCost * (assumptions.adminToStrategicShiftPct / 100);
+  const reworkReduction =
+    baseline.annualReworkCost * (assumptions.reworkReductionPct / 100);
+  const operationalEfficiency = adminShiftValue + reworkReduction;
+
+  // 6. Attribution Improvement — reduce waste from better measurement
+  const attributionImprovement =
+    d.annualPaidMediaSpend *
+    (pain.manualAttributionPct / 100) *
+    (assumptions.attributionImprovementPct / 100);
+
+  // 7. Personalization Lift — revenue uplift from personalized experiences
+  const personalizationLift =
+    d.currentAdRevenue * (assumptions.personalizationRevLiftPct / 100);
+
+  return {
+    martechOptimization,
+    roasImprovement,
+    contentVelocity,
+    campaignSpeed,
+    operationalEfficiency,
+    attributionImprovement,
+    personalizationLift,
   };
 }
 
 // ─── Investment Timeline ─────────────────────────────────────────────
-// Monthly investment accumulation during the 28-week build.
-function buildInvestmentCurve(): number[] {
-  const totalInvestment = FTE_YEARS * HOURS_PER_YEAR * CONSULTING_RATE;
-  const buildMonths = Math.ceil(BUILD_WEEKS / 4.33); // ~6.5 months
+function buildInvestmentCurve(
+  totalInvestment: number,
+  implementationWeeks: number,
+): number[] {
+  const buildMonths = Math.ceil(implementationWeeks / 4.33);
   const monthlyInvestment = totalInvestment / buildMonths;
 
   const curve: number[] = [];
@@ -220,60 +383,44 @@ function buildInvestmentCurve(): number[] {
 }
 
 // ─── Phase Labels ────────────────────────────────────────────────────
-function phaseForMonth(month: number): string {
-  if (month <= 1) return 'Discovery';
-  if (month <= 2) return 'Ontology';
-  if (month <= 3) return 'KG Population';
-  if (month <= 4) return 'Digital Twin';
-  if (month <= 5) return 'Tier 1 Validation';
-  if (month <= 6) return 'Domain Expansion';
-  if (month <= 7) return 'Full Validation';
-  if (month <= 10) return 'Supervised Launch';
-  if (month <= 15) return 'Graduated Autonomy';
+function phaseForMonth(month: number, implWeeks: number): string {
+  const buildMonths = Math.ceil(implWeeks / 4.33);
+  const phaseLength = buildMonths / 5; // 5 build phases
+
+  if (month <= phaseLength) return 'Discovery';
+  if (month <= phaseLength * 2) return 'Ontology';
+  if (month <= phaseLength * 3) return 'KG Population';
+  if (month <= phaseLength * 4) return 'Digital Twin';
+  if (month <= buildMonths) return 'Validation';
+  if (month <= buildMonths + 5) return 'Supervised Launch';
+  if (month <= buildMonths + 10) return 'Graduated Autonomy';
   return 'Operational Maturity';
 }
 
 // ─── Main ROI Computation ────────────────────────────────────────────
 export function computeRoi(
-  team: TeamProfile,
-  volume: CampaignVolume,
-  pain: CurrentPain,
-  hidden: HiddenCosts,
-  timeAllocation: TimeAllocation,
+  org: OrganizationProfile,
+  martech: MartechAndMedia,
+  ops: ContentAndCampaignOps,
+  pain: OperationalPain,
+  investment: TransformationInvestment,
+  assumptions: ImprovementAssumptions,
 ): RoiOutputs {
-  const baseline = computeBaseline(team, volume, pain, hidden);
-  const totalInvestment = FTE_YEARS * HOURS_PER_YEAR * CONSULTING_RATE;
+  const baseline = computeBaseline(org, martech, ops, pain);
+  const vs = computeValueStreams(baseline, martech, ops, pain, assumptions);
 
-  // ── Value Streams (annual, at full ramp) ──
-
-  // Time savings: hours freed in supervised + autonomous tiers
-  const automableHoursPct = (timeAllocation.supervisedPct + timeAllocation.autonomousPct) / 100;
-  const hourlyRate = team.avgSalary / HOURS_PER_YEAR;
-  const totalTeamHoursPerYear = team.headcount * HOURS_PER_YEAR;
-  // At full autonomy, save ~60% of automable hours (agents handle, humans supervise)
-  const timeSavingsAnnual = totalTeamHoursPerYear * automableHoursPct * 0.6 * hourlyRate;
-
-  // Rework reduction: KG-powered agents catch errors before they compound
-  // Reduces rework by ~70% at full maturity
-  const reworkReductionAnnual = baseline.annualReworkCost * 0.7;
-
-  // Cycle time improvement: campaigns launch faster
-  // Value = more campaigns per year × revenue per campaign
-  const currentCyclesPerYear = volume.monthlyCampaigns * 12;
-  const avgDailyCampaignValue = (baseline.annualTeamCost / currentCyclesPerYear) / volume.avgCycleTimeDays;
-  // Save ~50% of cycle time at full maturity
-  const daysSaved = volume.avgCycleTimeDays * 0.5;
-  const cycleTimeImprovementAnnual = currentCyclesPerYear * daysSaved * avgDailyCampaignValue;
-
-  // Knowledge compound premium: value grows as KG gets richer
-  // 5% uplift in year 2, 10% in year 3
-  const knowledgePremiumAnnual = (timeSavingsAnnual + reworkReductionAnnual + cycleTimeImprovementAnnual) * 0.05;
-
-  const totalAnnualValue = timeSavingsAnnual + reworkReductionAnnual + cycleTimeImprovementAnnual + knowledgePremiumAnnual;
+  const totalInvestment = investment.totalInvestmentAmount;
+  const totalAnnualValue =
+    vs.martechOptimization +
+    vs.roasImprovement +
+    vs.contentVelocity +
+    vs.campaignSpeed +
+    vs.operationalEfficiency +
+    vs.attributionImprovement +
+    vs.personalizationLift;
 
   // ── Timeline (36 months) ──
-
-  const investmentCurve = buildInvestmentCurve();
+  const investmentCurve = buildInvestmentCurve(totalInvestment, investment.implementationWeeks);
   const timeline: TimelinePoint[] = [];
 
   let cumulativeConservative = 0;
@@ -283,7 +430,7 @@ export function computeRoi(
   for (let m = 0; m <= PROJECTION_MONTHS; m++) {
     const ramp = rampFactor(m);
 
-    // Apply knowledge compound premium in years 2-3
+    // Knowledge compound premium in years 2-3
     let yearMultiplier = 1.0;
     if (m > 12 && m <= 24) yearMultiplier = 1.05;
     if (m > 24) yearMultiplier = 1.10;
@@ -300,7 +447,7 @@ export function computeRoi(
       valueConservative: cumulativeConservative,
       valueExpected: cumulativeExpected,
       valueAggressive: cumulativeAggressive,
-      phase: phaseForMonth(m),
+      phase: phaseForMonth(m, investment.implementationWeeks),
     });
   }
 
@@ -314,7 +461,6 @@ export function computeRoi(
   }
 
   // ── 3-Year Summary ──
-
   const totalValue3yr = cumulativeExpected;
   const threeYearRoi = ((totalValue3yr - totalInvestment) / totalInvestment) * 100;
   const paybackMonths = breakEvenMonth;
@@ -328,59 +474,98 @@ export function computeRoi(
     npv += monthlyValue * discountFactor;
   }
 
-  // ── Workflow Comparisons ──
-  const cycleReduction = Math.max(0.5, 1 - rampFactor(18));
+  // ── ROAS Comparison ──
+  const projectedRoas =
+    martech.currentBlendedRoas * (1 + assumptions.roasLiftPct / 100);
+  const roas: RoasComparison = {
+    currentRoas: martech.currentBlendedRoas,
+    projectedRoas,
+    currentAdRevenue: baseline.derived.currentAdRevenue,
+    projectedAdRevenue: baseline.derived.annualPaidMediaSpend * projectedRoas,
+    incrementalRevenue: vs.roasImprovement,
+  };
+
+  // ── Workflow Comparisons (6 enterprise workflows) ──
+  const cycleDays = ops.avgCampaignCycleWeeks * 7;
   const workflows: WorkflowComparison[] = [
     {
       name: 'Campaign Launch',
-      icon: '\uD83D\uDE80',
-      beforeDays: Math.round(volume.avgCycleTimeDays),
-      afterValue: Math.max(1, Math.round(volume.avgCycleTimeDays * 0.21)),
+      icon: '🚀',
+      beforeDays: cycleDays,
+      afterValue: Math.max(3, Math.round(cycleDays * 0.4)),
       afterUnit: 'days',
-      savingsPct: 79,
+      savingsPct: 60,
+    },
+    {
+      name: 'Content Production',
+      icon: '📝',
+      beforeDays: 14,
+      afterValue: Math.max(4, Math.round(14 * 24 * 0.35 / 24)),
+      afterUnit: 'days',
+      savingsPct: 65,
     },
     {
       name: 'Budget Reallocation',
-      icon: '\uD83D\uDCB0',
-      beforeDays: Math.round(pain.approvalBottleneckDays + 2),
+      icon: '💰',
+      beforeDays: pain.approvalCycleDays + 3,
       afterValue: 2,
       afterUnit: 'hours',
-      savingsPct: 92,
+      savingsPct: 90,
     },
     {
       name: 'Compliance Review',
-      icon: '\uD83D\uDEE1\uFE0F',
-      beforeDays: Math.max(1, Math.round(pain.complianceReviewHours / 8)),
-      afterValue: Math.max(1, Math.round(pain.complianceReviewHours * 0.33)),
+      icon: '🛡️',
+      beforeDays: pain.approvalCycleDays,
+      afterValue: Math.max(2, Math.round(pain.approvalCycleDays * 24 * 0.25)),
       afterUnit: 'hours',
-      savingsPct: 67,
+      savingsPct: 75,
+    },
+    {
+      name: 'Personalization Deploy',
+      icon: '🎯',
+      beforeDays: 21,
+      afterValue: 3,
+      afterUnit: 'days',
+      savingsPct: 86,
+    },
+    {
+      name: 'Attribution Report',
+      icon: '📊',
+      beforeDays: 5,
+      afterValue: 30,
+      afterUnit: 'minutes',
+      savingsPct: 96,
     },
   ];
 
   // ── Allocation Shift ──
+  const approvalPct = Math.round((100 - pain.adminTimePct) * 0.5);
+  const strategicPct = Math.round((100 - pain.adminTimePct) * 0.3);
+  const innovationPct = 100 - pain.adminTimePct - approvalPct - strategicPct;
+
   const currentAllocation: AllocationSlice[] = [
-    { label: 'Human-Only', pct: timeAllocation.humanOnlyPct, color: '#ef4444' },
-    { label: 'Approval-Gated', pct: timeAllocation.approvalGatedPct, color: '#f59e0b' },
-    { label: 'Supervised', pct: timeAllocation.supervisedPct, color: '#5B9ECF' },
-    { label: 'Autonomous', pct: timeAllocation.autonomousPct, color: '#4CAF50' },
+    { label: 'Admin/Manual', pct: pain.adminTimePct, color: '#ef4444' },
+    { label: 'Approval-Gated', pct: approvalPct, color: '#f59e0b' },
+    { label: 'Strategic Work', pct: strategicPct, color: '#5B9ECF' },
+    { label: 'Innovation', pct: Math.max(0, innovationPct), color: '#4CAF50' },
   ];
 
-  // Future state: shift towards supervised and autonomous
+  const futureAdminPct = Math.max(10, Math.round(pain.adminTimePct * 0.35));
+  const futureApprovalPct = Math.round(approvalPct * 0.5);
+  const futureStrategicPct = 40;
+  const futureInnovationPct = 100 - futureAdminPct - futureApprovalPct - futureStrategicPct;
+
   const futureAllocation: AllocationSlice[] = [
-    { label: 'Human-Only', pct: Math.max(5, Math.round(timeAllocation.humanOnlyPct * 0.4)), color: '#ef4444' },
-    { label: 'Approval-Gated', pct: Math.round(timeAllocation.approvalGatedPct * 0.6), color: '#f59e0b' },
-    { label: 'Supervised', pct: Math.min(45, Math.round(timeAllocation.supervisedPct * 1.5 + 10)), color: '#5B9ECF' },
-    { label: 'Autonomous', pct: 0, color: '#4CAF50' }, // filled below
+    { label: 'Admin/Manual', pct: futureAdminPct, color: '#ef4444' },
+    { label: 'Approval-Gated', pct: futureApprovalPct, color: '#f59e0b' },
+    { label: 'Strategic Work', pct: futureStrategicPct, color: '#5B9ECF' },
+    { label: 'Innovation', pct: Math.max(0, futureInnovationPct), color: '#4CAF50' },
   ];
-  // Ensure sums to 100
-  futureAllocation[3].pct = 100 - futureAllocation[0].pct - futureAllocation[1].pct - futureAllocation[2].pct;
 
   return {
     totalInvestment,
-    timeSavingsAnnual,
-    reworkReductionAnnual,
-    cycleTimeImprovementAnnual,
-    knowledgePremiumAnnual,
+    implementationWeeks: investment.implementationWeeks,
+    valueStreams: vs,
     totalAnnualValue,
     threeYearRoi,
     paybackMonths,
@@ -388,6 +573,7 @@ export function computeRoi(
     timeline,
     breakEvenMonth,
     workflows,
+    roas,
     currentAllocation,
     futureAllocation,
   };

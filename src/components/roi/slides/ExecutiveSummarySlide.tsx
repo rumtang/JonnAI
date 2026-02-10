@@ -12,13 +12,25 @@ interface ExecutiveSummarySlideProps {
   step: RoiStep;
 }
 
-// ─── Value Breakdown Bar ────────────────────────────────────────────
+// ─── Format Helpers ─────────────────────────────────────────────────
+function formatCompact(v: number): string {
+  if (Math.abs(v) >= 1_000_000) return `$${(v / 1_000_000).toFixed(1)}M`;
+  if (Math.abs(v) >= 1_000) return `$${(v / 1_000).toFixed(0)}K`;
+  return `$${Math.round(v).toLocaleString()}`;
+}
+
+// ─── Value Breakdown Bar (7 streams) ────────────────────────────────
 function ValueBreakdownBar({ outputs }: { outputs: ReturnType<typeof useRoiStore.getState>['outputs'] }) {
+  const vs = outputs.valueStreams;
+
   const streams = [
-    { label: 'Time Savings', value: outputs.timeSavingsAnnual, color: '#5B9ECF' },
-    { label: 'Rework Reduction', value: outputs.reworkReductionAnnual, color: '#D4856A' },
-    { label: 'Cycle Improvement', value: outputs.cycleTimeImprovementAnnual, color: '#C9A04E' },
-    { label: 'Knowledge Premium', value: outputs.knowledgePremiumAnnual, color: '#9B7ACC' },
+    { label: 'ROAS Improvement', value: vs.roasImprovement, color: '#9B7ACC' },
+    { label: 'Martech Optimization', value: vs.martechOptimization, color: '#E88D67' },
+    { label: 'Content Velocity', value: vs.contentVelocity, color: '#5B9ECF' },
+    { label: 'Campaign Speed', value: vs.campaignSpeed, color: '#C9A04E' },
+    { label: 'Ops Efficiency', value: vs.operationalEfficiency, color: '#D4856A' },
+    { label: 'Attribution', value: vs.attributionImprovement, color: '#f59e0b' },
+    { label: 'Personalization', value: vs.personalizationLift, color: '#4CAF50' },
   ];
 
   const total = streams.reduce((sum, s) => sum + s.value, 0);
@@ -59,14 +71,16 @@ function ValueBreakdownBar({ outputs }: { outputs: ReturnType<typeof useRoiStore
             width={seg.width}
             height={barHeight}
             color={seg.color}
-            delay={0.8 + i * 0.1}
+            delay={0.8 + i * 0.08}
             rx={i === 0 ? 6 : i === segments.length - 1 ? 6 : 0}
           />
         ))}
 
-        {/* Legend below bar */}
-        {segments.map((seg, i) => {
+        {/* Legend below bar — only show labels that have enough width */}
+        {segments.map((seg) => {
           const centerX = seg.x + seg.width / 2;
+          // Only render label if segment is wide enough to be readable
+          if (seg.width < 30) return null;
           return (
             <g key={`legend-${seg.label}`}>
               <rect
@@ -76,14 +90,14 @@ function ValueBreakdownBar({ outputs }: { outputs: ReturnType<typeof useRoiStore
               />
               <text
                 x={centerX} y={barHeight + 30}
-                textAnchor="middle" fontSize={6}
+                textAnchor="middle" fontSize={5}
                 fill="currentColor" className="text-muted-foreground/60"
               >
                 {seg.label}
               </text>
               <text
                 x={centerX} y={barHeight + 38}
-                textAnchor="middle" fontSize={7} fontWeight={600}
+                textAnchor="middle" fontSize={6} fontWeight={600}
                 fill={seg.color}
               >
                 {formatCompact(seg.value)}
@@ -96,13 +110,7 @@ function ValueBreakdownBar({ outputs }: { outputs: ReturnType<typeof useRoiStore
   );
 }
 
-// ─── Format Helpers ─────────────────────────────────────────────────
-function formatCompact(v: number): string {
-  if (Math.abs(v) >= 1_000_000) return `$${(v / 1_000_000).toFixed(1)}M`;
-  if (Math.abs(v) >= 1_000) return `$${(v / 1_000).toFixed(0)}K`;
-  return `$${Math.round(v).toLocaleString()}`;
-}
-
+// ─── Recommendation Logic ───────────────────────────────────────────
 function getRecommendation(roi: number): { emoji: string; headline: string; body: string } {
   if (roi >= 300) {
     return {
@@ -139,12 +147,14 @@ export default function ExecutiveSummarySlide({ step }: ExecutiveSummarySlidePro
   const [copied, setCopied] = useState(false);
 
   const recommendation = getRecommendation(outputs.threeYearRoi);
+  const vs = outputs.valueStreams;
+  const { roas } = outputs;
 
   // Build plain-text summary for clipboard
   const buildClipboardText = useCallback(() => {
     const lines = [
-      'ROI EXECUTIVE SUMMARY — Knowledge Graph Infrastructure',
-      '═'.repeat(55),
+      'ROI EXECUTIVE SUMMARY - Knowledge Graph Infrastructure',
+      '='.repeat(55),
       '',
       `3-Year ROI: ${Math.round(outputs.threeYearRoi)}%`,
       `Payback Period: ${outputs.paybackMonths} months`,
@@ -153,21 +163,29 @@ export default function ExecutiveSummarySlide({ step }: ExecutiveSummarySlidePro
       `Annual Value (Full Ramp): ${formatCompact(outputs.totalAnnualValue)}`,
       '',
       'VALUE BREAKDOWN (Annual)',
-      `  Time Savings: ${formatCompact(outputs.timeSavingsAnnual)}`,
-      `  Rework Reduction: ${formatCompact(outputs.reworkReductionAnnual)}`,
-      `  Cycle Time Improvement: ${formatCompact(outputs.cycleTimeImprovementAnnual)}`,
-      `  Knowledge Premium: ${formatCompact(outputs.knowledgePremiumAnnual)}`,
+      `  ROAS Improvement: ${formatCompact(vs.roasImprovement)}`,
+      `  Martech Optimization: ${formatCompact(vs.martechOptimization)}`,
+      `  Content Velocity: ${formatCompact(vs.contentVelocity)}`,
+      `  Campaign Speed: ${formatCompact(vs.campaignSpeed)}`,
+      `  Operational Efficiency: ${formatCompact(vs.operationalEfficiency)}`,
+      `  Attribution Improvement: ${formatCompact(vs.attributionImprovement)}`,
+      `  Personalization Lift: ${formatCompact(vs.personalizationLift)}`,
+      '',
+      'ROAS IMPACT',
+      `  Current ROAS: ${roas.currentRoas.toFixed(1)}:1`,
+      `  Projected ROAS: ${roas.projectedRoas.toFixed(1)}:1`,
+      `  Incremental Revenue: ${formatCompact(roas.incrementalRevenue)}`,
       '',
       `CURRENT ANNUAL COST: ${formatCompact(baseline.totalAnnualCost)}`,
       '',
       `RECOMMENDATION: ${recommendation.headline}`,
       recommendation.body,
       '',
-      '─'.repeat(55),
+      '-'.repeat(55),
       'Generated by the Organizational Intelligence ROI Simulator',
     ];
     return lines.join('\n');
-  }, [outputs, baseline, recommendation]);
+  }, [outputs, baseline, recommendation, vs, roas]);
 
   const handleCopy = useCallback(async () => {
     try {
@@ -248,6 +266,42 @@ export default function ExecutiveSummarySlide({ step }: ExecutiveSummarySlidePro
         className="glass-panel rounded-lg p-4 mb-6"
       >
         <ValueBreakdownBar outputs={outputs} />
+      </motion.div>
+
+      {/* ─── ROAS Metrics ────────────────────────────────────── */}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.85 }}
+        className="glass-panel rounded-lg p-4 mb-6"
+      >
+        <h4 className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider text-center mb-3">
+          ROAS Impact
+        </h4>
+        <div className="grid grid-cols-3 gap-3">
+          <div className="text-center p-2 rounded-lg bg-muted-foreground/5">
+            <p className="text-[8px] text-muted-foreground uppercase tracking-wider mb-1">Current ROAS</p>
+            <p className="text-lg font-bold text-[#D4856A]">
+              {roas.currentRoas.toFixed(1)}:1
+            </p>
+          </div>
+          <div className="text-center p-2 rounded-lg bg-muted-foreground/5">
+            <p className="text-[8px] text-muted-foreground uppercase tracking-wider mb-1">Projected ROAS</p>
+            <p className="text-lg font-bold text-[#14B8A6]">
+              {roas.projectedRoas.toFixed(1)}:1
+            </p>
+          </div>
+          <div className="text-center p-2 rounded-lg bg-muted-foreground/5">
+            <p className="text-[8px] text-muted-foreground uppercase tracking-wider mb-1">Incremental Revenue</p>
+            <span className="text-[#9B7ACC]">
+              <AnimatedNumber
+                value={roas.incrementalRevenue}
+                format="currency"
+                className="text-lg font-bold"
+              />
+            </span>
+          </div>
+        </div>
       </motion.div>
 
       {/* ─── Recommendation ──────────────────────────────────── */}

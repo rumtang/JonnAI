@@ -1,10 +1,11 @@
 // ─── ROI Simulator Step Definitions ──────────────────────────────────
-// 6 slides across 5 acts. Each slide is interactive and data-dense.
+// 7 slides across 5 acts. Enterprise-grade financial model for S&P 100+.
 
 export type RoiLayout =
   | 'roi-title'
-  | 'baseline-inputs'
-  | 'sankey'
+  | 'org-budget-profile'
+  | 'martech-media'
+  | 'ops-content'
   | 'timeline-dual'
   | 'before-after'
   | 'executive-card';
@@ -30,38 +31,50 @@ export const ROI_STEPS: RoiStep[] = [
     act: 1,
     actLabel: 'Your Marketing Machine',
     title: 'The ROI of Organizational Intelligence',
-    subtitle: 'Model the financial case for knowledge graph infrastructure',
+    subtitle: 'Model the enterprise financial case for knowledge graph infrastructure',
     layout: 'roi-title',
     themeColor: '#14B8A6',
     content: {
       tagline: 'The cost of not knowing what your organization knows compounds every single day.',
-      headline: 'This simulator builds a financial model based on your team size, campaign volume, and current pain points. Adjust the inputs to match your reality — the math speaks for itself.',
+      headline: 'This simulator builds a revenue-anchored financial model based on your marketing organization, spend allocation, and operational metrics. Adjust the inputs to match your reality — the math speaks for itself.',
     },
   },
   {
-    id: 'baseline-inputs',
+    id: 'org-budget-profile',
     act: 1,
     actLabel: 'Your Marketing Machine',
-    title: 'Your Current Cost Structure',
-    subtitle: 'Adjust the sliders to match your team and operations',
-    layout: 'baseline-inputs',
+    title: 'Organization & Budget Profile',
+    subtitle: 'Revenue, team size, and transformation investment',
+    layout: 'org-budget-profile',
     themeColor: '#14B8A6',
     content: {
-      tagline: 'Every enterprise has hidden costs buried in rework, bottlenecks, and coordination overhead.',
+      tagline: 'Every enterprise marketing machine runs on revenue. This is where your model starts.',
     },
   },
 
-  // ─── ACT 2: Where the Time Actually Goes ──────────────────────────
+  // ─── ACT 2: Where the Money Goes ──────────────────────────────────
   {
-    id: 'time-allocation',
+    id: 'martech-media',
     act: 2,
-    actLabel: 'Where Time Goes',
-    title: 'Where the Time Actually Goes',
-    subtitle: 'How your team hours flow across decision autonomy tiers',
-    layout: 'sankey',
+    actLabel: 'Where the Money Goes',
+    title: 'Martech & Media Spend',
+    subtitle: 'Stack utilization, tool sprawl, and paid media efficiency',
+    layout: 'martech-media',
     themeColor: '#14B8A6',
     content: {
-      tagline: 'Most teams spend 70% of their time on work that could be supervised or automated — if the context existed.',
+      tagline: 'Enterprise martech stacks average 120+ tools — but only 33% of their capability is utilized.',
+    },
+  },
+  {
+    id: 'ops-content',
+    act: 2,
+    actLabel: 'Where the Money Goes',
+    title: 'Operations & Content',
+    subtitle: 'Campaign volume, content velocity, and operational pain',
+    layout: 'ops-content',
+    themeColor: '#14B8A6',
+    content: {
+      tagline: 'Most enterprise teams spend 60% of their time on administrative work that could be automated — if the context existed.',
     },
   },
 

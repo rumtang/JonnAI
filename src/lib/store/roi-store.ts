@@ -3,69 +3,91 @@ import { ROI_STEPS } from '@/data/roi-steps';
 import {
   computeBaseline,
   computeRoi,
-  type TeamProfile,
-  type CampaignVolume,
-  type CurrentPain,
-  type HiddenCosts,
-  type TimeAllocation,
+  type OrganizationProfile,
+  type MartechAndMedia,
+  type ContentAndCampaignOps,
+  type OperationalPain,
+  type TransformationInvestment,
+  type ImprovementAssumptions,
   type Scenario,
   type BaselineOutputs,
   type RoiOutputs,
 } from '@/lib/roi/engine';
 
-// ─── Default Input Values ────────────────────────────────────────────
-const DEFAULT_TEAM: TeamProfile = {
-  headcount: 12,
-  avgSalary: 120000,
-  managerCount: 3,
-  specialistCount: 6,
-  coordinatorCount: 3,
+// ─── Enterprise Default Input Values ────────────────────────────────
+// Benchmarks: Gartner 2025 CMO Spend Survey, McKinsey, Salesforce,
+// Forrester, HubSpot State of Marketing 2025.
+
+const DEFAULT_ORG: OrganizationProfile = {
+  annualRevenue: 2_000_000_000,          // $2B — mid-range S&P 100
+  marketingBudgetPct: 7.7,               // Gartner 2025: 7.7% of revenue
+  marketingHeadcount: 200,               // ~10 FTEs per $100M budget
+  avgLoadedFteCost: 180_000,             // Enterprise fully loaded
 };
 
-const DEFAULT_VOLUME: CampaignVolume = {
-  monthlyCampaigns: 8,
-  avgCycleTimeDays: 21,
-  channelCount: 5,
+const DEFAULT_MARTECH: MartechAndMedia = {
+  martechPctOfBudget: 23.8,             // Gartner 2024: 23.8% of mktg budget
+  martechToolCount: 120,                 // Industry average tool sprawl
+  martechUtilizationPct: 33,             // Gartner: only 33% of capability used
+  paidMediaPctOfBudget: 30.6,           // Gartner 2025: 30.6% of mktg budget
+  currentBlendedRoas: 2.5,              // Cross-channel blended average
 };
 
-const DEFAULT_PAIN: CurrentPain = {
-  reworkRatePct: 15,
-  approvalBottleneckDays: 3,
-  complianceReviewHours: 12,
+const DEFAULT_OPS: ContentAndCampaignOps = {
+  monthlyCampaigns: 80,                 // Enterprise scale
+  monthlyContentAssets: 500,             // Enterprise content framework
+  avgCampaignCycleWeeks: 6,             // Enterprise average with reviews
+  channelCount: 10,                      // Enterprise omnichannel
+  agencyPctOfBudget: 15,                // Industry standard
 };
 
-const DEFAULT_HIDDEN: HiddenCosts = {
-  monthlyAgencySpend: 25000,
-  toolOverlapCount: 3,
-  missedDeadlineCostPerMonth: 8000,
+const DEFAULT_PAIN: OperationalPain = {
+  reworkRatePct: 20,                     // Brand consistency research
+  approvalCycleDays: 7,                  // Enterprise with compliance gates
+  adminTimePct: 60,                      // Salesforce: 60% on admin tasks
+  marketingWasteRatePct: 30,             // Mid-range of 26–60% estimates
+  manualAttributionPct: 33,              // Salesforce: 33% rely on manual
 };
 
-const DEFAULT_TIME_ALLOCATION: TimeAllocation = {
-  humanOnlyPct: 40,
-  approvalGatedPct: 30,
-  supervisedPct: 20,
-  autonomousPct: 10,
+const DEFAULT_INVESTMENT: TransformationInvestment = {
+  totalInvestmentAmount: 3_000_000,      // $3M — user-configurable
+  implementationWeeks: 28,               // ~7 months default
+};
+
+// Research-backed improvement assumptions — not exposed in UI
+const DEFAULT_ASSUMPTIONS: ImprovementAssumptions = {
+  roasLiftPct: 20,                       // Meta AI 22%, Google AI 17% → conservative 20%
+  contentTimeSavingsPct: 65,             // Documented 75-80% → conservative 65%
+  personalizationRevLiftPct: 12,         // McKinsey 10-15% → midpoint 12%
+  cycleTimeReductionPct: 40,             // Enterprise documented improvements
+  reworkReductionPct: 70,                // At full maturity
+  adminToStrategicShiftPct: 50,          // 60% admin → 30% = 50% shift
+  attributionImprovementPct: 15,         // Conservative estimate
+  martechUtilizationTargetPct: 60,       // From 33% → 60% target
+  martechToolConsolidationPct: 30,       // 30% overlap rate
 };
 
 // ─── Compute initial outputs ─────────────────────────────────────────
-const initialBaseline = computeBaseline(DEFAULT_TEAM, DEFAULT_VOLUME, DEFAULT_PAIN, DEFAULT_HIDDEN);
-const initialOutputs = computeRoi(DEFAULT_TEAM, DEFAULT_VOLUME, DEFAULT_PAIN, DEFAULT_HIDDEN, DEFAULT_TIME_ALLOCATION);
+const initialBaseline = computeBaseline(DEFAULT_ORG, DEFAULT_MARTECH, DEFAULT_OPS, DEFAULT_PAIN);
+const initialOutputs = computeRoi(
+  DEFAULT_ORG, DEFAULT_MARTECH, DEFAULT_OPS, DEFAULT_PAIN,
+  DEFAULT_INVESTMENT, DEFAULT_ASSUMPTIONS,
+);
 
 // ─── Store Interface ─────────────────────────────────────────────────
 interface RoiState {
   // Navigation
   currentStepIndex: number;
 
-  // Act 1 inputs
-  team: TeamProfile;
-  volume: CampaignVolume;
-  pain: CurrentPain;
-  hidden: HiddenCosts;
+  // Input groups
+  org: OrganizationProfile;
+  martech: MartechAndMedia;
+  ops: ContentAndCampaignOps;
+  pain: OperationalPain;
+  investment: TransformationInvestment;
+  assumptions: ImprovementAssumptions;
 
-  // Act 2 inputs
-  timeAllocation: TimeAllocation;
-
-  // Act 3 controls
+  // Scenario toggle
   activeScenario: Scenario;
 
   // Computed outputs
@@ -78,11 +100,12 @@ interface RoiState {
   goToStep: (index: number) => void;
 
   // Input setters (each triggers recalculate)
-  setTeam: (partial: Partial<TeamProfile>) => void;
-  setVolume: (partial: Partial<CampaignVolume>) => void;
-  setPain: (partial: Partial<CurrentPain>) => void;
-  setHidden: (partial: Partial<HiddenCosts>) => void;
-  setTimeAllocation: (partial: Partial<TimeAllocation>) => void;
+  setOrg: (partial: Partial<OrganizationProfile>) => void;
+  setMartech: (partial: Partial<MartechAndMedia>) => void;
+  setOps: (partial: Partial<ContentAndCampaignOps>) => void;
+  setPain: (partial: Partial<OperationalPain>) => void;
+  setInvestment: (partial: Partial<TransformationInvestment>) => void;
+  setAssumptions: (partial: Partial<ImprovementAssumptions>) => void;
   setActiveScenario: (scenario: Scenario) => void;
 
   // Lifecycle
@@ -91,15 +114,19 @@ interface RoiState {
 
 // ─── Helper: recalculate from current state ──────────────────────────
 function recalculate(state: {
-  team: TeamProfile;
-  volume: CampaignVolume;
-  pain: CurrentPain;
-  hidden: HiddenCosts;
-  timeAllocation: TimeAllocation;
+  org: OrganizationProfile;
+  martech: MartechAndMedia;
+  ops: ContentAndCampaignOps;
+  pain: OperationalPain;
+  investment: TransformationInvestment;
+  assumptions: ImprovementAssumptions;
 }) {
   return {
-    baseline: computeBaseline(state.team, state.volume, state.pain, state.hidden),
-    outputs: computeRoi(state.team, state.volume, state.pain, state.hidden, state.timeAllocation),
+    baseline: computeBaseline(state.org, state.martech, state.ops, state.pain),
+    outputs: computeRoi(
+      state.org, state.martech, state.ops, state.pain,
+      state.investment, state.assumptions,
+    ),
   };
 }
 
@@ -107,11 +134,12 @@ function recalculate(state: {
 export const useRoiStore = create<RoiState>((set, get) => ({
   currentStepIndex: 0,
 
-  team: { ...DEFAULT_TEAM },
-  volume: { ...DEFAULT_VOLUME },
+  org: { ...DEFAULT_ORG },
+  martech: { ...DEFAULT_MARTECH },
+  ops: { ...DEFAULT_OPS },
   pain: { ...DEFAULT_PAIN },
-  hidden: { ...DEFAULT_HIDDEN },
-  timeAllocation: { ...DEFAULT_TIME_ALLOCATION },
+  investment: { ...DEFAULT_INVESTMENT },
+  assumptions: { ...DEFAULT_ASSUMPTIONS },
 
   activeScenario: 'expected',
 
@@ -138,16 +166,22 @@ export const useRoiStore = create<RoiState>((set, get) => ({
     }
   },
 
-  setTeam: (partial) => {
+  setOrg: (partial) => {
     const state = get();
-    const team = { ...state.team, ...partial };
-    set({ team, ...recalculate({ ...state, team }) });
+    const org = { ...state.org, ...partial };
+    set({ org, ...recalculate({ ...state, org }) });
   },
 
-  setVolume: (partial) => {
+  setMartech: (partial) => {
     const state = get();
-    const volume = { ...state.volume, ...partial };
-    set({ volume, ...recalculate({ ...state, volume }) });
+    const martech = { ...state.martech, ...partial };
+    set({ martech, ...recalculate({ ...state, martech }) });
+  },
+
+  setOps: (partial) => {
+    const state = get();
+    const ops = { ...state.ops, ...partial };
+    set({ ops, ...recalculate({ ...state, ops }) });
   },
 
   setPain: (partial) => {
@@ -156,27 +190,28 @@ export const useRoiStore = create<RoiState>((set, get) => ({
     set({ pain, ...recalculate({ ...state, pain }) });
   },
 
-  setHidden: (partial) => {
+  setInvestment: (partial) => {
     const state = get();
-    const hidden = { ...state.hidden, ...partial };
-    set({ hidden, ...recalculate({ ...state, hidden }) });
+    const investment = { ...state.investment, ...partial };
+    set({ investment, ...recalculate({ ...state, investment }) });
   },
 
-  setTimeAllocation: (partial) => {
+  setAssumptions: (partial) => {
     const state = get();
-    const timeAllocation = { ...state.timeAllocation, ...partial };
-    set({ timeAllocation, ...recalculate({ ...state, timeAllocation }) });
+    const assumptions = { ...state.assumptions, ...partial };
+    set({ assumptions, ...recalculate({ ...state, assumptions }) });
   },
 
   setActiveScenario: (scenario) => set({ activeScenario: scenario }),
 
   reset: () => set({
     currentStepIndex: 0,
-    team: { ...DEFAULT_TEAM },
-    volume: { ...DEFAULT_VOLUME },
+    org: { ...DEFAULT_ORG },
+    martech: { ...DEFAULT_MARTECH },
+    ops: { ...DEFAULT_OPS },
     pain: { ...DEFAULT_PAIN },
-    hidden: { ...DEFAULT_HIDDEN },
-    timeAllocation: { ...DEFAULT_TIME_ALLOCATION },
+    investment: { ...DEFAULT_INVESTMENT },
+    assumptions: { ...DEFAULT_ASSUMPTIONS },
     activeScenario: 'expected',
     baseline: initialBaseline,
     outputs: initialOutputs,

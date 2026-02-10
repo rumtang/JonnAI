@@ -1,21 +1,20 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import type { TimeAllocation } from '@/lib/roi/engine';
+
+// Generic allocation interface — decoupled from engine types
+interface AllocationEntry {
+  label: string;
+  pct: number;
+  color: string;
+}
 
 interface SankeyDiagramProps {
-  allocation: TimeAllocation;
+  allocation: AllocationEntry[];
   height?: number;
 }
 
-const TIERS = [
-  { key: 'humanOnlyPct' as const, label: 'Human-Only', color: '#ef4444' },
-  { key: 'approvalGatedPct' as const, label: 'Approval-Gated', color: '#f59e0b' },
-  { key: 'supervisedPct' as const, label: 'Supervised', color: '#5B9ECF' },
-  { key: 'autonomousPct' as const, label: 'Autonomous', color: '#4CAF50' },
-];
-
-// Simplified Sankey: single source bar → 4 destination bars with bezier paths
+// Simplified Sankey: single source bar → N destination bars with bezier paths
 export default function SankeyDiagram({ allocation, height = 220 }: SankeyDiagramProps) {
   const svgWidth = 500;
   const marginX = 20;
@@ -29,14 +28,16 @@ export default function SankeyDiagram({ allocation, height = 220 }: SankeyDiagra
   const sourceHeight = usableHeight;
   const sourceY = topMargin;
 
+  // Filter out zero-pct entries
+  const entries = allocation.filter(e => e.pct > 0);
+
   // Destination bars — sized proportionally
   let destCumulative = 0;
-  const destBars = TIERS.map((tier) => {
-    const pct = allocation[tier.key];
-    const barH = Math.max(4, (pct / 100) * usableHeight);
+  const destBars = entries.map((entry) => {
+    const barH = Math.max(4, (entry.pct / 100) * usableHeight);
     const y = topMargin + destCumulative;
     destCumulative += barH + 4;
-    return { ...tier, pct, y, height: barH };
+    return { ...entry, y, height: barH };
   });
 
   // Scale destination bars to fit
@@ -63,8 +64,6 @@ export default function SankeyDiagram({ allocation, height = 220 }: SankeyDiagra
 
     // Top edge path
     const topPath = `M ${x1},${sourceStartY} C ${midX},${sourceStartY} ${midX},${bar.y} ${x2},${bar.y}`;
-    // Bottom edge path
-    const botPath = `M ${x1},${sourceStartY + sourceH} C ${midX},${sourceStartY + sourceH} ${midX},${bar.y + bar.height} ${x2},${bar.y + bar.height}`;
     // Combined filled path
     const d = `${topPath} L ${x2},${bar.y + bar.height} C ${midX},${bar.y + bar.height} ${midX},${sourceStartY + sourceH} ${x1},${sourceStartY + sourceH} Z`;
 
@@ -100,7 +99,7 @@ export default function SankeyDiagram({ allocation, height = 220 }: SankeyDiagra
       {/* Flow paths */}
       {paths.map((p, i) => (
         <motion.path
-          key={p.key}
+          key={p.label}
           d={p.d}
           fill={p.color}
           fillOpacity={0.15}
@@ -115,7 +114,7 @@ export default function SankeyDiagram({ allocation, height = 220 }: SankeyDiagra
 
       {/* Destination bars + labels */}
       {scaledBars.map((bar, i) => (
-        <g key={bar.key}>
+        <g key={bar.label}>
           <motion.rect
             x={destX} y={bar.y}
             width={barWidth} height={Math.max(4, bar.height)}

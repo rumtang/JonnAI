@@ -10,6 +10,7 @@ import { useIsMobile } from '@/lib/hooks/use-is-mobile';
 import { ROI_STEPS } from '@/data/roi-steps';
 import RoiTitleSlide from './slides/RoiTitleSlide';
 import BaselineInputsSlide from './slides/BaselineInputsSlide';
+import MartechMediaSlide from './slides/MartechMediaSlide';
 import SankeySlide from './slides/SankeySlide';
 import TimelineSlide from './slides/TimelineSlide';
 import BeforeAfterSlide from './slides/BeforeAfterSlide';
@@ -18,10 +19,10 @@ import ExecutiveSummarySlide from './slides/ExecutiveSummarySlide';
 // ─── Act Definitions ────────────────────────────────────────────────
 const ACTS = [
   { label: 'Your Marketing Machine', slides: [0, 1] },
-  { label: 'Where Time Goes', slides: [2] },
-  { label: 'The Transformation', slides: [3] },
-  { label: 'Before & After', slides: [4] },
-  { label: 'Your Investment Case', slides: [5] },
+  { label: 'Where the Money Goes', slides: [2, 3] },
+  { label: 'The Transformation', slides: [4] },
+  { label: 'Before & After', slides: [5] },
+  { label: 'Your Investment Case', slides: [6] },
 ];
 
 export default function RoiController() {
@@ -74,9 +75,11 @@ export default function RoiController() {
     switch (step.layout) {
       case 'roi-title':
         return <RoiTitleSlide step={step} />;
-      case 'baseline-inputs':
+      case 'org-budget-profile':
         return <BaselineInputsSlide step={step} />;
-      case 'sankey':
+      case 'martech-media':
+        return <MartechMediaSlide step={step} />;
+      case 'ops-content':
         return <SankeySlide step={step} />;
       case 'timeline-dual':
         return <TimelineSlide step={step} />;

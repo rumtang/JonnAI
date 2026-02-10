@@ -33,7 +33,10 @@ export default function TimelineSlide({ step }: TimelineSlideProps) {
   const activeScenario = useRoiStore(s => s.activeScenario);
   const setActiveScenario = useRoiStore(s => s.setActiveScenario);
 
-  const { timeline, breakEvenMonth, totalInvestment } = outputs;
+  const { timeline, breakEvenMonth, totalInvestment, implementationWeeks } = outputs;
+
+  // Build phase in months — derived from user-configurable implementation weeks
+  const buildMonths = Math.ceil(implementationWeeks / 4.33);
 
   // Chart dimensions
   const svgWidth = 600;
@@ -239,10 +242,10 @@ export default function TimelineSlide({ step }: TimelineSlideProps) {
               <text x={82} y={4} fontSize={7} fill="currentColor" className="text-muted-foreground/60">Cumulative Value</text>
             </g>
 
-            {/* Build phase markers on bottom */}
+            {/* Build phase marker — uses dynamic implementationWeeks */}
             <motion.rect
               x={xScale(0)} y={margin.top + chartH + 2}
-              width={xScale(7) - xScale(0)} height={4}
+              width={xScale(buildMonths) - xScale(0)} height={4}
               rx={2} fill="#E88D67" fillOpacity={0.3}
               initial={{ scaleX: 0 }}
               animate={{ scaleX: 1 }}
@@ -250,11 +253,11 @@ export default function TimelineSlide({ step }: TimelineSlideProps) {
               transition={{ delay: 0.8, duration: 0.5 }}
             />
             <text
-              x={(xScale(0) + xScale(7)) / 2} y={margin.top + chartH + 14}
+              x={(xScale(0) + xScale(buildMonths)) / 2} y={margin.top + chartH + 14}
               textAnchor="middle" fontSize={6}
               fill="#E88D67" fillOpacity={0.6}
             >
-              28-Week Build
+              {implementationWeeks}-Week Build
             </text>
           </svg>
         </motion.div>
@@ -289,6 +292,16 @@ export default function TimelineSlide({ step }: TimelineSlideProps) {
           <div className="glass-panel rounded-lg p-3 text-center" style={{ borderLeft: '3px solid #C9A04E' }}>
             <p className="text-[8px] text-muted-foreground uppercase tracking-wider mb-1">Annual Value (Full Ramp)</p>
             <AnimatedNumber value={outputs.totalAnnualValue} format="currency" className="text-lg font-bold text-[#C9A04E]" />
+          </div>
+
+          {/* ROAS Lift card */}
+          <div className="glass-panel rounded-lg p-3 text-center" style={{ borderLeft: '3px solid #E88D67' }}>
+            <p className="text-[8px] text-muted-foreground uppercase tracking-wider mb-1">ROAS Lift</p>
+            <p className="text-lg font-bold text-[#E88D67]">
+              {outputs.roas.currentRoas.toFixed(1)}:1{' '}
+              <span className="text-muted-foreground/60 text-xs font-normal mx-1">&rarr;</span>{' '}
+              {outputs.roas.projectedRoas.toFixed(1)}:1
+            </p>
           </div>
         </motion.div>
       </div>
