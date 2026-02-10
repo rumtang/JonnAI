@@ -2,28 +2,84 @@ import { create } from 'zustand';
 import { GraphData, GraphNode } from '../graph/types';
 import { RoleDefinition, ROLE_MAP } from '../roles/role-definitions';
 import { RoleSubgraph, computeRoleSubgraph } from '../roles/role-subgraph';
-import { MAIN_WORKFLOW_ORDER } from '../store/campaign-store';
 
-// Build an ordered walkthrough path for a role using the main workflow order.
-// Primary nodes (owned steps + reviewed gates) come first in workflow order,
-// then support nodes (agents + inputs) are appended at the end.
+// Complete workflow order — all 45 steps and gates in logical pipeline sequence.
+// WHY: Every role walks through the entire pipeline so users can see how each
+// step affects their work (preAI / aiAgents / aiAgentic), not just owned nodes.
+const FULL_WORKFLOW_ORDER = [
+  // Plan phase
+  'campaign-planning',
+  'journey-mapping',
+  'receive-request',
+  'content-scoring',
+  'social-listening',
+  'competitive-response',
+  'research-insights',
+  'influencer-brief',
+  'write-brief',
+  'brief-approval',
+  // Create phase
+  'draft-content',
+  'visual-asset-creation',
+  'seo-optimization',
+  'ab-variant-creation',
+  'paid-creative-production',
+  'sales-enablement',
+  'quality-check',
+  // Review phase
+  'brand-compliance',
+  'brand-review',
+  'ugc-moderation',
+  'legal-review',
+  'legal-compliance-gate',
+  'final-edit',
+  'accessibility-check',
+  'stakeholder-signoff',
+  // Publish phase
+  'localize-content',
+  'localization-quality-gate',
+  'segment-mapping',
+  'personalization-qa',
+  'consent-check',
+  'dynamic-assembly',
+  'channel-orchestration',
+  'content-repurposing',
+  'schedule-publish',
+  'distribute',
+  // Measure phase
+  'sentiment-monitoring',
+  'track-performance',
+  'generate-report',
+  'attribution-modeling',
+  'executive-reporting',
+  'archive-tag',
+  'content-governance',
+  // Optimize phase
+  'performance-review',
+  'governance-gate',
+  'optimize',
+];
+
+// Build the walkthrough path: all 45 workflow nodes in pipeline order.
+// Every role walks the full pipeline so journey tiles (preAI/aiAgents/aiAgentic)
+// are visible for every step, showing how each step affects this role.
 function buildWalkthroughPath(role: RoleDefinition, graphData: GraphData): string[] {
-  const primaryIds = new Set([...role.ownedSteps, ...role.reviewedGates]);
-  const supportIds = new Set([...role.relatedAgents, ...role.relatedInputs]);
-
-  // Order primary nodes by their position in the main workflow
-  const orderedPrimary = MAIN_WORKFLOW_ORDER.filter(id => primaryIds.has(id));
-  // Add any primary IDs not in the main workflow (shouldn't happen, but safety)
-  for (const id of primaryIds) {
-    if (!orderedPrimary.includes(id)) orderedPrimary.push(id);
-  }
-
-  // Filter to only nodes that actually exist in the graph
   const existingIds = new Set(graphData.nodes.map(n => n.id));
-  const primary = orderedPrimary.filter(id => existingIds.has(id));
-  const support = [...supportIds].filter(id => existingIds.has(id));
 
-  return [...primary, ...support];
+  // Start with the full workflow in order, filtered to nodes that exist in the graph
+  const path = FULL_WORKFLOW_ORDER.filter(id => existingIds.has(id));
+
+  // Safety: add any role-specific nodes not already in the path (agents, inputs, or
+  // nodes that might have been missed in FULL_WORKFLOW_ORDER)
+  const pathSet = new Set(path);
+  const extras = [
+    ...role.ownedSteps,
+    ...role.reviewedGates,
+    ...role.relatedAgents,
+    ...role.relatedInputs,
+  ].filter(id => existingIds.has(id) && !pathSet.has(id));
+
+  return [...path, ...extras];
 }
 
 interface RoleInsightState {

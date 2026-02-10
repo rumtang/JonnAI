@@ -145,27 +145,32 @@ export default function RoleInsightPanel({ onChangeRole }: RoleInsightPanelProps
               </button>
             </div>
 
-            {/* Progress dots */}
-            <div className="flex items-center gap-1 mb-4 overflow-x-auto pb-1">
+            {/* Progress dots — compact for 45-node walkthrough */}
+            <div className="flex items-center gap-[3px] mb-4 overflow-x-auto pb-1 scrollbar-thin">
               {walkthroughPath.map((nodeId, i) => {
                 const node = graphData.nodes.find(n => n.id === nodeId);
                 const nodeStyle = node ? (NODE_STYLES[node.type as NodeType] || NODE_STYLES.step) : NODE_STYLES.step;
                 const isCurrent = i === currentStepIndex;
                 const isVisited = i < currentStepIndex;
+                const isOwned = selectedRole.ownedSteps.includes(nodeId) || selectedRole.reviewedGates.includes(nodeId);
                 return (
                   <button
                     key={nodeId}
                     onClick={() => guardedNav(() => goToStep(i))}
                     title={node?.label || nodeId}
-                    className={`shrink-0 rounded-full transition-all duration-300 ${
+                    className={`shrink-0 transition-all duration-300 ${
                       isCurrent
-                        ? 'w-6 h-3 ring-2 ring-[#C9A04E]/50'
-                        : 'w-3 h-3 hover:scale-125'
-                    } ${isVisited ? 'opacity-100' : 'opacity-40'}`}
+                        ? 'w-4 h-2.5 rounded-full ring-2 ring-[#C9A04E]/50'
+                        : isOwned
+                          ? 'w-2.5 h-2.5 rounded-full hover:scale-125'
+                          : 'w-2 h-2 rounded-full hover:scale-125'
+                    } ${isVisited ? 'opacity-100' : 'opacity-30'}`}
                     style={{
                       backgroundColor: isCurrent
                         ? '#C9A04E'
-                        : (nodeStyle?.color || '#6b7280') + (isVisited ? '' : '80'),
+                        : isOwned
+                          ? '#C9A04E' + (isVisited ? '' : '80')
+                          : (nodeStyle?.color || '#6b7280') + (isVisited ? '60' : '40'),
                     }}
                   />
                 );
