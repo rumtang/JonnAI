@@ -1,12 +1,13 @@
 'use client';
 
 import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useCampaignStore } from '@/lib/store/campaign-store';
 import { useGraphStore } from '@/lib/store/graph-store';
 import { navigateToNode } from '@/lib/utils/camera-navigation';
 import { NODE_STYLES } from '@/lib/graph/node-styles';
-import { ROLE_MAP, NodeJourney } from '@/lib/roles/role-definitions';
-import { STEP_NARRATIVES, ContentBlock } from '@/data/step-narratives';
+import { ROLE_MAP } from '@/lib/roles/role-definitions';
+import { STEP_NARRATIVES, ContentBlock, CampaignJourney } from '@/data/step-narratives';
 import { Badge } from '@/components/ui/badge';
 import { GraphNode, StepMeta, GateMeta, AgentMeta, InputMeta } from '@/lib/graph/types';
 import {
@@ -14,6 +15,7 @@ import {
   Lightbulb, AlertTriangle, ArrowRightLeft, BarChart3, GitFork,
   Zap, MessageSquareQuote, Eye,
 } from 'lucide-react';
+import type { NodeJourney } from '@/lib/roles/role-definitions';
 
 export default function CampaignNodeCard() {
   const currentNodeId = useCampaignStore(s => s.currentNodeId);
@@ -29,7 +31,10 @@ export default function CampaignNodeCard() {
   const style = NODE_STYLES[currentNode.type];
   const narrative = STEP_NARRATIVES[currentNode.id];
   const role = narrative ? ROLE_MAP.get(narrative.roleId) : undefined;
-  const journey = role?.narrative.nodeJourneys[currentNode.id];
+  // Prefer campaign-specific third-person journey; fall back to role-based journey
+  const campaignJourney = narrative?.campaignJourney;
+  const roleJourney = role?.narrative.nodeJourneys[currentNode.id];
+  const journey: NodeJourney | CampaignJourney | undefined = campaignJourney || roleJourney;
 
   // Find connected agents and inputs for step nodes
   const connectedAgents = currentNode.type === 'step'
@@ -131,8 +136,8 @@ export default function CampaignNodeCard() {
         ))}
       </div>
 
-      {/* ── Journey breakdown — before/during/after AI ── */}
-      {journey && <JourneyBreakdown journey={journey} />}
+      {/* ── Journey breakdown — collapsible before/during/after AI ── */}
+      {journey && <JourneyBreakdown journey={journey} nodeId={currentNode.id} />}
 
       {/* ── Tier 2: Collapsible context ────────────────── */}
       <button
@@ -237,29 +242,68 @@ function OwnerBadge({ owner, agentName }: { owner: string; agentName?: string })
   );
 }
 
-/* ── Journey breakdown — 3-stage AI evolution ──────────── */
+/* ── Journey breakdown — collapsible 3-stage AI evolution ── */
 
-const JOURNEY_STAGES = [
-  { key: 'preAI' as const, label: 'Before AI', icon: '\uD83D\uDCCB', bg: 'bg-orange-500/8', border: 'border-orange-500/20', accent: 'text-orange-400' },
-  { key: 'aiAgents' as const, label: 'AI Agents', icon: '\uD83E\uDD16', bg: 'bg-violet-500/8', border: 'border-violet-500/20', accent: 'text-violet-400' },
-  { key: 'aiAgentic' as const, label: 'Agentic AI', icon: '\u26A1', bg: 'bg-emerald-500/8', border: 'border-emerald-500/20', accent: 'text-emerald-400' },
-];
+const JOURNEY_STAGE_CONFIG = {
+  preAI:     { label: 'Before AI',      color: '#94a3b8', indicator: '\uD83D\uDCCB' },
+  aiAgents:  { label: 'With AI Agents', color: '#6BAED6', indicator: '\uD83E\uDD16' },
+  aiAgentic: { label: 'Agentic AI',     color: '#4CAF50', indicator: '\u26A1' },
+} as const;
 
-function JourneyBreakdown({ journey }: { journey: NodeJourney }) {
+type JourneyStageName = keyof typeof JOURNEY_STAGE_CONFIG;
+
+// Collapsible tile — collapsed by default, click to expand (matches RoleInsightPanel)
+function JourneyTile({ stageName, stage, nodeId }: { stageName: JourneyStageName; stage: { summary: string; detail: string }; nodeId: string }) {
+  const [expanded, setExpanded] = useState(false);
+  const config = JOURNEY_STAGE_CONFIG[stageName];
+
   return (
-    <div className="mb-4">
-      <p className="text-xs font-semibold text-muted-foreground mb-2">How involvement in this step evolves</p>
-      <div className="space-y-2">
-        {JOURNEY_STAGES.map(({ key, label, icon, bg, border, accent }) => (
-          <div key={key} className={`p-2.5 rounded-lg ${bg} border ${border}`}>
-            <div className={`flex items-center gap-1.5 text-xs font-semibold ${accent} mb-1`}>
-              <span>{icon}</span>
-              {label}
+    <motion.div
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.15 }}
+    >
+      <button
+        onClick={() => setExpanded(!expanded)}
+        className="w-full text-left rounded-xl border transition-colors duration-200 hover:bg-white/[0.03]"
+        style={{ borderColor: config.color + '30', borderLeftWidth: 3, borderLeftColor: config.color }}
+      >
+        <div className="flex items-center gap-2.5 px-3 py-2.5">
+          <span className="text-sm">{config.indicator}</span>
+          <span className="text-xs font-semibold flex-1" style={{ color: config.color }}>{config.label}</span>
+          <ChevronDown
+            className="w-3.5 h-3.5 transition-transform duration-200"
+            style={{ color: config.color + '80', transform: expanded ? 'rotate(180deg)' : 'rotate(0deg)' }}
+          />
+        </div>
+      </button>
+      <AnimatePresence initial={false}>
+        {expanded && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.2, ease: 'easeInOut' }}
+            className="overflow-hidden"
+          >
+            <div className="px-3 pt-2 pb-3 ml-[3px]" style={{ borderLeft: `2px solid ${config.color}20` }}>
+              <p className="text-sm font-medium text-foreground/90 mb-1.5">{stage.summary}</p>
+              <p className="text-xs text-muted-foreground leading-relaxed">{stage.detail}</p>
             </div>
-            <p className="text-sm text-foreground/70 leading-relaxed">{journey[key].summary}</p>
-          </div>
-        ))}
-      </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
+  );
+}
+
+function JourneyBreakdown({ journey, nodeId }: { journey: { preAI: { summary: string; detail: string }; aiAgents: { summary: string; detail: string }; aiAgentic: { summary: string; detail: string } }; nodeId: string }) {
+  return (
+    <div className="mb-4 space-y-2">
+      <p className="text-[10px] uppercase tracking-wider text-muted-foreground/60 mb-2">How this step has evolved</p>
+      <JourneyTile key={`${nodeId}-preAI`} stageName="preAI" stage={journey.preAI} nodeId={nodeId} />
+      <JourneyTile key={`${nodeId}-aiAgents`} stageName="aiAgents" stage={journey.aiAgents} nodeId={nodeId} />
+      <JourneyTile key={`${nodeId}-aiAgentic`} stageName="aiAgentic" stage={journey.aiAgentic} nodeId={nodeId} />
     </div>
   );
 }
