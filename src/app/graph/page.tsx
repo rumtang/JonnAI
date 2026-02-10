@@ -1,12 +1,13 @@
 'use client';
 
-import { useEffect, useState, Suspense } from 'react';
+import { useEffect, useState, useRef, Suspense } from 'react';
+import { AnimatePresence } from 'framer-motion';
 import { useIsMobile } from '@/lib/hooks/use-is-mobile';
 import GraphScene from '@/components/graph/GraphScene';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 import NodeDetailPanel from '@/components/graph/NodeDetailPanel';
 import GraphControls from '@/components/graph/GraphControls';
-import LegendPanel from '@/components/graph/LegendPanel';
+
 import SearchBar from '@/components/graph/SearchBar';
 import ZoomControls from '@/components/graph/ZoomControls';
 import PresentationController from '@/components/presentation/PresentationController';
@@ -18,6 +19,7 @@ import CampaignSummary from '@/components/graph/CampaignMode/CampaignSummary';
 import RoleInsightPanel from '@/components/graph/RoleMode/RoleInsightPanel';
 import RolePicker from '@/components/graph/RoleMode/RolePicker';
 import RoleSelectorButton from '@/components/graph/RoleMode/RoleSelectorButton';
+import ExploreWelcome from '@/components/graph/ExploreWelcome';
 
 import { useGraphStore } from '@/lib/store/graph-store';
 import { usePresentationStore } from '@/lib/store/presentation-store';
@@ -67,6 +69,8 @@ export default function GraphPage() {
   const campaignActive = useCampaignStore(s => s.isActive);
   const roleActive = useRoleInsightStore(s => s.isActive);
   const [rolePickerOpen, setRolePickerOpen] = useState(false);
+  const [showExploreWelcome, setShowExploreWelcome] = useState(false);
+  const prevModeRef = useRef(mode);
   const isMobile = useIsMobile();
   const currentNodeId = useCampaignStore(s => s.currentNodeId);
   const startCampaign = useCampaignStore(s => s.startCampaign);
@@ -136,6 +140,14 @@ export default function GraphPage() {
     }
   }, [selectedNode, roleActive]);
 
+  // Show welcome overlay when transitioning from guided tour to explore mode
+  useEffect(() => {
+    if (prevModeRef.current === 'guided' && mode === 'explore') {
+      setShowExploreWelcome(true);
+    }
+    prevModeRef.current = mode;
+  }, [mode]);
+
   // Floating "Run a Campaign" CTA for explore mode
   const handleStartCampaign = () => {
     setMode('campaign');
@@ -178,7 +190,6 @@ export default function GraphPage() {
         <>
           <GraphControls />
           <SearchBar />
-          <LegendPanel />
           <ZoomControls />
 
           {/* Show RoleInsightPanel when role is active, NodeDetailPanel otherwise */}
@@ -190,6 +201,20 @@ export default function GraphPage() {
 
           {/* Role picker modal */}
           <RolePicker open={rolePickerOpen} onClose={() => setRolePickerOpen(false)} />
+
+          {/* Welcome overlay — shown when entering explore from guided tour */}
+          <AnimatePresence>
+            {showExploreWelcome && (
+              <ExploreWelcome
+                onExploreGraph={() => setShowExploreWelcome(false)}
+                onSelectRole={() => {
+                  setShowExploreWelcome(false);
+                  setRolePickerOpen(true);
+                }}
+                onDismiss={() => setShowExploreWelcome(false)}
+              />
+            )}
+          </AnimatePresence>
 
           {/* Bottom CTAs — Campaign + Role */}
           <div className={`fixed bottom-8 left-1/2 -translate-x-1/2 z-50 ${
