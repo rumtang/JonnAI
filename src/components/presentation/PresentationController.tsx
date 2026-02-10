@@ -644,7 +644,7 @@ export default function PresentationController() {
             initial={{ opacity: 0, y: 20 }}
             animate={{
               opacity: diagramOpacity,
-              y: isTitleSlide ? 30 : -40,
+              y: isTitleSlide ? 30 : isTransitionSlide ? -80 : -40,
               scale: 1,
             }}
             exit={{ opacity: 0, scale: 0.9, y: -60 }}
@@ -677,7 +677,7 @@ export default function PresentationController() {
                 {isTransitionSlide && (
                   <motion.div
                     key="agent-badges"
-                    className="flex items-start justify-center gap-0 mt-5"
+                    className="flex items-start justify-center gap-0 mt-3"
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -5 }}
@@ -689,15 +689,15 @@ export default function PresentationController() {
                         <div key={`ac-${i}`} className="flex items-start">
                           <div className="w-16 md:w-20 flex flex-col items-center overflow-visible">
                             {stageAgents.length > 0 ? (
-                              <div className="flex flex-col items-center gap-1.5">
-                                <div className="w-px h-4 bg-[#5B9ECF]/40" />
+                              <div className="flex flex-col items-center gap-1">
+                                <div className="w-px h-2 bg-[#5B9ECF]/40" />
                                 {stageAgents.map((agent, j) => (
                                   <motion.div
                                     key={agent.id}
                                     initial={{ opacity: 0, scale: 0.8 }}
                                     animate={{ opacity: 1, scale: 1 }}
                                     transition={{ delay: 0.5 + j * 0.15 }}
-                                    className="px-2 py-1 rounded-md bg-[#5B9ECF]/10 border border-[#5B9ECF]/25 text-[10px] font-medium text-[#5B9ECF] whitespace-nowrap"
+                                    className="px-1.5 py-0.5 rounded-md bg-[#5B9ECF]/10 border border-[#5B9ECF]/25 text-[9px] font-medium text-[#5B9ECF] whitespace-nowrap"
                                   >
                                     {agent.label}
                                   </motion.div>
@@ -801,7 +801,9 @@ export default function PresentationController() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 40 }}
             transition={{ duration: 0.4 }}
-            className="fixed bottom-24 left-1/2 -translate-x-1/2 z-50 w-full max-w-2xl px-4"
+            className={`fixed left-1/2 -translate-x-1/2 z-50 w-full max-w-2xl px-4 ${
+              showPipelineOverlay ? 'bottom-20' : 'bottom-24'
+            }`}
           >
             <AnimatePresence mode="wait">
               <motion.div
