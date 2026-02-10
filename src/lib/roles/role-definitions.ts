@@ -1,6 +1,16 @@
 // Role definitions derived from the content production graph's gate reviewers
 // and step owners. Each role maps to specific nodes and carries narrative insight.
 
+export type RoleCategory = 'strategy' | 'creative' | 'governance' | 'operations' | 'growth';
+
+export const ROLE_CATEGORIES: Record<RoleCategory, { label: string; subtitle: string; iconName: string }> = {
+  strategy:   { label: 'Strategy',   subtitle: 'Set the direction',   iconName: 'Compass' },
+  creative:   { label: 'Creative',   subtitle: 'Make the work',       iconName: 'Palette' },
+  governance: { label: 'Governance', subtitle: 'Protect the brand',   iconName: 'Shield' },
+  operations: { label: 'Operations', subtitle: 'Keep it running',     iconName: 'Settings' },
+  growth:     { label: 'Growth',     subtitle: 'Multiply the impact', iconName: 'TrendingUp' },
+};
+
 export interface RoleNarrative {
   today: string;
   future: string;
@@ -12,6 +22,10 @@ export interface RoleDefinition {
   id: string;
   title: string;
   description: string;
+  tagline: string;
+  iconName: string;
+  category: RoleCategory;
+  accentColor: string;
   // Node IDs this role directly owns or reviews
   ownedSteps: string[];
   reviewedGates: string[];
@@ -21,11 +35,22 @@ export interface RoleDefinition {
   narrative: RoleNarrative;
 }
 
+export function computeRoleStats(role: RoleDefinition, totalGraphNodes: number) {
+  const steps = role.ownedSteps.length;
+  const gates = role.reviewedGates.length;
+  const total = steps + gates + role.relatedAgents.length + role.relatedInputs.length;
+  return { steps, gates, total, coveragePct: Math.round((total / totalGraphNodes) * 100) };
+}
+
 export const ROLE_DEFINITIONS: RoleDefinition[] = [
   {
     id: 'content-director',
     title: 'Content Director',
     description: 'Owns the brief phase and approves content briefs before creation begins.',
+    tagline: 'Scopes and approves every brief.',
+    iconName: 'FileText',
+    category: 'strategy',
+    accentColor: '#5B9ECF',
     ownedSteps: ['receive-request', 'write-brief', 'content-governance', 'content-scoring'],
     reviewedGates: ['brief-approval', 'governance-gate'],
     relatedAgents: ['research-agent', 'writer-agent'],
@@ -41,6 +66,10 @@ export const ROLE_DEFINITIONS: RoleDefinition[] = [
     id: 'brand-manager',
     title: 'Brand Manager',
     description: 'Reviews content for brand compliance and can escalate to stakeholder sign-off.',
+    tagline: 'Guards tone, voice, and identity.',
+    iconName: 'ShieldCheck',
+    category: 'governance',
+    accentColor: '#D4856A',
     ownedSteps: ['brand-compliance'],
     reviewedGates: ['brand-review'],
     relatedAgents: ['writer-agent'],
@@ -56,6 +85,10 @@ export const ROLE_DEFINITIONS: RoleDefinition[] = [
     id: 'editor',
     title: 'Editor / Content Lead',
     description: 'Owns the final edit step and co-reviews the quality gate with AI assistance.',
+    tagline: 'Last human to touch the words.',
+    iconName: 'PenTool',
+    category: 'creative',
+    accentColor: '#9B7ACC',
     ownedSteps: ['final-edit'],
     reviewedGates: ['quality-check'],
     relatedAgents: ['writer-agent', 'seo-agent'],
@@ -71,6 +104,10 @@ export const ROLE_DEFINITIONS: RoleDefinition[] = [
     id: 'vp-marketing',
     title: 'VP Marketing / Stakeholder',
     description: 'Final sign-off authority before publication. Oversees scheduling and distribution.',
+    tagline: 'Final sign-off before anything ships.',
+    iconName: 'Crown',
+    category: 'strategy',
+    accentColor: '#4A8CC0',
     ownedSteps: ['schedule-publish', 'distribute'],
     reviewedGates: ['stakeholder-signoff'],
     relatedAgents: [],
@@ -86,6 +123,10 @@ export const ROLE_DEFINITIONS: RoleDefinition[] = [
     id: 'analytics-lead',
     title: 'Analytics Lead',
     description: 'Reviews performance data and decides whether content should be optimized, iterated, or archived.',
+    tagline: 'Closes the feedback loop with data.',
+    iconName: 'BarChart3',
+    category: 'operations',
+    accentColor: '#D4AD5E',
     ownedSteps: ['track-performance', 'generate-report', 'optimize', 'attribution-modeling', 'executive-reporting'],
     reviewedGates: ['performance-review'],
     relatedAgents: ['performance-agent'],
@@ -101,6 +142,10 @@ export const ROLE_DEFINITIONS: RoleDefinition[] = [
     id: 'content-strategist',
     title: 'Content Strategist',
     description: 'Drives the strategic inputs that ground every brief and agent decision.',
+    tagline: 'Defines the strategy every brief follows.',
+    iconName: 'Lightbulb',
+    category: 'strategy',
+    accentColor: '#6BAED6',
     ownedSteps: ['research-insights'],
     reviewedGates: [],
     relatedAgents: ['research-agent'],
@@ -116,6 +161,10 @@ export const ROLE_DEFINITIONS: RoleDefinition[] = [
     id: 'marketing-ops',
     title: 'Marketing Ops',
     description: 'Owns the operational backbone: scheduling, distribution, and the optimization feedback loop.',
+    tagline: 'Connects strategy to execution.',
+    iconName: 'Cog',
+    category: 'operations',
+    accentColor: '#C9A04E',
     ownedSteps: ['schedule-publish', 'distribute', 'optimize', 'channel-orchestration'],
     reviewedGates: ['performance-review'],
     relatedAgents: ['performance-agent', 'personalization-agent'],
@@ -131,6 +180,10 @@ export const ROLE_DEFINITIONS: RoleDefinition[] = [
     id: 'consumer-insights',
     title: 'Consumer Insights',
     description: 'Owns audience understanding and ensures every piece of content is grounded in real customer data.',
+    tagline: 'Formalizes what customers actually need.',
+    iconName: 'Users',
+    category: 'operations',
+    accentColor: '#B8943F',
     ownedSteps: ['research-insights'],
     reviewedGates: [],
     relatedAgents: ['research-agent'],
@@ -146,6 +199,10 @@ export const ROLE_DEFINITIONS: RoleDefinition[] = [
     id: 'consulting-dd',
     title: 'Consulting (Due Diligence)',
     description: 'External advisory role providing independent review across quality, brand, and strategic alignment gates.',
+    tagline: 'Independent lens across three gates.',
+    iconName: 'SearchCheck',
+    category: 'growth',
+    accentColor: '#3D9E42',
     ownedSteps: [],
     reviewedGates: ['quality-check', 'brand-review', 'stakeholder-signoff'],
     relatedAgents: ['writer-agent', 'seo-agent'],
@@ -161,6 +218,10 @@ export const ROLE_DEFINITIONS: RoleDefinition[] = [
     id: 'legal-counsel',
     title: 'Legal Counsel',
     description: 'Owns the legal review step and approves content through the legal compliance gate. Responsible for regulatory risk, IP clearance, and disclosure requirements.',
+    tagline: 'Clears legal risk before anything ships.',
+    iconName: 'Scale',
+    category: 'governance',
+    accentColor: '#C97A5A',
     ownedSteps: ['legal-review'],
     reviewedGates: ['legal-compliance-gate'],
     relatedAgents: ['legal-screening-agent'],
@@ -176,6 +237,10 @@ export const ROLE_DEFINITIONS: RoleDefinition[] = [
     id: 'localization-manager',
     title: 'Localization Manager',
     description: 'Owns the localization step and reviews localized content through the localization quality gate. Responsible for translation accuracy, cultural appropriateness, and regional compliance.',
+    tagline: 'Makes one campaign work in every market.',
+    iconName: 'Globe',
+    category: 'governance',
+    accentColor: '#BE6F4F',
     ownedSteps: ['localize-content'],
     reviewedGates: ['localization-quality-gate'],
     relatedAgents: ['localization-agent'],
@@ -191,6 +256,10 @@ export const ROLE_DEFINITIONS: RoleDefinition[] = [
     id: 'creative-director',
     title: 'Creative Director',
     description: 'Owns visual asset creation and ensures all imagery, graphics, and design elements align with the brand and content brief.',
+    tagline: 'Owns the visual layer of every asset.',
+    iconName: 'Paintbrush',
+    category: 'creative',
+    accentColor: '#B088DD',
     ownedSteps: ['visual-asset-creation'],
     reviewedGates: ['quality-check'],
     relatedAgents: ['writer-agent'],
@@ -206,6 +275,10 @@ export const ROLE_DEFINITIONS: RoleDefinition[] = [
     id: 'growth-lead',
     title: 'Growth Lead',
     description: 'Owns A/B testing strategy, content repurposing, and distribution optimization. Responsible for maximizing content reach and conversion through experimentation.',
+    tagline: 'Turns one asset into a channel strategy.',
+    iconName: 'Rocket',
+    category: 'growth',
+    accentColor: '#4CAF50',
     ownedSteps: ['ab-variant-creation', 'content-repurposing', 'segment-mapping', 'paid-creative-production', 'sales-enablement'],
     reviewedGates: ['performance-review'],
     relatedAgents: ['repurposing-agent', 'performance-agent', 'personalization-agent'],
@@ -221,6 +294,10 @@ export const ROLE_DEFINITIONS: RoleDefinition[] = [
     id: 'privacy-officer',
     title: 'Privacy Officer',
     description: 'Owns consent compliance and privacy validation for all personalized content delivery. Ensures data usage aligns with jurisdictional privacy regulations.',
+    tagline: 'Keeps personalization within legal bounds.',
+    iconName: 'Lock',
+    category: 'governance',
+    accentColor: '#E09070',
     ownedSteps: ['consent-check'],
     reviewedGates: ['personalization-qa'],
     relatedAgents: ['privacy-agent', 'personalization-agent'],
@@ -236,6 +313,10 @@ export const ROLE_DEFINITIONS: RoleDefinition[] = [
     id: 'campaign-manager',
     title: 'Campaign Manager',
     description: 'Owns campaign planning, journey mapping, and budget allocation. Responsible for the strategic layer that generates content requests and measures campaign-level ROI.',
+    tagline: 'Allocates budget and maps journeys.',
+    iconName: 'Megaphone',
+    category: 'strategy',
+    accentColor: '#3D7AB0',
     ownedSteps: ['campaign-planning', 'journey-mapping'],
     reviewedGates: [],
     relatedAgents: ['performance-agent'],
@@ -251,6 +332,10 @@ export const ROLE_DEFINITIONS: RoleDefinition[] = [
     id: 'partnerships-lead',
     title: 'Partnerships & Influencer Lead',
     description: 'Owns influencer briefs, creator relationships, and UGC moderation. Responsible for the earned and co-created content layer of the content pipeline.',
+    tagline: 'Bridges creators and brand standards.',
+    iconName: 'Handshake',
+    category: 'creative',
+    accentColor: '#8A6ABB',
     ownedSteps: ['influencer-brief', 'ugc-moderation'],
     reviewedGates: ['brand-review'],
     relatedAgents: ['writer-agent'],
@@ -266,6 +351,10 @@ export const ROLE_DEFINITIONS: RoleDefinition[] = [
     id: 'context-engineer',
     title: 'Context Engineer',
     description: 'Owns the semantic infrastructure that grounds every agent in the system: knowledge graphs, content taxonomy, scoring matrices, orchestration rules, and the relationships between reference inputs. Responsible for making the system smarter over time.',
+    tagline: 'Builds the infrastructure agents reason with.',
+    iconName: 'Blocks',
+    category: 'growth',
+    accentColor: '#5BBD5F',
     ownedSteps: ['content-governance', 'archive-tag'],
     reviewedGates: ['governance-gate'],
     relatedAgents: ['research-agent', 'personalization-agent', 'legal-screening-agent'],
