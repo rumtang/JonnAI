@@ -97,17 +97,17 @@ export default function Home() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.35 }}
-          className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-2xl mx-auto"
+          className="flex flex-wrap justify-center gap-4 max-w-4xl mx-auto"
         >
           {modes.map(({ key, label, description, color }) => (
             <button
               key={key}
               onClick={() => handleStart(key)}
-              className="group relative px-8 py-4 rounded-2xl glass-panel hover:shadow-lg transition-all duration-300"
+              className="group relative px-6 py-4 rounded-2xl glass-panel hover:shadow-lg transition-all duration-300 w-full sm:w-[calc(50%-0.5rem)] lg:w-[calc(33.333%-0.75rem)]"
             >
               <div className="text-left">
                 <p
-                  className="text-lg font-semibold transition-colors"
+                  className="text-base font-semibold transition-colors"
                   style={{ color }}
                 >
                   {label}
