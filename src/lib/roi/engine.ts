@@ -157,7 +157,7 @@ export const SOURCE_ATTRIBUTION: Record<string, { source: string; confidence: Co
 
 /** Revenue-anchored org profile. Everything cascades from annualRevenue. */
 export interface OrganizationProfile {
-  annualRevenue: number;              // $500M – $50B+
+  annualRevenue: number;              // $500M – $1T
   marketingBudgetPct: number;         // % of revenue (Gartner 2025: 7.7%)
   marketingHeadcount: number;         // 50–2000+
   avgLoadedFteCost: number;           // $100K–$400K fully loaded
@@ -177,9 +177,31 @@ export interface MartechAndMedia {
 export interface ContentAndCampaignOps {
   monthlyCampaigns: number;           // 10–500
   monthlyContentAssets: number;       // 50–2000
-  avgCampaignCycleWeeks: number;      // 2–12
+  avgCampaignCycleWeeks: number;      // Derived from distribution below
   channelCount: number;               // 3–20
   agencyPctOfBudget: number;          // 5–30%
+  // Campaign lifecycle distribution — % of campaigns in each duration bucket
+  campaignCycleShortPct: number;      // % at 1-10 weeks (quick-turn digital/social)
+  campaignCycleMediumPct: number;     // % at 11-25 weeks (integrated/seasonal)
+  campaignCycleLongPct: number;       // % at 25-52 weeks (brand/annual programs)
+}
+
+// Midpoints for campaign cycle distribution buckets
+export const CAMPAIGN_CYCLE_MIDPOINTS = {
+  short: 5.5,    // midpoint of 1-10 weeks
+  medium: 18,    // midpoint of 11-25 weeks
+  long: 38.5,    // midpoint of 25-52 weeks
+} as const;
+
+/** Compute weighted average campaign cycle from distribution percentages. */
+export function computeWeightedCycleWeeks(shortPct: number, mediumPct: number, longPct: number): number {
+  const total = shortPct + mediumPct + longPct;
+  if (total === 0) return 6; // fallback
+  return (
+    (shortPct * CAMPAIGN_CYCLE_MIDPOINTS.short +
+     mediumPct * CAMPAIGN_CYCLE_MIDPOINTS.medium +
+     longPct * CAMPAIGN_CYCLE_MIDPOINTS.long) / total
+  );
 }
 
 /** Quantified operational inefficiencies. */
@@ -194,7 +216,7 @@ export interface OperationalPain {
 /** User-configurable investment — no longer hardcoded. */
 export interface TransformationInvestment {
   totalInvestmentAmount: number;      // $500K – $25M, default ~$3M
-  implementationWeeks: number;        // 12–52, default 28
+  implementationWeeks: number;        // 12–104 (~3–24 months), default 28
 }
 
 /** Hidden improvement assumptions — research-backed, not UI-exposed. */

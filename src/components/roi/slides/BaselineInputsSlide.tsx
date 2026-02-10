@@ -73,6 +73,8 @@ function SliderRow({
 export default function BaselineInputsSlide({ step }: BaselineInputsSlideProps) {
   const org = useRoiStore(s => s.org);
   const setOrg = useRoiStore(s => s.setOrg);
+  const ops = useRoiStore(s => s.ops);
+  const setOps = useRoiStore(s => s.setOps);
   const investment = useRoiStore(s => s.investment);
   const setInvestment = useRoiStore(s => s.setInvestment);
   const baseline = useRoiStore(s => s.baseline);
@@ -168,12 +170,12 @@ export default function BaselineInputsSlide({ step }: BaselineInputsSlideProps) 
                 label="Annual Revenue"
                 value={org.annualRevenue}
                 min={500_000_000}
-                max={50_000_000_000}
-                step={100_000_000}
+                max={1_000_000_000_000}
+                step={500_000_000}
                 format={formatCurrency}
                 onChange={(v) => setOrg({ annualRevenue: v })}
                 color="#5B9ECF"
-                benchmark="Gartner: median S&P 500 = $15B"
+                benchmark="Range: $500M to $1T"
               />
               <SliderRow
                 label="Marketing Budget (% of Revenue)"
@@ -253,16 +255,98 @@ export default function BaselineInputsSlide({ step }: BaselineInputsSlideProps) 
               </div>
 
               <SliderRow
-                label="Implementation Timeline (weeks)"
+                label="Implementation Timeline"
                 value={investment.implementationWeeks}
                 min={12}
-                max={52}
+                max={104}
                 step={2}
-                format={(v) => `${v} weeks (~${Math.round(v / 4.33)} months)`}
+                format={(v) => `${Math.round(v / 4.33)} months (${v} weeks)`}
                 onChange={(v) => setInvestment({ implementationWeeks: v })}
                 color="#14B8A6"
-                benchmark="Phased enterprise build: 20-36 weeks typical"
+                benchmark="Enterprise phased build: 6-18 months typical"
               />
+            </div>
+          </motion.div>
+
+          {/* Card 3: Campaign Lifecycle Distribution */}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            className="glass-panel rounded-lg p-4"
+            style={{ borderLeft: '3px solid #C9A04E' }}
+          >
+            <h4 className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground mb-3 flex items-center gap-2">
+              <span>📅</span> Campaign Lifecycle Distribution
+            </h4>
+            <p className="text-[8px] text-muted-foreground/60 mb-3 leading-relaxed">
+              What % of your campaigns fall into each duration bucket? (Must total 100%)
+            </p>
+            <div className="space-y-3">
+              <SliderRow
+                label="Short (1-10 weeks)"
+                value={ops.campaignCycleShortPct}
+                min={0}
+                max={100}
+                step={5}
+                format={(v) => `${v}%`}
+                onChange={(v) => {
+                  const remaining = 100 - v;
+                  const medRatio = ops.campaignCycleMediumPct / Math.max(1, ops.campaignCycleMediumPct + ops.campaignCycleLongPct);
+                  setOps({
+                    campaignCycleShortPct: v,
+                    campaignCycleMediumPct: Math.round(remaining * medRatio),
+                    campaignCycleLongPct: Math.round(remaining * (1 - medRatio)),
+                  });
+                }}
+                color="#C9A04E"
+                benchmark="Email, social, digital promos, quick sprints"
+              />
+              <SliderRow
+                label="Medium (11-25 weeks)"
+                value={ops.campaignCycleMediumPct}
+                min={0}
+                max={100}
+                step={5}
+                format={(v) => `${v}%`}
+                onChange={(v) => {
+                  const remaining = 100 - v;
+                  const shortRatio = ops.campaignCycleShortPct / Math.max(1, ops.campaignCycleShortPct + ops.campaignCycleLongPct);
+                  setOps({
+                    campaignCycleMediumPct: v,
+                    campaignCycleShortPct: Math.round(remaining * shortRatio),
+                    campaignCycleLongPct: Math.round(remaining * (1 - shortRatio)),
+                  });
+                }}
+                color="#C9A04E"
+                benchmark="Product launches, seasonal, integrated campaigns"
+              />
+              <SliderRow
+                label="Long (25-52 weeks)"
+                value={ops.campaignCycleLongPct}
+                min={0}
+                max={100}
+                step={5}
+                format={(v) => `${v}%`}
+                onChange={(v) => {
+                  const remaining = 100 - v;
+                  const shortRatio = ops.campaignCycleShortPct / Math.max(1, ops.campaignCycleShortPct + ops.campaignCycleMediumPct);
+                  setOps({
+                    campaignCycleLongPct: v,
+                    campaignCycleShortPct: Math.round(remaining * shortRatio),
+                    campaignCycleMediumPct: Math.round(remaining * (1 - shortRatio)),
+                  });
+                }}
+                color="#C9A04E"
+                benchmark="Brand campaigns, annual programs, always-on"
+              />
+              {/* Computed weighted average */}
+              <div className="pt-2 border-t border-muted-foreground/10 flex items-center justify-between">
+                <span className="text-[8px] text-muted-foreground">Weighted Average Cycle</span>
+                <span className="text-[10px] font-semibold text-[#C9A04E]">
+                  {ops.avgCampaignCycleWeeks.toFixed(1)} weeks (~{Math.round(ops.avgCampaignCycleWeeks / 4.33)} months)
+                </span>
+              </div>
             </div>
           </motion.div>
         </div>

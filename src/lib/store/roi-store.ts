@@ -3,6 +3,7 @@ import { ROI_STEPS } from '@/data/roi-steps';
 import {
   computeBaseline,
   computeRoi,
+  computeWeightedCycleWeeks,
   type OrganizationProfile,
   type MartechAndMedia,
   type ContentAndCampaignOps,
@@ -37,9 +38,13 @@ const DEFAULT_MARTECH: MartechAndMedia = {
 const DEFAULT_OPS: ContentAndCampaignOps = {
   monthlyCampaigns: 80,                 // Enterprise scale
   monthlyContentAssets: 500,             // Enterprise content framework
-  avgCampaignCycleWeeks: 6,             // Enterprise average with reviews
+  avgCampaignCycleWeeks: 6,             // Computed from distribution below
   channelCount: 10,                      // Enterprise omnichannel
   agencyPctOfBudget: 15,                // Industry standard
+  // Campaign lifecycle distribution defaults (enterprise benchmarks)
+  campaignCycleShortPct: 55,            // Quick-turn: email, social, digital promos
+  campaignCycleMediumPct: 30,           // Integrated: product launch, seasonal, events
+  campaignCycleLongPct: 15,             // Annual: brand campaigns, always-on programs
 };
 
 const DEFAULT_PAIN: OperationalPain = {
@@ -187,6 +192,12 @@ export const useRoiStore = create<RoiState>((set, get) => ({
   setOps: (partial) => {
     const state = get();
     const ops = { ...state.ops, ...partial };
+    // Auto-compute weighted average cycle from distribution
+    if ('campaignCycleShortPct' in partial || 'campaignCycleMediumPct' in partial || 'campaignCycleLongPct' in partial) {
+      ops.avgCampaignCycleWeeks = computeWeightedCycleWeeks(
+        ops.campaignCycleShortPct, ops.campaignCycleMediumPct, ops.campaignCycleLongPct,
+      );
+    }
     set({ ops, ...recalculate({ ...state, ops }) });
   },
 

@@ -16,6 +16,7 @@ interface ExecutiveSummarySlideProps {
 
 // ─── Format Helpers ─────────────────────────────────────────────────
 function formatCompact(v: number): string {
+  if (Math.abs(v) >= 1_000_000_000) return `$${(v / 1_000_000_000).toFixed(1)}B`;
   if (Math.abs(v) >= 1_000_000) return `$${(v / 1_000_000).toFixed(1)}M`;
   if (Math.abs(v) >= 1_000) return `$${(v / 1_000).toFixed(0)}K`;
   return `$${Math.round(v).toLocaleString()}`;
@@ -194,6 +195,10 @@ export default function ExecutiveSummarySlide({ step }: ExecutiveSummarySlidePro
       return lines.join('\n');
     }
 
+    const pctOf = (v: number) => outputs.totalAnnualValue > 0
+      ? `${((v / outputs.totalAnnualValue) * 100).toFixed(1)}%`
+      : '–';
+
     const lines = [
       'ROI EXECUTIVE SUMMARY - Knowledge Graph Infrastructure',
       '='.repeat(55),
@@ -205,14 +210,14 @@ export default function ExecutiveSummarySlide({ step }: ExecutiveSummarySlidePro
       `IRR: ${isNaN(irr) ? 'N/A' : `${Math.round(irr * 100)}%`}`,
       `Annual Value (Full Ramp): ${formatCompact(outputs.totalAnnualValue)}`,
       '',
-      'VALUE BREAKDOWN (Annual)',
-      `  ROAS Improvement: ${formatCompact(vs.roasImprovement)}`,
-      `  Martech Optimization: ${formatCompact(vs.martechOptimization)}`,
-      `  Content Velocity: ${formatCompact(vs.contentVelocity)}`,
-      `  Campaign Speed: ${formatCompact(vs.campaignSpeed)}`,
-      `  Operational Efficiency: ${formatCompact(vs.operationalEfficiency)}`,
-      `  Attribution Improvement: ${formatCompact(vs.attributionImprovement)}`,
-      `  Personalization Lift: ${formatCompact(vs.personalizationLift)}`,
+      'VALUE BREAKDOWN (Annual — $ and % of total)',
+      `  ROAS Improvement: ${formatCompact(vs.roasImprovement)} (${pctOf(vs.roasImprovement)}) [Revenue]`,
+      `  Personalization Lift: ${formatCompact(vs.personalizationLift)} (${pctOf(vs.personalizationLift)}) [Revenue]`,
+      `  Campaign Speed: ${formatCompact(vs.campaignSpeed)} (${pctOf(vs.campaignSpeed)}) [Revenue]`,
+      `  Martech Optimization: ${formatCompact(vs.martechOptimization)} (${pctOf(vs.martechOptimization)}) [Savings]`,
+      `  Content Velocity: ${formatCompact(vs.contentVelocity)} (${pctOf(vs.contentVelocity)}) [Savings]`,
+      `  Operational Efficiency: ${formatCompact(vs.operationalEfficiency)} (${pctOf(vs.operationalEfficiency)}) [Savings]`,
+      `  Attribution Improvement: ${formatCompact(vs.attributionImprovement)} (${pctOf(vs.attributionImprovement)}) [Savings]`,
       '',
       'ROAS IMPACT',
       `  Current ROAS: ${roas.currentRoas.toFixed(1)}:1`,
@@ -269,6 +274,9 @@ export default function ExecutiveSummarySlide({ step }: ExecutiveSummarySlidePro
           className="text-6xl md:text-7xl font-bold text-[#14B8A6]"
           duration={1.2}
         />
+        <p className="text-sm text-muted-foreground mt-1">
+          {formatCompact(outputs.netPresentValue)} net present value on {formatCompact(outputs.totalInvestment)} invested
+        </p>
       </motion.div>
 
       {/* ─── View Mode Tabs ──────────────────────────────────── */}
@@ -326,6 +334,86 @@ export default function ExecutiveSummarySlide({ step }: ExecutiveSummarySlidePro
             className="glass-panel rounded-lg p-4 mb-4"
           >
             <ValueBreakdownBar outputs={outputs} />
+          </motion.div>
+
+          {/* ─── Detailed Savings & Revenue Table ──────────────── */}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.65 }}
+            className="glass-panel rounded-lg p-4 mb-4"
+          >
+            <h4 className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-3">
+              Where the Value Comes From
+            </h4>
+            <table className="w-full text-[9px]">
+              <thead>
+                <tr className="border-b border-muted-foreground/10">
+                  <th className="text-left py-1.5 text-muted-foreground font-medium">Value Stream</th>
+                  <th className="text-left py-1.5 text-muted-foreground font-medium">Type</th>
+                  <th className="text-right py-1.5 text-muted-foreground font-medium">Annual Value</th>
+                  <th className="text-right py-1.5 text-muted-foreground font-medium">% of Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  { label: 'ROAS Improvement', value: vs.roasImprovement, type: 'Revenue', color: '#9B7ACC' },
+                  { label: 'Personalization Lift', value: vs.personalizationLift, type: 'Revenue', color: '#4CAF50' },
+                  { label: 'Campaign Speed', value: vs.campaignSpeed, type: 'Revenue', color: '#C9A04E' },
+                  { label: 'Martech Optimization', value: vs.martechOptimization, type: 'Savings', color: '#E88D67' },
+                  { label: 'Content Velocity', value: vs.contentVelocity, type: 'Savings', color: '#5B9ECF' },
+                  { label: 'Operational Efficiency', value: vs.operationalEfficiency, type: 'Savings', color: '#D4856A' },
+                  { label: 'Attribution Improvement', value: vs.attributionImprovement, type: 'Savings', color: '#f59e0b' },
+                ].filter(s => s.value > 0).map((stream) => (
+                  <tr key={stream.label} className="border-b border-muted-foreground/5">
+                    <td className="py-1.5 font-medium" style={{ color: stream.color }}>
+                      {stream.label}
+                    </td>
+                    <td className="py-1.5 text-muted-foreground">
+                      <span className={`px-1.5 py-0.5 rounded text-[8px] ${
+                        stream.type === 'Revenue'
+                          ? 'bg-[#4CAF50]/10 text-[#4CAF50]'
+                          : 'bg-[#5B9ECF]/10 text-[#5B9ECF]'
+                      }`}>
+                        {stream.type}
+                      </span>
+                    </td>
+                    <td className="py-1.5 text-right font-semibold" style={{ color: stream.color }}>
+                      {formatCompact(stream.value)}
+                    </td>
+                    <td className="py-1.5 text-right text-muted-foreground">
+                      {outputs.totalAnnualValue > 0 ? `${((stream.value / outputs.totalAnnualValue) * 100).toFixed(1)}%` : '–'}
+                    </td>
+                  </tr>
+                ))}
+                {/* Total row */}
+                <tr className="border-t-2 border-muted-foreground/20">
+                  <td className="py-2 font-semibold text-foreground">Total Annual Value</td>
+                  <td></td>
+                  <td className="py-2 text-right font-bold text-[#14B8A6]">
+                    {formatCompact(outputs.totalAnnualValue)}
+                  </td>
+                  <td className="py-2 text-right font-semibold text-muted-foreground">100%</td>
+                </tr>
+              </tbody>
+            </table>
+            {/* Revenue vs Savings summary */}
+            <div className="flex gap-4 mt-3 pt-3 border-t border-muted-foreground/10">
+              <div className="flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-[#4CAF50]" />
+                <span className="text-[8px] text-muted-foreground">
+                  Revenue: {formatCompact(vs.roasImprovement + vs.personalizationLift + vs.campaignSpeed)}
+                  {' '}({outputs.totalAnnualValue > 0 ? `${(((vs.roasImprovement + vs.personalizationLift + vs.campaignSpeed) / outputs.totalAnnualValue) * 100).toFixed(0)}%` : '–'})
+                </span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-[#5B9ECF]" />
+                <span className="text-[8px] text-muted-foreground">
+                  Savings: {formatCompact(vs.martechOptimization + vs.contentVelocity + vs.operationalEfficiency + vs.attributionImprovement)}
+                  {' '}({outputs.totalAnnualValue > 0 ? `${(((vs.martechOptimization + vs.contentVelocity + vs.operationalEfficiency + vs.attributionImprovement) / outputs.totalAnnualValue) * 100).toFixed(0)}%` : '–'})
+                </span>
+              </div>
+            </div>
           </motion.div>
 
           {/* ROAS Metrics */}
