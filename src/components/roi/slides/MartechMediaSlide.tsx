@@ -206,7 +206,7 @@ export default function MartechMediaSlide({ step }: MartechMediaSlideProps) {
                 label="Current Blended ROAS"
                 value={martech.currentBlendedRoas}
                 min={1.0}
-                max={6.0}
+                max={10.0}
                 step={0.1}
                 format={(v) => `${v.toFixed(1)}:1`}
                 onChange={(v) => setMartech({ currentBlendedRoas: v })}

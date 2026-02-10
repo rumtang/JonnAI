@@ -106,7 +106,7 @@ export const SOURCE_ATTRIBUTION: Record<string, { source: string; confidence: Co
 
 /** Revenue-anchored org profile. Everything cascades from annualRevenue. */
 export interface OrganizationProfile {
-  annualRevenue: number;              // $500M – $1T
+  annualRevenue: number;              // $100M – $25B
   marketingBudgetPct: number;         // % of revenue (Gartner 2025: 7.7%)
   marketingHeadcount: number;         // 50–2000+
   avgLoadedFteCost: number;           // $100K–$400K fully loaded

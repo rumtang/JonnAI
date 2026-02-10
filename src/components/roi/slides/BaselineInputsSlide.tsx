@@ -169,13 +169,13 @@ export default function BaselineInputsSlide({ step }: BaselineInputsSlideProps) 
               <SliderRow
                 label="Annual Revenue"
                 value={org.annualRevenue}
-                min={500_000_000}
-                max={1_000_000_000_000}
-                step={500_000_000}
+                min={100_000_000}
+                max={25_000_000_000}
+                step={100_000_000}
                 format={formatCurrency}
                 onChange={(v) => setOrg({ annualRevenue: v })}
                 color="#5B9ECF"
-                benchmark="Range: $500M to $1T"
+                benchmark="Range: $100M to $25B"
               />
               <SliderRow
                 label="Marketing Budget (% of Revenue)"
