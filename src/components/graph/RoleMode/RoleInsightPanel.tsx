@@ -104,13 +104,13 @@ export default function RoleInsightPanel({ onChangeRole }: RoleInsightPanelProps
 
   // Classify the current node for the user
   const isPrimary = selectedRole.ownedSteps.includes(currentNodeId) || selectedRole.reviewedGates.includes(currentNodeId);
-  // Look up per-node journey for primary nodes
-  const nodeJourney: NodeJourney | undefined = isPrimary
-    ? selectedRole.narrative.nodeJourneys[currentNodeId]
-    : undefined;
+  // Look up per-node journey — available for all nodes, not just primary ones
+  const nodeJourney: NodeJourney | undefined = selectedRole.narrative.nodeJourneys[currentNodeId];
   const nodeRelation = isPrimary
     ? (selectedRole.ownedSteps.includes(currentNodeId) ? 'You own this step' : 'You review this gate')
-    : (selectedRole.relatedAgents.includes(currentNodeId) ? 'AI agent supporting you' : 'Input you depend on');
+    : (selectedRole.relatedAgents.includes(currentNodeId) ? 'AI agent supporting you'
+       : selectedRole.relatedInputs.includes(currentNodeId) ? 'Input you depend on'
+       : 'How this step affects your work');
 
   return (
     <AnimatePresence>
