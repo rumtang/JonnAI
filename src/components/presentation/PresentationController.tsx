@@ -1,11 +1,11 @@
 'use client';
 
-import { useEffect, useCallback } from 'react';
+import { useEffect, useCallback, useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { usePresentationStore } from '@/lib/store/presentation-store';
 import { useGraphStore } from '@/lib/store/graph-store';
 import { getGraphRef } from '@/lib/graph/graph-ref';
-import { ChevronLeft, ChevronRight, Play, Pause, Compass } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Play, Pause, Compass, Mouse } from 'lucide-react';
 import { GraphNode, GraphLink, StepMeta } from '@/lib/graph/types';
 
 // ─── Process Chart Layout ────────────────────────────────────
@@ -115,6 +115,18 @@ export default function PresentationController() {
   // Scrim stays high on slides 1-3 so the 2D overlay is the primary visual
   const scrimOpacity = isTitleSlide ? 0.95 : 0.90;
   const diagramOpacity = 1;
+
+  // Show interaction hint once when entering full-graph view
+  const hintShownRef = useRef(false);
+  const [showInteractionHint, setShowInteractionHint] = useState(false);
+  useEffect(() => {
+    if (!showPipelineOverlay && currentStepIndex > 0 && !hintShownRef.current) {
+      hintShownRef.current = true;
+      setShowInteractionHint(true);
+      const timer = setTimeout(() => setShowInteractionHint(false), 6000);
+      return () => clearTimeout(timer);
+    }
+  }, [showPipelineOverlay, currentStepIndex]);
 
   const exitToExplore = useCallback(() => {
     clearHighlights();
@@ -633,6 +645,30 @@ export default function PresentationController() {
                 </p>
               </motion.div>
             </AnimatePresence>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Interaction hint — appears once on first full-graph slide */}
+      <AnimatePresence>
+        {showInteractionHint && (
+          <motion.div
+            key="interaction-hint"
+            className="fixed top-6 right-6 z-[60] flex items-center gap-3 px-4 py-2.5 rounded-full glass-panel pointer-events-none"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 20 }}
+            transition={{ duration: 0.5 }}
+          >
+            <motion.div
+              animate={{ y: [0, -3, 0] }}
+              transition={{ repeat: 3, duration: 1.2, ease: 'easeInOut' }}
+            >
+              <Mouse className="w-4 h-4 text-muted-foreground" />
+            </motion.div>
+            <span className="text-xs text-muted-foreground">
+              Scroll to zoom · Drag to rotate
+            </span>
           </motion.div>
         )}
       </AnimatePresence>
