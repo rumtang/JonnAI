@@ -5,7 +5,7 @@ import { useCampaignStore } from '@/lib/store/campaign-store';
 import { useGraphStore } from '@/lib/store/graph-store';
 import { navigateToNode } from '@/lib/utils/camera-navigation';
 import { NODE_STYLES } from '@/lib/graph/node-styles';
-import { ROLE_MAP } from '@/lib/roles/role-definitions';
+import { ROLE_MAP, NodeJourney } from '@/lib/roles/role-definitions';
 import { STEP_NARRATIVES, ContentBlock } from '@/data/step-narratives';
 import { Badge } from '@/components/ui/badge';
 import { GraphNode, StepMeta, GateMeta, AgentMeta, InputMeta } from '@/lib/graph/types';
@@ -26,6 +26,7 @@ export default function CampaignNodeCard() {
   const style = NODE_STYLES[currentNode.type];
   const narrative = STEP_NARRATIVES[currentNode.id];
   const role = narrative ? ROLE_MAP.get(narrative.roleId) : undefined;
+  const journey = role?.narrative.nodeJourneys[currentNode.id];
 
   // Find connected agents and inputs for step nodes
   const connectedAgents = currentNode.type === 'step'
@@ -127,6 +128,9 @@ export default function CampaignNodeCard() {
         ))}
       </div>
 
+      {/* ── Journey breakdown — before/during/after AI ── */}
+      {journey && <JourneyBreakdown journey={journey} />}
+
       {/* ── Tier 2: Collapsible context ────────────────── */}
       <button
         onClick={() => setShowDetails(!showDetails)}
@@ -226,6 +230,33 @@ function OwnerBadge({ owner, agentName }: { owner: string; agentName?: string })
     <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full ${c.bg} border ${c.border}`}>
       <span className="text-sm">{c.icon}</span>
       <span className={`text-xs font-semibold ${c.text}`}>{label}</span>
+    </div>
+  );
+}
+
+/* ── Journey breakdown — 3-stage AI evolution ──────────── */
+
+const JOURNEY_STAGES = [
+  { key: 'preAI' as const, label: 'Before AI', icon: '\uD83D\uDCCB', bg: 'bg-orange-500/8', border: 'border-orange-500/20', accent: 'text-orange-400' },
+  { key: 'aiAgents' as const, label: 'AI Agents', icon: '\uD83E\uDD16', bg: 'bg-violet-500/8', border: 'border-violet-500/20', accent: 'text-violet-400' },
+  { key: 'aiAgentic' as const, label: 'Agentic AI', icon: '\u26A1', bg: 'bg-emerald-500/8', border: 'border-emerald-500/20', accent: 'text-emerald-400' },
+];
+
+function JourneyBreakdown({ journey }: { journey: NodeJourney }) {
+  return (
+    <div className="mb-4">
+      <p className="text-xs font-semibold text-muted-foreground mb-2">How involvement in this step evolves</p>
+      <div className="space-y-2">
+        {JOURNEY_STAGES.map(({ key, label, icon, bg, border, accent }) => (
+          <div key={key} className={`p-2.5 rounded-lg ${bg} border ${border}`}>
+            <div className={`flex items-center gap-1.5 text-xs font-semibold ${accent} mb-1`}>
+              <span>{icon}</span>
+              {label}
+            </div>
+            <p className="text-sm text-foreground/70 leading-relaxed">{journey[key].summary}</p>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
