@@ -76,10 +76,28 @@ const PIPELINE_STAGES = [
 
 // Agents mapped to their primary pipeline stage for the 2D overlay on slide 3
 const PIPELINE_AGENTS = [
-  { id: 'research-agent', label: 'Research Agent', stageIndex: 0 },
-  { id: 'writer-agent', label: 'Writer Agent', stageIndex: 1 },
-  { id: 'seo-agent', label: 'SEO Agent', stageIndex: 1 },
-  { id: 'performance-agent', label: 'Performance Agent', stageIndex: 4 },
+  // Plan
+  { id: 'research-agent', label: 'Research', stageIndex: 0 },
+  { id: 'social-listening-agent', label: 'Social Listening', stageIndex: 0 },
+  { id: 'journey-mapping-agent', label: 'Journey Mapping', stageIndex: 0 },
+  // Create
+  { id: 'writer-agent', label: 'Writer', stageIndex: 1 },
+  { id: 'seo-agent', label: 'SEO', stageIndex: 1 },
+  { id: 'visual-assets-agent', label: 'Visual Assets', stageIndex: 1 },
+  // Review
+  { id: 'legal-screening-agent', label: 'Legal Screening', stageIndex: 2 },
+  { id: 'accessibility-agent', label: 'Accessibility', stageIndex: 2 },
+  { id: 'privacy-agent', label: 'Privacy', stageIndex: 2 },
+  // Publish
+  { id: 'publishing-ops-agent', label: 'Publishing Ops', stageIndex: 3 },
+  { id: 'localization-agent', label: 'Localization', stageIndex: 3 },
+  { id: 'personalization-agent', label: 'Personalization', stageIndex: 3 },
+  // Measure
+  { id: 'performance-agent', label: 'Performance', stageIndex: 4 },
+  { id: 'governance-agent', label: 'Governance', stageIndex: 4 },
+  // Optimize
+  { id: 'optimization-agent', label: 'Optimization', stageIndex: 5 },
+  { id: 'repurposing-agent', label: 'Repurposing', stageIndex: 5 },
 ];
 
 export default function PresentationController() {
@@ -525,7 +543,7 @@ export default function PresentationController() {
                       const stageAgents = PIPELINE_AGENTS.filter(a => a.stageIndex === i);
                       return (
                         <div key={`ac-${i}`} className="flex items-start">
-                          <div className="w-14 md:w-16 flex flex-col items-center overflow-visible">
+                          <div className="w-16 md:w-20 flex flex-col items-center overflow-visible">
                             {stageAgents.length > 0 ? (
                               <div className="flex flex-col items-center gap-1.5">
                                 <div className="w-px h-4 bg-[#5B9ECF]/40" />
@@ -544,7 +562,7 @@ export default function PresentationController() {
                             ) : null}
                           </div>
                           {i < arr.length - 1 && (
-                            <div className="mx-1.5 md:mx-3 w-6 md:w-10 shrink-0" />
+                            <div className="mx-1 md:mx-2 w-4 md:w-6 shrink-0" />
                           )}
                         </div>
                       );
