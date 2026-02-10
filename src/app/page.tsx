@@ -6,7 +6,7 @@ import { motion } from 'framer-motion';
 export default function Home() {
   const router = useRouter();
 
-  const handleStart = (mode: 'guided' | 'explore') => {
+  const handleStart = (mode: 'guided' | 'explore' | 'build') => {
     if (typeof window !== 'undefined') {
       sessionStorage.setItem('initialMode', mode);
     }
@@ -90,6 +90,20 @@ export default function Home() {
               </p>
               <p className="text-sm text-muted-foreground mt-1">
                 Dive into the 3D knowledge graph directly
+              </p>
+            </div>
+          </button>
+
+          <button
+            onClick={() => handleStart('build')}
+            className="group relative px-8 py-4 rounded-2xl glass-panel hover:shadow-lg transition-all duration-300"
+          >
+            <div className="text-left">
+              <p className="text-lg font-semibold text-[#E88D67] group-hover:text-[#E88D67]/80 transition-colors">
+                Build the Playbook
+              </p>
+              <p className="text-sm text-muted-foreground mt-1">
+                How to build this infrastructure for your organization
               </p>
             </div>
           </button>

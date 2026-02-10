@@ -10,6 +10,7 @@ import LegendPanel from '@/components/graph/LegendPanel';
 import SearchBar from '@/components/graph/SearchBar';
 import ZoomControls from '@/components/graph/ZoomControls';
 import PresentationController from '@/components/presentation/PresentationController';
+import BuildController from '@/components/build/BuildController';
 import ModeToggle from '@/components/graph/ModeToggle';
 import CampaignPanel from '@/components/graph/CampaignMode/CampaignPanel';
 import CampaignSummary from '@/components/graph/CampaignMode/CampaignSummary';
@@ -71,7 +72,7 @@ export default function GraphPage() {
 
   useEffect(() => {
     // Read initial mode from sessionStorage (set by landing page)
-    let savedMode: 'guided' | 'explore' | 'campaign' | null = null;
+    let savedMode: 'guided' | 'explore' | 'campaign' | 'build' | null = null;
     try {
       if (typeof window !== 'undefined') {
         savedMode = sessionStorage.getItem('initialMode') as typeof savedMode;
@@ -95,8 +96,8 @@ export default function GraphPage() {
     setLinearGraphData(linearData);
     setSteps(presentationStepsData as PresentationStep[]);
 
-    // Start with linear view in guided mode, full graph in explore/campaign mode
-    if (activeMode === 'guided') {
+    // Start with linear view in guided/build mode, full graph in explore/campaign mode
+    if (activeMode === 'guided' || activeMode === 'build') {
       setGraphData(linearData);
     } else {
       setGraphData(fullData);
@@ -162,6 +163,8 @@ export default function GraphPage() {
 
       {mode === 'guided' ? (
         <PresentationController />
+      ) : mode === 'build' ? (
+        <BuildController />
       ) : mode === 'campaign' ? (
         <>
           <CampaignPanel />

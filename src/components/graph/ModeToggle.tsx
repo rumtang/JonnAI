@@ -1,14 +1,13 @@
 'use client';
 
 import { useShallow } from 'zustand/react/shallow';
-import { usePresentationStore } from '@/lib/store/presentation-store';
+import { usePresentationStore, type AppMode } from '@/lib/store/presentation-store';
 import { useGraphStore } from '@/lib/store/graph-store';
 import { useCampaignStore } from '@/lib/store/campaign-store';
 import { useRoleInsightStore } from '@/lib/store/role-insight-store';
+import { useBuildStore } from '@/lib/store/build-store';
 import { useIsMobile } from '@/lib/hooks/use-is-mobile';
 import { motion } from 'framer-motion';
-
-type Mode = 'guided' | 'explore' | 'campaign';
 
 export default function ModeToggle() {
   const isMobile = useIsMobile();
@@ -28,7 +27,9 @@ export default function ModeToggle() {
   const startCampaign = useCampaignStore(s => s.startCampaign);
   const resetCampaign = useCampaignStore(s => s.resetCampaign);
 
-  const handleModeChange = (newMode: Mode) => {
+  const resetBuild = useBuildStore(s => s.reset);
+
+  const handleModeChange = (newMode: AppMode) => {
     if (newMode === mode) return;
     setMode(newMode);
     selectNode(null);
@@ -39,25 +40,30 @@ export default function ModeToggle() {
 
     if (newMode === 'guided') {
       resetCampaign();
+      resetBuild();
       reset();
       loadLinearView();
-      // Disable progressive reveal in guided mode
       useGraphStore.setState({ progressiveReveal: false });
     } else if (newMode === 'explore') {
       resetCampaign();
+      resetBuild();
       loadFullGraph();
-      // Re-init progressive reveal with core nodes
       if (fullGraphData) initCoreNodes(fullGraphData);
     } else if (newMode === 'campaign') {
       resetCampaign();
+      resetBuild();
       loadFullGraph();
       startCampaign();
-      // Disable progressive reveal — campaign needs all nodes visible
+      useGraphStore.setState({ progressiveReveal: false });
+    } else if (newMode === 'build') {
+      resetCampaign();
+      resetBuild();
+      loadLinearView();
       useGraphStore.setState({ progressiveReveal: false });
     }
   };
 
-  const modes: { key: Mode; label: string; shortLabel: string; activeColor: string; activeBg: string }[] = [
+  const modes: { key: AppMode; label: string; shortLabel: string; activeColor: string; activeBg: string }[] = [
     {
       key: 'guided',
       label: 'Guided Tour',
@@ -78,6 +84,13 @@ export default function ModeToggle() {
       shortLabel: 'Run',
       activeColor: '#4CAF50',
       activeBg: 'bg-[#4CAF50]/20',
+    },
+    {
+      key: 'build',
+      label: 'Build It',
+      shortLabel: 'Build',
+      activeColor: '#E88D67',
+      activeBg: 'bg-[#E88D67]/20',
     },
   ];
 

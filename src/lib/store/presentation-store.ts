@@ -1,14 +1,16 @@
 import { create } from 'zustand';
 import { PresentationStep } from '../graph/types';
 
+export type AppMode = 'guided' | 'explore' | 'campaign' | 'build';
+
 interface PresentationState {
-  mode: 'guided' | 'explore' | 'campaign';
+  mode: AppMode;
   currentStepIndex: number;
   steps: PresentationStep[];
   isPlaying: boolean;
   isTransitioning: boolean;
 
-  setMode: (mode: 'guided' | 'explore' | 'campaign') => void;
+  setMode: (mode: AppMode) => void;
   setSteps: (steps: PresentationStep[]) => void;
   nextStep: () => void;
   prevStep: () => void;

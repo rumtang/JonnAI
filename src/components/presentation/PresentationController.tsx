@@ -667,7 +667,7 @@ export default function PresentationController() {
         {showInteractionHint && (
           <motion.div
             key="interaction-hint"
-            className="fixed top-6 right-6 z-[60] flex items-center gap-3 px-4 py-2.5 rounded-full glass-panel pointer-events-none"
+            className="fixed top-16 right-6 z-[60] flex items-center gap-3 px-4 py-2.5 rounded-full glass-panel pointer-events-none"
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: 20 }}
