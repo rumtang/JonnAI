@@ -100,6 +100,58 @@ const PIPELINE_AGENTS = [
   { id: 'repurposing-agent', label: 'Repurposing', stageIndex: 5 },
 ];
 
+interface FlyingAgent {
+  id: string;
+  label: string;
+  startX: number; // px from left
+  startY: number; // px from top
+}
+
+// ─── Flying Agent Badge ───────────────────────────────────
+// Independent motion.div that flies from its pipeline position
+// to viewport center, shrinking and fading as it converges.
+function FlyingAgentBadge({
+  agent,
+  index,
+}: {
+  agent: { id: string; label: string; startX: number; startY: number };
+  index: number;
+}) {
+  const centerX = typeof window !== 'undefined' ? window.innerWidth / 2 : 500;
+  const centerY = typeof window !== 'undefined' ? window.innerHeight / 2 : 400;
+
+  return (
+    <motion.div
+      className="absolute px-2 py-1 rounded-md bg-[#5B9ECF]/10 border border-[#5B9ECF]/25 text-[10px] font-medium text-[#5B9ECF] whitespace-nowrap"
+      style={{
+        left: agent.startX,
+        top: agent.startY,
+        // Center the badge on its position
+        transform: 'translate(-50%, -50%)',
+      }}
+      initial={{
+        x: 0,
+        y: 0,
+        scale: 1,
+        opacity: 1,
+      }}
+      animate={{
+        x: centerX - agent.startX,
+        y: centerY - agent.startY,
+        scale: 0.2,
+        opacity: 0,
+      }}
+      transition={{
+        duration: 1.2,
+        delay: index * 0.03,
+        ease: [0.25, 0.1, 0.25, 1], // ease-out with slight acceleration
+      }}
+    >
+      {agent.label}
+    </motion.div>
+  );
+}
+
 export default function PresentationController() {
   const {
     currentStepIndex,
@@ -147,6 +199,12 @@ export default function PresentationController() {
   const scrimOpacity = isTitleSlide ? 0.95 : 0.90;
   const diagramOpacity = 1;
 
+  // ─── Flying Agent Transition (slide 3→4) ─────────────────
+  // When agents exit the pipeline overlay, spawn independent clones
+  // that fly from their 2D column positions toward viewport center.
+  const [flyingAgents, setFlyingAgents] = useState<FlyingAgent[] | null>(null);
+  const prevStepIdRef = useRef<string | null>(null);
+
   // Show interaction hint once when entering full-graph view
   const hintShownRef = useRef(false);
   const [showInteractionHint, setShowInteractionHint] = useState(false);
@@ -158,6 +216,67 @@ export default function PresentationController() {
       return () => clearTimeout(timer);
     }
   }, [showPipelineOverlay, currentStepIndex]);
+
+  // Detect slide 3→4 transition and spawn flying agent badges
+  useEffect(() => {
+    const prev = prevStepIdRef.current;
+    prevStepIdRef.current = currentStep?.id ?? null;
+
+    if (
+      prev === 'act2-agents-and-context' &&
+      currentStep?.id === 'act3-graph-reveal' &&
+      !flyingAgents
+    ) {
+      // Calculate approximate screen position for each agent badge.
+      // The pipeline is a centered flex row of 6 stage columns.
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+
+      // Each stage column is ~80px wide (w-16 md:w-20) + gap spacer (~24px)
+      // Total width ≈ 6 * 80 + 5 * 24 = 600px, centered
+      const colWidth = vw < 768 ? 64 : 80;
+      const gapWidth = vw < 768 ? 12 : 24;
+      const totalWidth = 6 * colWidth + 5 * gapWidth;
+      const startX = (vw - totalWidth) / 2;
+
+      // The pipeline sits roughly at vertical center minus the y-offset
+      // from the animate transform (y: -40 on slide 3). Agent badges are
+      // below the stage boxes: ~64px (box) + ~20px (label) + ~20px (margin)
+      // + connector line + stacked badges.
+      const pipelineCenterY = vh / 2 - 40;
+      const badgeStartY = pipelineCenterY + 70; // below stage label
+
+      const agents: FlyingAgent[] = PIPELINE_AGENTS.map((agent) => {
+        const stageAgentsBefore = PIPELINE_AGENTS.filter(
+          (a) => a.stageIndex === agent.stageIndex
+        );
+        const indexInStack = stageAgentsBefore.indexOf(agent);
+
+        // Column center x for this stage
+        const colCenterX =
+          startX + agent.stageIndex * (colWidth + gapWidth) + colWidth / 2;
+
+        // Vertical offset: connector (16px) + each badge ~28px apart
+        const y = badgeStartY + 16 + indexInStack * 28;
+
+        return {
+          id: agent.id,
+          label: agent.label,
+          startX: colCenterX,
+          startY: y,
+        };
+      });
+
+      setFlyingAgents(agents);
+
+      // Clear after cascade + animation completes
+      const clearTimer = setTimeout(() => {
+        setFlyingAgents(null);
+      }, 1700);
+
+      return () => clearTimeout(clearTimer);
+    }
+  }, [currentStep?.id, flyingAgents]);
 
   const exitToExplore = useCallback(() => {
     clearHighlights();
@@ -488,6 +607,17 @@ export default function PresentationController() {
           >
             <div className="absolute inset-0 bg-background backdrop-blur-sm" />
           </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* ─── Flying Agent Badges (slide 3→4 transition) ─────── */}
+      <AnimatePresence>
+        {flyingAgents && (
+          <div className="fixed inset-0 z-[52] pointer-events-none">
+            {flyingAgents.map((agent, i) => (
+              <FlyingAgentBadge key={agent.id} agent={agent} index={i} />
+            ))}
+          </div>
         )}
       </AnimatePresence>
 
