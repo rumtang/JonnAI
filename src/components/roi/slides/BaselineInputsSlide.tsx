@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { Slider } from '@/components/ui/slider';
 import { useRoiStore } from '@/lib/store/roi-store';
@@ -16,11 +16,57 @@ interface BaselineInputsSlideProps {
 
 // ─── Format Helpers ──────────────────────────────────────────────────
 function formatCurrency(v: number): string {
-  if (v >= 1_000_000_000) return `$${(v / 1_000_000_000).toFixed(1)}B`;
-  if (v >= 1_000_000) return `$${(v / 1_000_000).toFixed(1)}M`;
-  if (v >= 1_000) return `$${(v / 1_000).toFixed(0)}K`;
-  return `$${v}`;
+  if (Math.abs(v) >= 1_000_000_000) return `$${(v / 1_000_000_000).toFixed(1)}B`;
+  if (Math.abs(v) >= 1_000_000) return `$${(v / 1_000_000).toFixed(1)}M`;
+  if (Math.abs(v) >= 1_000) return `$${Math.round(v / 1_000).toLocaleString()}K`;
+  return `$${Math.round(v).toLocaleString()}`;
 }
+
+function formatWithCommas(v: number): string {
+  return v.toLocaleString('en-US');
+}
+
+// ─── Log-Scale Utilities ─────────────────────────────────────────────
+// Maps a linear slider (0-STEPS) to a logarithmic value range.
+// This lets a single slider cover $100M to $750B without being
+// unusable at the low end (where most companies live).
+const LOG_STEPS = 1000;
+
+function logToPosition(min: number, max: number, value: number): number {
+  const clamped = Math.max(min, Math.min(max, value));
+  const logMin = Math.log(min);
+  const logMax = Math.log(max);
+  return Math.round(((Math.log(clamped) - logMin) / (logMax - logMin)) * LOG_STEPS);
+}
+
+function positionToLog(min: number, max: number, position: number): number {
+  const logMin = Math.log(min);
+  const logMax = Math.log(max);
+  return Math.exp(logMin + (position / LOG_STEPS) * (logMax - logMin));
+}
+
+// Snap to nice round numbers at each magnitude
+function snapRevenue(v: number): number {
+  if (v < 500_000_000)     return Math.round(v / 25_000_000) * 25_000_000;       // nearest $25M
+  if (v < 5_000_000_000)   return Math.round(v / 100_000_000) * 100_000_000;     // nearest $100M
+  if (v < 50_000_000_000)  return Math.round(v / 500_000_000) * 500_000_000;     // nearest $500M
+  if (v < 200_000_000_000) return Math.round(v / 5_000_000_000) * 5_000_000_000; // nearest $5B
+  return Math.round(v / 25_000_000_000) * 25_000_000_000;                         // nearest $25B
+}
+
+function snapInvestment(v: number): number {
+  if (v < 1_000_000)  return Math.round(v / 25_000) * 25_000;      // nearest $25K
+  if (v < 5_000_000)  return Math.round(v / 100_000) * 100_000;    // nearest $100K
+  if (v < 25_000_000) return Math.round(v / 500_000) * 500_000;    // nearest $500K
+  return Math.round(v / 1_000_000) * 1_000_000;                     // nearest $1M
+}
+
+// Revenue range: covers mid-market ($100M) through top of S&P ($750B)
+const REVENUE_MIN = 100_000_000;
+const REVENUE_MAX = 750_000_000_000;
+// Investment range: small pilot ($250K) through mega-enterprise ($100M)
+const INVESTMENT_MIN = 250_000;
+const INVESTMENT_MAX = 100_000_000;
 
 // ─── Slider Row with Benchmark ───────────────────────────────────────
 interface SliderRowProps {
@@ -51,7 +97,7 @@ function SliderRow({
       <div className="flex items-center justify-between">
         <span className="text-[9px] text-muted-foreground">{label}</span>
         <span className="text-[10px] font-semibold" style={{ color }}>
-          {format ? format(value) : value}
+          {format ? format(value) : value.toLocaleString()}
         </span>
       </div>
       <Slider
@@ -60,6 +106,67 @@ function SliderRow({
         max={max}
         step={step}
         onValueChange={([v]) => onChange(v)}
+        className="[&_[data-slot=slider-range]]:bg-[#14B8A6] [&_[data-slot=slider-thumb]]:border-[#14B8A6]"
+      />
+      {benchmark && (
+        <div className="text-[8px] text-muted-foreground/50 italic">{benchmark}</div>
+      )}
+    </div>
+  );
+}
+
+// ─── Log-Scale Slider Row ────────────────────────────────────────────
+// Uses logarithmic mapping so both $100M and $500B are equally easy to select.
+interface LogSliderRowProps {
+  label: string;
+  value: number;
+  logMin: number;
+  logMax: number;
+  snapFn: (v: number) => number;
+  format?: (v: number) => string;
+  onChange: (v: number) => void;
+  color?: string;
+  benchmark?: React.ReactNode;
+}
+
+function LogSliderRow({
+  label,
+  value,
+  logMin,
+  logMax,
+  snapFn,
+  format,
+  onChange,
+  color = '#14B8A6',
+  benchmark,
+}: LogSliderRowProps) {
+  const position = useMemo(
+    () => logToPosition(logMin, logMax, value),
+    [logMin, logMax, value],
+  );
+
+  const handleChange = useCallback(
+    ([pos]: number[]) => {
+      const raw = positionToLog(logMin, logMax, pos);
+      onChange(snapFn(raw));
+    },
+    [logMin, logMax, snapFn, onChange],
+  );
+
+  return (
+    <div className="space-y-1">
+      <div className="flex items-center justify-between">
+        <span className="text-[9px] text-muted-foreground">{label}</span>
+        <span className="text-[10px] font-semibold" style={{ color }}>
+          {format ? format(value) : value.toLocaleString()}
+        </span>
+      </div>
+      <Slider
+        value={[position]}
+        min={0}
+        max={LOG_STEPS}
+        step={1}
+        onValueChange={handleChange}
         className="[&_[data-slot=slider-range]]:bg-[#14B8A6] [&_[data-slot=slider-thumb]]:border-[#14B8A6]"
       />
       {benchmark && (
@@ -81,30 +188,28 @@ export default function BaselineInputsSlide({ step }: BaselineInputsSlideProps) 
 
   // Local state for the investment text input — enables bidirectional sync
   const [investmentText, setInvestmentText] = useState(
-    String(investment.totalInvestmentAmount)
+    formatWithCommas(investment.totalInvestmentAmount)
   );
 
-  // Handle slider change → update text field
+  // Handle log slider change → update text field
   const handleInvestmentSlider = useCallback((v: number) => {
     setInvestment({ totalInvestmentAmount: v });
-    setInvestmentText(String(v));
+    setInvestmentText(formatWithCommas(v));
   }, [setInvestment]);
 
   // Handle text input change → update slider
   const handleInvestmentInput = useCallback((raw: string) => {
-    // Allow the user to type freely
     setInvestmentText(raw);
-
-    // Parse and clamp to valid range
+    // Strip commas and non-digits to parse
     const parsed = parseInt(raw.replace(/[^0-9]/g, ''), 10);
-    if (!isNaN(parsed) && parsed >= 500_000 && parsed <= 25_000_000) {
+    if (!isNaN(parsed) && parsed >= INVESTMENT_MIN && parsed <= INVESTMENT_MAX) {
       setInvestment({ totalInvestmentAmount: parsed });
     }
   }, [setInvestment]);
 
-  // On blur, snap text to current store value
+  // On blur, snap text to current store value with commas
   const handleInvestmentBlur = useCallback(() => {
-    setInvestmentText(String(investment.totalInvestmentAmount));
+    setInvestmentText(formatWithCommas(investment.totalInvestmentAmount));
   }, [investment.totalInvestmentAmount]);
 
   // Derived metrics
@@ -166,16 +271,16 @@ export default function BaselineInputsSlide({ step }: BaselineInputsSlideProps) 
                 </p>
               </div>
 
-              <SliderRow
+              <LogSliderRow
                 label="Annual Revenue"
                 value={org.annualRevenue}
-                min={100_000_000}
-                max={25_000_000_000}
-                step={100_000_000}
+                logMin={REVENUE_MIN}
+                logMax={REVENUE_MAX}
+                snapFn={snapRevenue}
                 format={formatCurrency}
                 onChange={(v) => setOrg({ annualRevenue: v })}
                 color="#5B9ECF"
-                benchmark="Range: $100M to $25B"
+                benchmark="Log scale: $100M to $750B (full S&P 500 range)"
               />
               <SliderRow
                 label="Marketing Budget (% of Revenue)"
@@ -195,19 +300,20 @@ export default function BaselineInputsSlide({ step }: BaselineInputsSlideProps) 
               <SliderRow
                 label="Marketing Headcount"
                 value={org.marketingHeadcount}
-                min={50}
-                max={2000}
+                min={10}
+                max={5000}
                 step={10}
+                format={(v) => v.toLocaleString()}
                 onChange={(v) => setOrg({ marketingHeadcount: v })}
                 color="#5B9ECF"
-                benchmark="~10 FTEs per $100M budget"
+                benchmark="~10 FTEs per $100M budget (declines at mega-scale)"
               />
               <SliderRow
                 label="Avg Loaded FTE Cost"
                 value={org.avgLoadedFteCost}
-                min={100_000}
+                min={80_000}
                 max={400_000}
-                step={10_000}
+                step={5_000}
                 format={formatCurrency}
                 onChange={(v) => setOrg({ avgLoadedFteCost: v })}
                 color="#5B9ECF"
@@ -228,7 +334,7 @@ export default function BaselineInputsSlide({ step }: BaselineInputsSlideProps) 
               <span>💎</span> Transformation Investment
             </h4>
             <div className="space-y-3">
-              {/* Investment amount: slider + text input side by side */}
+              {/* Investment amount: log slider + text input side by side */}
               <div className="space-y-1">
                 <div className="flex items-center justify-between">
                   <span className="text-[9px] text-muted-foreground">Total Investment</span>
@@ -237,33 +343,33 @@ export default function BaselineInputsSlide({ step }: BaselineInputsSlideProps) 
                     value={investmentText}
                     onChange={(e) => handleInvestmentInput(e.target.value)}
                     onBlur={handleInvestmentBlur}
-                    className="w-28 text-right text-[10px] font-semibold text-[#14B8A6] bg-white/5 border border-muted-foreground/20 rounded px-2 py-0.5 backdrop-blur-sm focus:outline-none focus:ring-1 focus:ring-[#14B8A6]/50"
+                    className="w-32 text-right text-[10px] font-semibold text-[#14B8A6] bg-white/5 border border-muted-foreground/20 rounded px-2 py-0.5 backdrop-blur-sm focus:outline-none focus:ring-1 focus:ring-[#14B8A6]/50"
                     style={{ fontVariantNumeric: 'tabular-nums' }}
                   />
                 </div>
-                <Slider
-                  value={[investment.totalInvestmentAmount]}
-                  min={500_000}
-                  max={25_000_000}
-                  step={100_000}
-                  onValueChange={([v]) => handleInvestmentSlider(v)}
-                  className="[&_[data-slot=slider-range]]:bg-[#14B8A6] [&_[data-slot=slider-thumb]]:border-[#14B8A6]"
+                <LogSliderRow
+                  label=""
+                  value={investment.totalInvestmentAmount}
+                  logMin={INVESTMENT_MIN}
+                  logMax={INVESTMENT_MAX}
+                  snapFn={snapInvestment}
+                  format={formatCurrency}
+                  onChange={handleInvestmentSlider}
+                  color="#14B8A6"
+                  benchmark="Log scale: $250K to $100M"
                 />
-                <p className="text-[8px] text-muted-foreground/50 italic">
-                  Enterprise range: $1M-$10M typical
-                </p>
               </div>
 
               <SliderRow
                 label="Implementation Timeline"
                 value={investment.implementationWeeks}
-                min={12}
-                max={104}
-                step={2}
+                min={8}
+                max={156}
+                step={4}
                 format={(v) => `${Math.round(v / 4.33)} months (${v} weeks)`}
                 onChange={(v) => setInvestment({ implementationWeeks: v })}
                 color="#14B8A6"
-                benchmark="Enterprise phased build: 6-18 months typical"
+                benchmark="Enterprise phased build: 6-24 months typical"
               />
             </div>
           </motion.div>

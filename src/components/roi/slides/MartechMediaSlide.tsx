@@ -16,10 +16,10 @@ interface MartechMediaSlideProps {
 
 // ─── Format Helpers ──────────────────────────────────────────────────
 function formatCurrency(v: number): string {
-  if (v >= 1_000_000_000) return `$${(v / 1_000_000_000).toFixed(1)}B`;
-  if (v >= 1_000_000) return `$${(v / 1_000_000).toFixed(1)}M`;
-  if (v >= 1_000) return `$${(v / 1_000).toFixed(0)}K`;
-  return `$${v}`;
+  if (Math.abs(v) >= 1_000_000_000) return `$${(v / 1_000_000_000).toFixed(1)}B`;
+  if (Math.abs(v) >= 1_000_000) return `$${(v / 1_000_000).toFixed(1)}M`;
+  if (Math.abs(v) >= 1_000) return `$${Math.round(v / 1_000).toLocaleString()}K`;
+  return `$${Math.round(v).toLocaleString()}`;
 }
 
 // ─── Utilization color based on health ───────────────────────────────
@@ -58,7 +58,7 @@ function SliderRow({
       <div className="flex items-center justify-between">
         <span className="text-[9px] text-muted-foreground">{label}</span>
         <span className="text-[10px] font-semibold" style={{ color }}>
-          {format ? format(value) : value}
+          {format ? format(value) : value.toLocaleString()}
         </span>
       </div>
       <Slider
@@ -139,11 +139,11 @@ export default function MartechMediaSlide({ step }: MartechMediaSlideProps) {
                 label="Number of Martech Tools"
                 value={martech.martechToolCount}
                 min={20}
-                max={300}
+                max={500}
                 step={5}
                 onChange={(v) => setMartech({ martechToolCount: v })}
                 color="#E88D67"
-                benchmark="Enterprise average: 120 tools"
+                benchmark="Enterprise average: 120; mega-enterprise: 300-500"
               />
               {/* Utilization with dynamic color */}
               <div className="space-y-1">

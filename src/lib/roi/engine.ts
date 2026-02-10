@@ -106,10 +106,10 @@ export const SOURCE_ATTRIBUTION: Record<string, { source: string; confidence: Co
 
 /** Revenue-anchored org profile. Everything cascades from annualRevenue. */
 export interface OrganizationProfile {
-  annualRevenue: number;              // $100M – $25B
+  annualRevenue: number;              // $100M – $750B (log-scale slider)
   marketingBudgetPct: number;         // % of revenue (Gartner 2025: 7.7%)
-  marketingHeadcount: number;         // 50–2000+
-  avgLoadedFteCost: number;           // $100K–$400K fully loaded
+  marketingHeadcount: number;         // 10–5,000
+  avgLoadedFteCost: number;           // $80K–$400K fully loaded
   industry?: string;                  // Industry vertical for benchmark defaults
 }
 
@@ -124,8 +124,8 @@ export interface MartechAndMedia {
 
 /** Campaign and content volume at enterprise scale. */
 export interface ContentAndCampaignOps {
-  monthlyCampaigns: number;           // 10–500
-  monthlyContentAssets: number;       // 50–2000
+  monthlyCampaigns: number;           // 10–2,000
+  monthlyContentAssets: number;       // 50–10,000
   avgCampaignCycleWeeks: number;      // Derived from distribution below
   channelCount: number;               // 3–20
   agencyPctOfBudget: number;          // 5–30%
@@ -164,8 +164,8 @@ export interface OperationalPain {
 
 /** User-configurable investment — no longer hardcoded. */
 export interface TransformationInvestment {
-  totalInvestmentAmount: number;      // $500K – $25M, default ~$3M
-  implementationWeeks: number;        // 12–104 (~3–24 months), default 28
+  totalInvestmentAmount: number;      // $250K – $100M (log-scale slider), default ~$3M
+  implementationWeeks: number;        // 8–156 (~2–36 months), default 28
 }
 
 /** Improvement assumptions — independently-verified conservative levels, not UI-exposed. */

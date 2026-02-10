@@ -42,7 +42,7 @@ function SliderRow({
       <div className="flex items-center justify-between">
         <span className="text-[9px] text-muted-foreground">{label}</span>
         <span className="text-[10px] font-semibold" style={{ color }}>
-          {format ? format(value) : value}
+          {format ? format(value) : value.toLocaleString()}
         </span>
       </div>
       <Slider
@@ -163,21 +163,21 @@ export default function OpsContentSlide({ step }: OpsContentSlideProps) {
                 label="Monthly Campaigns"
                 value={ops.monthlyCampaigns}
                 min={10}
-                max={500}
+                max={2000}
                 step={10}
                 onChange={(v) => setOps({ monthlyCampaigns: v })}
                 color="#C9A04E"
-                benchmark="Enterprise scale: 50-200/month"
+                benchmark="Enterprise: 50-200/mo, mega-enterprise: 500-2,000"
               />
               <SliderRow
                 label="Monthly Content Assets"
                 value={ops.monthlyContentAssets}
                 min={50}
-                max={2000}
+                max={10000}
                 step={50}
                 onChange={(v) => setOps({ monthlyContentAssets: v })}
                 color="#C9A04E"
-                benchmark="Enterprise content framework: 200-800"
+                benchmark="Enterprise: 200-800, mega-enterprise: 2,000-10,000"
               />
               <SliderRow
                 label="Avg Campaign Cycle (weeks)"
