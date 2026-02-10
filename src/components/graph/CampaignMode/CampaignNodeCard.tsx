@@ -85,7 +85,7 @@ export default function CampaignNodeCard() {
   }
 
   return (
-    <div className="flex-1 overflow-y-auto">
+    <div>
       {/* ── Tier 1: Narrative content ─────────────────── */}
 
       {/* Node header with narrative headline */}
@@ -106,6 +106,16 @@ export default function CampaignNodeCard() {
           </div>
         </div>
       </div>
+
+      {/* Step owner — prominent badge */}
+      {currentNode.type === 'step' && (currentNode.meta as StepMeta)?.owner && (
+        <div className="mb-3">
+          <OwnerBadge
+            owner={(currentNode.meta as StepMeta).owner}
+            agentName={(currentNode.meta as StepMeta).agentName}
+          />
+        </div>
+      )}
 
       {/* Lede — replaces the dry description */}
       <p className="text-sm text-foreground/80 mb-4 leading-relaxed">{narrative.lede}</p>
@@ -201,6 +211,25 @@ export default function CampaignNodeCard() {
   );
 }
 
+/* ── Owner badge — prominent step ownership indicator ──── */
+
+const OWNER_CONFIG: Record<string, { label: string; icon: string; bg: string; border: string; text: string }> = {
+  agent:  { label: 'AI Agent',    icon: '\uD83E\uDD16', bg: 'bg-[#9B7ACC]/15', border: 'border-[#9B7ACC]/30', text: 'text-[#9B7ACC]' },
+  human:  { label: 'Human',       icon: '\uD83D\uDC64', bg: 'bg-[#5B9ECF]/15', border: 'border-[#5B9ECF]/30', text: 'text-[#5B9ECF]' },
+  shared: { label: 'Human + AI',  icon: '\uD83E\uDD1D', bg: 'bg-[#C9A04E]/15', border: 'border-[#C9A04E]/30', text: 'text-[#C9A04E]' },
+};
+
+function OwnerBadge({ owner, agentName }: { owner: string; agentName?: string }) {
+  const c = OWNER_CONFIG[owner] || OWNER_CONFIG.shared;
+  const label = owner === 'agent' && agentName ? agentName : c.label;
+  return (
+    <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full ${c.bg} border ${c.border}`}>
+      <span className="text-sm">{c.icon}</span>
+      <span className={`text-xs font-semibold ${c.text}`}>{label}</span>
+    </div>
+  );
+}
+
 /* ── Block type visual styles ─────────────────────────── */
 
 const BLOCK_CONFIG: Record<string, {
@@ -285,7 +314,7 @@ function FallbackCard({
   onDecision: (d: string) => void;
 }) {
   return (
-    <div className="flex-1 overflow-y-auto">
+    <div>
       <div className="flex items-center gap-3 mb-4">
         <div
           className="w-10 h-10 rounded-lg flex items-center justify-center text-lg"
@@ -300,6 +329,16 @@ function FallbackCard({
           </Badge>
         </div>
       </div>
+
+      {/* Step owner — prominent badge */}
+      {currentNode.type === 'step' && (currentNode.meta as StepMeta)?.owner && (
+        <div className="mb-3">
+          <OwnerBadge
+            owner={(currentNode.meta as StepMeta).owner}
+            agentName={(currentNode.meta as StepMeta).agentName}
+          />
+        </div>
+      )}
 
       <p className="text-sm text-muted-foreground mb-4">{currentNode.description}</p>
 
