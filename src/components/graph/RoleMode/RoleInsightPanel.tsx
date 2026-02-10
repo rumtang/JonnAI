@@ -228,7 +228,7 @@ export default function RoleInsightPanel({ onChangeRole }: RoleInsightPanelProps
                 {/* Journey tiles — all 3 stages for primary nodes */}
                 {nodeJourney && (
                   <div className="mb-4 space-y-2">
-                    <p className="text-[10px] uppercase tracking-wider text-muted-foreground/60 mb-2">How this role evolves</p>
+                    <p className="text-[10px] uppercase tracking-wider text-muted-foreground/60 mb-2">How involvement in this step evolves</p>
                     <JourneyTile
                       key={`${currentNodeId}-preAI`}
                       stageName="preAI"
