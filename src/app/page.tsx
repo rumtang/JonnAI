@@ -56,7 +56,7 @@ export default function Home() {
           className="text-lg text-muted-foreground mb-12 max-w-xl mx-auto leading-relaxed"
         >
           Why building a semantic knowledge layer matters more than bolting AI agents onto linear processes.
-          Explore the real complexity of content production workflows.
+          Explore the real complexity of marketing campaign workflows.
         </motion.p>
 
         {/* Mode selection buttons */}

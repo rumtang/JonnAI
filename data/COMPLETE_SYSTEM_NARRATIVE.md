@@ -1,4 +1,4 @@
-# Complete System Narrative — Agentic Content Production Graph
+# Complete System Narrative — Agentic Marketing Campaign Graph
 
 > **Purpose of this document:** This is the single source of truth for every piece of text, narrative, relationship, and structural metadata in the Agentic project. It is designed so that Claude Opus 4.6 (or any LLM) can read this one file and fully understand: what the system is, how every piece connects, what the narrative says, and why each design decision was made.
 
@@ -32,7 +32,7 @@
 
 ## 1. System Overview
 
-This project is a **3D interactive visualization** of a complete content production operating system for enterprise marketing. It renders 75 nodes and 150+ directed links as a force-directed 3D graph using Three.js and react-force-graph-3d inside a Next.js 16 application.
+This project is a **3D interactive visualization** of a complete marketing campaign operating system for enterprise marketing. It renders 75 nodes and 150+ directed links as a force-directed 3D graph using Three.js and react-force-graph-3d inside a Next.js 16 application.
 
 The visualization serves two audiences:
 - **CMOs and marketing leaders** who need to see how AI agents fit into their content workflow
@@ -62,7 +62,7 @@ This asymmetry (linear improvement from agents vs. multiplicative improvement fr
 
 ## 3. The 6-Phase Model
 
-The content production lifecycle has 6 phases. These map to the `group` field on every step and gate node.
+The marketing campaign lifecycle has 6 phases. These map to the `group` field on every step and gate node.
 
 | Phase | What Happens | Key Question |
 |-------|-------------|--------------|
@@ -1247,7 +1247,7 @@ Each role maps to specific nodes in the graph and carries a transformation narra
 
 The presentation is a guided narrative delivered through 6 slides. Each slide controls the 3D camera position, which nodes are visible, and which link types are highlighted. The slides build a progressive argument from simple pipeline → real complexity → strategic infrastructure → human elevation → closing argument.
 
-### Slide 1: "The Content Production Lifecycle" (act1-title)
+### Slide 1: "The Marketing Campaign Lifecycle" (act1-title)
 - Narration: (none — title card)
 - Graph state: linear | Action: show-title-slide
 

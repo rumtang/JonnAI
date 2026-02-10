@@ -527,7 +527,7 @@ export default function PresentationController() {
                 className="text-4xl md:text-5xl font-bold mb-4 leading-tight font-[family-name:var(--font-playfair)]"
               >
                 <span className="bg-gradient-to-r from-[#C9A04E] via-[#5B9ECF] to-[#9B7ACC] bg-clip-text text-transparent">
-                  The Content Production Lifecycle
+                  The Marketing Campaign Lifecycle
                 </span>
               </motion.h1>
 

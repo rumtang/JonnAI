@@ -1,8 +1,8 @@
 // ─── Node Types ───────────────────────────────────────────────
-// Simplified from 8 types to 4 for content-production focus.
+// Simplified from 8 types to 4 for marketing-campaign focus.
 
 export type NodeType =
-  | 'step'     // Concrete action in the content production lifecycle
+  | 'step'     // Concrete action in the marketing campaign lifecycle
   | 'gate'     // Checkpoint where work is reviewed / approved / sent back
   | 'agent'    // AI agent that performs work
   | 'input';   // Data, document, or tool that feeds the process

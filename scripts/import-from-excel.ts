@@ -292,7 +292,7 @@ ${njEntries.join(',\n')},
   }`;
   });
 
-  return `// Role definitions derived from the content production graph's gate reviewers
+  return `// Role definitions derived from the marketing campaign graph's gate reviewers
 // and step owners. Each role maps to specific nodes and carries narrative insight.
 
 export type RoleCategory = 'strategy' | 'creative' | 'governance' | 'operations' | 'growth';
