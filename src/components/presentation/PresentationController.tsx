@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { usePresentationStore } from '@/lib/store/presentation-store';
 import { useGraphStore } from '@/lib/store/graph-store';
 import { getGraphRef } from '@/lib/graph/graph-ref';
-import { ChevronLeft, ChevronRight, Play, Pause, Compass, Mouse } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Play, Pause, Compass, Mouse, Users, Layers } from 'lucide-react';
 import { GraphNode, GraphLink, StepMeta } from '@/lib/graph/types';
 
 // ─── Process Chart Layout ────────────────────────────────────
@@ -820,6 +820,36 @@ export default function PresentationController() {
                 <p className="text-muted-foreground text-sm leading-relaxed">
                   {currentStep.narration}
                 </p>
+
+                {/* End-of-tour CTA — only on last slide */}
+                {currentStepIndex === steps.length - 1 && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 1.2, duration: 0.5 }}
+                    className="mt-4 pt-4 border-t border-muted-foreground/10"
+                  >
+                    <p className="text-xs text-muted-foreground/70 mb-3">
+                      Explore the intelligence layer and see the impact per role
+                    </p>
+                    <div className="flex items-center gap-3">
+                      <button
+                        onClick={exitToExplore}
+                        className="flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold transition-all hover:shadow-lg bg-[#9B7ACC]/10 text-[#9B7ACC] hover:bg-[#9B7ACC]/20"
+                      >
+                        <Layers className="w-3.5 h-3.5" />
+                        Explore the Graph
+                      </button>
+                      <button
+                        onClick={exitToExplore}
+                        className="flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold transition-all hover:shadow-lg bg-[#C9A04E]/10 text-[#C9A04E] hover:bg-[#C9A04E]/20"
+                      >
+                        <Users className="w-3.5 h-3.5" />
+                        Impact Per Role
+                      </button>
+                    </div>
+                  </motion.div>
+                )}
               </motion.div>
             </AnimatePresence>
           </motion.div>
