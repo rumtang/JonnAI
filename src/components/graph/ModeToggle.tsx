@@ -6,6 +6,7 @@ import { useGraphStore } from '@/lib/store/graph-store';
 import { useCampaignStore } from '@/lib/store/campaign-store';
 import { useRoleInsightStore } from '@/lib/store/role-insight-store';
 import { useBuildStore } from '@/lib/store/build-store';
+import { getGraphRef } from '@/lib/graph/graph-ref';
 import { useIsMobile } from '@/lib/hooks/use-is-mobile';
 import { motion } from 'framer-motion';
 
@@ -38,28 +39,41 @@ export default function ModeToggle() {
     clearNavigation();
     useRoleInsightStore.getState().clearRole();
 
+    // Fly camera to a sensible default for each mode so the user
+    // always gets a clean, re-centered view on tab switch.
+    const fg = getGraphRef();
+    const origin = { x: 0, y: 0, z: 0 };
+
     if (newMode === 'guided') {
       resetCampaign();
       resetBuild();
       reset();
       loadLinearView();
       useGraphStore.setState({ progressiveReveal: false });
+      // Title slide position — PresentationController will refine on step execute
+      fg?.cameraPosition({ x: 0, y: 0, z: 800 }, origin, 1500);
     } else if (newMode === 'explore') {
       resetCampaign();
       resetBuild();
       loadFullGraph();
       if (fullGraphData) initCoreNodes(fullGraphData);
+      // Centered overview of full graph
+      fg?.cameraPosition({ x: 0, y: 0, z: 520 }, origin, 1500);
     } else if (newMode === 'campaign') {
       resetCampaign();
       resetBuild();
       loadFullGraph();
       startCampaign();
       useGraphStore.setState({ progressiveReveal: false });
+      // Brief overview before the campaign useEffect flies to the first node
+      fg?.cameraPosition({ x: 0, y: 0, z: 520 }, origin, 1200);
     } else if (newMode === 'build') {
       resetCampaign();
       resetBuild();
       loadLinearView();
       useGraphStore.setState({ progressiveReveal: false });
+      // Linear view — same as guided title position
+      fg?.cameraPosition({ x: 0, y: 0, z: 800 }, origin, 1500);
     }
   };
 
