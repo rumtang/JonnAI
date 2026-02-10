@@ -209,12 +209,40 @@ export const ROLE_DEFINITIONS: RoleDefinition[] = [
     iconName: 'PenTool',
     category: 'creative',
     accentColor: '#9B7ACC',
-    ownedSteps: ['final-edit'],
+    ownedSteps: ['draft-content', 'seo-optimization', 'final-edit', 'accessibility-check'],
     reviewedGates: ['quality-check'],
-    relatedAgents: ['writer-agent', 'seo-agent'],
-    relatedInputs: ['brand-guide', 'seo-tools'],
+    relatedAgents: ['writer-agent', 'seo-agent', 'accessibility-agent'],
+    relatedInputs: ['brand-guide', 'seo-tools', 'accessibility-standards'],
     narrative: {
       nodeJourneys: {
+        'draft-content': {
+          preAI: {
+            summary: 'You either write the first draft yourself or heavily rewrite whatever a junior writer produces.',
+            detail: 'Drafting depends on your availability and expertise. Quality is inconsistent because different writers interpret the brief differently, and you catch problems only at final edit.',
+          },
+          aiAgents: {
+            summary: 'An AI writer produces a structured first draft from the approved brief — you shape the narrative rather than starting from blank.',
+            detail: 'Drafts arrive with correct structure, keyword integration, and brand voice applied. Your role shifts from generating words to evaluating whether the argument holds together.',
+          },
+          aiAgentic: {
+            summary: 'Routine content drafts itself end-to-end — you engage only when the brief requires original thinking or creative risk.',
+            detail: 'The system handles formulaic content autonomously. Your editorial involvement concentrates on the 20% of content where narrative craft genuinely differentiates the output.',
+          },
+        },
+        'seo-optimization': {
+          preAI: {
+            summary: 'You or a specialist manually insert keywords, write meta descriptions, and restructure headings for search performance.',
+            detail: 'SEO optimization is often an afterthought bolted onto finished drafts. It frequently conflicts with narrative flow, forcing trade-offs between readability and search ranking.',
+          },
+          aiAgents: {
+            summary: 'An SEO agent optimizes keyword placement, meta tags, and heading structure automatically while preserving your editorial intent.',
+            detail: 'SEO becomes a parallel process, not a sequential bottleneck. You review the agent\'s changes to ensure optimization hasn\'t flattened the voice or distorted the argument.',
+          },
+          aiAgentic: {
+            summary: 'SEO optimization is embedded in the drafting process — content is born search-ready without a separate optimization step.',
+            detail: 'The system integrates SEO constraints during creation rather than retrofitting them. You audit edge cases where search optimization and editorial quality genuinely conflict.',
+          },
+        },
         'final-edit': {
           preAI: {
             summary: 'You\'re the last person to touch every piece — refining narrative flow, checking facts, and polishing the final draft.',
@@ -241,6 +269,20 @@ export const ROLE_DEFINITIONS: RoleDefinition[] = [
           aiAgentic: {
             summary: 'High-scoring content auto-passes the quality gate — you review only pieces where automated scores diverge from editorial intuition.',
             detail: 'The gate self-operates for standard content. You engage when something scores well technically but feels wrong editorially — the gap no algorithm closes.',
+          },
+        },
+        'accessibility-check': {
+          preAI: {
+            summary: 'You check alt text, heading hierarchy, and inclusive language manually — often as an afterthought before publication.',
+            detail: 'Accessibility compliance is inconsistent because it depends on individual awareness. Issues are caught late, creating rework at the worst possible moment in the pipeline.',
+          },
+          aiAgents: {
+            summary: 'An accessibility agent scans for WCAG violations, missing alt text, and non-inclusive language before content reaches your review.',
+            detail: 'Technical compliance is pre-validated. You focus on whether the content genuinely communicates across ability levels, not whether it passes a checklist.',
+          },
+          aiAgentic: {
+            summary: 'Accessibility compliance is built into the creation process — content that fails standards is blocked before it reaches your desk.',
+            detail: 'The system enforces accessibility at every step. You engage only when inclusive communication requires editorial judgment — tone for sensitive audiences, language that respects without patronizing.',
           },
         },
       },
@@ -417,10 +459,10 @@ export const ROLE_DEFINITIONS: RoleDefinition[] = [
     iconName: 'Lightbulb',
     category: 'strategy',
     accentColor: '#6BAED6',
-    ownedSteps: ['research-insights'],
+    ownedSteps: ['research-insights', 'competitive-response'],
     reviewedGates: [],
     relatedAgents: ['research-agent'],
-    relatedInputs: ['content-strategy', 'audience-personas', 'analytics-data'],
+    relatedInputs: ['content-strategy', 'audience-personas', 'analytics-data', 'competitor-library'],
     narrative: {
       nodeJourneys: {
         'research-insights': {
@@ -437,6 +479,20 @@ export const ROLE_DEFINITIONS: RoleDefinition[] = [
             detail: 'One well-maintained strategy doc silently improves the output of every agent and every gate. The better your frameworks, the better the entire system performs.',
           },
         },
+        'competitive-response': {
+          preAI: {
+            summary: 'You monitor competitors manually and decide when to create reactive content — usually days after the window closes.',
+            detail: 'Competitive intelligence is ad hoc. By the time you spot a competitor move, brief a writer, and get through approvals, the moment has passed.',
+          },
+          aiAgents: {
+            summary: 'A research agent surfaces competitive signals in real time — you decide which ones warrant a strategic response.',
+            detail: 'Signals arrive pre-analyzed with context. You evaluate whether a competitor move deserves counter-messaging or whether silence is the better strategy.',
+          },
+          aiAgentic: {
+            summary: 'Competitive signals auto-trigger response briefs within your strategic framework — you approve or kill, not create.',
+            detail: 'The system generates draft response briefs for competitive moves that match your trigger criteria. You decide which responses to greenlight — the strategic filter no algorithm can replace.',
+          },
+        },
       },
       keyInsight: 'You don\'t own a gate, but your influence is everywhere. Strategy quality is the highest-leverage input in the graph.',
     },
@@ -449,10 +505,10 @@ export const ROLE_DEFINITIONS: RoleDefinition[] = [
     iconName: 'Cog',
     category: 'operations',
     accentColor: '#C9A04E',
-    ownedSteps: ['schedule-publish', 'distribute', 'optimize', 'channel-orchestration'],
+    ownedSteps: ['schedule-publish', 'distribute', 'optimize', 'channel-orchestration', 'dynamic-assembly'],
     reviewedGates: ['performance-review'],
     relatedAgents: ['performance-agent', 'personalization-agent'],
-    relatedInputs: ['analytics-data', 'content-strategy', 'orchestration-rules', 'media-plan', 'channel-benchmarks'],
+    relatedInputs: ['analytics-data', 'content-strategy', 'orchestration-rules', 'media-plan', 'channel-benchmarks', 'cdp-profiles', 'asset-library'],
     narrative: {
       nodeJourneys: {
         'schedule-publish': {
@@ -511,6 +567,20 @@ export const ROLE_DEFINITIONS: RoleDefinition[] = [
             detail: 'Orchestration that required manual coordination now runs automatically. You maintain and evolve the rules as new channels emerge.',
           },
         },
+        'dynamic-assembly': {
+          preAI: {
+            summary: 'You manually assemble each content experience — selecting the right hero image, headline, and CTA for each segment.',
+            detail: 'Assembly is a bottleneck because every segment combination requires a manual build. Personalization is limited to what your team can physically produce.',
+          },
+          aiAgents: {
+            summary: 'A personalization agent assembles segment-specific content experiences from your variant library and rules.',
+            detail: 'Assembly scales because agents handle the combinatorics. You define which components are interchangeable and set the rules for how they combine.',
+          },
+          aiAgentic: {
+            summary: 'Content experiences assemble dynamically at delivery time — every segment gets a tailored combination without manual production.',
+            detail: 'The system constructs experiences per segment in real time using your rules, CDP signals, and the asset library. You maintain the assembly logic and troubleshoot when combinations produce unexpected results.',
+          },
+        },
         'performance-review': {
           preAI: {
             summary: 'You participate in performance reviews, providing operational context on what worked and what didn\'t.',
@@ -537,10 +607,10 @@ export const ROLE_DEFINITIONS: RoleDefinition[] = [
     iconName: 'Users',
     category: 'operations',
     accentColor: '#B8943F',
-    ownedSteps: ['research-insights'],
+    ownedSteps: ['research-insights', 'social-listening', 'sentiment-monitoring'],
     reviewedGates: [],
-    relatedAgents: ['research-agent'],
-    relatedInputs: ['audience-personas', 'analytics-data', 'content-strategy'],
+    relatedAgents: ['research-agent', 'social-listening-agent'],
+    relatedInputs: ['audience-personas', 'analytics-data', 'content-strategy', 'competitor-library', 'cdp-profiles'],
     narrative: {
       nodeJourneys: {
         'research-insights': {
@@ -555,6 +625,34 @@ export const ROLE_DEFINITIONS: RoleDefinition[] = [
           aiAgentic: {
             summary: 'Your personas are live infrastructure — every agent queries them in real time before making content decisions.',
             detail: 'When personas are sharp, the whole system produces relevant content. When they drift, everything drifts. Your maintenance of this input has system-wide impact.',
+          },
+        },
+        'social-listening': {
+          preAI: {
+            summary: 'You monitor social platforms manually, scanning for trending topics and audience sentiment shifts.',
+            detail: 'Social monitoring is time-consuming and reactive. You catch trends after they peak because manual scanning can\'t keep pace with the volume of conversations.',
+          },
+          aiAgents: {
+            summary: 'A social listening agent surfaces trending topics, sentiment shifts, and competitive signals in real time.',
+            detail: 'You stop scanning and start interpreting. The agent handles volume; you decide which signals are meaningful enough to influence the content pipeline.',
+          },
+          aiAgentic: {
+            summary: 'Social listening runs continuously and feeds signals directly into brief creation and competitive response workflows.',
+            detail: 'The system detects, classifies, and routes social signals without your involvement. You calibrate what counts as a meaningful signal and review the edge cases where context matters.',
+          },
+        },
+        'sentiment-monitoring': {
+          preAI: {
+            summary: 'You track audience reaction to published content by checking social comments, reviews, and support tickets manually.',
+            detail: 'Sentiment data is fragmented across platforms. By the time you assemble a picture of how content landed, the window for course-correction has often closed.',
+          },
+          aiAgents: {
+            summary: 'A sentiment agent aggregates brand mention tone and content reception signals across all channels in real time.',
+            detail: 'Alerts surface when sentiment shifts negatively. You interpret whether a dip is noise, a content problem, or an emerging reputational risk.',
+          },
+          aiAgentic: {
+            summary: 'Sentiment monitoring is continuous and auto-triggers escalation when brand health scores cross your thresholds.',
+            detail: 'The system connects sentiment signals to downstream actions — pausing distribution, triggering competitive response, or flagging for stakeholder review. You design the thresholds and interpret ambiguous signals.',
           },
         },
       },
