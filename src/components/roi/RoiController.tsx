@@ -1,8 +1,9 @@
 'use client';
 
-import { useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronLeft, ChevronRight, Compass } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Compass, BookOpen } from 'lucide-react';
+import MethodologyPanel from './MethodologyPanel';
 import { useRoiStore } from '@/lib/store/roi-store';
 import { usePresentationStore } from '@/lib/store/presentation-store';
 import { useGraphStore } from '@/lib/store/graph-store';
@@ -39,6 +40,7 @@ export default function RoiController() {
   const resetFilters = useGraphStore(s => s.resetFilters);
 
   const isMobile = useIsMobile();
+  const [methodologyOpen, setMethodologyOpen] = useState(false);
   const step = ROI_STEPS[currentStepIndex];
 
   // Keyboard navigation
@@ -228,6 +230,18 @@ export default function RoiController() {
           <ChevronRight className={isMobile ? 'w-4 h-4' : 'w-5 h-5'} />
         </button>
 
+        {/* How We Calculate */}
+        <button
+          onClick={() => setMethodologyOpen(true)}
+          className={`flex items-center gap-1.5 rounded-full glass-panel text-muted-foreground hover:text-[#14B8A6] transition-all font-medium ${
+            isMobile ? 'px-2 py-1.5 text-[10px]' : 'px-3 py-2 text-xs'
+          }`}
+          title="How we calculate these numbers"
+        >
+          <BookOpen className={isMobile ? 'w-3 h-3' : 'w-3.5 h-3.5'} />
+          {!isMobile && 'How We Calculate'}
+        </button>
+
         {/* Exit to Explore */}
         <button
           onClick={exitToExplore}
@@ -240,6 +254,9 @@ export default function RoiController() {
           {!isMobile && 'Explore'}
         </button>
       </motion.div>
+
+      {/* Methodology Panel */}
+      <MethodologyPanel open={methodologyOpen} onOpenChange={setMethodologyOpen} />
     </>
   );
 }
