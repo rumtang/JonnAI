@@ -208,38 +208,86 @@ function formatStringArray(items: string[]): string {
   return `[${items.map(i => `'${escapeTs(i)}'`).join(', ')}]`;
 }
 
-function buildRoleDefinitionsTs(roles: Record<string, unknown>[]): string {
-  const defs = roles.map(r => {
+// Group role rows by role ID, then build nodeJourneys from per-node rows
+interface RoleGroup {
+  id: string;
+  title: string;
+  description: string;
+  ownedSteps: string[];
+  reviewedGates: string[];
+  relatedAgents: string[];
+  relatedInputs: string[];
+  keyInsight: string;
+  nodeJourneys: Record<string, { preAI: { summary: string; detail: string }; aiAgents: { summary: string; detail: string }; aiAgentic: { summary: string; detail: string } }>;
+}
+
+function groupRoleRows(rows: Record<string, unknown>[]): RoleGroup[] {
+  const map = new Map<string, RoleGroup>();
+  for (const r of rows) {
     const id = str(r.id);
-    const title = str(r.title);
-    const description = str(r.description);
-    const ownedSteps = splitField(r.ownedSteps);
-    const reviewedGates = splitField(r.reviewedGates);
-    const relatedAgents = splitField(r.relatedAgents);
-    const relatedInputs = splitField(r.relatedInputs);
+    if (!map.has(id)) {
+      map.set(id, {
+        id,
+        title: str(r.title),
+        description: str(r.description),
+        ownedSteps: splitField(r.ownedSteps),
+        reviewedGates: splitField(r.reviewedGates),
+        relatedAgents: splitField(r.relatedAgents),
+        relatedInputs: splitField(r.relatedInputs),
+        keyInsight: str(r.keyInsight),
+        nodeJourneys: {},
+      });
+    }
+    const group = map.get(id)!;
+    // Update keyInsight in case it changed
+    if (str(r.keyInsight)) group.keyInsight = str(r.keyInsight);
+    const nodeId = str(r.nodeId);
+    if (nodeId) {
+      group.nodeJourneys[nodeId] = {
+        preAI: { summary: str(r.preAI_summary), detail: str(r.preAI_detail) },
+        aiAgents: { summary: str(r.aiAgents_summary), detail: str(r.aiAgents_detail) },
+        aiAgentic: { summary: str(r.aiAgentic_summary), detail: str(r.aiAgentic_detail) },
+      };
+    }
+  }
+  return [...map.values()];
+}
+
+function buildRoleDefinitionsTs(rows: Record<string, unknown>[]): string {
+  const roles = groupRoleRows(rows);
+
+  const defs = roles.map(r => {
+    // Build nodeJourneys object literal
+    const njEntries = Object.entries(r.nodeJourneys).map(([nodeId, nj]) => {
+      return `        '${escapeTs(nodeId)}': {
+          preAI: {
+            summary: '${escapeTs(nj.preAI.summary)}',
+            detail: '${escapeTs(nj.preAI.detail)}',
+          },
+          aiAgents: {
+            summary: '${escapeTs(nj.aiAgents.summary)}',
+            detail: '${escapeTs(nj.aiAgents.detail)}',
+          },
+          aiAgentic: {
+            summary: '${escapeTs(nj.aiAgentic.summary)}',
+            detail: '${escapeTs(nj.aiAgentic.detail)}',
+          },
+        }`;
+    });
 
     return `  {
-    id: '${escapeTs(id)}',
-    title: '${escapeTs(title)}',
-    description: '${escapeTs(description)}',
-    ownedSteps: ${formatStringArray(ownedSteps)},
-    reviewedGates: ${formatStringArray(reviewedGates)},
-    relatedAgents: ${formatStringArray(relatedAgents)},
-    relatedInputs: ${formatStringArray(relatedInputs)},
+    id: '${escapeTs(r.id)}',
+    title: '${escapeTs(r.title)}',
+    description: '${escapeTs(r.description)}',
+    ownedSteps: ${formatStringArray(r.ownedSteps)},
+    reviewedGates: ${formatStringArray(r.reviewedGates)},
+    relatedAgents: ${formatStringArray(r.relatedAgents)},
+    relatedInputs: ${formatStringArray(r.relatedInputs)},
     narrative: {
-      preAI: {
-        summary: '${escapeTs(str(r.narrative_preAI_summary))}',
-        detail: '${escapeTs(str(r.narrative_preAI_detail))}',
+      nodeJourneys: {
+${njEntries.join(',\n')},
       },
-      aiAgents: {
-        summary: '${escapeTs(str(r.narrative_aiAgents_summary))}',
-        detail: '${escapeTs(str(r.narrative_aiAgents_detail))}',
-      },
-      aiAgentic: {
-        summary: '${escapeTs(str(r.narrative_aiAgentic_summary))}',
-        detail: '${escapeTs(str(r.narrative_aiAgentic_detail))}',
-      },
-      keyInsight: '${escapeTs(str(r.narrative_keyInsight))}',
+      keyInsight: '${escapeTs(r.keyInsight)}',
     },
   }`;
   });
@@ -247,15 +295,29 @@ function buildRoleDefinitionsTs(roles: Record<string, unknown>[]): string {
   return `// Role definitions derived from the content production graph's gate reviewers
 // and step owners. Each role maps to specific nodes and carries narrative insight.
 
+export type RoleCategory = 'strategy' | 'creative' | 'governance' | 'operations' | 'growth';
+
+export const ROLE_CATEGORIES: Record<RoleCategory, { label: string; subtitle: string; iconName: string }> = {
+  strategy:   { label: 'Strategy',   subtitle: 'Set the direction',   iconName: 'Compass' },
+  creative:   { label: 'Creative',   subtitle: 'Make the work',       iconName: 'Palette' },
+  governance: { label: 'Governance', subtitle: 'Protect the brand',   iconName: 'Shield' },
+  operations: { label: 'Operations', subtitle: 'Keep it running',     iconName: 'Settings' },
+  growth:     { label: 'Growth',     subtitle: 'Multiply the impact', iconName: 'TrendingUp' },
+};
+
 export interface JourneyStage {
   summary: string;
   detail: string;
 }
 
-export interface RoleNarrative {
+export interface NodeJourney {
   preAI: JourneyStage;
   aiAgents: JourneyStage;
   aiAgentic: JourneyStage;
+}
+
+export interface RoleNarrative {
+  nodeJourneys: Record<string, NodeJourney>;
   keyInsight: string;
 }
 

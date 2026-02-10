@@ -9,7 +9,7 @@ import { useRoleInsight } from '@/lib/roles/use-role-insight';
 import { NODE_STYLES } from '@/lib/graph/node-styles';
 import { Badge } from '@/components/ui/badge';
 import { GraphNode, NodeType, StepMeta, GateMeta, AgentMeta, InputMeta } from '@/lib/graph/types';
-import type { JourneyStage, RoleNarrative } from '@/lib/roles/role-definitions';
+import type { JourneyStage, NodeJourney } from '@/lib/roles/role-definitions';
 
 interface RoleInsightPanelProps {
   onChangeRole: () => void;
@@ -23,23 +23,6 @@ const JOURNEY_STAGES = {
 } as const;
 
 type JourneyStageName = keyof typeof JOURNEY_STAGES;
-
-// Map walkthrough node to a journey stage based on what category it belongs to
-function getJourneyStageForStep(
-  nodeId: string,
-  role: { ownedSteps: string[]; reviewedGates: string[]; relatedAgents: string[]; relatedInputs: string[] },
-): JourneyStageName | null {
-  if (role.ownedSteps.includes(nodeId) || role.reviewedGates.includes(nodeId)) {
-    return 'preAI';
-  }
-  if (role.relatedAgents.includes(nodeId)) {
-    return 'aiAgents';
-  }
-  if (role.relatedInputs.includes(nodeId)) {
-    return 'aiAgentic';
-  }
-  return null;
-}
 
 // Collapsible journey tile — collapsed by default, expands on click
 function JourneyTile({ stageName, stage }: { stageName: JourneyStageName; stage: JourneyStage }) {
@@ -118,10 +101,13 @@ export default function RoleInsightPanel({ onChangeRole }: RoleInsightPanelProps
   const style = NODE_STYLES[currentNode.type as NodeType] || NODE_STYLES.step;
   const isFirst = currentStepIndex === 0;
   const isLast = currentStepIndex === walkthroughPath.length - 1;
-  const activeStage = getJourneyStageForStep(currentNodeId, selectedRole);
 
   // Classify the current node for the user
   const isPrimary = selectedRole.ownedSteps.includes(currentNodeId) || selectedRole.reviewedGates.includes(currentNodeId);
+  // Look up per-node journey for primary nodes
+  const nodeJourney: NodeJourney | undefined = isPrimary
+    ? selectedRole.narrative.nodeJourneys[currentNodeId]
+    : undefined;
   const nodeRelation = isPrimary
     ? (selectedRole.ownedSteps.includes(currentNodeId) ? 'You own this step' : 'You review this gate')
     : (selectedRole.relatedAgents.includes(currentNodeId) ? 'AI agent supporting you' : 'Input you depend on');
@@ -239,14 +225,24 @@ export default function RoleInsightPanel({ onChangeRole }: RoleInsightPanelProps
                   {currentNode.type === 'input' && <InputDetail meta={currentNode.meta as InputMeta} />}
                 </div>
 
-                {/* Journey stage tile for this step */}
-                {activeStage && (
-                  <div className="mb-4">
+                {/* Journey tiles — all 3 stages for primary nodes */}
+                {nodeJourney && (
+                  <div className="mb-4 space-y-2">
                     <p className="text-[10px] uppercase tracking-wider text-muted-foreground/60 mb-2">How this role evolves</p>
                     <JourneyTile
-                      key={`${currentNodeId}-${activeStage}`}
-                      stageName={activeStage}
-                      stage={selectedRole.narrative[activeStage]}
+                      key={`${currentNodeId}-preAI`}
+                      stageName="preAI"
+                      stage={nodeJourney.preAI}
+                    />
+                    <JourneyTile
+                      key={`${currentNodeId}-aiAgents`}
+                      stageName="aiAgents"
+                      stage={nodeJourney.aiAgents}
+                    />
+                    <JourneyTile
+                      key={`${currentNodeId}-aiAgentic`}
+                      stageName="aiAgentic"
+                      stage={nodeJourney.aiAgentic}
                     />
                   </div>
                 )}

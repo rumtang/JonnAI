@@ -126,10 +126,14 @@ interface JourneyStage {
   detail: string;
 }
 
-interface RoleNarrative {
+interface NodeJourney {
   preAI: JourneyStage;
   aiAgents: JourneyStage;
   aiAgentic: JourneyStage;
+}
+
+interface RoleNarrative {
+  nodeJourneys: Record<string, NodeJourney>;
   keyInsight: string;
 }
 
@@ -193,23 +197,54 @@ function parseRoleDefinitions(): RoleDefinition[] {
   }
 }
 
+// Each role+node combination becomes a row so per-node journeys can be edited in Excel
 function buildRolesRows(roles: RoleDefinition[]) {
-  return roles.map(r => ({
-    id: r.id,
-    title: r.title,
-    description: r.description,
-    ownedSteps: r.ownedSteps.join(', '),
-    reviewedGates: r.reviewedGates.join(', '),
-    relatedAgents: r.relatedAgents.join(', '),
-    relatedInputs: r.relatedInputs.join(', '),
-    narrative_preAI_summary: r.narrative.preAI.summary,
-    narrative_preAI_detail: r.narrative.preAI.detail,
-    narrative_aiAgents_summary: r.narrative.aiAgents.summary,
-    narrative_aiAgents_detail: r.narrative.aiAgents.detail,
-    narrative_aiAgentic_summary: r.narrative.aiAgentic.summary,
-    narrative_aiAgentic_detail: r.narrative.aiAgentic.detail,
-    narrative_keyInsight: r.narrative.keyInsight,
-  }));
+  const rows: Record<string, unknown>[] = [];
+  for (const r of roles) {
+    const primaryNodes = [...r.ownedSteps, ...r.reviewedGates];
+    if (primaryNodes.length === 0) {
+      // Role with no primary nodes — emit one row with empty node journeys
+      rows.push({
+        id: r.id,
+        title: r.title,
+        description: r.description,
+        ownedSteps: r.ownedSteps.join(', '),
+        reviewedGates: r.reviewedGates.join(', '),
+        relatedAgents: r.relatedAgents.join(', '),
+        relatedInputs: r.relatedInputs.join(', '),
+        nodeId: '',
+        preAI_summary: '',
+        preAI_detail: '',
+        aiAgents_summary: '',
+        aiAgents_detail: '',
+        aiAgentic_summary: '',
+        aiAgentic_detail: '',
+        keyInsight: r.narrative.keyInsight,
+      });
+      continue;
+    }
+    for (const nodeId of primaryNodes) {
+      const nj = r.narrative.nodeJourneys[nodeId];
+      rows.push({
+        id: r.id,
+        title: r.title,
+        description: r.description,
+        ownedSteps: r.ownedSteps.join(', '),
+        reviewedGates: r.reviewedGates.join(', '),
+        relatedAgents: r.relatedAgents.join(', '),
+        relatedInputs: r.relatedInputs.join(', '),
+        nodeId,
+        preAI_summary: nj?.preAI.summary ?? '',
+        preAI_detail: nj?.preAI.detail ?? '',
+        aiAgents_summary: nj?.aiAgents.summary ?? '',
+        aiAgents_detail: nj?.aiAgents.detail ?? '',
+        aiAgentic_summary: nj?.aiAgentic.summary ?? '',
+        aiAgentic_detail: nj?.aiAgentic.detail ?? '',
+        keyInsight: r.narrative.keyInsight,
+      });
+    }
+  }
+  return rows;
 }
 
 // ---------------------------------------------------------------------------
