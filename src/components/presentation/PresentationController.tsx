@@ -73,6 +73,14 @@ const PIPELINE_STAGES = [
   { label: 'Optimize', icon: '\uD83D\uDD04' },
 ];
 
+// Agents mapped to their primary pipeline stage for the 2D overlay on slide 3
+const PIPELINE_AGENTS = [
+  { id: 'research-agent', label: 'Research Agent', stageIndex: 0 },
+  { id: 'writer-agent', label: 'Writer Agent', stageIndex: 1 },
+  { id: 'seo-agent', label: 'SEO Agent', stageIndex: 1 },
+  { id: 'performance-agent', label: 'Performance Agent', stageIndex: 4 },
+];
+
 export default function PresentationController() {
   const {
     currentStepIndex,
@@ -104,10 +112,9 @@ export default function PresentationController() {
   const isPipelineSlide = currentStep?.id === 'act1-lifecycle';
   const isTransitionSlide = currentStep?.id === 'act2-agents-and-context';
   const showPipelineOverlay = isTitleSlide || isPipelineSlide || isTransitionSlide;
-  // Scrim opacity: fully opaque on title, high on pipeline, medium on transition
-  const scrimOpacity = isTitleSlide ? 0.95 : isPipelineSlide ? 0.90 : 0.55;
-  // Diagram fades on the transition slide to let the 3D graph emerge
-  const diagramOpacity = isTransitionSlide ? 0.4 : 1;
+  // Scrim stays high on slides 1-3 so the 2D overlay is the primary visual
+  const scrimOpacity = isTitleSlide ? 0.95 : 0.90;
+  const diagramOpacity = 1;
 
   const exitToExplore = useCallback(() => {
     clearHighlights();
@@ -451,7 +458,7 @@ export default function PresentationController() {
             animate={{
               opacity: diagramOpacity,
               y: isTitleSlide ? 30 : -40,
-              scale: isTransitionSlide ? 0.85 : 1,
+              scale: 1,
             }}
             exit={{ opacity: 0, scale: 0.9, y: -60 }}
             transition={{ duration: 0.6 }}
@@ -478,6 +485,48 @@ export default function PresentationController() {
                   </div>
                 ))}
               </div>
+              {/* Agent badges below pipeline (slide 3 — "bolt agents on") */}
+              <AnimatePresence>
+                {isTransitionSlide && (
+                  <motion.div
+                    key="agent-badges"
+                    className="flex items-start justify-center gap-0 mt-5"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -5 }}
+                    transition={{ delay: 0.3, duration: 0.5 }}
+                  >
+                    {PIPELINE_STAGES.map((_, i, arr) => {
+                      const stageAgents = PIPELINE_AGENTS.filter(a => a.stageIndex === i);
+                      return (
+                        <div key={`ac-${i}`} className="flex items-start">
+                          <div className="w-14 md:w-16 flex flex-col items-center overflow-visible">
+                            {stageAgents.length > 0 ? (
+                              <div className="flex flex-col items-center gap-1.5">
+                                <div className="w-px h-4 bg-[#5B9ECF]/40" />
+                                {stageAgents.map((agent, j) => (
+                                  <motion.div
+                                    key={agent.id}
+                                    initial={{ opacity: 0, scale: 0.8 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    transition={{ delay: 0.5 + j * 0.15 }}
+                                    className="px-2 py-1 rounded-md bg-[#5B9ECF]/10 border border-[#5B9ECF]/25 text-[10px] font-medium text-[#5B9ECF] whitespace-nowrap"
+                                  >
+                                    {agent.label}
+                                  </motion.div>
+                                ))}
+                              </div>
+                            ) : null}
+                          </div>
+                          {i < arr.length - 1 && (
+                            <div className="mx-1.5 md:mx-3 w-6 md:w-10 shrink-0" />
+                          )}
+                        </div>
+                      );
+                    })}
+                  </motion.div>
+                )}
+              </AnimatePresence>
               {/* Feedback loop arc: Optimize → Strategy */}
               <svg className="w-[85%] mt-3" height="20" viewBox="0 0 100 20" preserveAspectRatio="none">
                 <defs>

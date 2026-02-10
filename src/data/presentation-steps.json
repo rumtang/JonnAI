@@ -48,23 +48,23 @@
     "title": "Adding Agents — And What They Actually Need",
     "narration": "AI agents get overlaid on specific steps — research, drafting, optimization, performance analysis. That is the natural first move, and it works. But what this agent-first approach misses is that the real work depends on context: brand instincts, legal judgment calls, audience intuition that lives in your best people's heads. Most of that intelligence is mundane — routine decisions, everyday judgment calls. Codifying the mundane is exactly the point. When you make the routine explicit, agents can reason over it — and your people focus on work that actually requires them.",
     "cameraPosition": {
-      "x": 0,
-      "y": -50,
-      "z": 480
+      "x": -100,
+      "y": -80,
+      "z": 700
     },
     "cameraLookAt": {
       "x": 0,
-      "y": -50,
+      "y": 0,
       "z": 0
     },
     "cameraTransitionMs": 2000,
     "graphState": "linear",
-    "action": "show-agents-on-pipeline",
+    "action": "show-teams-by-phase",
     "filterNodeTypes": [
-      "agent"
+      "step"
     ],
     "highlightLinkTypes": [
-      "performs"
+      "flows-to"
     ],
     "duration": 0
   },
@@ -73,9 +73,9 @@
     "title": "It's Not a Pipeline — It's a Graph",
     "narration": "Now add the real structure. Checkpoints. Feedback loops. Escalation paths. Fast-track bypasses. The neat columns dissolve. This is not a pipeline — it is a graph.",
     "cameraPosition": {
-      "x": -200,
-      "y": -180,
-      "z": 750
+      "x": 0,
+      "y": 0,
+      "z": 500
     },
     "cameraLookAt": {
       "x": 0,
