@@ -121,10 +121,15 @@ function buildLinksRows(links: GraphLink[]) {
 // 4. Parse role definitions from TypeScript source
 // ---------------------------------------------------------------------------
 
+interface JourneyStage {
+  summary: string;
+  detail: string;
+}
+
 interface RoleNarrative {
-  today: string;
-  future: string;
-  teamSupport: string;
+  preAI: JourneyStage;
+  aiAgents: JourneyStage;
+  aiAgentic: JourneyStage;
   keyInsight: string;
 }
 
@@ -197,9 +202,12 @@ function buildRolesRows(roles: RoleDefinition[]) {
     reviewedGates: r.reviewedGates.join(', '),
     relatedAgents: r.relatedAgents.join(', '),
     relatedInputs: r.relatedInputs.join(', '),
-    narrative_today: r.narrative.today,
-    narrative_future: r.narrative.future,
-    narrative_teamSupport: r.narrative.teamSupport,
+    narrative_preAI_summary: r.narrative.preAI.summary,
+    narrative_preAI_detail: r.narrative.preAI.detail,
+    narrative_aiAgents_summary: r.narrative.aiAgents.summary,
+    narrative_aiAgents_detail: r.narrative.aiAgents.detail,
+    narrative_aiAgentic_summary: r.narrative.aiAgentic.summary,
+    narrative_aiAgentic_detail: r.narrative.aiAgentic.detail,
     narrative_keyInsight: r.narrative.keyInsight,
   }));
 }

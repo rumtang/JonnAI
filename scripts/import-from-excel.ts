@@ -227,9 +227,18 @@ function buildRoleDefinitionsTs(roles: Record<string, unknown>[]): string {
     relatedAgents: ${formatStringArray(relatedAgents)},
     relatedInputs: ${formatStringArray(relatedInputs)},
     narrative: {
-      today: '${escapeTs(str(r.narrative_today))}',
-      future: '${escapeTs(str(r.narrative_future))}',
-      teamSupport: '${escapeTs(str(r.narrative_teamSupport))}',
+      preAI: {
+        summary: '${escapeTs(str(r.narrative_preAI_summary))}',
+        detail: '${escapeTs(str(r.narrative_preAI_detail))}',
+      },
+      aiAgents: {
+        summary: '${escapeTs(str(r.narrative_aiAgents_summary))}',
+        detail: '${escapeTs(str(r.narrative_aiAgents_detail))}',
+      },
+      aiAgentic: {
+        summary: '${escapeTs(str(r.narrative_aiAgentic_summary))}',
+        detail: '${escapeTs(str(r.narrative_aiAgentic_detail))}',
+      },
       keyInsight: '${escapeTs(str(r.narrative_keyInsight))}',
     },
   }`;
@@ -238,10 +247,15 @@ function buildRoleDefinitionsTs(roles: Record<string, unknown>[]): string {
   return `// Role definitions derived from the content production graph's gate reviewers
 // and step owners. Each role maps to specific nodes and carries narrative insight.
 
+export interface JourneyStage {
+  summary: string;
+  detail: string;
+}
+
 export interface RoleNarrative {
-  today: string;
-  future: string;
-  teamSupport: string;
+  preAI: JourneyStage;
+  aiAgents: JourneyStage;
+  aiAgentic: JourneyStage;
   keyInsight: string;
 }
 

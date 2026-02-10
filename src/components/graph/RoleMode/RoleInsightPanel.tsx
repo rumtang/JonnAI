@@ -1,35 +1,89 @@
 'use client';
 
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Users, ChevronLeft, ChevronRight, RefreshCw, Eye } from 'lucide-react';
+import { X, Users, ChevronLeft, ChevronRight, ChevronDown, RefreshCw, Eye } from 'lucide-react';
 import { useRoleInsightStore } from '@/lib/store/role-insight-store';
 import { useGraphStore } from '@/lib/store/graph-store';
 import { useRoleInsight } from '@/lib/roles/use-role-insight';
 import { NODE_STYLES } from '@/lib/graph/node-styles';
 import { Badge } from '@/components/ui/badge';
 import { GraphNode, NodeType, StepMeta, GateMeta, AgentMeta, InputMeta } from '@/lib/graph/types';
+import type { JourneyStage, RoleNarrative } from '@/lib/roles/role-definitions';
 
 interface RoleInsightPanelProps {
   onChangeRole: () => void;
 }
 
-// Map walkthrough node to a narrative section heading + content
-function getNarrativeForStep(
+// Stage config: label, color, and progression indicator
+const JOURNEY_STAGES = {
+  preAI:     { label: 'Before AI',       color: '#94a3b8', indicator: '○' },
+  aiAgents:  { label: 'With AI Agents',  color: '#6BAED6', indicator: '◐' },
+  aiAgentic: { label: 'Agentic System',  color: '#4CAF50', indicator: '●' },
+} as const;
+
+type JourneyStageName = keyof typeof JOURNEY_STAGES;
+
+// Map walkthrough node to a journey stage based on what category it belongs to
+function getJourneyStageForStep(
   nodeId: string,
   role: { ownedSteps: string[]; reviewedGates: string[]; relatedAgents: string[]; relatedInputs: string[] },
-  narrative: { today: string; future: string; teamSupport: string; keyInsight: string }
-): { heading: string; content: string } | null {
+): JourneyStageName | null {
   if (role.ownedSteps.includes(nodeId) || role.reviewedGates.includes(nodeId)) {
-    return { heading: 'Your Work Today', content: narrative.today };
+    return 'preAI';
   }
   if (role.relatedAgents.includes(nodeId)) {
-    return { heading: 'Your Future with AI', content: narrative.future };
+    return 'aiAgents';
   }
   if (role.relatedInputs.includes(nodeId)) {
-    return { heading: 'How Your Team Supports You', content: narrative.teamSupport };
+    return 'aiAgentic';
   }
   return null;
+}
+
+// Collapsible journey tile — collapsed by default, expands on click
+function JourneyTile({ stageName, stage }: { stageName: JourneyStageName; stage: JourneyStage }) {
+  const [expanded, setExpanded] = useState(false);
+  const config = JOURNEY_STAGES[stageName];
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.15 }}
+    >
+      <button
+        onClick={() => setExpanded(!expanded)}
+        className="w-full text-left rounded-xl border transition-colors duration-200 hover:bg-white/[0.03]"
+        style={{ borderColor: config.color + '30', borderLeftWidth: 3, borderLeftColor: config.color }}
+      >
+        <div className="flex items-center gap-2.5 px-3 py-2.5">
+          <span className="text-sm" style={{ color: config.color }}>{config.indicator}</span>
+          <span className="text-xs font-semibold flex-1" style={{ color: config.color }}>{config.label}</span>
+          <ChevronDown
+            className="w-3.5 h-3.5 transition-transform duration-200"
+            style={{ color: config.color + '80', transform: expanded ? 'rotate(180deg)' : 'rotate(0deg)' }}
+          />
+        </div>
+      </button>
+      <AnimatePresence initial={false}>
+        {expanded && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.2, ease: 'easeInOut' }}
+            className="overflow-hidden"
+          >
+            <div className="px-3 pt-2 pb-3 ml-[3px]" style={{ borderLeft: `2px solid ${config.color}20` }}>
+              <p className="text-sm font-medium text-foreground/90 mb-1.5">{stage.summary}</p>
+              <p className="text-xs text-muted-foreground leading-relaxed">{stage.detail}</p>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
+  );
 }
 
 export default function RoleInsightPanel({ onChangeRole }: RoleInsightPanelProps) {
@@ -64,7 +118,7 @@ export default function RoleInsightPanel({ onChangeRole }: RoleInsightPanelProps
   const style = NODE_STYLES[currentNode.type as NodeType] || NODE_STYLES.step;
   const isFirst = currentStepIndex === 0;
   const isLast = currentStepIndex === walkthroughPath.length - 1;
-  const narrativeBlock = getNarrativeForStep(currentNodeId, selectedRole, selectedRole.narrative);
+  const activeStage = getJourneyStageForStep(currentNodeId, selectedRole);
 
   // Classify the current node for the user
   const isPrimary = selectedRole.ownedSteps.includes(currentNodeId) || selectedRole.reviewedGates.includes(currentNodeId);
@@ -185,17 +239,16 @@ export default function RoleInsightPanel({ onChangeRole }: RoleInsightPanelProps
                   {currentNode.type === 'input' && <InputDetail meta={currentNode.meta as InputMeta} />}
                 </div>
 
-                {/* Narrative insight for this step */}
-                {narrativeBlock && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 8 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.15 }}
-                    className="p-4 rounded-xl bg-[#C9A04E]/5 border border-[#C9A04E]/30 mb-4"
-                  >
-                    <h4 className="text-xs font-semibold text-[#C9A04E] mb-2">{narrativeBlock.heading}</h4>
-                    <p className="text-sm text-foreground/90 leading-relaxed">{narrativeBlock.content}</p>
-                  </motion.div>
+                {/* Journey stage tile for this step */}
+                {activeStage && (
+                  <div className="mb-4">
+                    <p className="text-[10px] uppercase tracking-wider text-muted-foreground/60 mb-2">How this role evolves</p>
+                    <JourneyTile
+                      key={`${currentNodeId}-${activeStage}`}
+                      stageName={activeStage}
+                      stage={selectedRole.narrative[activeStage]}
+                    />
+                  </div>
                 )}
 
                 {/* Key insight — shown on the last step */}
