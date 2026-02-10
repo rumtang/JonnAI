@@ -3,8 +3,10 @@
 import { motion } from 'framer-motion';
 import { Slider } from '@/components/ui/slider';
 import { useRoiStore } from '@/lib/store/roi-store';
+import { SOURCE_ATTRIBUTION } from '@/lib/roi/engine';
 import PieChart from '../charts/PieChart';
 import AnimatedNumber from '../charts/AnimatedNumber';
+import SourceTooltip from '../shared/SourceTooltip';
 import type { RoiStep } from '@/data/roi-steps';
 
 interface SankeySlideProps {
@@ -21,7 +23,7 @@ interface SliderRowProps {
   format?: (v: number) => string;
   onChange: (v: number) => void;
   color?: string;
-  benchmark?: string;
+  benchmark?: React.ReactNode;
 }
 
 function SliderRow({
@@ -52,7 +54,7 @@ function SliderRow({
         className="[&_[data-slot=slider-range]]:bg-[#14B8A6] [&_[data-slot=slider-thumb]]:border-[#14B8A6]"
       />
       {benchmark && (
-        <p className="text-[8px] text-muted-foreground/50 italic">{benchmark}</p>
+        <div className="text-[8px] text-muted-foreground/50 italic">{benchmark}</div>
       )}
     </div>
   );
@@ -232,7 +234,11 @@ export default function SankeySlide({ step }: SankeySlideProps) {
                 format={(v) => `${v}%`}
                 onChange={(v) => setPain({ reworkRatePct: v })}
                 color="#D4856A"
-                benchmark="Brand consistency research: 20%"
+                benchmark={
+                  <SourceTooltip source={SOURCE_ATTRIBUTION.reworkRate.source} confidence={SOURCE_ATTRIBUTION.reworkRate.confidence}>
+                    Brand consistency research: 20%
+                  </SourceTooltip>
+                }
               />
               <SliderRow
                 label="Approval Cycle (days)"
@@ -253,7 +259,11 @@ export default function SankeySlide({ step }: SankeySlideProps) {
                 format={(v) => `${v}%`}
                 onChange={(v) => setPain({ adminTimePct: v })}
                 color="#D4856A"
-                benchmark="Salesforce: 60% on admin tasks"
+                benchmark={
+                  <SourceTooltip source={SOURCE_ATTRIBUTION.adminTimePct.source} confidence={SOURCE_ATTRIBUTION.adminTimePct.confidence} sampleSize={SOURCE_ATTRIBUTION.adminTimePct.sampleSize}>
+                    Salesforce: 60% on admin tasks
+                  </SourceTooltip>
+                }
               />
               <SliderRow
                 label="Marketing Waste Rate"
@@ -264,7 +274,11 @@ export default function SankeySlide({ step }: SankeySlideProps) {
                 format={(v) => `${v}%`}
                 onChange={(v) => setPain({ marketingWasteRatePct: v })}
                 color="#D4856A"
-                benchmark="Mid-range of 26-60% estimates"
+                benchmark={
+                  <SourceTooltip source={SOURCE_ATTRIBUTION.marketingWaste.source} confidence={SOURCE_ATTRIBUTION.marketingWaste.confidence} sampleSize={SOURCE_ATTRIBUTION.marketingWaste.sampleSize}>
+                    Mid-range of 26-60% estimates
+                  </SourceTooltip>
+                }
               />
               <SliderRow
                 label="Manual Attribution"

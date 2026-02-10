@@ -23,6 +23,7 @@ const DEFAULT_ORG: OrganizationProfile = {
   marketingBudgetPct: 7.7,               // Gartner 2025: 7.7% of revenue
   marketingHeadcount: 200,               // ~10 FTEs per $100M budget
   avgLoadedFteCost: 180_000,             // Enterprise fully loaded
+  industry: 'B2B Average',              // Default industry vertical
 };
 
 const DEFAULT_MARTECH: MartechAndMedia = {
@@ -90,6 +91,9 @@ interface RoiState {
   // Scenario toggle
   activeScenario: Scenario;
 
+  // View mode (marketing vs CFO)
+  viewMode: 'marketing' | 'cfo';
+
   // Computed outputs
   baseline: BaselineOutputs;
   outputs: RoiOutputs;
@@ -107,6 +111,7 @@ interface RoiState {
   setInvestment: (partial: Partial<TransformationInvestment>) => void;
   setAssumptions: (partial: Partial<ImprovementAssumptions>) => void;
   setActiveScenario: (scenario: Scenario) => void;
+  setViewMode: (mode: 'marketing' | 'cfo') => void;
 
   // Lifecycle
   reset: () => void;
@@ -142,6 +147,7 @@ export const useRoiStore = create<RoiState>((set, get) => ({
   assumptions: { ...DEFAULT_ASSUMPTIONS },
 
   activeScenario: 'expected',
+  viewMode: 'marketing',
 
   baseline: initialBaseline,
   outputs: initialOutputs,
@@ -203,6 +209,7 @@ export const useRoiStore = create<RoiState>((set, get) => ({
   },
 
   setActiveScenario: (scenario) => set({ activeScenario: scenario }),
+  setViewMode: (mode) => set({ viewMode: mode }),
 
   reset: () => set({
     currentStepIndex: 0,
@@ -213,6 +220,7 @@ export const useRoiStore = create<RoiState>((set, get) => ({
     investment: { ...DEFAULT_INVESTMENT },
     assumptions: { ...DEFAULT_ASSUMPTIONS },
     activeScenario: 'expected',
+    viewMode: 'marketing',
     baseline: initialBaseline,
     outputs: initialOutputs,
   }),

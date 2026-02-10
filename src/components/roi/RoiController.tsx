@@ -15,6 +15,7 @@ import SankeySlide from './slides/SankeySlide';
 import TimelineSlide from './slides/TimelineSlide';
 import BeforeAfterSlide from './slides/BeforeAfterSlide';
 import ExecutiveSummarySlide from './slides/ExecutiveSummarySlide';
+import DoNothingSlide from './slides/DoNothingSlide';
 
 // ─── Act Definitions ────────────────────────────────────────────────
 const ACTS = [
@@ -22,7 +23,8 @@ const ACTS = [
   { label: 'Where the Money Goes', slides: [2, 3] },
   { label: 'The Transformation', slides: [4] },
   { label: 'Before & After', slides: [5] },
-  { label: 'Your Investment Case', slides: [6] },
+  { label: 'The Cost of Inaction', slides: [6] },
+  { label: 'Your Investment Case', slides: [7] },
 ];
 
 export default function RoiController() {
@@ -85,6 +87,8 @@ export default function RoiController() {
         return <TimelineSlide step={step} />;
       case 'before-after':
         return <BeforeAfterSlide step={step} />;
+      case 'do-nothing':
+        return <DoNothingSlide step={step} />;
       case 'executive-card':
         return <ExecutiveSummarySlide step={step} />;
       default:

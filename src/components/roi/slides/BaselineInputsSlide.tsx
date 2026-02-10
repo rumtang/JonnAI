@@ -4,8 +4,10 @@ import { useState, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { Slider } from '@/components/ui/slider';
 import { useRoiStore } from '@/lib/store/roi-store';
+import { INDUSTRY_BUDGET_RATIOS, SOURCE_ATTRIBUTION } from '@/lib/roi/engine';
 import WaterfallChart from '../charts/WaterfallChart';
 import AnimatedNumber from '../charts/AnimatedNumber';
+import SourceTooltip from '../shared/SourceTooltip';
 import type { RoiStep } from '@/data/roi-steps';
 
 interface BaselineInputsSlideProps {
@@ -30,7 +32,7 @@ interface SliderRowProps {
   format?: (v: number) => string;
   onChange: (v: number) => void;
   color?: string;
-  benchmark?: string;
+  benchmark?: React.ReactNode;
 }
 
 function SliderRow({
@@ -61,7 +63,7 @@ function SliderRow({
         className="[&_[data-slot=slider-range]]:bg-[#14B8A6] [&_[data-slot=slider-thumb]]:border-[#14B8A6]"
       />
       {benchmark && (
-        <p className="text-[8px] text-muted-foreground/50 italic">{benchmark}</p>
+        <div className="text-[8px] text-muted-foreground/50 italic">{benchmark}</div>
       )}
     </div>
   );
@@ -137,6 +139,31 @@ export default function BaselineInputsSlide({ step }: BaselineInputsSlideProps) 
               <span>🏢</span> Organization Profile
             </h4>
             <div className="space-y-3">
+              {/* Industry selector — cascades budget % */}
+              <div className="space-y-1">
+                <div className="flex items-center justify-between">
+                  <span className="text-[9px] text-muted-foreground">Industry Vertical</span>
+                </div>
+                <select
+                  value={org.industry ?? 'B2B Average'}
+                  onChange={(e) => {
+                    const industry = e.target.value;
+                    const budgetPct = INDUSTRY_BUDGET_RATIOS[industry] ?? 7.7;
+                    setOrg({ industry, marketingBudgetPct: budgetPct });
+                  }}
+                  className="w-full text-[10px] font-semibold bg-white/5 border border-muted-foreground/20 rounded px-2 py-1.5 backdrop-blur-sm text-foreground focus:outline-none focus:ring-1 focus:ring-[#5B9ECF]/50"
+                >
+                  {Object.keys(INDUSTRY_BUDGET_RATIOS).map((ind) => (
+                    <option key={ind} value={ind} className="bg-background text-foreground">
+                      {ind} ({INDUSTRY_BUDGET_RATIOS[ind]}%)
+                    </option>
+                  ))}
+                </select>
+                <p className="text-[8px] text-muted-foreground/50 italic">
+                  Selects industry-typical marketing budget %
+                </p>
+              </div>
+
               <SliderRow
                 label="Annual Revenue"
                 value={org.annualRevenue}
@@ -157,7 +184,11 @@ export default function BaselineInputsSlide({ step }: BaselineInputsSlideProps) 
                 format={(v) => `${v.toFixed(1)}%`}
                 onChange={(v) => setOrg({ marketingBudgetPct: v })}
                 color="#5B9ECF"
-                benchmark="Gartner 2025: 7.7% average"
+                benchmark={
+                  <SourceTooltip source={SOURCE_ATTRIBUTION.marketingBudgetPct.source} confidence={SOURCE_ATTRIBUTION.marketingBudgetPct.confidence} sampleSize={SOURCE_ATTRIBUTION.marketingBudgetPct.sampleSize}>
+                    Gartner 2025: 7.7% average
+                  </SourceTooltip>
+                }
               />
               <SliderRow
                 label="Marketing Headcount"

@@ -20,6 +20,139 @@ export const SCENARIO_MULTIPLIERS = {
 
 export type Scenario = keyof typeof SCENARIO_MULTIPLIERS;
 
+// ─── Industry Benchmark Constants ──────────────────────────────────
+// Source: Gartner 2025 CMO Spend Survey, Deloitte CMO Survey, industry analyses
+
+export const INDUSTRY_BUDGET_RATIOS: Record<string, number> = {
+  'B2B Average': 6.7,
+  'B2C Average': 9.6,
+  'Technology': 8.5,
+  'Financial Services': 8.0,
+  'Healthcare / Pharma': 7.2,
+  'Consumer Packaged Goods': 10.9,
+  'Retail': 8.3,
+  'Media / Entertainment': 9.1,
+  'Telecom': 5.3,
+  'Energy / Industrial': 3.1,
+  'Professional Services': 7.8,
+};
+
+export const CHANNEL_ROAS_BENCHMARKS: Record<string, { current: number; aiOptimized: number }> = {
+  'Google Search': { current: 8.0, aiOptimized: 9.6 },
+  'Google Shopping': { current: 5.5, aiOptimized: 6.8 },
+  'Meta (Facebook/Instagram)': { current: 3.5, aiOptimized: 4.3 },
+  'LinkedIn': { current: 2.1, aiOptimized: 2.7 },
+  'Programmatic Display': { current: 1.8, aiOptimized: 2.3 },
+  'TikTok': { current: 2.4, aiOptimized: 3.1 },
+  'YouTube': { current: 2.0, aiOptimized: 2.6 },
+  'Connected TV': { current: 1.5, aiOptimized: 2.0 },
+};
+
+export const BUDGET_ALLOCATION = {
+  paidMedia: 30.6,
+  martech: 22.4,
+  labor: 21.9,
+  agencies: 20.7,
+  other: 4.4,
+} as const;
+
+export const MARTECH_WASTE_BENCHMARKS = {
+  avgUtilization: 33,       // Gartner: 33% of capability used
+  wasteRangeLow: 26,        // % of budget wasted (low estimate)
+  wasteRangeHigh: 47,       // % of budget wasted (high estimate)
+  toolOverlapPct: 30,       // average redundancy across stack
+} as const;
+
+export const AI_IMPACT_BENCHMARKS = {
+  contentCostReduction: 65,     // % reduction in content production cost
+  headcountSavings: 20,         // % headcount reduction through automation
+  wasteRecovery: 50,            // % of identified waste recoverable via AI
+  personalizationLift: 12,      // % revenue lift from AI personalization (McKinsey)
+  roasImprovement: 20,          // % ROAS lift (Meta 22%, Google 17% → blended 20%)
+  agenticSpeedMultiplier: 3,    // 3x faster campaign execution
+  agenticCostReduction: 40,     // 40% cost reduction in campaign ops
+} as const;
+
+export const DO_NOTHING_EROSION = {
+  quarterlyPct: 2,     // 2% erosion per quarter from competitive gap
+  year1Pct: 16,        // cumulative after year 1 (compound)
+  year2Pct: 25,        // cumulative after year 2
+  year3Pct: 34,        // cumulative after year 3
+} as const;
+
+export const COST_INFLATION = {
+  googleCpcYoY: 13,       // % annual CPC inflation
+  metaCpmYoY: 19.2,       // % annual CPM inflation
+  laborCostYoY: 4.5,      // % annual salary inflation for marketing roles
+} as const;
+
+export const EFFICIENCY_METRICS = {
+  merTarget: 5.0,             // marketing efficiency ratio target
+  cacByIndustry: {
+    'B2B Average': 536,
+    'B2C Average': 148,
+    'Technology': 395,
+    'Financial Services': 644,
+    'Healthcare / Pharma': 580,
+    'Consumer Packaged Goods': 98,
+    'Retail': 120,
+  } as Record<string, number>,
+  ltvCacRatioTarget: 3.0,     // healthy LTV:CAC
+  pipelineContributionPct: 40, // marketing-sourced pipeline %
+} as const;
+
+export const OPERATING_COSTS = {
+  fteRanges: {
+    'Content Strategist': { low: 85_000, high: 140_000 },
+    'Marketing Ops': { low: 95_000, high: 160_000 },
+    'Paid Media Manager': { low: 90_000, high: 150_000 },
+    'Data Analyst': { low: 100_000, high: 170_000 },
+    'Creative Director': { low: 130_000, high: 220_000 },
+    'Campaign Manager': { low: 80_000, high: 130_000 },
+  } as Record<string, { low: number; high: number }>,
+  headcountPer100M: 10,        // ~10 FTEs per $100M budget
+  contentTeamPct: 25,          // % of marketing headcount
+  opsTeamPct: 20,              // % of marketing headcount
+} as const;
+
+export const COMPLIANCE_COSTS = {
+  financialServicesReviewCostPerAsset: 2_500,
+  pharmaReviewCostPerAsset: 3_500,
+  avgReviewDelayDays: 14,
+  aiReviewReductionPct: 60,
+} as const;
+
+export const CFO_FRAMEWORK = {
+  wacc: 10,               // weighted average cost of capital %
+  hurdle_rate: 15,        // minimum IRR for investment approval %
+  paybackExpectationMonths: 24,
+  doNothingErosionYear1: 16,   // % revenue at risk from inaction
+  riskAdjustmentPct: 20,       // haircut for conservative scenario
+} as const;
+
+export const CONFIDENCE_LEVELS = {
+  high: { label: 'High', color: '#4CAF50', description: 'Multiple corroborating sources, large samples' },
+  medium: { label: 'Medium', color: '#f59e0b', description: 'Single authoritative source or moderate sample' },
+  emerging: { label: 'Emerging', color: '#9B7ACC', description: 'Early data, directionally correct' },
+} as const;
+
+export type ConfidenceLevel = keyof typeof CONFIDENCE_LEVELS;
+
+export const SOURCE_ATTRIBUTION: Record<string, { source: string; confidence: ConfidenceLevel; sampleSize?: string }> = {
+  marketingBudgetPct: { source: 'Gartner 2025 CMO Spend Survey', confidence: 'high', sampleSize: '400+ CMOs' },
+  martechUtilization: { source: 'Gartner 2024 Martech Survey', confidence: 'high', sampleSize: '400+ enterprises' },
+  toolCount: { source: 'ChiefMartec / MartechMap 2024', confidence: 'medium' },
+  paidMediaPct: { source: 'Gartner 2025 CMO Spend Survey', confidence: 'high', sampleSize: '400+ CMOs' },
+  blendedRoas: { source: 'Google/Nielsen Cross-Channel Study', confidence: 'medium' },
+  adminTimePct: { source: 'Salesforce State of Marketing 2025', confidence: 'high', sampleSize: '4,800+ marketers' },
+  contentTimeSavings: { source: 'HubSpot State of Marketing 2025', confidence: 'high', sampleSize: '1,400+ marketers' },
+  personalizationLift: { source: 'McKinsey Personalization Analysis 2023', confidence: 'high' },
+  roasLift: { source: 'Meta Advantage+ / Google PMax results 2024', confidence: 'medium' },
+  reworkRate: { source: 'Lucidpress Brand Consistency Report', confidence: 'medium' },
+  marketingWaste: { source: 'Rakuten/ANA Programmatic Study', confidence: 'medium', sampleSize: '1,000+ advertisers' },
+  doNothingErosion: { source: 'PwC/ANA Digital Maturity Study', confidence: 'medium' },
+};
+
 // ─── Input Types ─────────────────────────────────────────────────────
 
 /** Revenue-anchored org profile. Everything cascades from annualRevenue. */
@@ -28,6 +161,7 @@ export interface OrganizationProfile {
   marketingBudgetPct: number;         // % of revenue (Gartner 2025: 7.7%)
   marketingHeadcount: number;         // 50–2000+
   avgLoadedFteCost: number;           // $100K–$400K fully loaded
+  industry?: string;                  // Industry vertical for benchmark defaults
 }
 
 /** Martech stack and paid media spend — drives optimization + ROAS streams. */
@@ -155,6 +289,32 @@ export interface RoasComparison {
   incrementalRevenue: number;
 }
 
+export interface ChannelRoasEntry {
+  channel: string;
+  currentRoas: number;
+  aiOptimizedRoas: number;
+  liftPct: number;
+}
+
+export interface EnterpriseModelOutputs {
+  budgetWasteTotal: number;
+  aiRecoveryPotential: number;
+  contentSavings: number;
+  headcountSavings: number;
+  merImprovement: number;          // marketing efficiency ratio
+  totalEnterpriseValue: number;
+}
+
+export interface DoNothingOutputs {
+  quarterlyLosses: number[];       // 8 quarters of cumulative loss
+  year1Loss: number;
+  year2Loss: number;
+  year3Loss: number;
+  year1ErosionPct: number;
+  year2ErosionPct: number;
+  year3ErosionPct: number;
+}
+
 export interface RoiOutputs {
   totalInvestment: number;
   implementationWeeks: number;
@@ -165,15 +325,20 @@ export interface RoiOutputs {
   threeYearRoi: number;
   paybackMonths: number;
   netPresentValue: number;
+  irr: number;
 
   timeline: TimelinePoint[];
   breakEvenMonth: number;
 
   workflows: WorkflowComparison[];
   roas: RoasComparison;
+  channelRoas: ChannelRoasEntry[];
 
   currentAllocation: AllocationSlice[];
   futureAllocation: AllocationSlice[];
+
+  enterpriseModel: EnterpriseModelOutputs;
+  doNothing: DoNothingOutputs;
 }
 
 // ─── Ramp Function ───────────────────────────────────────────────────
@@ -397,6 +562,116 @@ function phaseForMonth(month: number, implWeeks: number): string {
   return 'Operational Maturity';
 }
 
+// ─── IRR Calculation (Newton-Raphson) ────────────────────────────────
+// Computes Internal Rate of Return from monthly cash flows.
+// Returns annualized rate. Falls back to NaN if no convergence.
+export function calculateIRR(cashFlows: number[], maxIterations = 100, tolerance = 1e-7): number {
+  let rate = 0.1; // initial guess: 10%
+  for (let i = 0; i < maxIterations; i++) {
+    let npv = 0;
+    let dnpv = 0;
+    for (let t = 0; t < cashFlows.length; t++) {
+      const factor = Math.pow(1 + rate, t);
+      npv += cashFlows[t] / factor;
+      if (t > 0) dnpv -= (t * cashFlows[t]) / Math.pow(1 + rate, t + 1);
+    }
+    if (Math.abs(dnpv) < 1e-12) return NaN;
+    const newRate = rate - npv / dnpv;
+    if (Math.abs(newRate - rate) < tolerance) {
+      // Convert monthly rate to annualized
+      return Math.pow(1 + newRate, 12) - 1;
+    }
+    rate = newRate;
+  }
+  return NaN;
+}
+
+// ─── Enterprise Top-Down Model ──────────────────────────────────────
+export function calculateEnterpriseROI(
+  baseline: BaselineOutputs,
+  assumptions: ImprovementAssumptions,
+  org: OrganizationProfile,
+): EnterpriseModelOutputs {
+  const totalBudget = baseline.derived.totalMarketingBudget;
+  const teamCost = baseline.derived.totalTeamCost;
+
+  // Budget waste: martech + media + attribution waste combined
+  const budgetWasteTotal =
+    baseline.annualMartechWaste + baseline.annualMediaWaste + baseline.annualAttributionWaste;
+
+  // AI can recover a portion of identified waste
+  const aiRecoveryPotential = budgetWasteTotal * (AI_IMPACT_BENCHMARKS.wasteRecovery / 100);
+
+  // Content savings: content team + agency content share × AI reduction
+  const agencyContentShare = baseline.derived.annualAgencySpend * 0.4; // ~40% of agency is content
+  const contentSavings =
+    (baseline.derived.contentTeamCost + agencyContentShare) *
+    (AI_IMPACT_BENCHMARKS.contentCostReduction / 100);
+
+  // Headcount savings: automation of operational roles
+  const headcountSavings = teamCost * (AI_IMPACT_BENCHMARKS.headcountSavings / 100);
+
+  // MER improvement: same revenue, reduced total spend
+  const currentMer = org.annualRevenue / totalBudget;
+  const reducedBudget = totalBudget - aiRecoveryPotential - contentSavings * 0.5;
+  const merImprovement = reducedBudget > 0 ? org.annualRevenue / reducedBudget : currentMer;
+
+  const totalEnterpriseValue = aiRecoveryPotential + contentSavings + headcountSavings;
+
+  return {
+    budgetWasteTotal,
+    aiRecoveryPotential,
+    contentSavings,
+    headcountSavings,
+    merImprovement,
+    totalEnterpriseValue,
+  };
+}
+
+// ─── "Do Nothing" Cost of Inaction ──────────────────────────────────
+export function computeDoNothingCost(
+  annualRevenue: number,
+  marketingBudgetPct: number,
+): DoNothingOutputs {
+  const marketingBudget = annualRevenue * (marketingBudgetPct / 100);
+  const quarterlyErosionRate = DO_NOTHING_EROSION.quarterlyPct / 100;
+
+  // 8-quarter cumulative losses (compound erosion)
+  const quarterlyLosses: number[] = [];
+  let cumulative = 0;
+  for (let q = 1; q <= 8; q++) {
+    cumulative += marketingBudget * quarterlyErosionRate * q;
+    quarterlyLosses.push(cumulative);
+  }
+
+  const year1Loss = annualRevenue * (DO_NOTHING_EROSION.year1Pct / 100);
+  const year2Loss = annualRevenue * (DO_NOTHING_EROSION.year2Pct / 100);
+  const year3Loss = annualRevenue * (DO_NOTHING_EROSION.year3Pct / 100);
+
+  return {
+    quarterlyLosses,
+    year1Loss,
+    year2Loss,
+    year3Loss,
+    year1ErosionPct: DO_NOTHING_EROSION.year1Pct,
+    year2ErosionPct: DO_NOTHING_EROSION.year2Pct,
+    year3ErosionPct: DO_NOTHING_EROSION.year3Pct,
+  };
+}
+
+// ─── Channel ROAS Computation ───────────────────────────────────────
+export function computeChannelRoas(roasLiftPct: number): ChannelRoasEntry[] {
+  return Object.entries(CHANNEL_ROAS_BENCHMARKS).map(([channel, bench]) => {
+    const aiOptimizedRoas = bench.current * (1 + roasLiftPct / 100);
+    return {
+      channel,
+      currentRoas: bench.current,
+      aiOptimizedRoas: Math.round(aiOptimizedRoas * 10) / 10,
+      liftPct: Math.round(((aiOptimizedRoas - bench.current) / bench.current) * 100),
+    };
+  });
+}
+
 // ─── Main ROI Computation ────────────────────────────────────────────
 export function computeRoi(
   org: OrganizationProfile,
@@ -562,6 +837,29 @@ export function computeRoi(
     { label: 'Innovation', pct: Math.max(0, futureInnovationPct), color: '#4CAF50' },
   ];
 
+  // ── IRR from monthly cash flows ──
+  const buildMonths = Math.ceil(investment.implementationWeeks / 4.33);
+  const monthlyInvestment = totalInvestment / buildMonths;
+  const monthlyCashFlows: number[] = [];
+  for (let m = 0; m <= PROJECTION_MONTHS; m++) {
+    let cf = 0;
+    if (m > 0 && m <= buildMonths) cf -= monthlyInvestment;
+    if (m > 0) {
+      cf += timeline[m].valueExpected - timeline[m - 1].valueExpected;
+    }
+    monthlyCashFlows.push(cf);
+  }
+  const irr = calculateIRR(monthlyCashFlows);
+
+  // ── Enterprise model ──
+  const enterpriseModel = calculateEnterpriseROI(baseline, assumptions, org);
+
+  // ── Do-nothing cost ──
+  const doNothing = computeDoNothingCost(org.annualRevenue, org.marketingBudgetPct);
+
+  // ── Channel ROAS ──
+  const channelRoas = computeChannelRoas(assumptions.roasLiftPct);
+
   return {
     totalInvestment,
     implementationWeeks: investment.implementationWeeks,
@@ -570,11 +868,15 @@ export function computeRoi(
     threeYearRoi,
     paybackMonths,
     netPresentValue: npv,
+    irr,
     timeline,
     breakEvenMonth,
     workflows,
     roas,
+    channelRoas,
     currentAllocation,
     futureAllocation,
+    enterpriseModel,
+    doNothing,
   };
 }

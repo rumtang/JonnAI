@@ -3,8 +3,11 @@
 import { motion } from 'framer-motion';
 import { Slider } from '@/components/ui/slider';
 import { useRoiStore } from '@/lib/store/roi-store';
+import { SOURCE_ATTRIBUTION } from '@/lib/roi/engine';
 import WaterfallChart from '../charts/WaterfallChart';
 import AnimatedNumber from '../charts/AnimatedNumber';
+import ChannelRoasTable from '../charts/ChannelRoasTable';
+import SourceTooltip from '../shared/SourceTooltip';
 import type { RoiStep } from '@/data/roi-steps';
 
 interface MartechMediaSlideProps {
@@ -36,7 +39,7 @@ interface SliderRowProps {
   format?: (v: number) => string;
   onChange: (v: number) => void;
   color?: string;
-  benchmark?: string;
+  benchmark?: React.ReactNode;
 }
 
 function SliderRow({
@@ -67,7 +70,7 @@ function SliderRow({
         className="[&_[data-slot=slider-range]]:bg-[#14B8A6] [&_[data-slot=slider-thumb]]:border-[#14B8A6]"
       />
       {benchmark && (
-        <p className="text-[8px] text-muted-foreground/50 italic">{benchmark}</p>
+        <div className="text-[8px] text-muted-foreground/50 italic">{benchmark}</div>
       )}
     </div>
   );
@@ -78,6 +81,7 @@ export default function MartechMediaSlide({ step }: MartechMediaSlideProps) {
   const martech = useRoiStore(s => s.martech);
   const setMartech = useRoiStore(s => s.setMartech);
   const baseline = useRoiStore(s => s.baseline);
+  const outputs = useRoiStore(s => s.outputs);
 
   // Build waste waterfall from baseline cost buckets
   const wasteWaterfall = [
@@ -125,7 +129,11 @@ export default function MartechMediaSlide({ step }: MartechMediaSlideProps) {
                 format={(v) => `${v.toFixed(1)}%`}
                 onChange={(v) => setMartech({ martechPctOfBudget: v })}
                 color="#E88D67"
-                benchmark="Gartner 2024: 23.8% of marketing budget"
+                benchmark={
+                  <SourceTooltip source={SOURCE_ATTRIBUTION.martechUtilization.source} confidence={SOURCE_ATTRIBUTION.martechUtilization.confidence} sampleSize={SOURCE_ATTRIBUTION.martechUtilization.sampleSize}>
+                    Gartner 2024: 23.8% of marketing budget
+                  </SourceTooltip>
+                }
               />
               <SliderRow
                 label="Number of Martech Tools"
@@ -188,7 +196,11 @@ export default function MartechMediaSlide({ step }: MartechMediaSlideProps) {
                 format={(v) => `${v.toFixed(1)}%`}
                 onChange={(v) => setMartech({ paidMediaPctOfBudget: v })}
                 color="#9B7ACC"
-                benchmark="Gartner 2025: 30.6% of marketing budget"
+                benchmark={
+                  <SourceTooltip source={SOURCE_ATTRIBUTION.paidMediaPct.source} confidence={SOURCE_ATTRIBUTION.paidMediaPct.confidence} sampleSize={SOURCE_ATTRIBUTION.paidMediaPct.sampleSize}>
+                    Gartner 2025: 30.6% of marketing budget
+                  </SourceTooltip>
+                }
               />
               <SliderRow
                 label="Current Blended ROAS"
@@ -199,7 +211,11 @@ export default function MartechMediaSlide({ step }: MartechMediaSlideProps) {
                 format={(v) => `${v.toFixed(1)}:1`}
                 onChange={(v) => setMartech({ currentBlendedRoas: v })}
                 color="#9B7ACC"
-                benchmark="Cross-channel blended average: 2.5:1"
+                benchmark={
+                  <SourceTooltip source={SOURCE_ATTRIBUTION.blendedRoas.source} confidence={SOURCE_ATTRIBUTION.blendedRoas.confidence}>
+                    Cross-channel blended average: 2.5:1
+                  </SourceTooltip>
+                }
               />
             </div>
           </motion.div>
@@ -255,6 +271,20 @@ export default function MartechMediaSlide({ step }: MartechMediaSlideProps) {
                 className="text-sm font-bold text-[#14B8A6]"
               />
             </div>
+          </motion.div>
+
+          {/* Channel ROAS comparison table */}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.7 }}
+            className="glass-panel rounded-lg p-4"
+            style={{ borderLeft: '3px solid #9B7ACC' }}
+          >
+            <h4 className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground mb-3 flex items-center gap-2">
+              <span>📊</span> Channel ROAS: Current vs AI-Optimized
+            </h4>
+            <ChannelRoasTable channels={outputs.channelRoas} />
           </motion.div>
         </motion.div>
       </div>

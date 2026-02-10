@@ -1,5 +1,5 @@
 // ─── ROI Simulator Step Definitions ──────────────────────────────────
-// 7 slides across 5 acts. Enterprise-grade financial model for S&P 100+.
+// 8 slides across 6 acts. Enterprise-grade financial model for S&P 100+.
 
 export type RoiLayout =
   | 'roi-title'
@@ -8,6 +8,7 @@ export type RoiLayout =
   | 'ops-content'
   | 'timeline-dual'
   | 'before-after'
+  | 'do-nothing'
   | 'executive-card';
 
 export interface RoiStep {
@@ -106,10 +107,24 @@ export const ROI_STEPS: RoiStep[] = [
     },
   },
 
-  // ─── ACT 5: Your Investment Case ──────────────────────────────────
+  // ─── ACT 5: The Cost of Inaction ─────────────────────────────────
+  {
+    id: 'do-nothing',
+    act: 5,
+    actLabel: 'The Cost of Inaction',
+    title: 'The Cost of Doing Nothing',
+    subtitle: 'Revenue erosion from competitive AI adoption gap',
+    layout: 'do-nothing',
+    themeColor: '#ef4444',
+    content: {
+      tagline: 'Every quarter without action widens the gap. The cost of inaction compounds faster than the cost of investment.',
+    },
+  },
+
+  // ─── ACT 6: Your Investment Case ──────────────────────────────────
   {
     id: 'executive-summary',
-    act: 5,
+    act: 6,
     actLabel: 'Your Investment Case',
     title: 'Your Investment Case',
     subtitle: 'Executive summary based on your inputs',
