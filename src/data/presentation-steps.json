@@ -117,7 +117,7 @@
   {
     "id": "act6-close",
     "title": "A Different Way of Working",
-    "narration": "To take humans out of the loop on routine work, you first have to codify that routine — extract the patterns, the decision logic, the ways of working that nobody has ever written down. That is the unglamorous work. But once the mundane is structured, agents handle it — and humans move to strategy, creative direction, and judgment.",
+    "narration": "To alleviate humans of routine work, you first have to codify that routine — extract the patterns, the decision logic, the ways of working that nobody has ever written down. That is the unglamorous work. But once the mundane is structured, agents handle it — and humans move to strategy, creative direction, and judgment.",
     "cameraPosition": {
       "x": 0,
       "y": 0,

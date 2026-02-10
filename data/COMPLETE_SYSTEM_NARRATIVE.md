@@ -1272,7 +1272,7 @@ The presentation is a guided narrative delivered through 6 slides. Each slide co
 - *Merges former slides 7 (intelligence layer) + 8 (thesis). show-infrastructure-vs-agents highlights both inputs and agents with all connecting links.*
 
 ### Slide 6: "A Different Way of Working" (act6-close)
-- Narration: To take humans out of the loop on routine work, you first have to codify that routine — extract the patterns, the decision logic, the ways of working that nobody has ever written down. That is the unglamorous work. But once the mundane is structured, agents handle it — and humans move to strategy, creative direction, and judgment.
+- Narration: To alleviate humans of routine work, you first have to codify that routine — extract the patterns, the decision logic, the ways of working that nobody has ever written down. That is the unglamorous work. But once the mundane is structured, agents handle it — and humans move to strategy, creative direction, and judgment.
 - Graph state: full-graph | Action: show-operating-model
 - *Merges former slides 9 (elevation) + 10 (new roles) + 11 (close). show-operating-model clears all highlights showing the full graph — a "zoom out" close covering elevation, context engineer role, and the closing argument.*
 
