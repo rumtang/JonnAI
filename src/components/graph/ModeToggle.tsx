@@ -6,6 +6,7 @@ import { useGraphStore } from '@/lib/store/graph-store';
 import { useCampaignStore } from '@/lib/store/campaign-store';
 import { useRoleInsightStore } from '@/lib/store/role-insight-store';
 import { useBuildStore } from '@/lib/store/build-store';
+import { useRoiStore } from '@/lib/store/roi-store';
 import { getGraphRef } from '@/lib/graph/graph-ref';
 import { useIsMobile } from '@/lib/hooks/use-is-mobile';
 import { motion } from 'framer-motion';
@@ -29,6 +30,7 @@ export default function ModeToggle() {
   const resetCampaign = useCampaignStore(s => s.resetCampaign);
 
   const resetBuild = useBuildStore(s => s.reset);
+  const resetRoi = useRoiStore(s => s.reset);
 
   const handleModeChange = (newMode: AppMode) => {
     if (newMode === mode) return;
@@ -47,6 +49,7 @@ export default function ModeToggle() {
     if (newMode === 'guided') {
       resetCampaign();
       resetBuild();
+      resetRoi();
       reset();
       loadLinearView();
       useGraphStore.setState({ progressiveReveal: false });
@@ -55,6 +58,7 @@ export default function ModeToggle() {
     } else if (newMode === 'explore') {
       resetCampaign();
       resetBuild();
+      resetRoi();
       loadFullGraph();
       if (fullGraphData) initCoreNodes(fullGraphData);
       // Centered overview of full graph
@@ -62,6 +66,7 @@ export default function ModeToggle() {
     } else if (newMode === 'campaign') {
       resetCampaign();
       resetBuild();
+      resetRoi();
       loadFullGraph();
       startCampaign();
       useGraphStore.setState({ progressiveReveal: false });
@@ -70,9 +75,17 @@ export default function ModeToggle() {
     } else if (newMode === 'build') {
       resetCampaign();
       resetBuild();
+      resetRoi();
       loadLinearView();
       useGraphStore.setState({ progressiveReveal: false });
       // Linear view — same as guided title position
+      fg?.cameraPosition({ x: 0, y: 0, z: 800 }, origin, 1500);
+    } else if (newMode === 'roi') {
+      resetCampaign();
+      resetBuild();
+      resetRoi();
+      loadLinearView();
+      useGraphStore.setState({ progressiveReveal: false });
       fg?.cameraPosition({ x: 0, y: 0, z: 800 }, origin, 1500);
     }
   };
@@ -105,6 +118,13 @@ export default function ModeToggle() {
       shortLabel: 'Build',
       activeColor: '#E88D67',
       activeBg: 'bg-[#E88D67]/20',
+    },
+    {
+      key: 'roi',
+      label: 'ROI',
+      shortLabel: 'ROI',
+      activeColor: '#14B8A6',
+      activeBg: 'bg-[#14B8A6]/20',
     },
   ];
 

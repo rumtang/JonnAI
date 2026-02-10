@@ -6,7 +6,7 @@ import { motion } from 'framer-motion';
 export default function Home() {
   const router = useRouter();
 
-  const handleStart = (mode: 'guided' | 'explore' | 'campaign' | 'build') => {
+  const handleStart = (mode: 'guided' | 'explore' | 'campaign' | 'build' | 'roi') => {
     if (typeof window !== 'undefined') {
       sessionStorage.setItem('initialMode', mode);
     }
@@ -37,6 +37,12 @@ export default function Home() {
       label: 'Build It',
       description: 'See how to build this infrastructure for your team',
       color: '#E88D67',
+    },
+    {
+      key: 'roi' as const,
+      label: 'ROI Simulator',
+      description: 'Model the financial case for knowledge graph infrastructure',
+      color: '#14B8A6',
     },
   ];
 
