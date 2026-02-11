@@ -107,6 +107,7 @@ export interface BuildStep {
   subtitle: string;
   layout: 'title' | 'timeline' | 'layer-cards' | 'hub-spoke' | 'tier-stack' | 'gantt';
   themeColor: string;
+  relatedNodeIds?: string[];
   content: {
     headline?: string;
     tagline?: string;
@@ -284,6 +285,7 @@ export const BUILD_STEPS: BuildStep[] = [
     subtitle: 'What exists — teams, systems, data assets, and their relationships',
     layout: 'layer-cards',
     themeColor: '#5B9ECF',
+    relatedNodeIds: ['campaign-planning', 'journey-mapping', 'receive-request'],
     content: {
       layerName: 'Structural',
       layerDescription: 'The fastest layer to populate because most organizations already have this information documented, if scattered. The challenge is reconciliation, not extraction.',
@@ -370,6 +372,7 @@ export const BUILD_STEPS: BuildStep[] = [
     subtitle: 'How work flows — workflows, approvals, and the undocumented reality',
     layout: 'layer-cards',
     themeColor: '#5B9ECF',
+    relatedNodeIds: ['draft-content', 'seo-optimization', 'quality-check', 'seo-agent', 'writer-agent'],
     content: {
       layerName: 'Process',
       layerDescription: 'Where most discovery effort concentrates. Process documentation ranges from pristine Visio diagrams nobody follows to tribal knowledge in the heads of three people.',
@@ -494,6 +497,7 @@ export const BUILD_STEPS: BuildStep[] = [
     title: 'Rules Layer',
     subtitle: 'What must happen, what must not, and what requires human judgment',
     layout: 'layer-cards',
+    relatedNodeIds: ['legal-review', 'legal-compliance-gate', 'accessibility-check', 'governance-gate', 'content-governance', 'brand-compliance', 'brand-review'],
     themeColor: '#D4856A',
     content: {
       layerName: 'Rules',
@@ -607,6 +611,7 @@ export const BUILD_STEPS: BuildStep[] = [
     title: 'Metrics Layer',
     subtitle: 'How the organization measures itself — the feedback signal for optimization',
     layout: 'layer-cards',
+    relatedNodeIds: ['track-performance', 'generate-report', 'attribution-modeling', 'performance-review', 'performance-agent', 'analytics-data'],
     themeColor: '#C9A04E',
     content: {
       layerName: 'Metrics',
@@ -693,6 +698,7 @@ export const BUILD_STEPS: BuildStep[] = [
     title: 'Context Layer',
     subtitle: 'Cross-cutting strategic inputs that inform how agents reason across domains',
     layout: 'layer-cards',
+    relatedNodeIds: ['research-insights', 'content-scoring', 'write-brief', 'research-agent'],
     themeColor: '#9B7ACC',
     content: {
       layerName: 'Context',
@@ -921,7 +927,7 @@ export const BUILD_STEPS: BuildStep[] = [
     act: 4,
     actLabel: 'The Build',
     title: 'The Phased Build',
-    subtitle: 'Foundation in 16 weeks, full coverage in 28 — then 12-18 months to operational maturity',
+    subtitle: 'Foundation in 16 weeks, full coverage in 28 — 10-person team peaking at ~9.75 FTE',
     layout: 'gantt',
     themeColor: '#E88D67',
     content: {
@@ -945,7 +951,7 @@ export const BUILD_STEPS: BuildStep[] = [
             'Resistance mitigation plan',
             'AS-IS process maps',
           ],
-          teamRoles: ['Context Engineer', 'Domain Analyst', 'Engagement Manager', 'Client Liaison'],
+          teamRoles: ['Context Engineer', 'Domain Analyst (Lead)', 'Domain Analyst (×2)', 'Process Mining Analyst', 'Engagement Manager', 'Client Liaison'],
         },
         {
           id: 'phase-2',
@@ -963,7 +969,7 @@ export const BUILD_STEPS: BuildStep[] = [
             'Junction entity catalog',
             'Brand rule inventory',
           ],
-          teamRoles: ['Context Engineer', 'Domain Analyst'],
+          teamRoles: ['Context Engineer', 'Domain Analyst (Lead)', 'Domain Analyst (×2)', 'Knowledge Structurer', 'Process Mining Analyst'],
         },
         {
           id: 'phase-3',
@@ -982,7 +988,7 @@ export const BUILD_STEPS: BuildStep[] = [
             'Provenance metadata',
             'Data quality report',
           ],
-          teamRoles: ['Graph Engineer', 'Data Engineer', 'Context Engineer'],
+          teamRoles: ['Graph Engineer', 'Data Engineer', 'Context Engineer', 'Knowledge Structurer', 'Process Mining Analyst', 'QA / Validation Lead'],
         },
         {
           id: 'phase-4',
@@ -1002,7 +1008,7 @@ export const BUILD_STEPS: BuildStep[] = [
             'MCP server config',
             'Agent affordance map',
           ],
-          teamRoles: ['Graph Engineer', 'Context Engineer', 'Engagement Manager'],
+          teamRoles: ['Graph Engineer', 'Context Engineer', 'QA / Validation Lead', 'Engagement Manager'],
         },
         {
           id: 'phase-5',
@@ -1021,7 +1027,7 @@ export const BUILD_STEPS: BuildStep[] = [
             'Tier 1 validation report',
             'Supervised launch runbook',
           ],
-          teamRoles: ['Context Engineer', 'Graph Engineer', 'Engagement Manager'],
+          teamRoles: ['Context Engineer', 'Graph Engineer', 'QA / Validation Lead', 'Knowledge Structurer', 'Engagement Manager'],
         },
         {
           id: 'phase-6',
@@ -1040,7 +1046,7 @@ export const BUILD_STEPS: BuildStep[] = [
             'Shadow process inventory',
             'Cross-domain test results',
           ],
-          teamRoles: ['Context Engineer', 'Domain Analyst', 'Graph Engineer', 'Data Engineer'],
+          teamRoles: ['Context Engineer', 'Domain Analyst (Lead)', 'Domain Analyst (×2)', 'Knowledge Structurer', 'Graph Engineer', 'Data Engineer', 'QA / Validation Lead'],
         },
         {
           id: 'phase-7',
@@ -1060,7 +1066,7 @@ export const BUILD_STEPS: BuildStep[] = [
             'Training materials',
             'Handoff documentation',
           ],
-          teamRoles: ['Context Engineer', 'Graph Engineer', 'Engagement Manager'],
+          teamRoles: ['Context Engineer', 'Graph Engineer', 'Domain Analyst (Lead)', 'QA / Validation Lead', 'Engagement Manager'],
         },
       ],
       teamRoles: [
@@ -1070,9 +1076,24 @@ export const BUILD_STEPS: BuildStep[] = [
           allocation: '100% — Weeks 1-28',
         },
         {
-          role: 'Domain Analyst',
-          responsibility: 'Discovery interviews, process mapping, document analysis, shadow process extraction',
-          allocation: '100% Wk 1-8, 75% Wk 17-22, 25% Wk 22-28',
+          role: 'Domain Analyst (Lead)',
+          responsibility: 'Leads analyst squad, discovery interviews, process mapping, shadow process extraction',
+          allocation: '100% Wk 1-12, 75% Wk 17-22, 50% Wk 23-28',
+        },
+        {
+          role: 'Domain Analyst (×2)',
+          responsibility: 'Each owns 2-3 domains; parallel discovery interviews, document analysis, practitioner walk-throughs',
+          allocation: '100% Wk 1-12, 75% Wk 17-22 (each)',
+        },
+        {
+          role: 'Knowledge Structurer',
+          responsibility: 'Bridges raw interviews → ontology-ready YAML; normalizes terminology across domains',
+          allocation: '100% Wk 3-16, 75% Wk 17-22',
+        },
+        {
+          role: 'Process Mining Analyst',
+          responsibility: 'System log analysis to reveal actual vs. documented behavior; validates shadow processes',
+          allocation: '100% — Weeks 1-12',
         },
         {
           role: 'Graph Engineer',
@@ -1085,8 +1106,13 @@ export const BUILD_STEPS: BuildStep[] = [
           allocation: '100% Wk 7-16, 50% Wk 17-28',
         },
         {
+          role: 'QA / Validation Lead',
+          responsibility: 'Independent validation of KG content, cross-domain integrity checks, agent test suite QA',
+          allocation: '50% Wk 7-14, 100% Wk 15-28',
+        },
+        {
           role: 'Engagement Manager',
-          responsibility: 'Client relationship, cross-domain stakeholder coordination, scope management',
+          responsibility: 'Client relationship, stakeholder coordination, scope management, change management comms',
           allocation: '75% Wk 1-16, 50% Wk 17-28',
         },
         {
@@ -1135,11 +1161,12 @@ export const BUILD_STEPS: BuildStep[] = [
         { item: 'Data access requests submitted for priority systems (CRM, HRIS, BPM)', owner: 'Joint', leadTime: '3-4 weeks before kickoff' },
         { item: 'Cloud environment provisioned (graph DB, dev environment)', owner: 'Joint', leadTime: '2-3 weeks before kickoff' },
         { item: 'Priority domains selected (2-3 for Tier 1 focus)', owner: 'Joint', leadTime: 'During scoping' },
+        { item: 'Process mining tool access provisioned (Celonis, Minit, or equivalent)', owner: 'Joint', leadTime: '3-4 weeks before kickoff' },
       ],
       assumptions: [
         'Client assigns a dedicated liaison with cross-departmental access',
         'Priority domain SMEs available within 48 hours of request during Weeks 1-8',
-        'Existing documentation is reasonably current (< 18 months stale)',
+        'Process mining tool access provisioned by Week 1 (Celonis, Minit, or equivalent)',
         'Ontology builds on existing standards (schema.org or industry-specific), not designed from scratch',
         'Scope locked after Week 5 — additions go to Tier 2',
       ],

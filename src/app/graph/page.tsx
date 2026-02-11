@@ -118,8 +118,8 @@ export default function GraphPage() {
     setLinearGraphData(linearData);
     setSteps(presentationStepsData as PresentationStep[]);
 
-    // Start with linear view in guided/build/roi mode, full graph in explore/campaign/role mode
-    if (activeMode === 'guided' || activeMode === 'build' || activeMode === 'roi') {
+    // Start with linear view in guided/roi mode, full graph in explore/campaign/build/role mode
+    if (activeMode === 'guided' || activeMode === 'roi') {
       setGraphData(linearData);
     } else {
       setGraphData(fullData);
