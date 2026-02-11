@@ -24,10 +24,12 @@ import ExplorePrompts from '@/components/graph/ExplorePrompts';
 
 import { useGraphStore } from '@/lib/store/graph-store';
 import { useSessionStore } from '@/lib/store/session-store';
+import { useRoiStore } from '@/lib/store/roi-store';
 import { usePresentationStore, type AppMode } from '@/lib/store/presentation-store';
 import { useCampaignStore } from '@/lib/store/campaign-store';
 import { useRoleInsightStore } from '@/lib/store/role-insight-store';
 import { navigateToNode } from '@/lib/utils/camera-navigation';
+import { decodeRoiConfig } from '@/lib/utils/roi-share';
 import seedGraphData from '@/data/seed-graph.json';
 import linearProcessData from '@/data/linear-process.json';
 import presentationStepsData from '@/data/presentation-steps.json';
@@ -102,6 +104,23 @@ export default function GraphPage() {
         }
       }
     } catch { /* ignore */ }
+
+    // Check for ?roi= query parameter (shared ROI URL)
+    try {
+      if (typeof window !== 'undefined') {
+        const params = new URLSearchParams(window.location.search);
+        const roiParam = params.get('roi');
+        if (roiParam) {
+          const config = decodeRoiConfig(roiParam);
+          if (config) {
+            savedMode = 'roi';
+            useRoiStore.getState().importConfig(config);
+            // Clean URL without reloading
+            window.history.replaceState({}, '', window.location.pathname);
+          }
+        }
+      }
+    } catch { /* ignore invalid roi param */ }
 
     if (savedMode) {
       setMode(savedMode);

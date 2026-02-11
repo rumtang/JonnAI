@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { ROI_STEPS } from '@/data/roi-steps';
 import { useSessionStore } from './session-store';
+import type { RoiShareConfig } from '@/lib/utils/roi-share';
 import {
   computeBaseline,
   computeRoi,
@@ -128,6 +129,10 @@ interface RoiState {
   setViewMode: (mode: 'marketing' | 'cfo') => void;
   setQuickCalcMode: (on: boolean) => void;
 
+  // Sharing
+  exportConfig: () => RoiShareConfig;
+  importConfig: (config: RoiShareConfig) => void;
+
   // Lifecycle
   reset: () => void;
 }
@@ -247,6 +252,51 @@ export const useRoiStore = create<RoiState>((set, get) => ({
   setActiveScenario: (scenario) => set({ activeScenario: scenario }),
   setViewMode: (mode) => set({ viewMode: mode }),
   setQuickCalcMode: (on) => set({ quickCalcMode: on, currentStepIndex: on ? 0 : 1 }),
+
+  exportConfig: () => {
+    const { org, investment, agentIntensity, activeScenario } = get();
+    return {
+      rev: org.annualRevenue,
+      ind: org.industry || '',
+      name: org.companyName || '',
+      hc: org.marketingHeadcount,
+      budPct: org.marketingBudgetPct,
+      fteCost: org.avgLoadedFteCost,
+      intensity: agentIntensity,
+      scenario: activeScenario,
+      invest: investment.totalInvestmentAmount,
+      weeks: investment.implementationWeeks,
+    };
+  },
+
+  importConfig: (config) => {
+    const state = get();
+    const org = {
+      ...state.org,
+      annualRevenue: config.rev,
+      industry: config.ind,
+      companyName: config.name,
+      marketingHeadcount: config.hc,
+      marketingBudgetPct: config.budPct,
+      avgLoadedFteCost: config.fteCost,
+    };
+    const investment = {
+      ...state.investment,
+      totalInvestmentAmount: config.invest,
+      implementationWeeks: config.weeks,
+    };
+    const assumptions = { ...INTENSITY_PRESETS[config.intensity] };
+    set({
+      org,
+      investment,
+      agentIntensity: config.intensity,
+      activeScenario: config.scenario,
+      assumptions,
+      quickCalcMode: false,
+      currentStepIndex: 0,
+      ...recalculate({ ...state, org, investment, assumptions }),
+    });
+  },
 
   reset: () => set({
     currentStepIndex: 0,

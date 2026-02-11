@@ -2,9 +2,10 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronLeft, ChevronRight, Compass, BookOpen, FastForward } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Compass, BookOpen, FastForward, Link2, Check } from 'lucide-react';
 import MethodologyPanel from './MethodologyPanel';
 import { useRoiStore } from '@/lib/store/roi-store';
+import { buildShareUrl } from '@/lib/utils/roi-share';
 import { usePresentationStore } from '@/lib/store/presentation-store';
 import { useGraphStore } from '@/lib/store/graph-store';
 import { useIsMobile } from '@/lib/hooks/use-is-mobile';
@@ -44,8 +45,11 @@ export default function RoiController() {
   const clearHighlights = useGraphStore(s => s.clearHighlights);
   const resetFilters = useGraphStore(s => s.resetFilters);
 
+  const exportConfig = useRoiStore(s => s.exportConfig);
+
   const isMobile = useIsMobile();
   const [methodologyOpen, setMethodologyOpen] = useState(false);
+  const [copied, setCopied] = useState(false);
   const step = ROI_STEPS[currentStepIndex];
 
   // Keyboard navigation
@@ -256,6 +260,31 @@ export default function RoiController() {
           <BookOpen className={isMobile ? 'w-3 h-3' : 'w-3.5 h-3.5'} />
           {!isMobile && 'How We Calculate'}
         </button>
+
+        {/* Share This Model — shown on results slides (index >= 4) */}
+        {currentStepIndex >= 4 && (
+          <button
+            onClick={() => {
+              const config = exportConfig();
+              const url = buildShareUrl(config);
+              navigator.clipboard.writeText(url).then(() => {
+                setCopied(true);
+                setTimeout(() => setCopied(false), 2000);
+              });
+            }}
+            className={`flex items-center gap-1.5 rounded-full glass-panel transition-all font-medium ${
+              copied ? 'text-[#4CAF50]' : 'text-muted-foreground hover:text-[#14B8A6]'
+            } ${isMobile ? 'px-2 py-1.5 text-[10px]' : 'px-3 py-2 text-xs'}`}
+            title="Copy shareable URL to clipboard"
+          >
+            {copied ? (
+              <Check className={isMobile ? 'w-3 h-3' : 'w-3.5 h-3.5'} />
+            ) : (
+              <Link2 className={isMobile ? 'w-3 h-3' : 'w-3.5 h-3.5'} />
+            )}
+            {!isMobile && (copied ? 'Copied!' : 'Share')}
+          </button>
+        )}
 
         {/* Exit to Explore */}
         <button
