@@ -174,7 +174,7 @@ export interface OperationalPain {
 
 /** User-configurable investment — no longer hardcoded. */
 export interface TransformationInvestment {
-  totalInvestmentAmount: number;      // $250K – $100M (log-scale slider), default ~$3M
+  totalInvestmentAmount: number;      // $250K – $100M (log-scale slider), default $20M
   implementationWeeks: number;        // 8–156 (~2–36 months), default 28
 }
 

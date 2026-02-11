@@ -62,7 +62,7 @@ const DEFAULT_PAIN: OperationalPain = {
 };
 
 const DEFAULT_INVESTMENT: TransformationInvestment = {
-  totalInvestmentAmount: 3_000_000,      // $3M — user-configurable
+  totalInvestmentAmount: 20_000_000,     // $20M over 2 years — user-configurable
   implementationWeeks: 28,               // ~7 months default
 };
 

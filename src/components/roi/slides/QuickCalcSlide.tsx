@@ -108,7 +108,7 @@ export default function QuickCalcSlide({ step }: QuickCalcSlideProps) {
       manualAttributionPct: 33,
     } as OperationalPain,
     investment: {
-      totalInvestmentAmount: 3_000_000,
+      totalInvestmentAmount: 20_000_000,
       implementationWeeks: 28,
     } as TransformationInvestment,
     assumptions: {
@@ -305,7 +305,7 @@ export default function QuickCalcSlide({ step }: QuickCalcSlideProps) {
 
           <p className="text-[10px] text-muted-foreground/50 leading-relaxed pt-2">
             Based on {formatCurrency(org.annualRevenue)} revenue, {org.industry || 'B2B Average'} vertical,
-            {' '}{org.marketingBudgetPct.toFixed(1)}% marketing budget. Uses $3M default investment with
+            {' '}{org.marketingBudgetPct.toFixed(1)}% marketing budget. Uses $20M default investment with
             industry-median improvement assumptions. Refine these inputs for a precise model.
           </p>
         </motion.div>
