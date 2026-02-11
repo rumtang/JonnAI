@@ -221,7 +221,7 @@ function RoiReportDocument({ org, baseline, outputs, viewMode }: ReportData) {
   const streams = [
     { label: 'ROAS Improvement', value: vs.roasImprovement, type: 'Revenue' },
     { label: 'Personalization Lift', value: vs.personalizationLift, type: 'Revenue' },
-    { label: 'Campaign Speed', value: vs.campaignSpeed, type: 'Revenue' },
+    { label: 'Campaign Throughput', value: vs.campaignSpeed, type: 'Savings' },
     { label: 'Martech Optimization', value: vs.martechOptimization, type: 'Savings' },
     { label: 'Content Velocity', value: vs.contentVelocity, type: 'Savings' },
     { label: 'Operational Efficiency', value: vs.operationalEfficiency, type: 'Savings' },
@@ -278,6 +278,12 @@ function RoiReportDocument({ org, baseline, outputs, viewMode }: ReportData) {
             <Text style={styles.metricLabel}>Total Investment</Text>
             <Text style={[styles.metricValue, { color: colors.orange }]}>
               {fmt(outputs.totalInvestment)}
+            </Text>
+          </View>
+          <View style={styles.metricCard}>
+            <Text style={styles.metricLabel}>Ongoing Annual Cost</Text>
+            <Text style={[styles.metricValue, { color: colors.orange }]}>
+              {fmt(outputs.annualOpEx)}
             </Text>
           </View>
           <View style={styles.metricCard}>
@@ -348,8 +354,10 @@ function RoiReportDocument({ org, baseline, outputs, viewMode }: ReportData) {
           <Text>
             Revenue-anchored model with conservative assumptions. Benchmarks sourced from Gartner 2025 CMO Spend Survey,
             McKinsey Personalization Analysis, Salesforce State of Marketing 2025, Forrester, and HubSpot.
-            Value streams include double-count guardrails (labor savings capped at 40% of team cost).
-            NPV discounted at 10% annual rate. IRR computed via Newton-Raphson on monthly cash flows.
+            Revenue streams (ROAS, Personalization) apply a 20% contribution margin — only profit on incremental revenue is counted.
+            Labor savings capped at 40% of team cost to prevent double-counting. Ongoing operational costs (20% of initial
+            investment per year) cover LLM tokens, infrastructure, and maintenance. NPV discounted at 10% annual rate.
+            IRR computed via Newton-Raphson on monthly cash flows net of ongoing OpEx.
           </Text>
         </View>
 

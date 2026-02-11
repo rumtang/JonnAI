@@ -196,8 +196,8 @@ export const METHODOLOGY: SlideMethodology[] = [
         id: 'roas-improvement',
         title: 'ROAS Improvement',
         description:
-          'Incremental ad revenue from AI-optimized campaigns. Based on platform vendor case studies (Meta, Google) — not independently verified. Default assumes 12% lift.',
-        formula: 'ROAS Lift = Media Spend × (Projected ROAS − Current ROAS)',
+          'Incremental profit contribution from AI-optimized campaigns. A 20% contribution margin is applied — only the profit on incremental revenue counts, not gross revenue. Based on platform vendor case studies (Meta, Google) — not independently verified. Default assumes 12% lift.',
+        formula: 'ROAS Lift = Media Spend × (Projected ROAS − Current ROAS) × 20% Margin',
         variables: [
           { name: 'Paid Media Spend', storeKey: 'baseline.derived.annualPaidMediaSpend', format: 'currency' },
           { name: 'Current ROAS', storeKey: 'martech.currentBlendedRoas', format: 'multiplier' },
@@ -208,6 +208,22 @@ export const METHODOLOGY: SlideMethodology[] = [
         resultFormat: 'currency',
         sourceKey: 'roasLift',
         confidence: 'emerging',
+      },
+      {
+        id: 'personalization-lift',
+        title: 'Personalization Lift',
+        description:
+          'Profit contribution from personalized customer experiences. McKinsey research shows 8% median revenue lift from personalization at scale. A 20% contribution margin is applied — only the profit on incremental revenue counts.',
+        formula: 'Value = Ad Revenue × Personalization Lift % × 20% Margin',
+        variables: [
+          { name: 'Current Ad Revenue', storeKey: 'baseline.derived.currentAdRevenue', format: 'currency' },
+          { name: 'Personalization Lift %', storeKey: 'assumptions.personalizationRevLiftPct', format: 'percent' },
+        ],
+        resultLabel: 'Personalization Lift',
+        resultKey: 'outputs.valueStreams.personalizationLift',
+        resultFormat: 'currency',
+        sourceKey: 'personalizationLift',
+        confidence: 'high',
       },
       {
         id: 'channel-roas',
@@ -250,17 +266,17 @@ export const METHODOLOGY: SlideMethodology[] = [
       },
       {
         id: 'campaign-speed',
-        title: 'Campaign Speed Value',
+        title: 'Campaign Throughput Savings',
         description:
-          'Revenue captured earlier by reducing campaign cycle times. Each day saved per campaign captures 0.1% of daily marketing budget (conservative attribution).',
-        formula: 'Value = Campaigns/yr × Days Saved × Daily Mktg Budget × 0.1%',
+          'Labor efficiency from faster campaign cycles. Days saved per campaign free up the 30% of the team actively working on campaign ops. Capped at 10% of total team cost, then included in the 40% labor savings cap alongside Content Velocity and Ops Efficiency.',
+        formula: 'Value = min(Campaigns/yr × Days Saved × 30% FTE × 8hr × Hourly Rate, 10% of Team Cost)',
         variables: [
           { name: 'Monthly Campaigns', storeKey: 'ops.monthlyCampaigns', format: 'number' },
           { name: 'Avg Cycle (weeks)', storeKey: 'ops.avgCampaignCycleWeeks', format: 'weeks' },
           { name: 'Cycle Reduction %', storeKey: 'assumptions.cycleTimeReductionPct', format: 'percent' },
-          { name: 'Daily Marketing Budget', storeKey: 'baseline.derived.dailyMarketingBudget', format: 'currency' },
+          { name: 'Hourly Rate', storeKey: 'baseline.derived.hourlyRate', format: 'currency' },
         ],
-        resultLabel: 'Campaign Speed Value',
+        resultLabel: 'Campaign Throughput Savings',
         resultKey: 'outputs.valueStreams.campaignSpeed',
         resultFormat: 'currency',
         sourceKey: 'adminTimePct',
@@ -520,6 +536,21 @@ export const METHODOLOGY: SlideMethodology[] = [
         resultKey: '_computed.conservativeAnnualValue',
         resultFormat: 'currency',
         sourceKey: 'marketingBudgetPct',
+        confidence: 'high',
+      },
+      {
+        id: 'ongoing-opex',
+        title: 'Ongoing Operational Costs',
+        description:
+          'Annual operational expenditure for running the AI infrastructure: LLM API tokens (content generation, compliance checks, optimization), cloud infrastructure (knowledge graph DB, compute, storage), and maintenance/DevOps staffing. Industry standard is 20% of initial capital investment per year. OpEx begins after the build phase completes and is subtracted from monthly cash flows in NPV, IRR, and payback calculations.',
+        formula: 'Annual OpEx = Total Investment × 20%',
+        variables: [
+          { name: 'Total Investment', storeKey: 'investment.totalInvestmentAmount', format: 'currency' },
+        ],
+        resultLabel: 'Annual Ongoing Cost',
+        resultKey: 'outputs.annualOpEx',
+        resultFormat: 'currency',
+        sourceKey: 'ongoingOpEx',
         confidence: 'high',
       },
       {

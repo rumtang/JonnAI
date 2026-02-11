@@ -14,7 +14,7 @@ export type ValueStreamKey =
 export const VALUE_STREAM_LABELS: Record<ValueStreamKey, string> = {
   roasImprovement: 'ROAS Improvement',
   personalizationLift: 'Personalization Lift',
-  campaignSpeed: 'Campaign Speed',
+  campaignSpeed: 'Campaign Throughput',
   martechOptimization: 'Martech Optimization',
   contentVelocity: 'Content Velocity',
   operationalEfficiency: 'Ops Efficiency',

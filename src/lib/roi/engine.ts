@@ -71,6 +71,13 @@ export const COST_INFLATION = {
   laborCostYoY: 4.5,      // % annual salary inflation for marketing roles
 } as const;
 
+// Only profit margin on incremental revenue counts as value — not gross revenue
+export const CONTRIBUTION_MARGIN_PCT = 20;
+
+// Industry-standard software maintenance ratio: covers LLM API tokens,
+// cloud infrastructure, knowledge graph maintenance, DevOps staffing
+export const ONGOING_OPEX_PCT = 20;
+
 export const CFO_FRAMEWORK = {
   wacc: 10,               // weighted average cost of capital %
   hurdle_rate: 15,        // minimum IRR for investment approval %
@@ -100,6 +107,8 @@ export const SOURCE_ATTRIBUTION: Record<string, { source: string; confidence: Co
   reworkRate: { source: 'Lucidpress Brand Consistency Report', confidence: 'medium' },
   marketingWaste: { source: 'Rakuten/ANA Programmatic Study', confidence: 'medium', sampleSize: '1,000+ advertisers' },
   doNothingErosion: { source: 'PwC/ANA Digital Maturity Study (illustrative erosion model)', confidence: 'emerging' },
+  contributionMargin: { source: 'Industry average marketing contribution margin (20% of incremental revenue)', confidence: 'medium' },
+  ongoingOpEx: { source: 'Industry-standard software maintenance ratio (20% of capital cost per year)', confidence: 'high' },
 };
 
 // ─── Input Types ─────────────────────────────────────────────────────
@@ -290,6 +299,7 @@ export interface DoNothingOutputs {
 export interface RoiOutputs {
   totalInvestment: number;
   implementationWeeks: number;
+  annualOpEx: number;
 
   valueStreams: ValueStreams;
   totalAnnualValue: number;
@@ -453,22 +463,28 @@ function computeValueStreams(
     d.annualMartechSpend * (assumptions.martechToolConsolidationPct / 100) * 0.3;
   const martechOptimization = recoverableValue + consolidationSavings;
 
-  // 2. ROAS Improvement — the enterprise "wow" metric
+  // 2. ROAS Improvement — incremental *profit contribution*, not gross revenue
   const projectedRoas =
     martech.currentBlendedRoas * (1 + assumptions.roasLiftPct / 100);
   const roasImprovement =
-    d.annualPaidMediaSpend * (projectedRoas - martech.currentBlendedRoas);
+    d.annualPaidMediaSpend * (projectedRoas - martech.currentBlendedRoas) *
+    (CONTRIBUTION_MARGIN_PCT / 100);
 
   // 3. Content Velocity — time savings on content production
   const contentVelocity =
     d.contentTeamCost * (assumptions.contentTimeSavingsPct / 100);
 
-  // 4. Campaign Speed — faster campaigns = more revenue days captured
+  // 4. Campaign Throughput — labor efficiency from faster campaign cycles
+  // Faster campaigns → days saved per campaign × active FTE fraction × hourly rate
   const currentCycleDays = ops.avgCampaignCycleWeeks * 7;
   const daysSaved = currentCycleDays * (assumptions.cycleTimeReductionPct / 100);
   const campaignsPerYear = ops.monthlyCampaigns * 12;
-  // Each campaign captures 0.1% of daily marketing budget per day launched earlier
-  const campaignSpeed = campaignsPerYear * daysSaved * d.dailyMarketingBudget * 0.001;
+  const activeFteFraction = 0.30; // 30% of team actively working on campaign ops
+  const hoursPerDay = 8;
+  const rawCampaignSpeed =
+    campaignsPerYear * daysSaved * activeFteFraction * hoursPerDay * d.hourlyRate;
+  // Cap at 10% of total team cost
+  const campaignSpeed = Math.min(rawCampaignSpeed, d.totalTeamCost * 0.10);
 
   // 5. Operational Efficiency — admin-to-strategic shift + rework reduction
   const adminShiftValue =
@@ -485,20 +501,23 @@ function computeValueStreams(
     (assumptions.attributionImprovementPct / 100) *
     (1 - assumptions.roasLiftPct / 100);
 
-  // 7. Personalization Lift — revenue uplift from personalized experiences
+  // 7. Personalization Lift — profit contribution from personalized experiences
   const personalizationLift =
-    d.currentAdRevenue * (assumptions.personalizationRevLiftPct / 100);
+    d.currentAdRevenue * (assumptions.personalizationRevLiftPct / 100) *
+    (CONTRIBUTION_MARGIN_PCT / 100);
 
   // ── Double-count guardrail: cap labor-related savings at 40% of team cost ──
-  // Content velocity + operational efficiency both draw from team cost;
-  // a person can't have all their content time, admin time, and rework time saved simultaneously.
+  // Content velocity, campaign throughput, and operational efficiency all draw from team cost;
+  // a person can't have all their content time, campaign time, admin time, and rework time saved simultaneously.
   const maxLaborSavings = d.totalTeamCost * 0.40;
-  const rawLaborSavings = contentVelocity + operationalEfficiency;
+  const rawLaborSavings = contentVelocity + campaignSpeed + operationalEfficiency;
   let finalContentVelocity = contentVelocity;
+  let finalCampaignSpeed = campaignSpeed;
   let finalOperationalEfficiency = operationalEfficiency;
   if (rawLaborSavings > maxLaborSavings && rawLaborSavings > 0) {
     const scaleFactor = maxLaborSavings / rawLaborSavings;
     finalContentVelocity = contentVelocity * scaleFactor;
+    finalCampaignSpeed = campaignSpeed * scaleFactor;
     finalOperationalEfficiency = operationalEfficiency * scaleFactor;
   }
 
@@ -506,7 +525,7 @@ function computeValueStreams(
     martechOptimization,
     roasImprovement,
     contentVelocity: finalContentVelocity,
-    campaignSpeed,
+    campaignSpeed: finalCampaignSpeed,
     operationalEfficiency: finalOperationalEfficiency,
     attributionImprovement,
     personalizationLift,
@@ -687,6 +706,11 @@ export function computeRoi(
     vs.attributionImprovement +
     vs.personalizationLift;
 
+  // ── Ongoing operational costs (LLM tokens, infra, maintenance) ──
+  const annualOpEx = totalInvestment * (ONGOING_OPEX_PCT / 100);
+  const monthlyOpEx = annualOpEx / 12;
+  const buildMonthsForOpEx = Math.ceil(investment.implementationWeeks / 4.33);
+
   // ── Timeline (36 months) ──
   const investmentCurve = buildInvestmentCurve(totalInvestment, investment.implementationWeeks);
   const timeline: TimelinePoint[] = [];
@@ -694,11 +718,17 @@ export function computeRoi(
   let cumulativeConservative = 0;
   let cumulativeExpected = 0;
   let cumulativeAggressive = 0;
+  let cumulativeOpEx = 0;
 
   for (let m = 0; m <= PROJECTION_MONTHS; m++) {
     const ramp = rampFactor(m);
 
     const monthlyBaseValue = (totalAnnualValue / 12) * ramp;
+
+    // OpEx starts after the build phase completes
+    if (m > buildMonthsForOpEx) {
+      cumulativeOpEx += monthlyOpEx;
+    }
 
     cumulativeConservative += monthlyBaseValue * SCENARIO_MULTIPLIERS.conservative;
     cumulativeExpected += monthlyBaseValue * SCENARIO_MULTIPLIERS.expected;
@@ -706,7 +736,7 @@ export function computeRoi(
 
     timeline.push({
       month: m,
-      investmentCumulative: investmentCurve[m] ?? totalInvestment,
+      investmentCumulative: (investmentCurve[m] ?? totalInvestment) + cumulativeOpEx,
       valueConservative: cumulativeConservative,
       valueExpected: cumulativeExpected,
       valueAggressive: cumulativeAggressive,
@@ -714,7 +744,7 @@ export function computeRoi(
     });
   }
 
-  // ── Breakeven month ──
+  // ── Breakeven month (cumulative value must exceed cumulative investment + cumulative OpEx) ──
   let breakEvenMonth = PROJECTION_MONTHS;
   for (let m = 1; m <= PROJECTION_MONTHS; m++) {
     if (timeline[m].valueExpected >= timeline[m].investmentCumulative) {
@@ -725,16 +755,18 @@ export function computeRoi(
 
   // ── 3-Year Summary ──
   const totalValue3yr = cumulativeExpected;
-  const threeYearRoi = ((totalValue3yr - totalInvestment) / totalInvestment) * 100;
+  const totalCost3yr = totalInvestment + cumulativeOpEx;
+  const threeYearRoi = ((totalValue3yr - totalCost3yr) / totalCost3yr) * 100;
   const paybackMonths = breakEvenMonth;
 
-  // NPV: discount future value streams at 10% annual
+  // NPV: discount future net cash flows (value minus OpEx) at 10% annual
   let npv = -totalInvestment;
   for (let m = 1; m <= PROJECTION_MONTHS; m++) {
     const monthlyValue =
       m > 0 ? timeline[m].valueExpected - timeline[m - 1].valueExpected : 0;
+    const opExThisMonth = m > buildMonthsForOpEx ? monthlyOpEx : 0;
     const discountFactor = 1 / Math.pow(1 + DISCOUNT_RATE / 12, m);
-    npv += monthlyValue * discountFactor;
+    npv += (monthlyValue - opExThisMonth) * discountFactor;
   }
 
   // ── ROAS Comparison ──
@@ -825,7 +857,7 @@ export function computeRoi(
     { label: 'Innovation', pct: Math.max(0, futureInnovationPct), color: '#4CAF50' },
   ];
 
-  // ── IRR from monthly cash flows ──
+  // ── IRR from monthly cash flows (includes OpEx) ──
   const buildMonths = Math.ceil(investment.implementationWeeks / 4.33);
   const monthlyInvestment = totalInvestment / buildMonths;
   const monthlyCashFlows: number[] = [];
@@ -835,6 +867,8 @@ export function computeRoi(
     if (m > 0) {
       cf += timeline[m].valueExpected - timeline[m - 1].valueExpected;
     }
+    // Subtract ongoing OpEx after build phase
+    if (m > buildMonthsForOpEx) cf -= monthlyOpEx;
     monthlyCashFlows.push(cf);
   }
   const irr = calculateIRR(monthlyCashFlows);
@@ -851,6 +885,7 @@ export function computeRoi(
   return {
     totalInvestment,
     implementationWeeks: investment.implementationWeeks,
+    annualOpEx,
     valueStreams: vs,
     totalAnnualValue,
     threeYearRoi,

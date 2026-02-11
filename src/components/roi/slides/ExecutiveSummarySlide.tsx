@@ -2,7 +2,7 @@
 
 import { useState, useCallback } from 'react';
 import { motion } from 'framer-motion';
-import { Copy, Check, TrendingUp, Clock, DollarSign, BarChart3, Shield, Download } from 'lucide-react';
+import { Copy, Check, TrendingUp, Clock, DollarSign, BarChart3, Shield, Download, RefreshCw } from 'lucide-react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { useRoiStore } from '@/lib/store/roi-store';
 import { SCENARIO_MULTIPLIERS, CFO_FRAMEWORK } from '@/lib/roi/engine';
@@ -31,7 +31,7 @@ function ValueBreakdownBar({ outputs }: { outputs: ReturnType<typeof useRoiStore
     { label: 'ROAS Improvement', value: vs.roasImprovement, color: '#9B7ACC' },
     { label: 'Martech Optimization', value: vs.martechOptimization, color: '#E88D67' },
     { label: 'Content Velocity', value: vs.contentVelocity, color: '#5B9ECF' },
-    { label: 'Campaign Speed', value: vs.campaignSpeed, color: '#C9A04E' },
+    { label: 'Campaign Throughput', value: vs.campaignSpeed, color: '#C9A04E' },
     { label: 'Ops Efficiency', value: vs.operationalEfficiency, color: '#D4856A' },
     { label: 'Attribution', value: vs.attributionImprovement, color: '#f59e0b' },
     { label: 'Personalization', value: vs.personalizationLift, color: '#4CAF50' },
@@ -191,6 +191,7 @@ export default function ExecutiveSummarySlide({ step }: ExecutiveSummarySlidePro
         `  Internal Rate of Return (IRR): ${isNaN(irr) ? 'N/A' : `${Math.round(irr * 100)}%`}`,
         `  Payback Period: ${outputs.paybackMonths} months`,
         `  Total Capital Required: ${formatCompact(outputs.totalInvestment)}`,
+        `  Ongoing Annual Cost: ${formatCompact(outputs.annualOpEx)}`,
         '',
         'RISK-ADJUSTED RETURNS (Conservative)',
         `  Risk-Adjusted NPV: ${formatCompact(riskAdjustedNpv)}`,
@@ -227,6 +228,7 @@ export default function ExecutiveSummarySlide({ step }: ExecutiveSummarySlidePro
       `3-Year ROI: ${Math.round(outputs.threeYearRoi)}%`,
       `Payback Period: ${outputs.paybackMonths} months`,
       `Total Investment: ${formatCompact(outputs.totalInvestment)}`,
+      `Ongoing Annual Cost: ${formatCompact(outputs.annualOpEx)}`,
       `Net Present Value: ${formatCompact(outputs.netPresentValue)}`,
       `IRR: ${isNaN(irr) ? 'N/A' : `${Math.round(irr * 100)}%`}`,
       `Annual Value (Full Ramp): ${formatCompact(outputs.totalAnnualValue)}`,
@@ -234,7 +236,7 @@ export default function ExecutiveSummarySlide({ step }: ExecutiveSummarySlidePro
       'VALUE BREAKDOWN (Annual — $ and % of total)',
       `  ROAS Improvement: ${formatCompact(vs.roasImprovement)} (${pctOf(vs.roasImprovement)}) [Revenue]`,
       `  Personalization Lift: ${formatCompact(vs.personalizationLift)} (${pctOf(vs.personalizationLift)}) [Revenue]`,
-      `  Campaign Speed: ${formatCompact(vs.campaignSpeed)} (${pctOf(vs.campaignSpeed)}) [Revenue]`,
+      `  Campaign Throughput: ${formatCompact(vs.campaignSpeed)} (${pctOf(vs.campaignSpeed)}) [Savings]`,
       `  Martech Optimization: ${formatCompact(vs.martechOptimization)} (${pctOf(vs.martechOptimization)}) [Savings]`,
       `  Content Velocity: ${formatCompact(vs.contentVelocity)} (${pctOf(vs.contentVelocity)}) [Savings]`,
       `  Operational Efficiency: ${formatCompact(vs.operationalEfficiency)} (${pctOf(vs.operationalEfficiency)}) [Savings]`,
@@ -337,11 +339,12 @@ export default function ExecutiveSummarySlide({ step }: ExecutiveSummarySlidePro
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="grid grid-cols-2 md:grid-cols-5 gap-3 mb-4"
+            className="grid grid-cols-2 md:grid-cols-6 gap-3 mb-4"
           >
             {[
               { icon: Clock, label: 'Payback Period', value: outputs.paybackMonths, format: 'months' as const, color: '#14B8A6' },
               { icon: DollarSign, label: 'Total Investment', value: outputs.totalInvestment, format: 'currency' as const, color: '#D4856A' },
+              { icon: RefreshCw, label: 'Ongoing Annual Cost', value: outputs.annualOpEx, format: 'currency' as const, color: '#E88D67' },
               { icon: BarChart3, label: 'Net Present Value', value: outputs.netPresentValue, format: 'currency' as const, color: '#9B7ACC' },
               { icon: TrendingUp, label: 'Annual Value', value: outputs.totalAnnualValue, format: 'currency' as const, color: '#C9A04E' },
               { icon: Shield, label: 'IRR', value: isNaN(irr) ? 0 : irr * 100, format: 'percent' as const, color: '#14B8A6' },
@@ -400,7 +403,7 @@ export default function ExecutiveSummarySlide({ step }: ExecutiveSummarySlidePro
                 {[
                   { label: 'ROAS Improvement', streamKey: 'roasImprovement' as ValueStreamKey, value: vs.roasImprovement, type: 'Revenue', color: '#9B7ACC' },
                   { label: 'Personalization Lift', streamKey: 'personalizationLift' as ValueStreamKey, value: vs.personalizationLift, type: 'Revenue', color: '#4CAF50' },
-                  { label: 'Campaign Speed', streamKey: 'campaignSpeed' as ValueStreamKey, value: vs.campaignSpeed, type: 'Revenue', color: '#C9A04E' },
+                  { label: 'Campaign Throughput', streamKey: 'campaignSpeed' as ValueStreamKey, value: vs.campaignSpeed, type: 'Savings', color: '#C9A04E' },
                   { label: 'Martech Optimization', streamKey: 'martechOptimization' as ValueStreamKey, value: vs.martechOptimization, type: 'Savings', color: '#E88D67' },
                   { label: 'Content Velocity', streamKey: 'contentVelocity' as ValueStreamKey, value: vs.contentVelocity, type: 'Savings', color: '#5B9ECF' },
                   { label: 'Operational Efficiency', streamKey: 'operationalEfficiency' as ValueStreamKey, value: vs.operationalEfficiency, type: 'Savings', color: '#D4856A' },
@@ -454,15 +457,15 @@ export default function ExecutiveSummarySlide({ step }: ExecutiveSummarySlidePro
               <div className="flex items-center gap-1.5">
                 <span className="w-2 h-2 rounded-full bg-[#4CAF50]" />
                 <span className="text-[8px] text-muted-foreground">
-                  Revenue: {formatCompact(vs.roasImprovement + vs.personalizationLift + vs.campaignSpeed)}
-                  {' '}({outputs.totalAnnualValue > 0 ? `${(((vs.roasImprovement + vs.personalizationLift + vs.campaignSpeed) / outputs.totalAnnualValue) * 100).toFixed(0)}%` : '–'})
+                  Revenue: {formatCompact(vs.roasImprovement + vs.personalizationLift)}
+                  {' '}({outputs.totalAnnualValue > 0 ? `${(((vs.roasImprovement + vs.personalizationLift) / outputs.totalAnnualValue) * 100).toFixed(0)}%` : '–'})
                 </span>
               </div>
               <div className="flex items-center gap-1.5">
                 <span className="w-2 h-2 rounded-full bg-[#5B9ECF]" />
                 <span className="text-[8px] text-muted-foreground">
-                  Savings: {formatCompact(vs.martechOptimization + vs.contentVelocity + vs.operationalEfficiency + vs.attributionImprovement)}
-                  {' '}({outputs.totalAnnualValue > 0 ? `${(((vs.martechOptimization + vs.contentVelocity + vs.operationalEfficiency + vs.attributionImprovement) / outputs.totalAnnualValue) * 100).toFixed(0)}%` : '–'})
+                  Savings: {formatCompact(vs.martechOptimization + vs.contentVelocity + vs.campaignSpeed + vs.operationalEfficiency + vs.attributionImprovement)}
+                  {' '}({outputs.totalAnnualValue > 0 ? `${(((vs.martechOptimization + vs.contentVelocity + vs.campaignSpeed + vs.operationalEfficiency + vs.attributionImprovement) / outputs.totalAnnualValue) * 100).toFixed(0)}%` : '–'})
                 </span>
               </div>
             </div>
@@ -562,13 +565,14 @@ export default function ExecutiveSummarySlide({ step }: ExecutiveSummarySlidePro
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4"
+            className="grid grid-cols-2 md:grid-cols-5 gap-3 mb-4"
           >
             {[
               { label: 'Net Present Value', value: outputs.netPresentValue, format: 'currency' as const, color: '#9B7ACC' },
               { label: 'Internal Rate of Return', value: isNaN(irr) ? 0 : irr * 100, format: 'percent' as const, color: '#14B8A6' },
               { label: 'Payback Period', value: outputs.paybackMonths, format: 'months' as const, color: '#C9A04E' },
               { label: 'Capital Required', value: outputs.totalInvestment, format: 'currency' as const, color: '#D4856A' },
+              { label: 'Ongoing Annual Cost', value: outputs.annualOpEx, format: 'currency' as const, color: '#E88D67' },
             ].map(({ label, value, format, color }, i) => (
               <motion.div
                 key={label}
