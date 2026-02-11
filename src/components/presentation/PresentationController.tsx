@@ -487,7 +487,7 @@ export default function PresentationController() {
         break;
       }
 
-      case 'show-infrastructure-vs-agents': {
+      case 'show-intelligence-vs-agents': {
         clearHighlights();
         highlightByTypes(['input', 'agent']);
         highlightLinksByTypes(['uses', 'performs']);

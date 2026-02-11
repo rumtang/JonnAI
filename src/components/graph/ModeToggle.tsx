@@ -93,7 +93,7 @@ export default function ModeToggle() {
       resetRoi();
       loadFullGraph();
       useGraphStore.setState({ progressiveReveal: false });
-      fg?.cameraPosition({ x: 0, y: 0, z: 520 }, origin, 1500);
+      // No camera fly — role mode covers graph with a scrim
     }
   };
 
@@ -113,11 +113,11 @@ export default function ModeToggle() {
       activeBg: 'bg-[#5B9ECF]/20',
     },
     {
-      key: 'explore',
-      label: 'Explore',
-      shortLabel: 'Explore',
-      activeColor: '#9B7ACC',
-      activeBg: 'bg-[#9B7ACC]/20',
+      key: 'roi',
+      label: 'ROI',
+      shortLabel: 'ROI',
+      activeColor: '#14B8A6',
+      activeBg: 'bg-[#14B8A6]/20',
     },
     {
       key: 'campaign',
@@ -134,11 +134,11 @@ export default function ModeToggle() {
       activeBg: 'bg-[#E88D67]/20',
     },
     {
-      key: 'roi',
-      label: 'ROI',
-      shortLabel: 'ROI',
-      activeColor: '#14B8A6',
-      activeBg: 'bg-[#14B8A6]/20',
+      key: 'explore',
+      label: 'Explore',
+      shortLabel: 'Explore',
+      activeColor: '#9B7ACC',
+      activeBg: 'bg-[#9B7ACC]/20',
     },
   ];
 

@@ -3,9 +3,10 @@ import { GraphData, GraphNode } from '../graph/types';
 import { RoleDefinition, ROLE_MAP } from '../roles/role-definitions';
 import { RoleSubgraph, computeRoleSubgraph } from '../roles/role-subgraph';
 
-// Complete workflow order — all 45 steps and gates in logical pipeline sequence.
-// WHY: Every role walks through the entire pipeline so users can see how each
-// step affects their work (preAI / aiAgents / aiAgentic), not just owned nodes.
+// Complete workflow order — all pipeline steps and gates in logical sequence.
+// WHY: Used as an ordering reference so role-specific walkthrough paths
+// preserve the pipeline's logical flow (even though each role only visits
+// its own subset of nodes).
 const FULL_WORKFLOW_ORDER = [
   // Plan phase
   'campaign-planning',
@@ -60,26 +61,31 @@ const FULL_WORKFLOW_ORDER = [
   'optimize',
 ];
 
-// Build the walkthrough path: all 45 workflow nodes in pipeline order.
-// Every role walks the full pipeline so journey tiles (preAI/aiAgents/aiAgentic)
-// are visible for every step, showing how each step affects this role.
+// Build the walkthrough path: only nodes this role owns, reviews, or depends on.
+// Pipeline nodes (owned steps + reviewed gates) come first in FULL_WORKFLOW_ORDER
+// sequence to preserve logical flow, then agents, then inputs.
 function buildWalkthroughPath(role: RoleDefinition, graphData: GraphData): string[] {
   const existingIds = new Set(graphData.nodes.map(n => n.id));
 
-  // Start with the full workflow in order, filtered to nodes that exist in the graph
-  const path = FULL_WORKFLOW_ORDER.filter(id => existingIds.has(id));
+  // Collect the role's pipeline nodes (steps + gates)
+  const pipelineSet = new Set([...role.ownedSteps, ...role.reviewedGates]);
 
-  // Safety: add any role-specific nodes not already in the path (agents, inputs, or
-  // nodes that might have been missed in FULL_WORKFLOW_ORDER)
-  const pathSet = new Set(path);
-  const extras = [
-    ...role.ownedSteps,
-    ...role.reviewedGates,
-    ...role.relatedAgents,
-    ...role.relatedInputs,
-  ].filter(id => existingIds.has(id) && !pathSet.has(id));
+  // Keep pipeline nodes in workflow order for logical narrative flow
+  const pipelineNodes = FULL_WORKFLOW_ORDER.filter(
+    id => pipelineSet.has(id) && existingIds.has(id)
+  );
 
-  return [...path, ...extras];
+  // Append agents then inputs — order within each group matches role definition
+  const agents = role.relatedAgents.filter(id => existingIds.has(id));
+  const inputs = role.relatedInputs.filter(id => existingIds.has(id));
+
+  // Deduplicate in case any agent/input ID overlaps with pipeline
+  const seen = new Set(pipelineNodes);
+  const uniqueAgents = agents.filter(id => !seen.has(id));
+  uniqueAgents.forEach(id => seen.add(id));
+  const uniqueInputs = inputs.filter(id => !seen.has(id));
+
+  return [...pipelineNodes, ...uniqueAgents, ...uniqueInputs];
 }
 
 interface RoleInsightState {

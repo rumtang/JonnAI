@@ -16,9 +16,8 @@ import RoiController from '@/components/roi/RoiController';
 import ModeToggle from '@/components/graph/ModeToggle';
 import CampaignPanel from '@/components/graph/CampaignMode/CampaignPanel';
 import CampaignSummary from '@/components/graph/CampaignMode/CampaignSummary';
-import RoleInsightPanel from '@/components/graph/RoleMode/RoleInsightPanel';
+import RoleController from '@/components/role/RoleController';
 import RolePicker from '@/components/graph/RoleMode/RolePicker';
-import RoleSelectorButton from '@/components/graph/RoleMode/RoleSelectorButton';
 import ExploreWelcome from '@/components/graph/ExploreWelcome';
 import ExplorePrompts from '@/components/graph/ExplorePrompts';
 
@@ -27,7 +26,6 @@ import { useSessionStore } from '@/lib/store/session-store';
 import { useRoiStore } from '@/lib/store/roi-store';
 import { usePresentationStore, type AppMode } from '@/lib/store/presentation-store';
 import { useCampaignStore } from '@/lib/store/campaign-store';
-import { useRoleInsightStore } from '@/lib/store/role-insight-store';
 import { navigateToNode } from '@/lib/utils/camera-navigation';
 import { decodeRoiConfig } from '@/lib/utils/roi-share';
 import seedGraphData from '@/data/seed-graph.json';
@@ -68,10 +66,8 @@ export default function GraphPage() {
   const setFullGraphData = useGraphStore(s => s.setFullGraphData);
   const setLinearGraphData = useGraphStore(s => s.setLinearGraphData);
   const selectNode = useGraphStore(s => s.selectNode);
-  const selectedNode = useGraphStore(s => s.selectedNode);
   const { setSteps, mode, setMode } = usePresentationStore();
   const campaignActive = useCampaignStore(s => s.isActive);
-  const roleActive = useRoleInsightStore(s => s.isActive);
   const [rolePickerOpen, setRolePickerOpen] = useState(false);
   const [showExploreWelcome, setShowExploreWelcome] = useState(false);
   const prevModeRef = useRef(mode);
@@ -171,14 +167,6 @@ export default function GraphPage() {
     }
   }, [campaignActive, currentNodeId, selectNode]);
 
-  // Deactivate role when a node is clicked (so NodeDetailPanel can show)
-  useEffect(() => {
-    if (selectedNode && roleActive) {
-      // clearRole() only resets role store — selectNode already set its own highlights
-      useRoleInsightStore.getState().clearRole();
-    }
-  }, [selectedNode, roleActive]);
-
   // Show welcome overlay when transitioning from guided tour to explore mode
   useEffect(() => {
     if (prevModeRef.current === 'guided' && mode === 'explore') {
@@ -262,18 +250,7 @@ export default function GraphPage() {
         </>
       ) : mode === 'role' ? (
         <>
-          <GraphControls />
-          <SearchBar />
-          <ZoomControls />
-
-          {/* Show RoleInsightPanel when role is active, NodeDetailPanel otherwise */}
-          {roleActive ? (
-            <RoleInsightPanel onChangeRole={() => setRolePickerOpen(true)} />
-          ) : (
-            <NodeDetailPanel />
-          )}
-
-          {/* Role picker modal — non-dismissable until role selected in role mode */}
+          <RoleController onChangeRole={() => setRolePickerOpen(true)} />
           <RolePicker
             open={rolePickerOpen}
             onClose={() => setRolePickerOpen(false)}
@@ -286,15 +263,7 @@ export default function GraphPage() {
           <SearchBar />
           <ZoomControls />
 
-          {/* Show RoleInsightPanel when role is active, NodeDetailPanel otherwise */}
-          {roleActive ? (
-            <RoleInsightPanel onChangeRole={() => setRolePickerOpen(true)} />
-          ) : (
-            <NodeDetailPanel />
-          )}
-
-          {/* Role picker modal */}
-          <RolePicker open={rolePickerOpen} onClose={() => setRolePickerOpen(false)} />
+          <NodeDetailPanel />
 
           {/* Welcome overlay — shown when entering explore from guided tour */}
           <AnimatePresence>
@@ -303,6 +272,8 @@ export default function GraphPage() {
                 onExploreGraph={() => setShowExploreWelcome(false)}
                 onSelectRole={() => {
                   setShowExploreWelcome(false);
+                  // Switch to role mode to pick a role
+                  setMode('role');
                   setRolePickerOpen(true);
                 }}
                 onDismiss={() => setShowExploreWelcome(false)}
@@ -315,11 +286,10 @@ export default function GraphPage() {
             <ExplorePrompts />
           )}
 
-          {/* Bottom CTAs — Campaign + Role */}
+          {/* Bottom CTA — Campaign */}
           <div className={`fixed bottom-8 left-1/2 -translate-x-1/2 z-50 ${
             isMobile ? 'flex flex-col items-stretch gap-2 w-[calc(100%-2rem)]' : 'flex items-center gap-3'
           }`}>
-            <RoleSelectorButton onOpenPicker={() => setRolePickerOpen(true)} />
             <button
               onClick={handleStartCampaign}
               className={`rounded-2xl glass-panel hover:shadow-lg hover:shadow-[#4CAF50]/10

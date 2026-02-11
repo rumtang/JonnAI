@@ -85,7 +85,7 @@
   {
     "id": "act3-graph-reveal",
     "title": "It's Not a Pipeline — It's a Graph",
-    "narration": "This is what the process actually looks like. Not a pipeline — a network. Every step connects to review gates, knowledge inputs, agent capabilities, and feedback loops. The complexity isn't a bug; it's the reality of enterprise content production at scale. The organizations that perform aren't the ones that simplify this away. They're the ones that build infrastructure to navigate it.",
+    "narration": "This is what the process actually looks like. Not a pipeline — a network. Every step connects to review gates, knowledge inputs, agent capabilities, and feedback loops. The complexity isn't a bug; it's the reality of enterprise content production at scale. The organizations that perform aren't the ones that simplify this away. They're the ones that build intelligence to navigate it.",
     "cameraPosition": {
       "x": 0,
       "y": 0,
@@ -118,7 +118,7 @@
   {
     "id": "act4-intelligence-layer",
     "title": "The Intelligence Layer",
-    "narration": "The infrastructure layer is what separates agents that hallucinate from agents that perform. Brand voice guides, audience personas, compliance rules, performance data — these aren't nice-to-have context. They're the operational substrate that every agent depends on for every decision. When this layer is incomplete or stale, agent output degrades. When it's well-maintained, it compounds — every new piece of organizational knowledge makes every agent more capable.",
+    "narration": "The intelligence layer is what separates agents that hallucinate from agents that perform. Brand voice guides, audience personas, compliance rules, performance data — these aren't nice-to-have context. They're the operational substrate that every agent depends on for every decision. When this layer is incomplete or stale, agent output degrades. When it's well-maintained, it compounds — every new piece of organizational knowledge makes every agent more capable.",
     "cameraPosition": {
       "x": 60,
       "y": 0,
@@ -131,7 +131,7 @@
     },
     "cameraTransitionMs": 2000,
     "graphState": "full-graph",
-    "action": "show-infrastructure-vs-agents",
+    "action": "show-intelligence-vs-agents",
     "filterNodeTypes": [
       "input",
       "agent"
@@ -178,7 +178,7 @@
   {
     "id": "act6-close",
     "title": "The Strategic Thesis",
-    "narration": "The thesis is simple. Agents will commoditize — the cost of generating content, optimizing media, and scoring performance will approach zero. What won't commoditize is the organizational intelligence that makes those agents effective: the knowledge graph, the governance rules, the feedback loops, the escalation logic. The organizations building that infrastructure now are creating a compounding advantage. The ones waiting for agents to get smarter are renting capability they'll never own.",
+    "narration": "The thesis is simple. Agents will commoditize — the cost of generating content, optimizing media, and scoring performance will approach zero. What won't commoditize is the organizational intelligence that makes those agents effective: the knowledge graph, the governance rules, the feedback loops, the escalation logic. The organizations building that intelligence layer now are creating a compounding advantage. The ones waiting for agents to get smarter are renting capability they'll never own.",
     "cameraPosition": {
       "x": 0,
       "y": 0,

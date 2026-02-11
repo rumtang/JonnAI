@@ -56,7 +56,7 @@ export default function Home() {
           <span className="text-foreground">The</span>
           <br />
           <span className="bg-gradient-to-r from-[#C9A04E] via-[#5B9ECF] to-[#9B7ACC] bg-clip-text text-transparent">
-            Infrastructure Layer
+            Intelligence Layer
           </span>
         </motion.h1>
 
@@ -67,7 +67,7 @@ export default function Home() {
           transition={{ delay: 0.25 }}
           className="text-lg text-muted-foreground mb-4 max-w-xl mx-auto leading-relaxed"
         >
-          Agents will commoditize. The infrastructure underneath them won&apos;t. Explore how
+          Agents will commoditize. The intelligence underneath them won&apos;t. Explore how
           organizational knowledge graphs, human-in-the-loop governance, and AI agents work
           together in enterprise content production.
         </motion.p>
@@ -81,7 +81,7 @@ export default function Home() {
         >
           An interactive model of the marketing campaign lifecycle — from brief to measurement —
           showing where AI handles volume, where humans maintain judgment, and where the knowledge
-          layer makes both effective.
+          intelligence layer makes both effective.
         </motion.p>
 
         {/* Mode buttons */}
