@@ -94,6 +94,19 @@ function getCachedRingMaterial(color: number, opacity: number): THREE.MeshBasicM
   return mat;
 }
 
+// Node THREE.Group object cache — avoids recreating meshes/sprites on every hover
+// Each entry stores the group and references to mutable children for fast updates
+interface CachedNodeGroup {
+  group: THREE.Group;
+  mesh: THREE.Mesh;
+  glowSprite: THREE.Sprite;
+  labelSprite: SpriteText;
+  ownerSprite?: SpriteText;
+  campaignRing?: THREE.Mesh;
+  visitedSprite?: THREE.Sprite;
+}
+const nodeGroupCache = new Map<string, CachedNodeGroup>();
+
 export default function GraphScene() {
   const fgRef = useRef<any>(null);
   const rotationRef = useRef<number | null>(null);
@@ -268,9 +281,22 @@ export default function GraphScene() {
     };
   }, []);
 
-  // Custom node rendering with crystalline materials
+  // Clean up stale cache entries when the visible node set changes
+  useEffect(() => {
+    const visibleIds = new Set(filteredGraphData.nodes.map(n => n.id));
+    for (const [id, cached] of nodeGroupCache) {
+      if (!visibleIds.has(id)) {
+        // Dispose geometries created specifically for this node (campaign ring)
+        if (cached.campaignRing) cached.campaignRing.geometry.dispose();
+        if (cached.visitedSprite) cached.visitedSprite.geometry.dispose();
+        nodeGroupCache.delete(id);
+      }
+    }
+  }, [filteredGraphData]);
+
+  // Custom node rendering with crystalline materials — uses object cache
+  // to avoid recreating THREE.Group/Mesh/Sprite on every hover change
   const nodeThreeObject = useCallback((node: GraphNode) => {
-    const group = new THREE.Group();
     const style = NODE_STYLES[node.type] || NODE_STYLES.step;
     const size = (node.val || style.baseSize) * 0.8;
 
@@ -288,49 +314,107 @@ export default function GraphScene() {
       : (hasHighlights && !isHighlighted && !isSelected &&
          !(hoveredNode && hoveredNode.id === node.id));
 
+    const cached = nodeGroupCache.get(node.id);
+
+    if (cached) {
+      // ── Update path: mutate existing objects instead of recreating ──
+      const { group, mesh, glowSprite, labelSprite, ownerSprite } = cached;
+
+      // Swap material (cheap pointer reassignment to cached material)
+      mesh.material = getCachedPhysicalMaterial(style.color, isDimmed ? 0.35 : 0.95, !!isHighlighted);
+
+      // Update glow
+      const glowColor = isCampaignCurrent ? '#4CAF50' : style.color;
+      const glowOpacity = isDimmed ? 0.04 : (isCampaignCurrent ? 0.45 : isHighlighted ? 0.30 : 0.12);
+      glowSprite.material = getCachedSpriteMaterial(glowColor, glowOpacity);
+      glowSprite.scale.setScalar(isCampaignCurrent ? size * 6 : size * 4);
+
+      // Update label colors
+      labelSprite.color = isDimmed ? 'rgba(40,40,50,0.35)' : 'rgba(40,40,50,0.90)';
+      labelSprite.backgroundColor = isDimmed ? 'rgba(250,248,245,0.3)' : 'rgba(250,248,245,0.85)';
+
+      // Update owner badge colors
+      if (ownerSprite) {
+        const ownerColors: Record<string, string> = {
+          agent: 'rgba(155,122,204,0.85)',
+          human: 'rgba(91,158,207,0.85)',
+          shared: 'rgba(201,160,78,0.85)',
+        };
+        const stepMeta = node.meta as StepMeta;
+        ownerSprite.color = isDimmed ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.9)';
+        ownerSprite.backgroundColor = isDimmed ? 'rgba(0,0,0,0.15)' : (ownerColors[stepMeta.owner] || 'rgba(0,0,0,0.4)');
+      }
+
+      // Campaign ring: add/remove dynamically
+      if (isCampaignCurrent && !cached.campaignRing) {
+        const ringGeom = new THREE.RingGeometry(size * 1.3, size * 1.6, 32);
+        const ring = new THREE.Mesh(ringGeom, getCachedRingMaterial(0x4CAF50, 0.7));
+        group.add(ring);
+        cached.campaignRing = ring;
+      } else if (!isCampaignCurrent && cached.campaignRing) {
+        group.remove(cached.campaignRing);
+        cached.campaignRing.geometry.dispose();
+        cached.campaignRing = undefined;
+      }
+
+      // Campaign visited sprite: add/remove dynamically
+      if (isCampaignVisited && !isCampaignCurrent && !cached.visitedSprite) {
+        const vs = new THREE.Sprite(getCachedSpriteMaterial('#4CAF50', 0.15));
+        vs.scale.setScalar(size * 3);
+        group.add(vs);
+        cached.visitedSprite = vs;
+      } else if ((!isCampaignVisited || isCampaignCurrent) && cached.visitedSprite) {
+        group.remove(cached.visitedSprite);
+        cached.visitedSprite.geometry.dispose();
+        cached.visitedSprite = undefined;
+      }
+
+      return group;
+    }
+
+    // ── Create path: build new Group for this node ──
+    const group = new THREE.Group();
     const geometry = geometries[style.geometry] || geometries.icosahedron;
 
-    // Crystalline MeshPhysicalMaterial — cached to avoid GPU object creation
     const material = getCachedPhysicalMaterial(style.color, isDimmed ? 0.35 : 0.95, !!isHighlighted);
-
     const mesh = new THREE.Mesh(geometry, material);
     mesh.scale.setScalar(size);
     group.add(mesh);
 
-    // Soft glow sprite with additive blending — cached materials
     const glowColor = isCampaignCurrent ? '#4CAF50' : style.color;
     const glowOpacity = isDimmed ? 0.04 : (isCampaignCurrent ? 0.45 : isHighlighted ? 0.30 : 0.12);
     const glowSprite = new THREE.Sprite(getCachedSpriteMaterial(glowColor, glowOpacity));
     glowSprite.scale.setScalar(isCampaignCurrent ? size * 6 : size * 4);
     group.add(glowSprite);
 
-    // Campaign current-node ring indicator
+    let campaignRing: THREE.Mesh | undefined;
     if (isCampaignCurrent) {
       const ringGeom = new THREE.RingGeometry(size * 1.3, size * 1.6, 32);
-      const ring = new THREE.Mesh(ringGeom, getCachedRingMaterial(0x4CAF50, 0.7));
-      group.add(ring);
+      campaignRing = new THREE.Mesh(ringGeom, getCachedRingMaterial(0x4CAF50, 0.7));
+      group.add(campaignRing);
     }
 
-    // Campaign visited node — subtle green tint on glow
+    let visitedSprite: THREE.Sprite | undefined;
     if (isCampaignVisited && !isCampaignCurrent) {
-      const visitedSprite = new THREE.Sprite(getCachedSpriteMaterial('#4CAF50', 0.15));
+      visitedSprite = new THREE.Sprite(getCachedSpriteMaterial('#4CAF50', 0.15));
       visitedSprite.scale.setScalar(size * 3);
       group.add(visitedSprite);
     }
 
-    // Text label — dark charcoal on warm cream pill
-    const sprite = new SpriteText(node.label);
-    sprite.color = isDimmed ? 'rgba(40,40,50,0.35)' : 'rgba(40,40,50,0.90)';
-    sprite.textHeight = Math.max(2, size * 0.6);
-    sprite.position.y = -(size + 3);
-    sprite.fontFace = 'system-ui, -apple-system, sans-serif';
-    sprite.fontWeight = '600';
-    sprite.backgroundColor = isDimmed ? 'rgba(250,248,245,0.3)' : 'rgba(250,248,245,0.85)';
-    sprite.padding = 1;
-    sprite.borderRadius = 2;
-    group.add(sprite);
+    // Text label
+    const labelSprite = new SpriteText(node.label);
+    labelSprite.color = isDimmed ? 'rgba(40,40,50,0.35)' : 'rgba(40,40,50,0.90)';
+    labelSprite.textHeight = Math.max(2, size * 0.6);
+    labelSprite.position.y = -(size + 3);
+    labelSprite.fontFace = 'system-ui, -apple-system, sans-serif';
+    labelSprite.fontWeight = '600';
+    labelSprite.backgroundColor = isDimmed ? 'rgba(250,248,245,0.3)' : 'rgba(250,248,245,0.85)';
+    labelSprite.padding = 1;
+    labelSprite.borderRadius = 2;
+    group.add(labelSprite);
 
-    // Owner badge for step nodes (AI / Human / Shared)
+    // Owner badge for step nodes
+    let ownerSprite: SpriteText | undefined;
     if (node.type === 'step' && node.meta) {
       const stepMeta = node.meta as StepMeta;
       const ownerLabels: Record<string, string> = {
@@ -345,7 +429,7 @@ export default function GraphScene() {
       };
       const ownerText = ownerLabels[stepMeta.owner];
       if (ownerText) {
-        const ownerSprite = new SpriteText(ownerText);
+        ownerSprite = new SpriteText(ownerText);
         ownerSprite.color = isDimmed ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.9)';
         ownerSprite.textHeight = Math.max(1.5, size * 0.4);
         ownerSprite.position.y = -(size + 3 + Math.max(2, size * 0.6) + 1.5);
@@ -358,8 +442,19 @@ export default function GraphScene() {
       }
     }
 
+    // Store in cache
+    nodeGroupCache.set(node.id, {
+      group,
+      mesh,
+      glowSprite,
+      labelSprite,
+      ownerSprite,
+      campaignRing,
+      visitedSprite,
+    });
+
     return group;
-  }, [hoveredNode, selectedNode, highlightedNodeIds, neighborSet, hasHighlights, geometries, campaignActive, campaignNodeId, campaignVisitedSet, campaignNeighborSet]);
+  }, [hoveredNode, selectedNode, highlightedNodeIds, neighborSet, hasHighlights, geometries, campaignActive, campaignNodeId, campaignVisitedSet, campaignNeighborSet, filteredGraphData]);
 
   // Pause rotation on interaction, resume after 3s idle
   const markInteracting = useCallback(() => {
@@ -531,9 +626,9 @@ export default function GraphScene() {
       onNodeHover={handleNodeHover as any}
       onBackgroundClick={handleBackgroundClick}
       d3VelocityDecay={0.5}
-      d3AlphaDecay={0.03}
+      d3AlphaDecay={0.08}
       warmupTicks={100}
-      cooldownTicks={300}
+      cooldownTicks={150}
       enableNodeDrag={mode === 'explore' && !campaignActive}
       showNavInfo={false}
     />

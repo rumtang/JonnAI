@@ -8,7 +8,8 @@ import CampaignNodeCard from './CampaignNodeCard';
 import CampaignLog from './CampaignLog';
 
 export default function CampaignPanel() {
-  const { isActive, currentNodeId } = useCampaignStore();
+  const isActive = useCampaignStore(s => s.isActive);
+  const currentNodeId = useCampaignStore(s => s.currentNodeId);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   // Reset scroll to top whenever the active node changes

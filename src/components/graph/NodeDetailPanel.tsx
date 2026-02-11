@@ -1,5 +1,6 @@
 'use client';
 
+import { useMemo } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useGraphStore } from '@/lib/store/graph-store';
@@ -64,23 +65,27 @@ export default function NodeDetailPanel() {
   };
 
   // Find connected nodes (from the currently visible graph data)
-  const connectedNodes = selectedNode ? graphData.links
-    .filter(l => {
-      const sId = typeof l.source === 'object' ? (l.source as GraphNode).id : l.source;
-      const tId = typeof l.target === 'object' ? (l.target as GraphNode).id : l.target;
-      return sId === selectedNode.id || tId === selectedNode.id;
-    })
-    .map(l => {
-      const sId = typeof l.source === 'object' ? (l.source as GraphNode).id : l.source;
-      const tId = typeof l.target === 'object' ? (l.target as GraphNode).id : l.target;
-      const otherId = sId === selectedNode.id ? tId : sId;
-      const otherNode = graphData.nodes.find(n => n.id === otherId);
-      return { node: otherNode, linkType: l.type, direction: sId === selectedNode.id ? 'outgoing' : 'incoming' };
-    })
-    .filter(c => c.node) : [];
+  const connectedNodes = useMemo(() => {
+    if (!selectedNode) return [];
+    return graphData.links
+      .filter(l => {
+        const sId = typeof l.source === 'object' ? (l.source as GraphNode).id : l.source;
+        const tId = typeof l.target === 'object' ? (l.target as GraphNode).id : l.target;
+        return sId === selectedNode.id || tId === selectedNode.id;
+      })
+      .map(l => {
+        const sId = typeof l.source === 'object' ? (l.source as GraphNode).id : l.source;
+        const tId = typeof l.target === 'object' ? (l.target as GraphNode).id : l.target;
+        const otherId = sId === selectedNode.id ? tId : sId;
+        const otherNode = graphData.nodes.find(n => n.id === otherId);
+        return { node: otherNode, linkType: l.type, direction: sId === selectedNode.id ? 'outgoing' : 'incoming' as const };
+      })
+      .filter(c => c.node);
+  }, [selectedNode, graphData]);
 
   // Count hidden connections (only relevant in progressive reveal mode)
-  const hiddenCount = (progressiveReveal && selectedNode && fullGraphData) ? (() => {
+  const hiddenCount = useMemo(() => {
+    if (!progressiveReveal || !selectedNode || !fullGraphData) return 0;
     let count = 0;
     for (const link of fullGraphData.links) {
       const sId = typeof link.source === 'object' ? (link.source as GraphNode).id : link.source;
@@ -91,7 +96,7 @@ export default function NodeDetailPanel() {
       }
     }
     return count;
-  })() : 0;
+  }, [progressiveReveal, selectedNode, fullGraphData, revealedNodeIds]);
 
   return (
     <AnimatePresence>

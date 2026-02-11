@@ -93,9 +93,9 @@ interface FlyingAgent {
 }
 
 // ─── Flying Agent Badge ───────────────────────────────────
-// Independent motion.div that flies from its pipeline position
+// Pure CSS animation badge that flies from its pipeline position
 // to viewport center, shrinking and fading as it converges.
-// Rendered at z-[60] so it sits above the exiting pipeline overlay.
+// Uses CSS custom properties for per-badge positioning (no Framer Motion).
 function FlyingAgentBadge({
   agent,
   index,
@@ -107,34 +107,18 @@ function FlyingAgentBadge({
   const centerY = typeof window !== 'undefined' ? window.innerHeight / 2 : 400;
 
   return (
-    <motion.div
-      className="absolute px-3 py-1.5 rounded-lg bg-[#5B9ECF]/25 border border-[#5B9ECF]/50 text-xs font-semibold text-[#5B9ECF] whitespace-nowrap shadow-[0_0_16px_rgba(91,158,207,0.4)]"
+    <div
+      className="flying-agent-badge"
       style={{
-        // Position the badge centered on its column. Framer Motion's x/y
-        // are additive offsets from this CSS position.
-        left: agent.startX - 35,
-        top: agent.startY - 12,
-      }}
-      initial={{
-        x: 0,
-        y: 0,
-        scale: 1,
-        opacity: 1,
-      }}
-      animate={{
-        x: centerX - agent.startX,
-        y: centerY - agent.startY,
-        scale: 0.15,
-        opacity: 0,
-      }}
-      transition={{
-        duration: 1.4,
-        delay: index * 0.04,
-        ease: [0.4, 0, 0.2, 1],
-      }}
+        '--start-x': `${agent.startX - 35}px`,
+        '--start-y': `${agent.startY - 12}px`,
+        '--dx': `${centerX - agent.startX}px`,
+        '--dy': `${centerY - agent.startY}px`,
+        '--delay': `${index * 0.04}s`,
+      } as React.CSSProperties}
     >
       {agent.label}
-    </motion.div>
+    </div>
   );
 }
 
@@ -443,49 +427,33 @@ export default function PresentationController() {
 
   return (
     <>
-      {/* ─── Background Scrim (slides 1-3) ──────────────────── */}
+      {/* ─── Background Scrim + Pipeline Diagram (slides 1-3) ─ */}
       <AnimatePresence>
         {showPipelineOverlay && (
-          <motion.div
-            key="scrim"
-            className="fixed inset-0 z-[45] pointer-events-none"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: scrimOpacity }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.8 }}
-          >
-            <div className="absolute inset-0 bg-background backdrop-blur-sm" />
-          </motion.div>
-        )}
-      </AnimatePresence>
+          <>
+            <motion.div
+              key="scrim"
+              className="fixed inset-0 z-[45] pointer-events-none"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: scrimOpacity }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.8 }}
+            >
+              <div className="absolute inset-0 bg-background backdrop-blur-sm" />
+            </motion.div>
 
-      {/* ─── Flying Agent Badges (slide 3→4 transition) ─────── */}
-      {/* z-[60] so badges render above the exiting pipeline (z-[55]) */}
-      <AnimatePresence>
-        {flyingAgents && (
-          <div className="fixed inset-0 z-[60] pointer-events-none">
-            {flyingAgents.map((agent, i) => (
-              <FlyingAgentBadge key={agent.id} agent={agent} index={i} />
-            ))}
-          </div>
-        )}
-      </AnimatePresence>
-
-      {/* ─── Pipeline Diagram (slides 1-3, persistent layer) ── */}
-      <AnimatePresence>
-        {showPipelineOverlay && (
-          <motion.div
-            key="pipeline-diagram"
-            className="fixed inset-0 z-[55] flex items-center justify-center pointer-events-none"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{
-              opacity: diagramOpacity,
-              y: isTitleSlide ? 30 : isTransitionSlide ? -80 : -40,
-              scale: 1,
-            }}
-            exit={{ opacity: 0, scale: 0.9, y: -60 }}
-            transition={{ duration: 0.6 }}
-          >
+            <motion.div
+              key="pipeline-diagram"
+              className="fixed inset-0 z-[55] flex items-center justify-center pointer-events-none"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{
+                opacity: diagramOpacity,
+                y: isTitleSlide ? 30 : isTransitionSlide ? -80 : -40,
+                scale: 1,
+              }}
+              exit={{ opacity: 0, scale: 0.9, y: -60 }}
+              transition={{ duration: 0.6 }}
+            >
             <div className="flex flex-col items-center">
               {/* Lifecycle stages */}
               <div className="flex items-center justify-center gap-0">
@@ -563,8 +531,19 @@ export default function PresentationController() {
               </svg>
             </div>
           </motion.div>
+          </>
         )}
       </AnimatePresence>
+
+      {/* ─── Flying Agent Badges (slide 3→4 transition) ─────── */}
+      {/* z-[60] so badges render above the exiting pipeline (z-[55]) */}
+      {flyingAgents && (
+        <div className="fixed inset-0 z-[60] pointer-events-none">
+          {flyingAgents.map((agent, i) => (
+            <FlyingAgentBadge key={agent.id} agent={agent} index={i} />
+          ))}
+        </div>
+      )}
 
       {/* ─── Title Content (slide 1 only) ─────────────────── */}
       <AnimatePresence>
@@ -628,65 +607,57 @@ export default function PresentationController() {
       </AnimatePresence>
 
       {/* ─── Narration Card (slides 2+) ───────────────────── */}
+      {/* Single AnimatePresence keyed on step id — flattened from nested wrappers */}
       <AnimatePresence mode="wait">
         {!isTitleSlide && (
           <motion.div
-            key="narration"
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 40 }}
+            key={currentStep.id}
+            initial={{ opacity: 0, y: 20, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -20, scale: 0.95 }}
             transition={{ duration: 0.4 }}
             className={`fixed left-1/2 -translate-x-1/2 z-50 w-full max-w-2xl px-4 ${
               showPipelineOverlay ? 'bottom-20' : 'bottom-24'
             }`}
           >
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={currentStep.id}
-                initial={{ opacity: 0, y: 20, scale: 0.95 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: -20, scale: 0.95 }}
-                transition={{ duration: 0.4 }}
-                className="glass-panel rounded-2xl p-6 shadow-2xl"
-              >
-                <h2 className="text-lg font-semibold text-primary mb-2 font-[family-name:var(--font-playfair)]">
-                  {currentStep.title}
-                </h2>
-                <p className="text-muted-foreground text-sm leading-relaxed">
-                  {currentStep.narration}
-                </p>
+            <div className="glass-panel rounded-2xl p-6 shadow-2xl">
+              <h2 className="text-lg font-semibold text-primary mb-2 font-[family-name:var(--font-playfair)]">
+                {currentStep.title}
+              </h2>
+              <p className="text-muted-foreground text-sm leading-relaxed">
+                {currentStep.narration}
+              </p>
 
-                {/* End-of-tour CTA — only on last slide */}
-                {currentStepIndex === steps.length - 1 && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 1.2, duration: 0.5 }}
-                    className="mt-4 pt-4 border-t border-muted-foreground/10"
-                  >
-                    <p className="text-xs text-muted-foreground/70 mb-3">
-                      Explore the organizational intelligence layer and see the impact per role
-                    </p>
-                    <div className="flex items-center gap-3">
-                      <button
-                        onClick={exitToExplore}
-                        className="flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold transition-all hover:shadow-lg bg-[#9B7ACC]/10 text-[#9B7ACC] hover:bg-[#9B7ACC]/20"
-                      >
-                        <Layers className="w-3.5 h-3.5" />
-                        Explore the Graph
-                      </button>
-                      <button
-                        onClick={exitToExplore}
-                        className="flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold transition-all hover:shadow-lg bg-[#C9A04E]/10 text-[#C9A04E] hover:bg-[#C9A04E]/20"
-                      >
-                        <Users className="w-3.5 h-3.5" />
-                        Impact Per Role
-                      </button>
-                    </div>
-                  </motion.div>
-                )}
-              </motion.div>
-            </AnimatePresence>
+              {/* End-of-tour CTA — only on last slide */}
+              {currentStepIndex === steps.length - 1 && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 1.2, duration: 0.5 }}
+                  className="mt-4 pt-4 border-t border-muted-foreground/10"
+                >
+                  <p className="text-xs text-muted-foreground/70 mb-3">
+                    Explore the organizational intelligence layer and see the impact per role
+                  </p>
+                  <div className="flex items-center gap-3">
+                    <button
+                      onClick={exitToExplore}
+                      className="flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold transition-all hover:shadow-lg bg-[#9B7ACC]/10 text-[#9B7ACC] hover:bg-[#9B7ACC]/20"
+                    >
+                      <Layers className="w-3.5 h-3.5" />
+                      Explore the Graph
+                    </button>
+                    <button
+                      onClick={exitToExplore}
+                      className="flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold transition-all hover:shadow-lg bg-[#C9A04E]/10 text-[#C9A04E] hover:bg-[#C9A04E]/20"
+                    >
+                      <Users className="w-3.5 h-3.5" />
+                      Impact Per Role
+                    </button>
+                  </div>
+                </motion.div>
+              )}
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
