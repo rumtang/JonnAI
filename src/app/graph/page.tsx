@@ -20,8 +20,10 @@ import RoleInsightPanel from '@/components/graph/RoleMode/RoleInsightPanel';
 import RolePicker from '@/components/graph/RoleMode/RolePicker';
 import RoleSelectorButton from '@/components/graph/RoleMode/RoleSelectorButton';
 import ExploreWelcome from '@/components/graph/ExploreWelcome';
+import ExplorePrompts from '@/components/graph/ExplorePrompts';
 
 import { useGraphStore } from '@/lib/store/graph-store';
+import { useSessionStore } from '@/lib/store/session-store';
 import { usePresentationStore } from '@/lib/store/presentation-store';
 import { useCampaignStore } from '@/lib/store/campaign-store';
 import { useRoleInsightStore } from '@/lib/store/role-insight-store';
@@ -238,6 +240,11 @@ export default function GraphPage() {
               />
             )}
           </AnimatePresence>
+
+          {/* Discovery prompts — shown for first-time explorers */}
+          {!showExploreWelcome && !useSessionStore.getState().guidedTourCompleted && (
+            <ExplorePrompts />
+          )}
 
           {/* Bottom CTAs — Campaign + Role */}
           <div className={`fixed bottom-8 left-1/2 -translate-x-1/2 z-50 ${
