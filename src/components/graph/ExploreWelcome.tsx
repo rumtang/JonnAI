@@ -46,7 +46,7 @@ export default function ExploreWelcome({
         {/* Header */}
         <div className="text-center mb-6">
           <h2 className="text-2xl font-bold text-foreground font-[family-name:var(--font-playfair)] mb-2">
-            The Intelligence Layer
+            The Organizational Intelligence Layer
           </h2>
           <p className="text-sm text-muted-foreground leading-relaxed max-w-sm mx-auto">
             Explore how 45 workflow steps, gates, and AI agents connect — or see how the system transforms your specific role.
@@ -69,7 +69,7 @@ export default function ExploreWelcome({
               Explore the Graph
             </h3>
             <p className="text-xs text-muted-foreground leading-relaxed">
-              Navigate the full knowledge graph — click nodes, trace connections, and discover the intelligence layer.
+              Navigate the full knowledge graph — click nodes, trace connections, and discover the organizational intelligence layer.
             </p>
           </button>
 

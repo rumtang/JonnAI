@@ -7,7 +7,7 @@ import { Lightbulb, ChevronRight, X } from 'lucide-react';
 const DISCOVERY_PROMPTS = [
   'Find a gate node (coral dodecahedrons). Click one to see where humans maintain control.',
   'Purple torus shapes are AI agents. Click one to see what it does and what tools it uses.',
-  'Click any step to see its inputs. These knowledge dependencies are the intelligence layer.',
+  'Click any step to see its inputs. These knowledge dependencies are the organizational intelligence layer.',
   'Use the filters (top-left) to show only gates \u2014 see every human checkpoint in the workflow.',
 ];
 

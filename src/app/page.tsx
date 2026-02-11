@@ -56,7 +56,7 @@ export default function Home() {
           <span className="text-foreground">The</span>
           <br />
           <span className="bg-gradient-to-r from-[#C9A04E] via-[#5B9ECF] to-[#9B7ACC] bg-clip-text text-transparent">
-            Intelligence Layer
+            Organizational Intelligence Layer
           </span>
         </motion.h1>
 
@@ -81,7 +81,7 @@ export default function Home() {
         >
           An interactive model of the marketing campaign lifecycle — from brief to measurement —
           showing where AI handles volume, where humans maintain judgment, and where the knowledge
-          intelligence layer makes both effective.
+          organizational intelligence layer makes both effective.
         </motion.p>
 
         {/* Mode buttons */}

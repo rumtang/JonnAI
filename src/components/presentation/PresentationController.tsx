@@ -610,7 +610,7 @@ export default function PresentationController() {
                 transition={{ delay: 0.5 }}
                 className="text-lg text-muted-foreground max-w-xl mx-auto leading-relaxed"
               >
-                Understanding the intelligence layer to unlock agentic capabilities
+                Understanding the organizational intelligence layer to unlock agentic capabilities
               </motion.p>
             </div>
 
@@ -665,7 +665,7 @@ export default function PresentationController() {
                     className="mt-4 pt-4 border-t border-muted-foreground/10"
                   >
                     <p className="text-xs text-muted-foreground/70 mb-3">
-                      Explore the intelligence layer and see the impact per role
+                      Explore the organizational intelligence layer and see the impact per role
                     </p>
                     <div className="flex items-center gap-3">
                       <button

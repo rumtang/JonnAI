@@ -108,8 +108,8 @@
   },
   {
     "id": "act4-intelligence-layer",
-    "title": "The Intelligence Layer",
-    "narration": "The agents in this graph share a common dependency: brand voice guides, audience personas, compliance rules, performance data. This is the intelligence layer — structured knowledge that helps agents understand what to produce, for whom, and within what boundaries. When this layer is well-maintained, agent output improves. When it's incomplete, output quality tends to drop.",
+    "title": "The Organizational Intelligence Layer",
+    "narration": "The agents in this graph share a common dependency: brand voice guides, audience personas, compliance rules, performance data. This is the organizational intelligence layer — structured knowledge that helps agents understand what to produce, for whom, and within what boundaries. When this layer is well-maintained, agent output improves. When it's incomplete, output quality tends to drop.",
     "cameraPosition": {
       "x": 60,
       "y": 0,
@@ -174,7 +174,7 @@
   {
     "id": "act6-close",
     "title": "The Path to Agentic Operations",
-    "narration": "The practical path forward: understand the process, map the intelligence layer, then build the foundation that helps agents perform. Better models will keep arriving — but they'll work best when they have better knowledge to draw on.",
+    "narration": "The practical path forward: understand the process, map the organizational intelligence layer, then build the foundation that helps agents perform. Better models will keep arriving — but they'll work best when they have better knowledge to draw on.",
     "cameraPosition": {
       "x": 0,
       "y": 0,

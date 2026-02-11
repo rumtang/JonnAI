@@ -193,7 +193,7 @@ export default function BeforeAfterSlide({ step }: BeforeAfterSlideProps) {
           Team Time Allocation Shift
         </h3>
         <p className="text-[10px] text-muted-foreground text-center mb-6">
-          How your team&apos;s work distribution transforms with the intelligence layer
+          How your team&apos;s work distribution transforms with the organizational intelligence layer
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
