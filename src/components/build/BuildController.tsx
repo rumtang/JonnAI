@@ -8,6 +8,7 @@ import { usePresentationStore } from '@/lib/store/presentation-store';
 import { useGraphStore } from '@/lib/store/graph-store';
 import { useIsMobile } from '@/lib/hooks/use-is-mobile';
 import { BUILD_STEPS } from '@/data/build-steps';
+import { getGraphRef } from '@/lib/graph/graph-ref';
 import TitleSlide from './slides/TitleSlide';
 import TimelineSlide from './slides/TimelineSlide';
 import LayerCardsSlide from './slides/LayerCardsSlide';
@@ -59,6 +60,41 @@ export default function BuildController() {
   useEffect(() => {
     setGraphPeek(false);
   }, [currentStepIndex]);
+
+  // Fly camera to centroid of highlighted nodes when peeking
+  useEffect(() => {
+    if (!graphPeek) return;
+    const graphInstance = getGraphRef();
+    if (!graphInstance) return;
+
+    const currentStep = BUILD_STEPS[currentStepIndex];
+    if (!currentStep?.relatedNodeIds?.length) return;
+
+    const { graphData } = useGraphStore.getState();
+    const relatedNodes = graphData.nodes.filter(n =>
+      currentStep.relatedNodeIds!.includes(n.id)
+    );
+
+    // Compute centroid of highlighted nodes
+    let cx = 0, cy = 0, cz = 0, count = 0;
+    for (const node of relatedNodes) {
+      if (node.x !== undefined && node.y !== undefined && node.z !== undefined) {
+        cx += node.x;
+        cy += node.y;
+        cz += node.z;
+        count++;
+      }
+    }
+    if (count === 0) return;
+    cx /= count;
+    cy /= count;
+    cz /= count;
+
+    // Fly camera to show highlighted nodes
+    const lookAt = { x: cx, y: cy, z: cz };
+    const cameraPos = { x: cx, y: cy + 40, z: cz + 220 };
+    graphInstance.cameraPosition(cameraPos, lookAt, 800);
+  }, [graphPeek, currentStepIndex]);
 
   // Keyboard navigation
   useEffect(() => {
@@ -122,19 +158,19 @@ export default function BuildController() {
 
   return (
     <>
-      {/* ─── Full-screen Scrim — fades when peeking at graph ─ */}
+      {/* ─── Full-screen Scrim — nearly transparent when peeking at graph ─ */}
       <motion.div
         className="fixed inset-0 z-[45] pointer-events-none"
         initial={{ opacity: 0 }}
-        animate={{ opacity: graphPeek ? 0.3 : step.layout === 'title' ? 0.85 : 0.75 }}
+        animate={{ opacity: graphPeek ? 0.1 : step.layout === 'title' ? 0.85 : 0.75 }}
         transition={{ duration: 0.4 }}
       >
-        <div className="absolute inset-0 bg-background backdrop-blur-sm" />
+        <div className={`absolute inset-0 bg-background ${graphPeek ? '' : 'backdrop-blur-sm'}`} />
       </motion.div>
 
       {/* ─── Slide Content ──────────────────────────────────── */}
-      <div className={`fixed inset-0 z-[46] overflow-hidden flex flex-col transition-opacity duration-300 ${
-        graphPeek ? 'pointer-events-none opacity-20' : 'pointer-events-auto'
+      <div className={`fixed inset-0 z-[46] overflow-hidden flex flex-col transition-all duration-300 ${
+        graphPeek ? 'pointer-events-none opacity-0' : 'pointer-events-auto'
       }`}>
         {/* Act indicator + slide title bar */}
         <motion.div
