@@ -44,6 +44,25 @@
     "duration": 15000
   },
   {
+    "id": "act1-pain-points",
+    "title": "Where the Pipeline Breaks",
+    "narration": "At scale, this pipeline tends to break in familiar ways. Briefs are ambiguous, so content gets reworked. Reviewers lack context, so approval cycles stretch out. A significant share of marketer time goes to coordination rather than strategic work. These are less about efficiency and more about a linear model that doesn't reflect how work actually flows.",
+    "cameraPosition": {
+      "x": 0,
+      "y": 200,
+      "z": 800
+    },
+    "cameraLookAt": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "cameraTransitionMs": 2000,
+    "graphState": "linear",
+    "action": "show-process-chart",
+    "duration": 8000
+  },
+  {
     "id": "act2-agents-and-context",
     "title": "Adding Agents — And What They Actually Need",
     "narration": "A common first step is to add AI agents to the existing pipeline — one for research, another for drafting, one for SEO. This can speed things up significantly. But without shared context, each agent tends to operate in isolation. The research agent may not know what the brand guide says. The SEO agent may not know what compliance flagged last quarter. Faster output without coherence often just creates more content to review.",
@@ -67,25 +86,6 @@
       "flows-to"
     ],
     "duration": 25000
-  },
-  {
-    "id": "act1-pain-points",
-    "title": "Where the Pipeline Breaks",
-    "narration": "At scale, this pipeline tends to break in familiar ways. Briefs are ambiguous, so content gets reworked. Reviewers lack context, so approval cycles stretch out. A significant share of marketer time goes to coordination rather than strategic work. These are less about efficiency and more about a linear model that doesn't reflect how work actually flows.",
-    "cameraPosition": {
-      "x": 0,
-      "y": 200,
-      "z": 800
-    },
-    "cameraLookAt": {
-      "x": 0,
-      "y": 0,
-      "z": 0
-    },
-    "cameraTransitionMs": 2000,
-    "graphState": "linear",
-    "action": "show-process-chart",
-    "duration": 8000
   },
   {
     "id": "act3-graph-reveal",

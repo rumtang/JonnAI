@@ -65,23 +65,11 @@ export default function Home() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.25 }}
-          className="text-lg text-muted-foreground mb-4 max-w-xl mx-auto leading-relaxed"
+          className="text-lg text-muted-foreground mb-10 max-w-xl mx-auto leading-relaxed"
         >
           Agents will commoditize. The intelligence underneath them won&apos;t. Explore how
           organizational knowledge graphs, human-in-the-loop governance, and AI agents work
           together in enterprise content production.
-        </motion.p>
-
-        {/* Value proposition */}
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.28 }}
-          className="text-sm text-muted-foreground/70 mb-10 max-w-2xl mx-auto leading-relaxed"
-        >
-          An interactive model of the marketing campaign lifecycle — from brief to measurement —
-          showing where AI handles volume, where humans maintain judgment, and where the knowledge
-          organizational intelligence layer makes both effective.
         </motion.p>
 
         {/* Mode buttons */}
