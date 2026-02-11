@@ -4,7 +4,7 @@ import { useState, useCallback, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { Slider } from '@/components/ui/slider';
 import { useRoiStore } from '@/lib/store/roi-store';
-import { INDUSTRY_BUDGET_RATIOS, SOURCE_ATTRIBUTION } from '@/lib/roi/engine';
+import { INDUSTRY_BUDGET_RATIOS, SOURCE_ATTRIBUTION, AGENT_INTENSITY_LEVELS, type AgentIntensity } from '@/lib/roi/engine';
 import WaterfallChart from '../charts/WaterfallChart';
 import AnimatedNumber from '../charts/AnimatedNumber';
 import SourceTooltip from '../shared/SourceTooltip';
@@ -184,6 +184,8 @@ export default function BaselineInputsSlide({ step }: BaselineInputsSlideProps) 
   const setOps = useRoiStore(s => s.setOps);
   const investment = useRoiStore(s => s.investment);
   const setInvestment = useRoiStore(s => s.setInvestment);
+  const agentIntensity = useRoiStore(s => s.agentIntensity);
+  const setAgentIntensity = useRoiStore(s => s.setAgentIntensity);
   const baseline = useRoiStore(s => s.baseline);
 
   // Local state for the investment text input — enables bidirectional sync
@@ -388,6 +390,44 @@ export default function BaselineInputsSlide({ step }: BaselineInputsSlideProps) 
                 color="#14B8A6"
                 benchmark="Enterprise phased build: 6-24 months typical"
               />
+
+              {/* Agentification Intensity Selector */}
+              <div className="pt-3 border-t border-muted-foreground/10 space-y-2">
+                <span className="text-[9px] text-muted-foreground">Agentification Intensity</span>
+                <div className="grid grid-cols-3 gap-2">
+                  {(['low', 'medium', 'high'] as AgentIntensity[]).map((level) => {
+                    const info = AGENT_INTENSITY_LEVELS[level];
+                    const isSelected = agentIntensity === level;
+                    const colorMap: Record<AgentIntensity, string> = {
+                      low: '#5B9ECF',
+                      medium: '#14B8A6',
+                      high: '#C9A04E',
+                    };
+                    const color = colorMap[level];
+                    return (
+                      <button
+                        key={level}
+                        onClick={() => setAgentIntensity(level)}
+                        className="rounded-lg p-2 text-left transition-all"
+                        style={{
+                          border: `1.5px solid ${isSelected ? color : 'rgba(128,128,128,0.2)'}`,
+                          backgroundColor: isSelected ? `${color}10` : 'transparent',
+                        }}
+                      >
+                        <p className="text-[9px] font-semibold" style={{ color: isSelected ? color : undefined }}>
+                          {info.label}
+                        </p>
+                        <p className="text-[7px] text-muted-foreground leading-tight mt-0.5">
+                          {info.shortDescription}
+                        </p>
+                      </button>
+                    );
+                  })}
+                </div>
+                <p className="text-[7px] text-muted-foreground/60 leading-relaxed">
+                  {AGENT_INTENSITY_LEVELS[agentIntensity].description}
+                </p>
+              </div>
             </div>
           </motion.div>
 

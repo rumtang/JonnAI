@@ -13,7 +13,7 @@ import {
   StyleSheet,
   pdf,
 } from '@react-pdf/renderer';
-import type { OrganizationProfile, BaselineOutputs, RoiOutputs } from '@/lib/roi/engine';
+import { AGENT_INTENSITY_LEVELS, type OrganizationProfile, type BaselineOutputs, type RoiOutputs, type AgentIntensity } from '@/lib/roi/engine';
 
 // ─── Types ────────────────────────────────────────────────────────────
 interface ReportData {
@@ -21,6 +21,7 @@ interface ReportData {
   baseline: BaselineOutputs;
   outputs: RoiOutputs;
   viewMode: 'marketing' | 'cfo';
+  agentIntensity?: AgentIntensity;
 }
 
 // ─── Format Helpers ───────────────────────────────────────────────────
@@ -186,10 +187,11 @@ const styles = StyleSheet.create({
 });
 
 // ─── PDF Document Component ───────────────────────────────────────────
-function RoiReportDocument({ org, baseline, outputs, viewMode }: ReportData) {
+function RoiReportDocument({ org, baseline, outputs, viewMode, agentIntensity = 'medium' }: ReportData) {
   const companyName = org.companyName?.trim() || '';
   const vs = outputs.valueStreams;
   const { doNothing, irr } = outputs;
+  const intensityLabel = AGENT_INTENSITY_LEVELS[agentIntensity].label;
 
   const title = companyName
     ? `Investment Case for ${companyName}`
@@ -240,7 +242,7 @@ function RoiReportDocument({ org, baseline, outputs, viewMode }: ReportData) {
           ) : null}
           <Text style={styles.headerTitle}>{title}</Text>
           <Text style={styles.headerSubtitle}>
-            {org.industry ?? 'B2B Average'} | {fmt(org.annualRevenue)} Revenue | {org.marketingHeadcount.toLocaleString()} Marketing FTEs | {today}
+            {org.industry ?? 'B2B Average'} | {fmt(org.annualRevenue)} Revenue | {org.marketingHeadcount.toLocaleString()} Marketing FTEs | {intensityLabel} Intensity | {today}
           </Text>
         </View>
 
@@ -352,7 +354,7 @@ function RoiReportDocument({ org, baseline, outputs, viewMode }: ReportData) {
         <View style={styles.methodology}>
           <Text style={{ fontFamily: 'Helvetica-Bold', marginBottom: 4 }}>Methodology</Text>
           <Text>
-            Revenue-anchored model with conservative assumptions. Benchmarks sourced from Gartner 2025 CMO Spend Survey,
+            Revenue-anchored model using {intensityLabel} agentification intensity assumptions. Benchmarks sourced from Gartner 2025 CMO Spend Survey,
             McKinsey Personalization Analysis, Salesforce State of Marketing 2025, Forrester, and HubSpot.
             Revenue streams (ROAS, Personalization) apply a 20% contribution margin — only profit on incremental revenue is counted.
             Labor savings capped at 40% of team cost to prevent double-counting. Ongoing operational costs (20% of initial

@@ -213,6 +213,54 @@ export const TRANSFORMATION_ACTIONS: TransformationAction[] = [
   },
 ];
 
+// ─── Per-Stream Adoption Rationale ──────────────────────────────────
+// Explains WHY each stream ramps at a different rate — for methodology
+// panel and Playbook slide tooltips.
+export const STREAM_ADOPTION_RATIONALE: Record<ValueStreamKey, {
+  adoptionSpeed: 'Quick Win' | 'Medium' | 'Slow';
+  techDependency: string;
+  changeBarrier: string;
+  costReductionNote?: string;
+}> = {
+  martechOptimization: {
+    adoptionSpeed: 'Quick Win',
+    techDependency: 'Structural Layer (martech audit, weeks 1–12)',
+    changeBarrier: 'Low — tooling decisions are centralized, IT-driven',
+    costReductionNote: 'SaaS licenses are annual contracts. Savings start at next renewal cycle, not at discovery. Average lag: 4 months after tech readiness.',
+  },
+  campaignSpeed: {
+    adoptionSpeed: 'Medium',
+    techDependency: 'Rules + Process Layers (weeks 4–16)',
+    changeBarrier: 'Medium — requires team retraining on new approval workflows and routing logic',
+  },
+  contentVelocity: {
+    adoptionSpeed: 'Medium',
+    techDependency: 'Context + Process Layers (weeks 10–22)',
+    changeBarrier: 'Medium — creative teams need trust in AI drafting quality',
+    costReductionNote: 'Agency contracts are typically quarterly. Reducing scope requires renegotiation at the next review cycle. Average lag: 2 months.',
+  },
+  operationalEfficiency: {
+    adoptionSpeed: 'Slow',
+    techDependency: 'All Layers including Cross-Domain (weeks 17–28)',
+    changeBarrier: 'High — retraining hundreds of people on new workflows takes quarters. Organizational politics slow role redefinition.',
+  },
+  roasImprovement: {
+    adoptionSpeed: 'Medium',
+    techDependency: 'Metrics + Context Layers (weeks 10–22)',
+    changeBarrier: 'Medium — media teams need confidence in AI optimization recommendations before ceding control',
+  },
+  attributionImprovement: {
+    adoptionSpeed: 'Slow',
+    techDependency: 'Metrics Layer (weeks 10–22)',
+    changeBarrier: 'High — teams resist changing measurement approaches that justify existing budgets. Trust-building with new attribution models takes time.',
+  },
+  personalizationLift: {
+    adoptionSpeed: 'Slow',
+    techDependency: 'Context + Metrics Layers (weeks 10–22)',
+    changeBarrier: 'High — requires cross-team coordination (content, data, product) and trust in automated personalization decisions.',
+  },
+};
+
 /** Get all actions that feed a specific value stream */
 export function getActionsForStream(streamKey: ValueStreamKey): TransformationAction[] {
   return TRANSFORMATION_ACTIONS.filter(a =>

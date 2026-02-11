@@ -40,7 +40,7 @@ export const METHODOLOGY: SlideMethodology[] = [
         id: 'model-overview',
         title: 'Model Architecture',
         description:
-          'Revenue-anchored enterprise model with 7 independent value streams. All projections use a 36-month horizon, 10% annual discount rate, and S-curve ramp function for realistic value realization. Labor-related savings are capped at 40% of team cost to prevent double-counting.',
+          'Revenue-anchored enterprise model with 7 independent value streams. All projections use a 36-month horizon, 10% annual discount rate, and per-stream adoption curves for realistic value realization. Each stream ramps independently based on tech readiness, change management lag, and (for savings streams) contract renewal cycles. Labor-related savings are capped at 40% of team cost to prevent double-counting.',
         formula: 'Total Annual Value = Σ (7 Value Streams)',
         variables: [
           { name: 'Projection Period', storeKey: '_constant.projectionMonths', format: 'months' },
@@ -165,6 +165,23 @@ export const METHODOLOGY: SlideMethodology[] = [
         resultFormat: 'currency',
         sourceKey: 'adminTimePct',
         confidence: 'high',
+      },
+      {
+        id: 'agentification-intensity',
+        title: 'Agentification Intensity',
+        description:
+          'Three-level preset that adjusts all 9 improvement assumptions at once, reflecting how deeply an organization adopts AI agents. Co-Pilot (Low): humans lead with AI assists — ~half of industry medians. Agentic (Medium): AI executes with human supervision — aligned with 2026 industry medians (88% of orgs integrated AI, 60% of roles partially automated). Autonomous (High): AI drives operations, humans steer strategy — aligned with top-quartile benchmarks (65% content cost reduction, 20% ROAS lift, 79% journey automation). The intensity selector is orthogonal to the scenario multiplier (conservative 0.6x / expected 1.0x / aggressive 1.4x), which models confidence in the numbers rather than depth of adoption.',
+        formula: 'Assumptions = INTENSITY_PRESETS[selected level]',
+        variables: [
+          { name: 'ROAS Lift (Low/Med/High)', storeKey: 'assumptions.roasLiftPct', format: 'percent' },
+          { name: 'Content Savings (Low/Med/High)', storeKey: 'assumptions.contentTimeSavingsPct', format: 'percent' },
+          { name: 'Cycle Time Reduction (Low/Med/High)', storeKey: 'assumptions.cycleTimeReductionPct', format: 'percent' },
+        ],
+        resultLabel: 'Total Annual Value',
+        resultKey: 'outputs.totalAnnualValue',
+        resultFormat: 'currency',
+        sourceKey: 'marketingBudgetPct',
+        confidence: 'medium',
       },
     ],
   },
@@ -328,10 +345,10 @@ export const METHODOLOGY: SlideMethodology[] = [
     sections: [
       {
         id: 'ramp-factor',
-        title: 'S-Curve Ramp Factor',
+        title: 'Per-Stream Adoption Curves',
         description:
-          'Value doesn\'t start at 100%. The S-curve models realistic adoption: 0-30% in months 1-7 (foundation), 30-70% months 7-12 (adoption), 70-90% months 12-18 (optimization), 90-100% months 18-36 (maturity). No additional year multipliers are applied.',
-        formula: 'Monthly Value = (Annual Value / 12) × Ramp(month)',
+          'Each of the 7 value streams has its own adoption S-curve reflecting three real-world delays: (1) Tech Readiness — which KG layers must complete, scaling proportionally with the build timeline; (2) Change Management — fixed months for training, trust-building, and organizational alignment (2–6 months depending on stream); (3) Cost Reduction Lag — SaaS renewal cycles and contract terms that delay savings realization (martech +4 months, content +2 months). Each stream also has realization ceilings (50–75% at month 18, 85–100% at month 36) reflecting organizational inertia — you can\'t retrain 500 people in 6 months. The result is a more conservative but credible model: breakeven shifts later, but a CFO is more likely to trust the numbers.',
+        formula: 'Monthly Value = Σ (Stream Value / 12) × streamRamp(month, stream, buildWeeks)',
         variables: [
           { name: 'Total Annual Value', storeKey: 'outputs.totalAnnualValue', format: 'currency' },
           { name: 'Implementation Weeks', storeKey: 'investment.implementationWeeks', format: 'weeks' },

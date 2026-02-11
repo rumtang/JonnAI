@@ -4,6 +4,7 @@ import {
   computeBaseline,
   computeRoi,
   computeWeightedCycleWeeks,
+  INTENSITY_PRESETS,
   type OrganizationProfile,
   type MartechAndMedia,
   type ContentAndCampaignOps,
@@ -11,6 +12,7 @@ import {
   type TransformationInvestment,
   type ImprovementAssumptions,
   type Scenario,
+  type AgentIntensity,
   type BaselineOutputs,
   type RoiOutputs,
 } from '@/lib/roi/engine';
@@ -97,6 +99,9 @@ interface RoiState {
   // Scenario toggle
   activeScenario: Scenario;
 
+  // Agent intensity level (co-pilot / agentic / autonomous)
+  agentIntensity: AgentIntensity;
+
   // View mode (marketing vs CFO)
   viewMode: 'marketing' | 'cfo';
 
@@ -116,6 +121,7 @@ interface RoiState {
   setPain: (partial: Partial<OperationalPain>) => void;
   setInvestment: (partial: Partial<TransformationInvestment>) => void;
   setAssumptions: (partial: Partial<ImprovementAssumptions>) => void;
+  setAgentIntensity: (level: AgentIntensity) => void;
   setActiveScenario: (scenario: Scenario) => void;
   setViewMode: (mode: 'marketing' | 'cfo') => void;
 
@@ -153,6 +159,7 @@ export const useRoiStore = create<RoiState>((set, get) => ({
   assumptions: { ...DEFAULT_ASSUMPTIONS },
 
   activeScenario: 'expected',
+  agentIntensity: 'medium',
   viewMode: 'marketing',
 
   baseline: initialBaseline,
@@ -220,6 +227,12 @@ export const useRoiStore = create<RoiState>((set, get) => ({
     set({ assumptions, ...recalculate({ ...state, assumptions }) });
   },
 
+  setAgentIntensity: (level) => {
+    const state = get();
+    const assumptions = { ...INTENSITY_PRESETS[level] };
+    set({ agentIntensity: level, assumptions, ...recalculate({ ...state, assumptions }) });
+  },
+
   setActiveScenario: (scenario) => set({ activeScenario: scenario }),
   setViewMode: (mode) => set({ viewMode: mode }),
 
@@ -232,6 +245,7 @@ export const useRoiStore = create<RoiState>((set, get) => ({
     investment: { ...DEFAULT_INVESTMENT },
     assumptions: { ...DEFAULT_ASSUMPTIONS },
     activeScenario: 'expected',
+    agentIntensity: 'medium',
     viewMode: 'marketing',
     baseline: initialBaseline,
     outputs: initialOutputs,

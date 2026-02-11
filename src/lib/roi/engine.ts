@@ -191,6 +191,75 @@ export interface ImprovementAssumptions {
   martechToolConsolidationPct: number;// Realistic consolidation: 20%
 }
 
+// ─── Agent Intensity ─────────────────────────────────────────────────
+// Three-level selector for how deeply an organization adopts AI agents.
+// Orthogonal to the scenario multiplier (conservative/expected/aggressive).
+// Medium = current defaults — zero change for existing users.
+
+export type AgentIntensity = 'low' | 'medium' | 'high';
+
+export const AGENT_INTENSITY_LEVELS: Record<AgentIntensity, {
+  label: string;
+  shortDescription: string;
+  description: string;
+  benchmarkNote: string;
+}> = {
+  low: {
+    label: 'Co-Pilot',
+    shortDescription: 'Humans lead, AI assists',
+    description: 'AI augments existing workflows — content drafting, report generation, basic optimization. Humans remain primary decision-makers with AI as a productivity tool.',
+    benchmarkNote: '~Half of industry-median improvement assumptions. Appropriate for organizations early in AI adoption.',
+  },
+  medium: {
+    label: 'Agentic',
+    shortDescription: 'AI executes, humans supervise',
+    description: 'AI agents handle end-to-end workflow execution — campaign optimization, content production, attribution analysis — with human oversight at key decision points.',
+    benchmarkNote: 'Aligned with 2026 industry medians: 88% of orgs have integrated AI, 60% of marketing roles partially automated.',
+  },
+  high: {
+    label: 'Autonomous',
+    shortDescription: 'AI drives, humans steer strategy',
+    description: 'Fully autonomous AI operations across the marketing function — real-time optimization, self-healing campaigns, predictive resource allocation. Humans focus on strategy and creative direction.',
+    benchmarkNote: 'Aligned with top-quartile benchmarks: 65% content cost reduction, 20% ROAS lift, 79% customer journey automation.',
+  },
+};
+
+export const INTENSITY_PRESETS: Record<AgentIntensity, ImprovementAssumptions> = {
+  low: {
+    roasLiftPct: 6,
+    contentTimeSavingsPct: 20,
+    personalizationRevLiftPct: 4,
+    cycleTimeReductionPct: 10,
+    reworkReductionPct: 20,
+    adminToStrategicShiftPct: 15,
+    attributionImprovementPct: 5,
+    martechUtilizationTargetPct: 40,
+    martechToolConsolidationPct: 10,
+  },
+  medium: {
+    roasLiftPct: 12,
+    contentTimeSavingsPct: 40,
+    personalizationRevLiftPct: 8,
+    cycleTimeReductionPct: 25,
+    reworkReductionPct: 40,
+    adminToStrategicShiftPct: 30,
+    attributionImprovementPct: 10,
+    martechUtilizationTargetPct: 50,
+    martechToolConsolidationPct: 20,
+  },
+  high: {
+    roasLiftPct: 20,
+    contentTimeSavingsPct: 65,
+    personalizationRevLiftPct: 15,
+    cycleTimeReductionPct: 50,
+    reworkReductionPct: 60,
+    adminToStrategicShiftPct: 55,
+    attributionImprovementPct: 20,
+    martechUtilizationTargetPct: 65,
+    martechToolConsolidationPct: 35,
+  },
+};
+
 // ─── Output Types ────────────────────────────────────────────────────
 
 /** Computed once from inputs, reused by all value stream calculations. */
@@ -324,7 +393,8 @@ export interface RoiOutputs {
 }
 
 // ─── Ramp Function ───────────────────────────────────────────────────
-// S-curve value realization — scale-independent.
+// Legacy uniform S-curve — kept exported for backward compatibility.
+// computeRoi() now uses streamRampFactor() for per-stream adoption curves.
 export function rampFactor(month: number): number {
   if (month <= 0) return 0;
   if (month <= 7) return (month / 7) * 0.3;
@@ -332,6 +402,141 @@ export function rampFactor(month: number): number {
   if (month <= 18) return 0.7 + ((month - 12) / 6) * 0.2;
   if (month <= 36) return 0.9 + ((month - 18) / 18) * 0.1;
   return 1.0;
+}
+
+// ─── Per-Stream Adoption Parameters ─────────────────────────────────
+// Each value stream has its own adoption curve reflecting:
+// 1. Tech readiness: which KG layers must complete (scales with build timeline)
+// 2. Change management: training, trust, org alignment (fixed duration)
+// 3. Cost reduction lag: SaaS renewal cycles, contract terms (savings streams only)
+
+export interface StreamAdoptionParams {
+  techReadyWeek: number;           // Week the prerequisite KG layers complete (at 28-week reference build)
+  changeManagementMonths: number;  // Fixed months after tech-ready for training/trust/alignment
+  costReductionLagMonths: number;  // Additional lag for savings streams — contract cycles
+  sCurveK: number;                 // Logistic steepness (0.3–0.8, higher = faster)
+  sCurveMidpointOffset: number;    // Months after adoption-start to reach 50%
+  maxRealization18mo: number;      // Ceiling cap at month 18 (organizational inertia)
+  maxRealization36mo: number;      // Ceiling cap at month 36
+}
+
+type ValueStreamKey = keyof ValueStreams;
+
+export const STREAM_ADOPTION_PARAMS: Record<ValueStreamKey, StreamAdoptionParams> = {
+  // Martech audit completes early (week 12), but SaaS licenses are annual contracts.
+  // You identify the redundant tool in month 3 but can't cancel until the next renewal.
+  // Average wait = 6 months, discounted to 4 for overlapping renewals.
+  martechOptimization: {
+    techReadyWeek: 12,
+    changeManagementMonths: 2,
+    costReductionLagMonths: 4,
+    sCurveK: 0.6,
+    sCurveMidpointOffset: 5,
+    maxRealization18mo: 0.75,
+    maxRealization36mo: 1.0,
+  },
+  // Campaign speed improves once process + brand layers are built (week 16).
+  // Requires significant team retraining on new workflows.
+  campaignSpeed: {
+    techReadyWeek: 16,
+    changeManagementMonths: 4,
+    costReductionLagMonths: 0,
+    sCurveK: 0.45,
+    sCurveMidpointOffset: 7,
+    maxRealization18mo: 0.65,
+    maxRealization36mo: 0.95,
+  },
+  // Content intelligence + audience layers complete around week 22.
+  // Agency contracts are typically quarterly — reducing scope requires renegotiation.
+  contentVelocity: {
+    techReadyWeek: 22,
+    changeManagementMonths: 3,
+    costReductionLagMonths: 2,
+    sCurveK: 0.5,
+    sCurveMidpointOffset: 6,
+    maxRealization18mo: 0.70,
+    maxRealization36mo: 0.95,
+  },
+  // Cross-domain integration completes last (week 28).
+  // Largest change management burden — retraining hundreds of people takes quarters.
+  operationalEfficiency: {
+    techReadyWeek: 28,
+    changeManagementMonths: 6,
+    costReductionLagMonths: 0,
+    sCurveK: 0.35,
+    sCurveMidpointOffset: 9,
+    maxRealization18mo: 0.50,
+    maxRealization36mo: 0.85,
+  },
+  // ROAS improvement depends on attribution + audience layers (week 22).
+  // Revenue-type stream — value flows once adopted, no contract lag.
+  roasImprovement: {
+    techReadyWeek: 22,
+    changeManagementMonths: 4,
+    costReductionLagMonths: 0,
+    sCurveK: 0.45,
+    sCurveMidpointOffset: 7,
+    maxRealization18mo: 0.70,
+    maxRealization36mo: 0.95,
+  },
+  // Attribution depends on metrics layer (week 22).
+  // Requires trust-building — teams resist changing measurement approaches.
+  attributionImprovement: {
+    techReadyWeek: 22,
+    changeManagementMonths: 5,
+    costReductionLagMonths: 0,
+    sCurveK: 0.4,
+    sCurveMidpointOffset: 8,
+    maxRealization18mo: 0.55,
+    maxRealization36mo: 0.90,
+  },
+  // Personalization depends on audience + context layers (week 22).
+  // Requires trust-building and cross-team coordination.
+  personalizationLift: {
+    techReadyWeek: 22,
+    changeManagementMonths: 5,
+    costReductionLagMonths: 0,
+    sCurveK: 0.5,
+    sCurveMidpointOffset: 7,
+    maxRealization18mo: 0.60,
+    maxRealization36mo: 0.95,
+  },
+};
+
+/**
+ * Per-stream adoption ramp factor.
+ * adoptionStart = techReadyMonth + changeManagement + costReductionLag
+ * techReadyMonth scales with build timeline; change mgmt and cost lag are fixed.
+ * Returns 0–ceiling based on logistic S-curve with organizational inertia caps.
+ */
+export function streamRampFactor(
+  month: number,
+  streamKey: ValueStreamKey,
+  implementationWeeks: number,
+): number {
+  const params = STREAM_ADOPTION_PARAMS[streamKey];
+  // Tech readiness scales proportionally with the build timeline
+  const scaleFactor = implementationWeeks / 28;
+  const techReadyMonth = (params.techReadyWeek * scaleFactor) / 4.33;
+  // Change management and contract lag are people-time — fixed duration
+  const adoptionStart = techReadyMonth + params.changeManagementMonths + params.costReductionLagMonths;
+
+  const t = month - adoptionStart;
+  if (t <= 0) return 0;
+
+  // Normalized logistic S-curve starting from 0 at t=0
+  const raw = 1 / (1 + Math.exp(-params.sCurveK * (t - params.sCurveMidpointOffset)));
+  const atZero = 1 / (1 + Math.exp(-params.sCurveK * (0 - params.sCurveMidpointOffset)));
+  const normalized = (raw - atZero) / (1 - atZero);
+
+  // Apply realization ceiling — linear interpolation between 18mo and 36mo caps
+  const ceiling = month <= 18
+    ? params.maxRealization18mo
+    : params.maxRealization18mo +
+      (params.maxRealization36mo - params.maxRealization18mo) *
+      Math.min(1, (month - 18) / 18);
+
+  return Math.min(Math.max(0, normalized), ceiling);
 }
 
 // ─── Derived Metrics ─────────────────────────────────────────────────
@@ -720,10 +925,18 @@ export function computeRoi(
   let cumulativeAggressive = 0;
   let cumulativeOpEx = 0;
 
-  for (let m = 0; m <= PROJECTION_MONTHS; m++) {
-    const ramp = rampFactor(m);
+  const implWeeks = investment.implementationWeeks;
 
-    const monthlyBaseValue = (totalAnnualValue / 12) * ramp;
+  for (let m = 0; m <= PROJECTION_MONTHS; m++) {
+    // Per-stream ramp: each value stream has its own adoption curve
+    const monthlyBaseValue =
+      (vs.martechOptimization / 12) * streamRampFactor(m, 'martechOptimization', implWeeks) +
+      (vs.roasImprovement / 12) * streamRampFactor(m, 'roasImprovement', implWeeks) +
+      (vs.contentVelocity / 12) * streamRampFactor(m, 'contentVelocity', implWeeks) +
+      (vs.campaignSpeed / 12) * streamRampFactor(m, 'campaignSpeed', implWeeks) +
+      (vs.operationalEfficiency / 12) * streamRampFactor(m, 'operationalEfficiency', implWeeks) +
+      (vs.attributionImprovement / 12) * streamRampFactor(m, 'attributionImprovement', implWeeks) +
+      (vs.personalizationLift / 12) * streamRampFactor(m, 'personalizationLift', implWeeks);
 
     // OpEx starts after the build phase completes
     if (m > buildMonthsForOpEx) {
