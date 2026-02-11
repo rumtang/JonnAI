@@ -76,10 +76,10 @@ export default function ModeToggle() {
       resetCampaign();
       resetBuild();
       resetRoi();
-      loadLinearView();
+      loadFullGraph();
       useGraphStore.setState({ progressiveReveal: false });
-      // Linear view — same as guided title position
-      fg?.cameraPosition({ x: 0, y: 0, z: 800 }, origin, 1500);
+      // Full graph behind scrim — "View in Graph" needs full node data
+      fg?.cameraPosition({ x: 0, y: 0, z: 520 }, origin, 1500);
     } else if (newMode === 'roi') {
       resetCampaign();
       resetBuild();

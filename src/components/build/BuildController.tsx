@@ -64,6 +64,10 @@ export default function BuildController() {
   // Fly camera to centroid of highlighted nodes when peeking
   useEffect(() => {
     if (!graphPeek) return;
+
+    // Ensure full graph is loaded — build mode may have started with linear view
+    useGraphStore.getState().loadFullGraph();
+
     const graphInstance = getGraphRef();
     if (!graphInstance) return;
 
