@@ -16,7 +16,7 @@ export const useUIStore = create<UIState>((set) => ({
   sidebarOpen: false,
   detailPanelOpen: false,
   legendVisible: true,
-  controlsVisible: false,
+  controlsVisible: true,
 
   toggleSidebar: () => set((state) => ({ sidebarOpen: !state.sidebarOpen })),
   setDetailPanelOpen: (open) => set({ detailPanelOpen: open }),
