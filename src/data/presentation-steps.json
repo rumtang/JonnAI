@@ -44,25 +44,6 @@
     "duration": 15000
   },
   {
-    "id": "act1-pain-points",
-    "title": "Where the Pipeline Breaks",
-    "narration": "At enterprise scale, this pipeline breaks in predictable ways. Twenty percent of content gets reworked because the brief was ambiguous. Approval cycles average seven business days because reviewers lack context. Sixty percent of marketer time goes to administrative coordination, not strategic work. These aren't efficiency problems — they're structural failures baked into a linear model that doesn't match how work actually flows.",
-    "cameraPosition": {
-      "x": 0,
-      "y": 200,
-      "z": 800
-    },
-    "cameraLookAt": {
-      "x": 0,
-      "y": 0,
-      "z": 0
-    },
-    "cameraTransitionMs": 2000,
-    "graphState": "linear",
-    "action": "show-process-chart",
-    "duration": 8000
-  },
-  {
     "id": "act2-agents-and-context",
     "title": "Adding Agents — And What They Actually Need",
     "narration": "The first instinct is to bolt AI agents onto the existing pipeline — an agent for research, another for drafting, one for SEO. This gets results fast: first-draft generation drops from hours to minutes. But it also creates a new problem. Without shared context, each agent operates in isolation. The research agent doesn't know what the brand guide says. The SEO agent doesn't know what the compliance team flagged last quarter. Speed without coherence just produces more content to fix.",
@@ -88,6 +69,25 @@
     "duration": 25000
   },
   {
+    "id": "act1-pain-points",
+    "title": "Where the Pipeline Breaks",
+    "narration": "At enterprise scale, this pipeline breaks in predictable ways. Twenty percent of content gets reworked because the brief was ambiguous. Approval cycles average seven business days because reviewers lack context. Sixty percent of marketer time goes to administrative coordination, not strategic work. These aren't efficiency problems — they're structural failures baked into a linear model that doesn't match how work actually flows.",
+    "cameraPosition": {
+      "x": 0,
+      "y": 200,
+      "z": 800
+    },
+    "cameraLookAt": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "cameraTransitionMs": 2000,
+    "graphState": "linear",
+    "action": "show-process-chart",
+    "duration": 8000
+  },
+  {
     "id": "act3-graph-reveal",
     "title": "But Agents Have to Navigate the Real World",
     "narration": "This is what agents actually have to navigate. Not a clean pipeline — a network of review gates, knowledge inputs, agent capabilities, and feedback loops. The complexity isn't a bug; it's the reality of enterprise content production at scale. The organizations that perform aren't the ones that simplify this away. They're the ones that build intelligence to navigate it.",
@@ -107,28 +107,9 @@
     "duration": 12000
   },
   {
-    "id": "act3-feedback-loops",
-    "title": "Feedback Loops and Revision Cycles",
-    "narration": "The arrows flowing backward are the real story. Every review gate can send work back for revision. Every escalation pulls a human into the loop. Every performance measurement feeds forward into the next campaign's planning. These feedback loops are where quality happens — and where most organizations lose time. The difference between a 2-week campaign cycle and a 6-week one is almost entirely determined by how many times content loops through revision.",
-    "cameraPosition": {
-      "x": -50,
-      "y": 100,
-      "z": 500
-    },
-    "cameraLookAt": {
-      "x": 0,
-      "y": 0,
-      "z": 0
-    },
-    "cameraTransitionMs": 2500,
-    "graphState": "full-graph",
-    "action": "show-feedback-loops",
-    "duration": 8000
-  },
-  {
     "id": "act4-intelligence-layer",
     "title": "The Intelligence Layer",
-    "narration": "The intelligence layer is what separates agents that hallucinate from agents that perform. Brand voice guides, audience personas, compliance rules, performance data — these aren't nice-to-have context. They're the operational substrate that every agent depends on for every decision. When this layer is incomplete or stale, agent output degrades. When it's well-maintained, it compounds — every new piece of organizational knowledge makes every agent more capable.",
+    "narration": "Every agent in this graph depends on the same foundation: brand voice guides, audience personas, compliance rules, performance data. This is the intelligence layer — the structured knowledge that tells agents what to say, who to say it to, and what boundaries to respect. Build this layer well, and every agent gets smarter. Neglect it, and agents hallucinate faster.",
     "cameraPosition": {
       "x": 60,
       "y": 0,
@@ -150,12 +131,12 @@
       "uses",
       "performs"
     ],
-    "duration": 25000
+    "duration": 20000
   },
   {
     "id": "act5-human-roles",
     "title": "Human-in-the-Loop as Design Principle",
-    "narration": "Human-in-the-loop isn't a safety net — it's a design principle. Every gate in this graph represents a point where human judgment is irreplaceable: brand exceptions that require taste, legal ambiguities that require interpretation, strategic pivots that require context no model has. The pattern that works isn't AI replacing humans or humans supervising AI. It's a clear contract: agents handle volume and velocity, humans handle judgment and accountability.",
+    "narration": "Agents handle volume and velocity. Humans handle judgment and accountability. Every gate in this graph marks a point where human decision-making is irreplaceable — brand taste, legal interpretation, strategic direction.",
     "cameraPosition": {
       "x": 0,
       "y": -60,
@@ -169,12 +150,12 @@
     "cameraTransitionMs": 2000,
     "graphState": "full-graph",
     "action": "show-human-roles",
-    "duration": 15000
+    "duration": 10000
   },
   {
     "id": "act5-operating-model",
     "title": "The Operating Model Shift",
-    "narration": "The shift isn't from manual to automated. It's from a team of specialists executing tasks to a team of orchestrators directing systems. Content directors become workflow architects. Brand managers become governance designers. Analytics leads become feedback loop engineers. Every role in the graph transforms — not by doing less, but by operating at a higher altitude. The organizations that understand this are already redesigning their operating models around the graph, not around the org chart.",
+    "narration": "The shift isn't from manual to automated — it's from executing tasks to orchestrating systems. Every role transforms: content directors become workflow architects, brand managers become governance designers.",
     "cameraPosition": {
       "x": 100,
       "y": -50,
@@ -192,8 +173,8 @@
   },
   {
     "id": "act6-close",
-    "title": "The Strategic Thesis",
-    "narration": "The thesis is simple. Agents will commoditize — the cost of generating content, optimizing media, and scoring performance will approach zero. What won't commoditize is the organizational intelligence that makes those agents effective: the knowledge graph, the governance rules, the feedback loops, the escalation logic. The organizations building that intelligence layer now are creating a compounding advantage. The ones waiting for agents to get smarter are renting capability they'll never own.",
+    "title": "The Path to Agentic Operations",
+    "narration": "The path is clear: understand the process, map the intelligence layer, then build the foundation agents need to perform. Better models won't save you — better knowledge will. The organizations building that layer now are the ones whose agents will actually work.",
     "cameraPosition": {
       "x": 0,
       "y": 0,
@@ -207,6 +188,6 @@
     "cameraTransitionMs": 2000,
     "graphState": "full-graph",
     "action": "show-operating-model",
-    "duration": 15000
+    "duration": 12000
   }
 ]

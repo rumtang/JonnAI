@@ -178,7 +178,7 @@ export default function PresentationController() {
 
   const currentStep = steps[currentStepIndex];
   const isTitleSlide = currentStep?.action === 'show-title-slide';
-  const isPipelineSlide = currentStep?.id === 'act1-lifecycle';
+  const isPipelineSlide = currentStep?.id === 'act1-lifecycle' || currentStep?.id === 'act1-pain-points';
   const isTransitionSlide = currentStep?.id === 'act2-agents-and-context';
   const showPipelineOverlay = isTitleSlide || isPipelineSlide || isTransitionSlide;
   // Scrim stays high on slides 1-3 so the 2D overlay is the primary visual
@@ -213,7 +213,7 @@ export default function PresentationController() {
     prevStepIdRef.current = currentStep?.id ?? null;
 
     if (
-      prev === 'act2-agents-and-context' &&
+      prev === 'act1-pain-points' &&
       currentStep?.id === 'act3-graph-reveal' &&
       !flyingAgents
     ) {
@@ -352,12 +352,6 @@ export default function PresentationController() {
           loadExplodedGraph();
           hasExplodedRef.current = true;
         }
-        break;
-      }
-
-      case 'show-feedback-loops': {
-        clearHighlights();
-        highlightLinksByTypes(['returns-to', 'escalates-to', 'flows-to']);
         break;
       }
 
@@ -616,8 +610,7 @@ export default function PresentationController() {
                 transition={{ delay: 0.5 }}
                 className="text-lg text-muted-foreground max-w-xl mx-auto leading-relaxed"
               >
-                Every team tells the same story: a clean, linear pipeline.
-                But what does the process really look like?
+                Understanding the intelligence layer to unlock agentic capabilities
               </motion.p>
             </div>
 
