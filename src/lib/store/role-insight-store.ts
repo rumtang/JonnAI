@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { GraphData, GraphNode } from '../graph/types';
+import { GraphData } from '../graph/types';
 import { RoleDefinition, ROLE_MAP } from '../roles/role-definitions';
 import { RoleSubgraph, computeRoleSubgraph } from '../roles/role-subgraph';
 
@@ -61,10 +61,13 @@ const FULL_WORKFLOW_ORDER = [
   'optimize',
 ];
 
-// Build the walkthrough path: only nodes this role owns, reviews, or depends on.
+// Total number of slides: intro + 3 journey stages
+const MAX_SLIDE_INDEX = 3;
+
+// Build the ordered node list: only nodes this role owns, reviews, or depends on.
 // Pipeline nodes (owned steps + reviewed gates) come first in FULL_WORKFLOW_ORDER
 // sequence to preserve logical flow, then agents, then inputs.
-function buildWalkthroughPath(role: RoleDefinition, graphData: GraphData): string[] {
+function buildOrderedNodeIds(role: RoleDefinition, graphData: GraphData): string[] {
   const existingIds = new Set(graphData.nodes.map(n => n.id));
 
   // Collect the role's pipeline nodes (steps + gates)
@@ -94,15 +97,16 @@ interface RoleInsightState {
   roleSubgraph: RoleSubgraph | null;
   isActive: boolean;
 
-  // Walkthrough state — step-by-step camera journey through the role's nodes
-  walkthroughPath: string[];  // ordered node IDs
-  currentStepIndex: number;
+  // Ordered node IDs for grouping content across slides
+  orderedNodeIds: string[];
+  // 4 fixed slides: 0=intro, 1=preAI, 2=aiAgents, 3=aiAgentic
+  currentSlideIndex: number;
 
   selectRole: (roleId: string, graphData: GraphData) => void;
   clearRole: () => void;
-  nextStep: () => string | null;   // returns next node ID or null if at end
-  prevStep: () => string | null;   // returns prev node ID or null if at start
-  goToStep: (index: number) => string | null;
+  nextSlide: () => void;
+  prevSlide: () => void;
+  goToSlide: (index: number) => void;
 }
 
 export const useRoleInsightStore = create<RoleInsightState>((set, get) => ({
@@ -110,23 +114,23 @@ export const useRoleInsightStore = create<RoleInsightState>((set, get) => ({
   selectedRole: null,
   roleSubgraph: null,
   isActive: false,
-  walkthroughPath: [],
-  currentStepIndex: 0,
+  orderedNodeIds: [],
+  currentSlideIndex: 0,
 
   selectRole: (roleId, graphData) => {
     const role = ROLE_MAP.get(roleId);
     if (!role) return;
 
     const subgraph = computeRoleSubgraph(role, graphData);
-    const path = buildWalkthroughPath(role, graphData);
+    const nodeIds = buildOrderedNodeIds(role, graphData);
 
     set({
       selectedRoleId: roleId,
       selectedRole: role,
       roleSubgraph: subgraph,
       isActive: true,
-      walkthroughPath: path,
-      currentStepIndex: 0,
+      orderedNodeIds: nodeIds,
+      currentSlideIndex: 0,
     });
   },
 
@@ -135,30 +139,24 @@ export const useRoleInsightStore = create<RoleInsightState>((set, get) => ({
     selectedRole: null,
     roleSubgraph: null,
     isActive: false,
-    walkthroughPath: [],
-    currentStepIndex: 0,
+    orderedNodeIds: [],
+    currentSlideIndex: 0,
   }),
 
-  nextStep: () => {
-    const { walkthroughPath, currentStepIndex } = get();
-    if (currentStepIndex >= walkthroughPath.length - 1) return null;
-    const nextIndex = currentStepIndex + 1;
-    set({ currentStepIndex: nextIndex });
-    return walkthroughPath[nextIndex];
+  nextSlide: () => {
+    const { currentSlideIndex } = get();
+    if (currentSlideIndex >= MAX_SLIDE_INDEX) return;
+    set({ currentSlideIndex: currentSlideIndex + 1 });
   },
 
-  prevStep: () => {
-    const { walkthroughPath, currentStepIndex } = get();
-    if (currentStepIndex <= 0) return null;
-    const prevIndex = currentStepIndex - 1;
-    set({ currentStepIndex: prevIndex });
-    return walkthroughPath[prevIndex];
+  prevSlide: () => {
+    const { currentSlideIndex } = get();
+    if (currentSlideIndex <= 0) return;
+    set({ currentSlideIndex: currentSlideIndex - 1 });
   },
 
-  goToStep: (index) => {
-    const { walkthroughPath } = get();
-    if (index < 0 || index >= walkthroughPath.length) return null;
-    set({ currentStepIndex: index });
-    return walkthroughPath[index];
+  goToSlide: (index) => {
+    if (index < 0 || index > MAX_SLIDE_INDEX) return;
+    set({ currentSlideIndex: index });
   },
 }));

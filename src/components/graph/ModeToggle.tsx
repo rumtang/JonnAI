@@ -106,18 +106,11 @@ export default function ModeToggle() {
       activeBg: 'bg-[#C9A04E]/20',
     },
     {
-      key: 'role',
-      label: 'Your Role',
-      shortLabel: 'Role',
-      activeColor: '#5B9ECF',
-      activeBg: 'bg-[#5B9ECF]/20',
-    },
-    {
-      key: 'roi',
-      label: 'ROI',
-      shortLabel: 'ROI',
-      activeColor: '#14B8A6',
-      activeBg: 'bg-[#14B8A6]/20',
+      key: 'explore',
+      label: 'Explore',
+      shortLabel: 'Explore',
+      activeColor: '#9B7ACC',
+      activeBg: 'bg-[#9B7ACC]/20',
     },
     {
       key: 'campaign',
@@ -134,11 +127,18 @@ export default function ModeToggle() {
       activeBg: 'bg-[#E88D67]/20',
     },
     {
-      key: 'explore',
-      label: 'Explore',
-      shortLabel: 'Explore',
-      activeColor: '#9B7ACC',
-      activeBg: 'bg-[#9B7ACC]/20',
+      key: 'roi',
+      label: 'ROI',
+      shortLabel: 'ROI',
+      activeColor: '#14B8A6',
+      activeBg: 'bg-[#14B8A6]/20',
+    },
+    {
+      key: 'role',
+      label: 'Your Role',
+      shortLabel: 'Role',
+      activeColor: '#5B9ECF',
+      activeBg: 'bg-[#5B9ECF]/20',
     },
   ];
 

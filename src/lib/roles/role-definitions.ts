@@ -2655,7 +2655,7 @@ export const ROLE_DEFINITIONS: RoleDefinition[] = [
     accentColor: '#D4AD5E',
     ownedSteps: ['track-performance', 'generate-report', 'optimize', 'attribution-modeling', 'executive-reporting'],
     reviewedGates: ['performance-review'],
-    relatedAgents: ['performance-agent'],
+    relatedAgents: ['performance-agent', 'optimization-agent'],
     relatedInputs: ['analytics-data', 'cdp-profiles', 'budget-allocation', 'channel-benchmarks'],
     narrative: {
       nodeJourneys: {
@@ -3951,7 +3951,7 @@ export const ROLE_DEFINITIONS: RoleDefinition[] = [
     accentColor: '#C9A04E',
     ownedSteps: ['schedule-publish', 'distribute', 'optimize', 'channel-orchestration', 'dynamic-assembly'],
     reviewedGates: ['performance-review'],
-    relatedAgents: ['performance-agent', 'personalization-agent'],
+    relatedAgents: ['performance-agent', 'personalization-agent', 'publishing-ops-agent'],
     relatedInputs: ['analytics-data', 'content-strategy', 'orchestration-rules', 'media-plan', 'channel-benchmarks', 'cdp-profiles', 'asset-library'],
     narrative: {
       nodeJourneys: {
@@ -5895,7 +5895,7 @@ export const ROLE_DEFINITIONS: RoleDefinition[] = [
     accentColor: '#C97A5A',
     ownedSteps: ['legal-review'],
     reviewedGates: ['legal-compliance-gate'],
-    relatedAgents: ['legal-screening-agent'],
+    relatedAgents: ['legal-screening-agent', 'governance-agent'],
     relatedInputs: ['legal-guidelines', 'approval-matrix'],
     narrative: {
       nodeJourneys: {
@@ -7191,7 +7191,7 @@ export const ROLE_DEFINITIONS: RoleDefinition[] = [
     accentColor: '#B088DD',
     ownedSteps: ['visual-asset-creation'],
     reviewedGates: ['quality-check'],
-    relatedAgents: ['writer-agent'],
+    relatedAgents: ['writer-agent', 'visual-assets-agent'],
     relatedInputs: ['brand-guide', 'asset-library'],
     narrative: {
       nodeJourneys: {
@@ -9135,7 +9135,7 @@ export const ROLE_DEFINITIONS: RoleDefinition[] = [
     accentColor: '#3D7AB0',
     ownedSteps: ['campaign-planning', 'journey-mapping'],
     reviewedGates: [],
-    relatedAgents: ['performance-agent'],
+    relatedAgents: ['performance-agent', 'journey-mapping-agent'],
     relatedInputs: ['budget-allocation', 'cdp-profiles', 'channel-benchmarks', 'content-strategy', 'influencer-database'],
     narrative: {
       nodeJourneys: {

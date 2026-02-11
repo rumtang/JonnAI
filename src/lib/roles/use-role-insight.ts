@@ -1,6 +1,6 @@
 // Integration hook bridging role-insight-store and graph-store.
 // Activating a role computes the subgraph and applies highlights.
-// Next/Prev/GoToStep update the walkthrough index in the store.
+// Next/Prev/GoToSlide update the slide index in the store.
 
 import { useCallback } from 'react';
 import { useGraphStore } from '../store/graph-store';
@@ -19,8 +19,8 @@ export function useRoleInsight() {
     isActive,
     selectRole,
     clearRole,
-    walkthroughPath,
-    currentStepIndex,
+    orderedNodeIds,
+    currentSlideIndex,
   } = useRoleInsightStore();
 
   const activateRole = useCallback((roleId: string) => {
@@ -38,16 +38,16 @@ export function useRoleInsight() {
     clearHighlights();
   }, [clearRole, clearHighlights]);
 
-  const goToNextStep = useCallback(() => {
-    return useRoleInsightStore.getState().nextStep();
+  const goToNextSlide = useCallback(() => {
+    useRoleInsightStore.getState().nextSlide();
   }, []);
 
-  const goToPrevStep = useCallback(() => {
-    return useRoleInsightStore.getState().prevStep();
+  const goToPrevSlide = useCallback(() => {
+    useRoleInsightStore.getState().prevSlide();
   }, []);
 
-  const goToStep = useCallback((index: number) => {
-    return useRoleInsightStore.getState().goToStep(index);
+  const goToSlide = useCallback((index: number) => {
+    useRoleInsightStore.getState().goToSlide(index);
   }, []);
 
   return {
@@ -56,10 +56,10 @@ export function useRoleInsight() {
     isActive,
     activateRole,
     deactivateRole,
-    walkthroughPath,
-    currentStepIndex,
-    goToNextStep,
-    goToPrevStep,
-    goToStep,
+    orderedNodeIds,
+    currentSlideIndex,
+    goToNextSlide,
+    goToPrevSlide,
+    goToSlide,
   };
 }

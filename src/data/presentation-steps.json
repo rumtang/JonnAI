@@ -52,6 +52,11 @@
       "y": 200,
       "z": 800
     },
+    "cameraLookAt": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
     "cameraTransitionMs": 2000,
     "graphState": "linear",
     "action": "show-process-chart",
@@ -84,8 +89,8 @@
   },
   {
     "id": "act3-graph-reveal",
-    "title": "It's Not a Pipeline — It's a Graph",
-    "narration": "This is what the process actually looks like. Not a pipeline — a network. Every step connects to review gates, knowledge inputs, agent capabilities, and feedback loops. The complexity isn't a bug; it's the reality of enterprise content production at scale. The organizations that perform aren't the ones that simplify this away. They're the ones that build intelligence to navigate it.",
+    "title": "But Agents Have to Navigate the Real World",
+    "narration": "This is what agents actually have to navigate. Not a clean pipeline — a network of review gates, knowledge inputs, agent capabilities, and feedback loops. The complexity isn't a bug; it's the reality of enterprise content production at scale. The organizations that perform aren't the ones that simplify this away. They're the ones that build intelligence to navigate it.",
     "cameraPosition": {
       "x": 0,
       "y": 0,
@@ -109,6 +114,11 @@
       "x": -50,
       "y": 100,
       "z": 500
+    },
+    "cameraLookAt": {
+      "x": 0,
+      "y": 0,
+      "z": 0
     },
     "cameraTransitionMs": 2500,
     "graphState": "full-graph",
@@ -169,6 +179,11 @@
       "x": 100,
       "y": -50,
       "z": 600
+    },
+    "cameraLookAt": {
+      "x": 0,
+      "y": 0,
+      "z": 0
     },
     "cameraTransitionMs": 2000,
     "graphState": "full-graph",

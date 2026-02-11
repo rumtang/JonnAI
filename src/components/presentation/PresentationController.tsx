@@ -49,22 +49,6 @@ const PROCESS_CHART_LINKS: Array<[string, string]> = [
   ['generate-report',   'optimize'],
 ];
 
-// Agent positions below their primary phase column — spaced for expanded layout
-const AGENT_CHART_POSITIONS: Record<string, { fx: number; fy: number; fz: number }> = {
-  'research-agent':    { fx: -500, fy: -350, fz: 0 },
-  'writer-agent':      { fx: -350, fy: -350, fz: 0 },
-  'seo-agent':         { fx: -250, fy: -350, fz: 0 },
-  'performance-agent': { fx:  300, fy: -350, fz: 0 },
-};
-
-// One primary performs link per agent
-const AGENT_PRIMARY_LINKS: Array<[string, string]> = [
-  ['research-agent',    'research-insights'],
-  ['writer-agent',      'draft-content'],
-  ['seo-agent',         'seo-optimization'],
-  ['performance-agent', 'track-performance'],
-];
-
 // Lifecycle stages shown on slides 1-3 as the "map everyone draws"
 const PIPELINE_STAGES = [
   { label: 'Plan', icon: '\uD83C\uDFAF' },
@@ -324,41 +308,6 @@ export default function PresentationController() {
     return { nodes: stepNodes, links: stepLinks };
   }, [fullGraphData]);
 
-  // Helper: build process chart with agents below
-  const buildProcessChartWithAgents = useCallback(() => {
-    if (!fullGraphData) return null;
-    const stepNodes: GraphNode[] = fullGraphData.nodes
-      .filter(n => n.type === 'step')
-      .map(n => {
-        const pos = PROCESS_CHART_LAYOUT[n.id];
-        if (!pos) return { ...n };
-        return { ...n, fx: pos.fx, fy: pos.fy, fz: pos.fz };
-      });
-    const agentNodes: GraphNode[] = fullGraphData.nodes
-      .filter(n => n.type === 'agent')
-      .map(n => {
-        const pos = AGENT_CHART_POSITIONS[n.id];
-        if (!pos) return { ...n };
-        return { ...n, fx: pos.fx, fy: pos.fy, fz: pos.fz };
-      });
-    const stepLinks: GraphLink[] = PROCESS_CHART_LINKS.map(([src, tgt]) => ({
-      source: src,
-      target: tgt,
-      type: 'flows-to' as const,
-      particles: 2,
-    }));
-    const agentLinks: GraphLink[] = AGENT_PRIMARY_LINKS.map(([src, tgt]) => ({
-      source: src,
-      target: tgt,
-      type: 'performs' as const,
-      particles: 2,
-    }));
-    return {
-      nodes: [...stepNodes, ...agentNodes],
-      links: [...stepLinks, ...agentLinks],
-    };
-  }, [fullGraphData]);
-
   // Helper: load full graph with force-directed layout (unpin all nodes)
   const loadExplodedGraph = useCallback(() => {
     if (!fullGraphData) return;
@@ -383,14 +332,6 @@ export default function PresentationController() {
         break;
       }
 
-      case 'show-linear':
-      case 'show-linear-pipeline': {
-        clearHighlights();
-        const chart = buildProcessChart();
-        if (chart) setGraphData(chart);
-        break;
-      }
-
       case 'show-process-chart':
       case 'show-teams-by-phase': {
         // Going back to pipeline slides means next forward visit should re-explode
@@ -402,58 +343,7 @@ export default function PresentationController() {
         break;
       }
 
-      case 'show-detailed-steps': {
-        clearHighlights();
-        const chart = buildProcessChart();
-        if (chart) setGraphData(chart);
-        break;
-      }
-
-      // ─── Act 2: Agents ───────────────────────────────────────
-      case 'show-process-with-agents':
-      case 'show-agents-on-pipeline': {
-        clearHighlights();
-        const chartWithAgents = buildProcessChartWithAgents();
-        if (chartWithAgents) setGraphData(chartWithAgents);
-        highlightByTypes(['agent']);
-        highlightLinksByTypes(['performs']);
-        break;
-      }
-
-      case 'show-agents-grounded':
-      case 'show-agent-dependencies': {
-        // Show the step pipeline with input nodes floating around it,
-        // connected by 'uses' links — the context layer agents depend on
-        clearHighlights();
-        if (!fullGraphData) break;
-        const stepNodesD: GraphNode[] = fullGraphData.nodes
-          .filter(n => n.type === 'step')
-          .map(n => {
-            const pos = PROCESS_CHART_LAYOUT[n.id];
-            if (!pos) return { ...n };
-            return { ...n, fx: pos.fx, fy: pos.fy, fz: pos.fz };
-          });
-        const inputNodes: GraphNode[] = fullGraphData.nodes
-          .filter(n => n.type === 'input');
-        const stepLinks: GraphLink[] = PROCESS_CHART_LINKS.map(([src, tgt]) => ({
-          source: src,
-          target: tgt,
-          type: 'flows-to' as const,
-          particles: 2,
-        }));
-        const usesLinks: GraphLink[] = fullGraphData.links
-          .filter(l => l.type === 'uses');
-        setGraphData({
-          nodes: [...stepNodesD, ...inputNodes],
-          links: [...stepLinks, ...usesLinks],
-        });
-        highlightByTypes(['input']);
-        highlightLinksByTypes(['uses']);
-        break;
-      }
-
       // ─── Act 3: Full Graph Reveal ────────────────────────────
-      case 'explode':
       case 'explode-to-graph': {
         clearHighlights();
         resetFilters();
@@ -465,28 +355,13 @@ export default function PresentationController() {
         break;
       }
 
-      case 'highlight-knowledge-layer':
-      case 'highlight-gates': {
-        clearHighlights();
-        highlightByTypes(['gate']);
-        highlightLinksByTypes(['reviews', 'escalates-to', 'returns-to']);
-        break;
-      }
-
       case 'show-feedback-loops': {
         clearHighlights();
         highlightLinksByTypes(['returns-to', 'escalates-to', 'flows-to']);
         break;
       }
 
-      // ─── Act 4: Infrastructure ───────────────────────────────
-      case 'show-knowledge-layer': {
-        clearHighlights();
-        highlightByTypes(['input']);
-        highlightLinksByTypes(['uses']);
-        break;
-      }
-
+      // ─── Act 4: Intelligence Layer ──────────────────────────
       case 'show-intelligence-vs-agents': {
         clearHighlights();
         highlightByTypes(['input', 'agent']);
@@ -494,29 +369,15 @@ export default function PresentationController() {
         break;
       }
 
-      case 'show-structured-context': {
-        clearHighlights();
-        break;
-      }
-
       // ─── Act 5: Human Roles ──────────────────────────────────
-      case 'show-human-roles':
-      case 'show-human-elevation': {
+      case 'show-human-roles': {
         clearHighlights();
         highlightByTypes(['gate', 'step']);
         highlightLinksByTypes(['reviews', 'escalates-to']);
         break;
       }
 
-      case 'show-emerging-roles': {
-        clearHighlights();
-        highlightByTypes(['step', 'gate', 'input']);
-        highlightLinksByTypes(['uses', 'reviews']);
-        break;
-      }
-
-      case 'show-role-overview':
-      case 'show-role-explorer': {
+      case 'show-role-overview': {
         clearHighlights();
         if (!fullGraphData) break;
         const humanStepIds = new Set(
@@ -533,34 +394,13 @@ export default function PresentationController() {
       }
 
       // ─── Act 6: Strategic ────────────────────────────────────
-      case 'show-investment-thesis': {
-        clearHighlights();
-        highlightByTypes(['input', 'agent']);
-        highlightLinksByTypes(['uses']);
-        break;
-      }
-
-      case 'show-operating-model':
-      case 'full-reveal': {
+      case 'show-operating-model': {
         clearHighlights();
         resetFilters();
-        break;
-      }
-
-      case 'full-explore': {
-        clearHighlights();
-        resetFilters();
-        break;
-      }
-
-      case 'show-team-connections': {
-        clearHighlights();
-        highlightByTypes(['gate', 'step']);
-        highlightLinksByTypes(['reviews', 'returns-to', 'escalates-to']);
         break;
       }
     }
-  }, [mode, linearGraphData, fullGraphData, setGraphData, clearHighlights, resetFilters, highlightByTypes, highlightLinksByTypes, setHighlightedNodeIds, buildProcessChart, buildProcessChartWithAgents, loadExplodedGraph]);
+  }, [mode, linearGraphData, fullGraphData, setGraphData, clearHighlights, resetFilters, highlightByTypes, highlightLinksByTypes, setHighlightedNodeIds, buildProcessChart, loadExplodedGraph]);
 
   // Execute step action + camera when step changes
   useEffect(() => {

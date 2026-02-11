@@ -7,11 +7,11 @@ import type { AppMode } from '@/lib/store/presentation-store';
 // ─── Direct access modes ─────────────────────────────────────
 const DIRECT_MODES: { key: AppMode; label: string; color: string }[] = [
   { key: 'guided',   label: 'Guided Tour',    color: '#C9A04E' },
-  { key: 'role',     label: 'Your Role + AI',  color: '#5B9ECF' },
-  { key: 'roi',      label: 'ROI Simulator',   color: '#14B8A6' },
+  { key: 'explore',  label: 'Explore',         color: '#9B7ACC' },
   { key: 'campaign', label: 'Campaign',        color: '#4CAF50' },
   { key: 'build',    label: 'Build It',        color: '#E88D67' },
-  { key: 'explore',  label: 'Explore',         color: '#9B7ACC' },
+  { key: 'roi',      label: 'ROI Simulator',   color: '#14B8A6' },
+  { key: 'role',     label: 'Your Role + AI',  color: '#5B9ECF' },
 ];
 
 export default function Home() {

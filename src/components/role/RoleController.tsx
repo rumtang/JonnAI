@@ -7,11 +7,16 @@ import { useRoleInsightStore } from '@/lib/store/role-insight-store';
 import { useGraphStore } from '@/lib/store/graph-store';
 import { usePresentationStore } from '@/lib/store/presentation-store';
 import { useRoleInsight } from '@/lib/roles/use-role-insight';
-import { NODE_STYLES } from '@/lib/graph/node-styles';
 import { useIsMobile } from '@/lib/hooks/use-is-mobile';
-import type { NodeType } from '@/lib/graph/types';
-import type { NodeJourney } from '@/lib/roles/role-definitions';
 import RoleSlide from './RoleSlide';
+
+// 4 fixed slides with labels and theme colors
+const SLIDE_META = [
+  { label: 'Overview',        color: '' },   // uses role accent (filled dynamically)
+  { label: 'Before AI',       color: '#94a3b8' },
+  { label: 'With AI Agents',  color: '#6BAED6' },
+  { label: 'Agentic System',  color: '#4CAF50' },
+] as const;
 
 interface RoleControllerProps {
   onChangeRole: () => void;
@@ -19,11 +24,11 @@ interface RoleControllerProps {
 
 export default function RoleController({ onChangeRole }: RoleControllerProps) {
   const selectedRole = useRoleInsightStore(s => s.selectedRole);
-  const walkthroughPath = useRoleInsightStore(s => s.walkthroughPath);
-  const currentStepIndex = useRoleInsightStore(s => s.currentStepIndex);
+  const orderedNodeIds = useRoleInsightStore(s => s.orderedNodeIds);
+  const currentSlideIndex = useRoleInsightStore(s => s.currentSlideIndex);
   const graphData = useGraphStore(s => s.graphData);
 
-  const { goToNextStep, goToPrevStep, goToStep } = useRoleInsight();
+  const { goToNextSlide, goToPrevSlide, goToSlide } = useRoleInsight();
 
   const setMode = usePresentationStore(s => s.setMode);
   const loadFullGraph = useGraphStore(s => s.loadFullGraph);
@@ -32,20 +37,23 @@ export default function RoleController({ onChangeRole }: RoleControllerProps) {
 
   const isMobile = useIsMobile();
 
+  const isFirst = currentSlideIndex === 0;
+  const isLast = currentSlideIndex === 3;
+
   // Keyboard navigation — left/right arrows
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'ArrowRight') {
         e.preventDefault();
-        goToNextStep();
+        goToNextSlide();
       } else if (e.key === 'ArrowLeft') {
         e.preventDefault();
-        goToPrevStep();
+        goToPrevSlide();
       }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [goToNextStep, goToPrevStep]);
+  }, [goToNextSlide, goToPrevSlide]);
 
   // Exit to explore mode
   const exitToExplore = useCallback(() => {
@@ -56,17 +64,8 @@ export default function RoleController({ onChangeRole }: RoleControllerProps) {
     loadFullGraph();
   }, [clearHighlights, resetFilters, setMode, loadFullGraph]);
 
-  // Current node for the slide
-  const currentNodeId = walkthroughPath[currentStepIndex];
-  const currentNode = currentNodeId
-    ? graphData.nodes.find(n => n.id === currentNodeId)
-    : undefined;
-
-  const isFirst = currentStepIndex === 0;
-  const isLast = currentStepIndex === walkthroughPath.length - 1;
-
-  // Per-node journey data
-  const nodeJourney: NodeJourney | undefined = selectedRole?.narrative.nodeJourneys[currentNodeId];
+  // Current slide label for header
+  const currentSlideName = SLIDE_META[currentSlideIndex]?.label ?? '';
 
   return (
     <>
@@ -80,10 +79,10 @@ export default function RoleController({ onChangeRole }: RoleControllerProps) {
         <div className="absolute inset-0 bg-background backdrop-blur-sm" />
       </motion.div>
 
-      {/* --- Slide Content --- only when a role is selected and we have a valid node */}
-      {selectedRole && currentNode && (
+      {/* --- Slide Content --- only when a role is selected */}
+      {selectedRole && (
         <div className="fixed inset-0 z-[46] pointer-events-auto overflow-hidden flex flex-col">
-          {/* Header: role name + step counter */}
+          {/* Header: role name + current slide label */}
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -95,9 +94,7 @@ export default function RoleController({ onChangeRole }: RoleControllerProps) {
             </div>
             <div>
               <h2 className="text-lg font-semibold text-foreground">{selectedRole.title}</h2>
-              <p className="text-xs text-[#5B9ECF]">
-                Step {currentStepIndex + 1} of {walkthroughPath.length}
-              </p>
+              <p className="text-xs text-[#5B9ECF]">{currentSlideName}</p>
             </div>
           </motion.div>
 
@@ -105,7 +102,7 @@ export default function RoleController({ onChangeRole }: RoleControllerProps) {
           <div className="flex-1 overflow-hidden flex items-center justify-center">
             <AnimatePresence mode="wait">
               <motion.div
-                key={currentNodeId}
+                key={currentSlideIndex}
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
@@ -113,10 +110,10 @@ export default function RoleController({ onChangeRole }: RoleControllerProps) {
                 className="w-full"
               >
                 <RoleSlide
-                  node={currentNode}
+                  slideIndex={currentSlideIndex}
                   role={selectedRole}
-                  nodeJourney={nodeJourney}
-                  isLast={isLast}
+                  graphData={graphData}
+                  orderedNodeIds={orderedNodeIds}
                 />
               </motion.div>
             </AnimatePresence>
@@ -125,7 +122,7 @@ export default function RoleController({ onChangeRole }: RoleControllerProps) {
       )}
 
       {/* --- Bottom Navigation --- */}
-      {selectedRole && walkthroughPath.length > 0 && (
+      {selectedRole && (
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -136,42 +133,30 @@ export default function RoleController({ onChangeRole }: RoleControllerProps) {
         >
           {/* Previous */}
           <button
-            onClick={goToPrevStep}
+            onClick={goToPrevSlide}
             disabled={isFirst}
             className="p-2 rounded-full glass-panel text-muted-foreground hover:text-foreground disabled:opacity-30 disabled:cursor-not-allowed transition-all"
           >
             <ChevronLeft className={isMobile ? 'w-4 h-4' : 'w-5 h-5'} />
           </button>
 
-          {/* Progress dots — color-coded by node type, owned nodes bigger */}
-          <div className={`flex items-center gap-[3px] px-3 py-2 rounded-full glass-panel ${
-            isMobile ? 'max-w-[200px] overflow-x-auto' : 'max-w-[400px] overflow-x-auto'
-          }`}>
-            {walkthroughPath.map((nodeId, i) => {
-              const node = graphData.nodes.find(n => n.id === nodeId);
-              const nodeStyle = node ? (NODE_STYLES[node.type as NodeType] || NODE_STYLES.step) : NODE_STYLES.step;
-              const isCurrent = i === currentStepIndex;
-              const isVisited = i < currentStepIndex;
-              const isOwned = selectedRole.ownedSteps.includes(nodeId) || selectedRole.reviewedGates.includes(nodeId);
+          {/* 4 progress dots — color-coded by slide type */}
+          <div className={`flex items-center gap-2 px-4 py-2 rounded-full glass-panel`}>
+            {SLIDE_META.map((meta, i) => {
+              const isCurrent = i === currentSlideIndex;
+              const isVisited = i < currentSlideIndex;
+              const dotColor = i === 0 ? selectedRole.accentColor : meta.color;
               return (
                 <button
-                  key={nodeId}
-                  onClick={() => goToStep(i)}
-                  title={node?.label || nodeId}
-                  className={`shrink-0 transition-all duration-300 ${
+                  key={i}
+                  onClick={() => goToSlide(i)}
+                  title={meta.label}
+                  className={`shrink-0 rounded-full transition-all duration-300 ${
                     isCurrent
-                      ? 'w-5 h-2.5 rounded-full ring-2 ring-[#5B9ECF]/50'
-                      : isOwned
-                        ? 'w-2.5 h-2.5 rounded-full hover:scale-125'
-                        : 'w-2 h-2 rounded-full hover:scale-125'
-                  } ${isVisited ? 'opacity-100' : 'opacity-30'}`}
-                  style={{
-                    backgroundColor: isCurrent
-                      ? '#5B9ECF'
-                      : isOwned
-                        ? '#5B9ECF' + (isVisited ? '' : '80')
-                        : (nodeStyle?.color || '#6b7280') + (isVisited ? '60' : '40'),
-                  }}
+                      ? 'w-6 h-3 ring-2 ring-white/20'
+                      : 'w-3 h-3 hover:scale-125'
+                  } ${isVisited || isCurrent ? 'opacity-100' : 'opacity-40'}`}
+                  style={{ backgroundColor: dotColor }}
                 />
               );
             })}
@@ -179,7 +164,7 @@ export default function RoleController({ onChangeRole }: RoleControllerProps) {
 
           {/* Next */}
           <button
-            onClick={goToNextStep}
+            onClick={goToNextSlide}
             disabled={isLast}
             className="p-2 rounded-full glass-panel text-muted-foreground hover:text-foreground disabled:opacity-30 disabled:cursor-not-allowed transition-all"
           >

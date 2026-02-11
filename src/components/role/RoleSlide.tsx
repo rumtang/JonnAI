@@ -1,104 +1,279 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Eye } from 'lucide-react';
+import { Eye, Lightbulb, Users } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { NODE_STYLES } from '@/lib/graph/node-styles';
-import type { GraphNode, NodeType, StepMeta, GateMeta, AgentMeta, InputMeta } from '@/lib/graph/types';
-import type { RoleDefinition, JourneyStage, NodeJourney } from '@/lib/roles/role-definitions';
+import { computeRoleStats } from '@/lib/roles/role-definitions';
+import type { GraphData, GraphNode, NodeType } from '@/lib/graph/types';
+import type { RoleDefinition, JourneyStage } from '@/lib/roles/role-definitions';
 
-// Stage config: label, color, and progression indicator
-const JOURNEY_STAGES = {
-  preAI:     { label: 'Before AI',       color: '#94a3b8', indicator: '\u25CB' },
-  aiAgents:  { label: 'With AI Agents',  color: '#6BAED6', indicator: '\u25D0' },
-  aiAgentic: { label: 'Agentic System',  color: '#4CAF50', indicator: '\u25CF' },
+// Stage config: label, subtitle, color, icon
+const STAGE_CONFIG = {
+  preAI:     { label: 'Before AI',       subtitle: 'Manual processes and bottlenecks',   color: '#94a3b8' },
+  aiAgents:  { label: 'With AI Agents',  subtitle: 'AI augments your decisions',         color: '#6BAED6' },
+  aiAgentic: { label: 'Agentic System',  subtitle: 'Orchestrated intelligence at scale', color: '#4CAF50' },
 } as const;
 
-type JourneyStageName = keyof typeof JOURNEY_STAGES;
+type StageName = keyof typeof STAGE_CONFIG;
+
+// Pipeline phases in display order
+const PHASE_ORDER = ['Plan', 'Create', 'Review', 'Publish', 'Measure', 'Optimize'] as const;
 
 interface RoleSlideProps {
-  node: GraphNode;
+  slideIndex: number;
   role: RoleDefinition;
-  nodeJourney: NodeJourney | undefined;
-  isLast: boolean;
+  graphData: GraphData;
+  orderedNodeIds: string[];
 }
 
-export default function RoleSlide({ node, role, nodeJourney, isLast }: RoleSlideProps) {
-  const style = NODE_STYLES[node.type as NodeType] || NODE_STYLES.step;
+export default function RoleSlide({ slideIndex, role, graphData, orderedNodeIds }: RoleSlideProps) {
+  switch (slideIndex) {
+    case 0:
+      return <RoleIntroSlide role={role} graphData={graphData} orderedNodeIds={orderedNodeIds} />;
+    case 1:
+      return <RoleStageSlide stage="preAI" role={role} graphData={graphData} orderedNodeIds={orderedNodeIds} />;
+    case 2:
+      return <RoleStageSlide stage="aiAgents" role={role} graphData={graphData} orderedNodeIds={orderedNodeIds} />;
+    case 3:
+      return <RoleStageSlide stage="aiAgentic" role={role} graphData={graphData} orderedNodeIds={orderedNodeIds} showKeyInsight />;
+    default:
+      return null;
+  }
+}
 
-  // Classify node's relationship to the role
-  const isPrimary = role.ownedSteps.includes(node.id) || role.reviewedGates.includes(node.id);
-  const nodeRelation = isPrimary
-    ? (role.ownedSteps.includes(node.id) ? 'You own this step' : 'You review this gate')
-    : (role.relatedAgents.includes(node.id) ? 'AI agent supporting you'
-       : role.relatedInputs.includes(node.id) ? 'Input you depend on'
-       : 'How this step affects your work');
+// ─── Slide 0: Role Intro ─────────────────────────────────────
+
+interface IntroSlideProps {
+  role: RoleDefinition;
+  graphData: GraphData;
+  orderedNodeIds: string[];
+}
+
+function RoleIntroSlide({ role, graphData, orderedNodeIds }: IntroSlideProps) {
+  const stats = computeRoleStats(role, graphData.nodes.length);
+  const nodeMap = new Map(graphData.nodes.map(n => [n.id, n]));
+
+  // Group pipeline nodes (owned steps + reviewed gates) by phase
+  const pipelineIds = new Set([...role.ownedSteps, ...role.reviewedGates]);
+  const pipelineNodes = orderedNodeIds
+    .filter(id => pipelineIds.has(id))
+    .map(id => nodeMap.get(id))
+    .filter(Boolean) as GraphNode[];
+
+  const byPhase = groupByPhase(pipelineNodes);
+
+  // Agents and inputs
+  const agentNodes = role.relatedAgents.map(id => nodeMap.get(id)).filter(Boolean) as GraphNode[];
+  const inputNodes = role.relatedInputs.map(id => nodeMap.get(id)).filter(Boolean) as GraphNode[];
 
   return (
     <div className="max-w-3xl mx-auto w-full px-4">
       <div className="glass-panel rounded-2xl p-8 max-h-[calc(100vh-200px)] overflow-y-auto">
-        {/* Node header */}
-        <div className="flex items-center gap-4 mb-4">
+        {/* Role header */}
+        <div className="text-center mb-6">
           <div
-            className="w-14 h-14 rounded-xl flex items-center justify-center text-2xl shrink-0"
-            style={{ backgroundColor: (style?.color || '#6b7280') + '20' }}
+            className="w-16 h-16 rounded-2xl mx-auto mb-4 flex items-center justify-center"
+            style={{ backgroundColor: role.accentColor + '20' }}
           >
-            {style?.emoji}
+            <Users className="w-7 h-7" style={{ color: role.accentColor }} />
           </div>
+          <h2 className="text-2xl font-bold text-foreground mb-1">{role.title}</h2>
+          <p className="text-sm text-muted-foreground mb-2">{role.description}</p>
+          <p className="text-xs italic" style={{ color: role.accentColor }}>{role.tagline}</p>
+        </div>
+
+        {/* Coverage stat */}
+        <div className="flex justify-center mb-6">
+          <Badge
+            variant="outline"
+            className="text-xs px-3 py-1"
+            style={{ borderColor: role.accentColor + '40', color: role.accentColor }}
+          >
+            {stats.total} nodes &middot; {stats.coveragePct}% of graph
+          </Badge>
+        </div>
+
+        {/* What You Own — grouped by phase */}
+        <div className="mb-6">
+          <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground/70 mb-3">
+            What You Own
+          </h3>
+          <div className="space-y-3">
+            {PHASE_ORDER.map(phase => {
+              const nodes = byPhase.get(phase);
+              if (!nodes || nodes.length === 0) return null;
+              return (
+                <div key={phase}>
+                  <p className="text-[10px] uppercase tracking-wider text-muted-foreground/50 mb-1.5">{phase}</p>
+                  <div className="space-y-1">
+                    {nodes.map(node => {
+                      const style = NODE_STYLES[node.type as NodeType] || NODE_STYLES.step;
+                      const relation = role.ownedSteps.includes(node.id)
+                        ? 'step' : 'gate';
+                      return (
+                        <div key={node.id} className="flex items-center gap-2.5 py-1">
+                          <span className="text-sm shrink-0">{style.emoji}</span>
+                          <span className="text-sm text-foreground">{node.label}</span>
+                          <Badge
+                            variant="outline"
+                            className="text-[10px] ml-auto"
+                            style={{ borderColor: (style.color) + '40', color: style.color }}
+                          >
+                            {relation}
+                          </Badge>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Your Support System */}
+        {(agentNodes.length > 0 || inputNodes.length > 0) && (
           <div>
-            <h3 className="text-xl font-bold text-foreground">{node.label}</h3>
-            <div className="flex items-center gap-2 mt-1">
-              <Badge
-                variant="outline"
-                className="text-xs"
-                style={{ borderColor: (style?.color || '#6b7280') + '60', color: style?.color }}
-              >
-                {node.type}
-              </Badge>
+            <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground/70 mb-3">
+              Your Support System
+            </h3>
+            <div className="space-y-1">
+              {agentNodes.map(node => {
+                const style = NODE_STYLES.agent;
+                return (
+                  <div key={node.id} className="flex items-center gap-2.5 py-1">
+                    <span className="text-sm shrink-0">{style.emoji}</span>
+                    <span className="text-sm text-foreground">{node.label}</span>
+                    <Badge variant="outline" className="text-[10px] ml-auto border-[#9B7ACC]/40 text-[#9B7ACC]">
+                      agent
+                    </Badge>
+                  </div>
+                );
+              })}
+              {inputNodes.map(node => {
+                const style = NODE_STYLES.input;
+                return (
+                  <div key={node.id} className="flex items-center gap-2.5 py-1">
+                    <span className="text-sm shrink-0">{style.emoji}</span>
+                    <span className="text-sm text-foreground">{node.label}</span>
+                    <Badge variant="outline" className="text-[10px] ml-auto border-[#C9A04E]/40 text-[#C9A04E]">
+                      input
+                    </Badge>
+                  </div>
+                );
+              })}
             </div>
           </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ─── Slides 1–3: Stage Slide ─────────────────────────────────
+
+interface StageSlideProps {
+  stage: StageName;
+  role: RoleDefinition;
+  graphData: GraphData;
+  orderedNodeIds: string[];
+  showKeyInsight?: boolean;
+}
+
+function RoleStageSlide({ stage, role, graphData, orderedNodeIds, showKeyInsight }: StageSlideProps) {
+  const config = STAGE_CONFIG[stage];
+  const nodeMap = new Map(graphData.nodes.map(n => [n.id, n]));
+
+  // Separate pipeline nodes from support nodes
+  const pipelineIds = new Set([...role.ownedSteps, ...role.reviewedGates]);
+  const pipelineNodes = orderedNodeIds
+    .filter(id => pipelineIds.has(id))
+    .map(id => nodeMap.get(id))
+    .filter(Boolean) as GraphNode[];
+  const byPhase = groupByPhase(pipelineNodes);
+
+  // Support nodes (agents + inputs) that have journey data
+  const supportIds = [...role.relatedAgents, ...role.relatedInputs];
+  const supportNodes = supportIds
+    .map(id => nodeMap.get(id))
+    .filter(Boolean) as GraphNode[];
+
+  return (
+    <div className="max-w-3xl mx-auto w-full px-4">
+      <div className="glass-panel rounded-2xl p-8 max-h-[calc(100vh-200px)] overflow-y-auto">
+        {/* Stage header */}
+        <div className="flex items-center gap-3 mb-6">
+          <div
+            className="w-3 h-10 rounded-full shrink-0"
+            style={{ backgroundColor: config.color }}
+          />
+          <div>
+            <h2 className="text-xl font-bold text-foreground">{config.label}</h2>
+            <p className="text-xs text-muted-foreground">{config.subtitle}</p>
+          </div>
         </div>
 
-        {/* Relationship badge */}
-        <div className="mb-4 px-4 py-2.5 rounded-lg bg-[#5B9ECF]/5 border border-[#5B9ECF]/20">
-          <p className="text-sm font-medium text-[#5B9ECF]">
-            <Eye className="w-3.5 h-3.5 inline mr-1.5" />
-            {nodeRelation}
-          </p>
+        {/* Pipeline nodes grouped by phase */}
+        <div className="space-y-5">
+          {PHASE_ORDER.map(phase => {
+            const nodes = byPhase.get(phase);
+            if (!nodes || nodes.length === 0) return null;
+            return (
+              <div key={phase}>
+                <p className="text-[10px] uppercase tracking-wider text-muted-foreground/50 mb-2">{phase}</p>
+                <div className="space-y-3">
+                  {nodes.map(node => (
+                    <NodeStageCard
+                      key={node.id}
+                      node={node}
+                      role={role}
+                      stage={stage}
+                      stageColor={config.color}
+                    />
+                  ))}
+                </div>
+              </div>
+            );
+          })}
         </div>
 
-        {/* Description */}
-        <p className="text-sm text-muted-foreground leading-relaxed mb-5">{node.description}</p>
-
-        {/* Type-specific metadata */}
-        <div className="space-y-3 mb-5">
-          {node.type === 'step' && <StepDetail meta={node.meta as StepMeta} />}
-          {node.type === 'gate' && <GateDetail meta={node.meta as GateMeta} />}
-          {node.type === 'agent' && <AgentDetail meta={node.meta as AgentMeta} />}
-          {node.type === 'input' && <InputDetail meta={node.meta as InputMeta} />}
-        </div>
-
-        {/* Journey stages — always expanded */}
-        {nodeJourney && (
-          <div className="mb-5 space-y-3">
-            <p className="text-[10px] uppercase tracking-wider text-muted-foreground/60 mb-2">
-              How involvement in this step evolves
+        {/* Supporting agents/inputs */}
+        {supportNodes.length > 0 && (
+          <div className="mt-6">
+            <p className="text-[10px] uppercase tracking-wider text-muted-foreground/50 mb-2">
+              Supporting Your Work
             </p>
-            <JourneyTile stageName="preAI" stage={nodeJourney.preAI} />
-            <JourneyTile stageName="aiAgents" stage={nodeJourney.aiAgents} />
-            <JourneyTile stageName="aiAgentic" stage={nodeJourney.aiAgentic} />
+            <div className="space-y-3">
+              {supportNodes.map(node => {
+                const journey = role.narrative.nodeJourneys[node.id];
+                if (!journey) return null;
+                return (
+                  <NodeStageCard
+                    key={node.id}
+                    node={node}
+                    role={role}
+                    stage={stage}
+                    stageColor={config.color}
+                  />
+                );
+              })}
+            </div>
           </div>
         )}
 
-        {/* Key insight — last step only */}
-        {isLast && (
+        {/* Key Insight — slide 3 only */}
+        {showKeyInsight && (
           <motion.div
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="p-5 rounded-xl bg-[#5B9ECF]/10 border border-[#5B9ECF]/40"
+            transition={{ delay: 0.3 }}
+            className="mt-6 p-5 rounded-xl bg-[#4CAF50]/10 border border-[#4CAF50]/30"
           >
-            <h4 className="text-xs font-bold text-[#5B9ECF] mb-2">Key Insight</h4>
+            <div className="flex items-center gap-2 mb-2">
+              <Lightbulb className="w-4 h-4 text-[#4CAF50]" />
+              <h4 className="text-xs font-bold text-[#4CAF50]">Key Insight</h4>
+            </div>
             <p className="text-sm text-foreground leading-relaxed">{role.narrative.keyInsight}</p>
           </motion.div>
         )}
@@ -107,108 +282,80 @@ export default function RoleSlide({ node, role, nodeJourney, isLast }: RoleSlide
   );
 }
 
-// --- Always-expanded journey tile (no collapsing) ---
+// ─── Node Card for a Single Stage ────────────────────────────
 
-function JourneyTile({ stageName, stage }: { stageName: JourneyStageName; stage: JourneyStage }) {
-  const config = JOURNEY_STAGES[stageName];
+interface NodeStageCardProps {
+  node: GraphNode;
+  role: RoleDefinition;
+  stage: StageName;
+  stageColor: string;
+}
+
+function NodeStageCard({ node, role, stage, stageColor }: NodeStageCardProps) {
+  const style = NODE_STYLES[node.type as NodeType] || NODE_STYLES.step;
+  const journey = role.narrative.nodeJourneys[node.id];
+  const stageData: JourneyStage | undefined = journey?.[stage];
+
+  // Relationship label
+  const relation = role.ownedSteps.includes(node.id)
+    ? 'You own this step'
+    : role.reviewedGates.includes(node.id)
+      ? 'You review this gate'
+      : role.relatedAgents.includes(node.id)
+        ? 'AI agent supporting you'
+        : role.relatedInputs.includes(node.id)
+          ? 'Input you depend on'
+          : '';
+
   return (
     <div
-      className="rounded-xl border"
-      style={{ borderColor: config.color + '30', borderLeftWidth: 3, borderLeftColor: config.color }}
+      className="rounded-xl border p-4"
+      style={{ borderColor: stageColor + '25', borderLeftWidth: 3, borderLeftColor: stageColor }}
     >
-      <div className="px-4 py-3">
-        <div className="flex items-center gap-2.5 mb-2">
-          <span className="text-sm" style={{ color: config.color }}>{config.indicator}</span>
-          <span className="text-xs font-semibold" style={{ color: config.color }}>{config.label}</span>
-        </div>
-        <p className="text-sm font-medium text-foreground/90 mb-1">{stage.summary}</p>
-        <p className="text-xs text-muted-foreground leading-relaxed">{stage.detail}</p>
-      </div>
-    </div>
-  );
-}
-
-// --- Metadata components (from RoleInsightPanel) ---
-
-function MetaRow({ label, value }: { label: string; value: string | undefined }) {
-  if (!value) return null;
-  return (
-    <div className="flex items-center justify-between py-1.5 border-b border-border">
-      <span className="text-xs text-muted-foreground">{label}</span>
-      <span className="text-xs text-foreground">{value}</span>
-    </div>
-  );
-}
-
-function StepDetail({ meta }: { meta?: StepMeta }) {
-  if (!meta) return null;
-  const ownerColors: Record<string, string> = {
-    agent: 'text-[#9B7ACC] border-[#9B7ACC]/30',
-    human: 'text-[#5B9ECF] border-[#5B9ECF]/30',
-    shared: 'text-[#C9A04E] border-[#C9A04E]/30',
-  };
-  return (
-    <>
-      <MetaRow label="Phase" value={meta.phase} />
-      <div className="flex items-center justify-between py-1.5 border-b border-border">
-        <span className="text-xs text-muted-foreground">Owner</span>
-        <Badge variant="outline" className={`text-xs ${ownerColors[meta.owner] || ''}`}>
-          {meta.owner === 'agent' ? `AI: ${meta.agentName || 'Agent'}` : meta.owner === 'human' ? 'Human' : 'Shared'}
+      {/* Node header */}
+      <div className="flex items-center gap-2.5 mb-2">
+        <span className="text-sm shrink-0">{style.emoji}</span>
+        <span className="text-sm font-semibold text-foreground">{node.label}</span>
+        <Badge
+          variant="outline"
+          className="text-[10px] ml-auto"
+          style={{ borderColor: style.color + '40', color: style.color }}
+        >
+          {node.type}
         </Badge>
       </div>
-      <MetaRow label="Est. Time" value={meta.estimatedTime} />
-    </>
-  );
-}
 
-function GateDetail({ meta }: { meta?: GateMeta }) {
-  if (!meta) return null;
-  return (
-    <>
-      <div className="p-3 rounded-lg bg-white/5 border border-white/10 mb-2">
-        <p className="text-xs text-muted-foreground mb-1">Reviewed by</p>
-        <p className="text-sm font-semibold text-foreground">{meta.reviewer}</p>
-      </div>
-      <MetaRow label="Gate Type" value={meta.gateType.replace(/-/g, ' ')} />
-      {meta.autoPassCriteria && (
-        <div className="p-3 rounded-lg bg-emerald-500/5 border border-emerald-500/20 mt-2">
-          <p className="text-xs text-emerald-400 font-semibold mb-1">Auto-pass Criteria</p>
-          <p className="text-sm text-slate-200">{meta.autoPassCriteria}</p>
-        </div>
+      {/* Relationship badge */}
+      {relation && (
+        <p className="text-[10px] text-muted-foreground/60 mb-2 flex items-center gap-1">
+          <Eye className="w-3 h-3 inline" />
+          {relation}
+        </p>
       )}
-    </>
-  );
-}
 
-function AgentDetail({ meta }: { meta?: AgentMeta }) {
-  if (!meta) return null;
-  return (
-    <>
-      <MetaRow label="Capability" value={meta.capability} />
-      <MetaRow label="Autonomy" value={meta.autonomy} />
-      {meta.tools && meta.tools.length > 0 && (
-        <div className="mt-2">
-          <p className="text-xs text-muted-foreground mb-1">Tools:</p>
-          <div className="flex flex-wrap gap-1">
-            {meta.tools.map(tool => (
-              <Badge key={tool} variant="outline" className="text-xs border-[#9B7ACC]/30 text-[#9B7ACC]">
-                {tool}
-              </Badge>
-            ))}
-          </div>
-        </div>
+      {/* Journey text */}
+      {stageData ? (
+        <>
+          <p className="text-sm font-medium text-foreground/90 mb-1">{stageData.summary}</p>
+          <p className="text-xs text-muted-foreground leading-relaxed">{stageData.detail}</p>
+        </>
+      ) : (
+        <p className="text-xs text-muted-foreground/40 italic">No journey data for this stage</p>
       )}
-    </>
+    </div>
   );
 }
 
-function InputDetail({ meta }: { meta?: InputMeta }) {
-  if (!meta) return null;
-  return (
-    <>
-      <MetaRow label="Type" value={meta.inputType} />
-      <MetaRow label="Source" value={meta.source} />
-      <MetaRow label="Refresh Rate" value={meta.refreshRate} />
-    </>
-  );
+// ─── Helpers ─────────────────────────────────────────────────
+
+// Group nodes by their pipeline phase (from node.group field)
+function groupByPhase(nodes: GraphNode[]): Map<string, GraphNode[]> {
+  const map = new Map<string, GraphNode[]>();
+  for (const node of nodes) {
+    const phase = node.group || 'Other';
+    const arr = map.get(phase) || [];
+    arr.push(node);
+    map.set(phase, arr);
+  }
+  return map;
 }
