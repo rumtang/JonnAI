@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState, useRef, Suspense } from 'react';
+import { Home } from 'lucide-react';
 import { useIsMobile } from '@/lib/hooks/use-is-mobile';
 import GraphScene from '@/components/graph/GraphScene';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
@@ -135,10 +136,6 @@ export default function GraphPage() {
       setGraphData(linearData);
     } else {
       setGraphData(fullData);
-      if (activeMode === 'explore') {
-        // Progressive reveal: start with core workflow nodes only
-        useGraphStore.getState().initCoreNodes(fullData);
-      }
       if (activeMode === 'campaign') {
         startCampaign();
       }
@@ -219,6 +216,16 @@ export default function GraphPage() {
       </div>
 
       {/* UI Overlays */}
+
+      {/* Home button — back to jonn.ai */}
+      <a
+        href="https://jonn.ai"
+        className="fixed top-4 left-4 z-50 p-2 rounded-full glass-panel text-muted-foreground hover:text-foreground transition-all"
+        title="Back to jonn.ai"
+      >
+        <Home className="w-4 h-4" />
+      </a>
+
       <ModeToggle />
 
       {/* Journey progress indicator + Next button */}
