@@ -1,11 +1,13 @@
 'use client';
 
+import { useMemo } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useCampaignStore } from '@/lib/store/campaign-store';
 import { usePresentationStore } from '@/lib/store/presentation-store';
 import { useGraphStore } from '@/lib/store/graph-store';
 import { useSessionStore } from '@/lib/store/session-store';
+import { StepMeta } from '@/lib/graph/types';
 
 export default function CampaignSummary() {
   const {
@@ -35,8 +37,37 @@ export default function CampaignSummary() {
   const loadFullGraph = useGraphStore(s => s.loadFullGraph);
   const selectNode = useGraphStore(s => s.selectNode);
   const clearHighlights = useGraphStore(s => s.clearHighlights);
+  const graphData = useGraphStore(s => s.graphData);
 
   const orgProfile = useSessionStore(s => s.orgProfile);
+
+  // Compute manual baseline from actual graph data
+  const baseline = useMemo(() => {
+    const nodes = graphData.nodes;
+    // Sum all step estimatedTime values
+    let baseMinutes = 0;
+    let gateCount = 0;
+    for (const node of nodes) {
+      if (node.type === 'step') {
+        const est = (node.meta as StepMeta)?.estimatedTime || '';
+        const match = est.match(/(\d+)\s*min/i);
+        if (match) baseMinutes += parseInt(match[1], 10);
+      }
+      if (node.type === 'gate') gateCount++;
+    }
+    // Manual execution: 2.5x slower without AI acceleration
+    const manualMinutes = Math.round(baseMinutes * 2.5);
+    // 60% of gates trigger revision without AI quality checks
+    const manualRevisions = Math.round(gateCount * 0.6);
+    // 7-day approval cycle per gate
+    const manualDays = gateCount * 7;
+
+    const manualHours = Math.floor(manualMinutes / 60);
+    const manualMins = manualMinutes % 60;
+    const manualTimeLabel = manualHours > 0 ? `${manualHours}h ${manualMins}m` : `${manualMins}m`;
+
+    return { manualTimeLabel, manualRevisions, manualDays };
+  }, [graphData.nodes]);
 
   const gatesPassed = decisions.filter(d => {
     const dl = d.decision.toLowerCase();
@@ -48,6 +79,15 @@ export default function CampaignSummary() {
   const timeLabel = hours > 0 ? `${hours}h ${mins}m` : `${mins}m`;
 
   const handleRunAgain = () => {
+    // Preserve current results in session store for comparison on next run
+    useSessionStore.getState().setCampaignResults({
+      totalSteps: stepCount,
+      totalMinutes: totalEstimatedMinutes,
+      revisions: revisionCount,
+      escalations: escalationCount,
+      gatesApproved: gatesPassed,
+      completedAt: Date.now(),
+    });
     selectNode(null);
     clearHighlights();
     resetCampaign();
@@ -111,25 +151,28 @@ export default function CampaignSummary() {
               />
             </div>
 
-            {/* Baseline comparison — manual vs. AI-assisted */}
+            {/* Baseline comparison — manual vs. AI-assisted (computed from graph data) */}
             <div className="mb-6 rounded-xl border border-white/10 overflow-hidden">
-              <div className="grid grid-cols-4 text-[10px] font-semibold text-muted-foreground/60 uppercase tracking-wider px-3 py-2 bg-white/5">
+              <div className="grid grid-cols-5 text-[10px] font-semibold text-muted-foreground/60 uppercase tracking-wider px-3 py-2 bg-white/5">
                 <span />
-                <span className="text-center">Steps</span>
                 <span className="text-center">Time</span>
                 <span className="text-center">Revisions</span>
+                <span className="text-center">Escalations</span>
+                <span className="text-center">Approval</span>
               </div>
-              <div className="grid grid-cols-4 text-xs px-3 py-2.5 border-t border-white/5">
-                <span className="text-muted-foreground">Without AI</span>
-                <span className="text-center text-foreground/60">~37</span>
-                <span className="text-center text-foreground/60">~22.5 hrs</span>
-                <span className="text-center text-foreground/60">Est. 12</span>
+              <div className="grid grid-cols-5 text-xs px-3 py-2.5 border-t border-white/5">
+                <span className="text-muted-foreground">Manual Est.</span>
+                <span className="text-center text-foreground/50">{baseline.manualTimeLabel}</span>
+                <span className="text-center text-foreground/50">~{baseline.manualRevisions}</span>
+                <span className="text-center text-foreground/50 text-[10px]">N/A</span>
+                <span className="text-center text-foreground/50">~{baseline.manualDays}d</span>
               </div>
-              <div className="grid grid-cols-4 text-xs px-3 py-2.5 border-t border-white/5 bg-[#4CAF50]/5">
-                <span className="text-[#4CAF50] font-semibold">Your Campaign</span>
-                <span className="text-center text-foreground font-semibold">{stepCount}</span>
+              <div className="grid grid-cols-5 text-xs px-3 py-2.5 border-t border-white/5 bg-[#4CAF50]/5">
+                <span className="text-[#4CAF50] font-semibold">Your Run</span>
                 <span className="text-center text-foreground font-semibold">{timeLabel}</span>
                 <span className="text-center text-foreground font-semibold">{revisionCount}</span>
+                <span className="text-center text-foreground font-semibold">{escalationCount}</span>
+                <span className="text-center text-foreground font-semibold text-[10px]">~instant</span>
               </div>
             </div>
 
@@ -159,6 +202,11 @@ export default function CampaignSummary() {
               </div>
             )}
 
+            {/* What-if prompt */}
+            <p className="text-xs text-muted-foreground/70 mb-3 text-center italic">
+              What would happen with different decisions?
+            </p>
+
             {/* Action buttons */}
             <div className="flex gap-3">
               <button
@@ -167,7 +215,7 @@ export default function CampaignSummary() {
                            border border-[#4CAF50]/30 text-[#4CAF50] font-semibold text-sm
                            transition-all duration-200"
               >
-                {'\uD83D\uDD04'} Run Again
+                {'\uD83D\uDD04'} Try Different Decisions
               </button>
               <button
                 onClick={handleExplore}
