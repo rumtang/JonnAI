@@ -18,6 +18,7 @@ import TimelineSlide from './slides/TimelineSlide';
 import PlaybookSlide from './slides/PlaybookSlide';
 import BeforeAfterSlide from './slides/BeforeAfterSlide';
 import ExecutiveSummarySlide from './slides/ExecutiveSummarySlide';
+import CfoSummarySlide from './slides/CfoSummarySlide';
 
 // ─── Act Definitions (8 slides, 6 acts) ────────────────────────────
 const ACTS = [
@@ -46,6 +47,7 @@ export default function RoiController() {
   const resetFilters = useGraphStore(s => s.resetFilters);
 
   const exportConfig = useRoiStore(s => s.exportConfig);
+  const viewMode = useRoiStore(s => s.viewMode);
 
   const isMobile = useIsMobile();
   const [methodologyOpen, setMethodologyOpen] = useState(false);
@@ -102,7 +104,9 @@ export default function RoiController() {
       case 'before-after':
         return <BeforeAfterSlide step={step} />;
       case 'executive-card':
-        return <ExecutiveSummarySlide step={step} />;
+        return viewMode === 'cfo'
+          ? <CfoSummarySlide step={step} />
+          : <ExecutiveSummarySlide step={step} />;
       default:
         return null;
     }

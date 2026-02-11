@@ -28,18 +28,24 @@ function formatCompact(v: number): string {
 function ActionCard({
   action,
   valueStreams,
+  streamPrimaryCounts,
   delay,
 }: {
   action: TransformationAction;
   valueStreams: Record<string, number>;
+  streamPrimaryCounts: Record<string, number>;
   delay: number;
 }) {
   const [expanded, setExpanded] = useState(false);
 
-  // Compute total $ value this action contributes to (primary streams only)
+  // Compute this action's proportional share of its primary streams
+  // (split evenly among all actions that claim the same stream as primary)
   const primaryTotal = action.valueStreams
     .filter(vs => vs.contribution === 'primary')
-    .reduce((sum, vs) => sum + (valueStreams[vs.streamKey] ?? 0), 0);
+    .reduce((sum, vs) => {
+      const count = streamPrimaryCounts[vs.streamKey] ?? 1;
+      return sum + (valueStreams[vs.streamKey] ?? 0) / count;
+    }, 0);
 
   return (
     <motion.div
@@ -112,7 +118,7 @@ function ActionCard({
             >
               {VALUE_STREAM_LABELS[vs.streamKey]}
               {vs.contribution === 'primary' && valueStreams[vs.streamKey] > 0
-                ? ` · ${formatCompact(valueStreams[vs.streamKey])}`
+                ? ` · ${formatCompact(valueStreams[vs.streamKey] / (streamPrimaryCounts[vs.streamKey] ?? 1))}`
                 : ''}
             </span>
           ))}
@@ -175,7 +181,9 @@ function ActionCard({
                           className="flex-shrink-0 font-semibold ml-auto"
                           style={{ color: VALUE_STREAM_COLORS[vs.streamKey] }}
                         >
-                          {formatCompact(valueStreams[vs.streamKey])}
+                          {vs.contribution === 'primary'
+                            ? formatCompact(valueStreams[vs.streamKey] / (streamPrimaryCounts[vs.streamKey] ?? 1))
+                            : formatCompact(valueStreams[vs.streamKey])}
                         </span>
                       )}
                     </div>
@@ -205,6 +213,16 @@ export default function PlaybookSlide({ step }: PlaybookSlideProps) {
     operationalEfficiency: vs.operationalEfficiency,
     attributionImprovement: vs.attributionImprovement,
   };
+
+  // Count how many actions claim each stream as primary so we can split evenly
+  const streamPrimaryCounts: Record<string, number> = {};
+  for (const action of TRANSFORMATION_ACTIONS) {
+    for (const avs of action.valueStreams) {
+      if (avs.contribution === 'primary') {
+        streamPrimaryCounts[avs.streamKey] = (streamPrimaryCounts[avs.streamKey] ?? 0) + 1;
+      }
+    }
+  }
 
   return (
     <div className="max-w-6xl mx-auto px-6 py-4 overflow-y-auto max-h-[calc(100vh-10rem)]">
@@ -241,6 +259,7 @@ export default function PlaybookSlide({ step }: PlaybookSlideProps) {
             key={action.id}
             action={action}
             valueStreams={vsRecord}
+            streamPrimaryCounts={streamPrimaryCounts}
             delay={0.15 + i * 0.08}
           />
         ))}

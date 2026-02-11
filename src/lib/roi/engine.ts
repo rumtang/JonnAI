@@ -889,6 +889,58 @@ export function computeChannelRoas(roasLiftPct: number): ChannelRoasEntry[] {
   });
 }
 
+// ─── Sensitivity Analysis ────────────────────────────────────
+// Varies two key assumptions by ±25% and returns a 3x3 matrix of payback months.
+export interface SensitivityMatrix {
+  rowLabel: string;       // "Content Time Savings"
+  colLabel: string;       // "ROAS Lift"
+  rowValues: string[];    // labels for -25%, base, +25%
+  colValues: string[];    // labels for -25%, base, +25%
+  paybacks: number[][];   // [row][col] payback months
+}
+
+export function computeSensitivity(
+  org: OrganizationProfile,
+  martech: MartechAndMedia,
+  ops: ContentAndCampaignOps,
+  pain: OperationalPain,
+  investment: TransformationInvestment,
+  baseAssumptions: ImprovementAssumptions,
+): SensitivityMatrix {
+  const offsets = [-0.25, 0, 0.25];
+  const baseContent = baseAssumptions.contentTimeSavingsPct;
+  const baseRoas = baseAssumptions.roasLiftPct;
+
+  const rowValues = offsets.map(o => {
+    const v = Math.round(baseContent * (1 + o));
+    return o === 0 ? `${v}%` : `${v}%`;
+  });
+  const colValues = offsets.map(o => {
+    const v = Math.round(baseRoas * (1 + o));
+    return o === 0 ? `${v}%` : `${v}%`;
+  });
+
+  const paybacks = offsets.map(contentOff => {
+    return offsets.map(roasOff => {
+      const modified: ImprovementAssumptions = {
+        ...baseAssumptions,
+        contentTimeSavingsPct: baseContent * (1 + contentOff),
+        roasLiftPct: baseRoas * (1 + roasOff),
+      };
+      const result = computeRoi(org, martech, ops, pain, investment, modified);
+      return result.paybackMonths;
+    });
+  });
+
+  return {
+    rowLabel: 'Content Time Savings',
+    colLabel: 'ROAS Lift',
+    rowValues,
+    colValues,
+    paybacks,
+  };
+}
+
 // ─── Main ROI Computation ────────────────────────────────────────────
 export function computeRoi(
   org: OrganizationProfile,
