@@ -167,6 +167,14 @@ export default function GraphPage() {
     }
   }, [campaignActive, currentNodeId, selectNode]);
 
+  // Open role picker when entering role mode (ModeToggle clears the role,
+  // so the picker must open for the user to select one)
+  useEffect(() => {
+    if (mode === 'role') {
+      setRolePickerOpen(true);
+    }
+  }, [mode]);
+
   // Show welcome overlay when transitioning from guided tour to explore mode
   useEffect(() => {
     if (prevModeRef.current === 'guided' && mode === 'explore') {
