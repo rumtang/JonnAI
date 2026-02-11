@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { PresentationStep } from '../graph/types';
 
-export type AppMode = 'guided' | 'explore' | 'campaign' | 'build' | 'roi';
+export type AppMode = 'guided' | 'explore' | 'campaign' | 'build' | 'roi' | 'role';
 
 interface PresentationState {
   mode: AppMode;

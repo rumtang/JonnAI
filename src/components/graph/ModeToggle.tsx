@@ -87,6 +87,13 @@ export default function ModeToggle() {
       loadLinearView();
       useGraphStore.setState({ progressiveReveal: false });
       fg?.cameraPosition({ x: 0, y: 0, z: 800 }, origin, 1500);
+    } else if (newMode === 'role') {
+      resetCampaign();
+      resetBuild();
+      resetRoi();
+      loadFullGraph();
+      useGraphStore.setState({ progressiveReveal: false });
+      fg?.cameraPosition({ x: 0, y: 0, z: 520 }, origin, 1500);
     }
   };
 
@@ -97,6 +104,13 @@ export default function ModeToggle() {
       shortLabel: 'Tour',
       activeColor: '#C9A04E',
       activeBg: 'bg-[#C9A04E]/20',
+    },
+    {
+      key: 'role',
+      label: 'Your Role',
+      shortLabel: 'Role',
+      activeColor: '#5B9ECF',
+      activeBg: 'bg-[#5B9ECF]/20',
     },
     {
       key: 'explore',

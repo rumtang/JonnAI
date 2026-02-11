@@ -6,7 +6,7 @@ import { motion } from 'framer-motion';
 export default function Home() {
   const router = useRouter();
 
-  const handleStart = (mode: 'guided' | 'explore' | 'campaign' | 'build' | 'roi') => {
+  const handleStart = (mode: 'guided' | 'explore' | 'campaign' | 'build' | 'roi' | 'role') => {
     if (typeof window !== 'undefined') {
       sessionStorage.setItem('initialMode', mode);
     }
@@ -20,6 +20,13 @@ export default function Home() {
       description: 'Narrated walkthrough of the content production lifecycle',
       color: '#C9A04E',
       badge: 'Start Here',
+    },
+    {
+      key: 'role' as const,
+      label: 'Your Role + AI',
+      description: 'See how AI transforms your specific role across the workflow',
+      color: '#5B9ECF',
+      badge: 'For Practitioners',
     },
     {
       key: 'roi' as const,

@@ -19,9 +19,10 @@ const CATEGORY_ORDER: RoleCategory[] = ['strategy', 'creative', 'governance', 'o
 interface RolePickerProps {
   open: boolean;
   onClose: () => void;
+  isRoleMode?: boolean;
 }
 
-export default function RolePicker({ open, onClose }: RolePickerProps) {
+export default function RolePicker({ open, onClose, isRoleMode = false }: RolePickerProps) {
   const { activateRole } = useRoleInsight();
   const graphData = useGraphStore((s) => s.graphData);
   const totalNodes = graphData.nodes.length || 26; // fallback to known count
@@ -49,7 +50,7 @@ export default function RolePicker({ open, onClose }: RolePickerProps) {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           className="fixed inset-0 z-[60] flex items-center justify-center bg-black/60 backdrop-blur-sm"
-          onClick={onClose}
+          onClick={isRoleMode ? undefined : onClose}
         >
           <motion.div
             initial={{ scale: 0.9, opacity: 0 }}
@@ -62,17 +63,21 @@ export default function RolePicker({ open, onClose }: RolePickerProps) {
             {/* Header */}
             <div className="flex items-start justify-between mb-6">
               <div>
-                <h2 className="text-2xl font-bold text-foreground">Choose Your Role</h2>
+                <h2 className="text-2xl font-bold text-foreground">
+                  {isRoleMode ? 'Choose the Role Closest to Yours' : 'Choose Your Role'}
+                </h2>
                 <p className="text-sm text-muted-foreground mt-1">
                   See the workflow from your perspective
                 </p>
               </div>
-              <button
-                onClick={onClose}
-                className="p-1 rounded-lg hover:bg-accent text-muted-foreground hover:text-foreground transition-colors"
-              >
-                <X className="w-5 h-5" />
-              </button>
+              {!isRoleMode && (
+                <button
+                  onClick={onClose}
+                  className="p-1 rounded-lg hover:bg-accent text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              )}
             </div>
 
             {/* Category sections */}

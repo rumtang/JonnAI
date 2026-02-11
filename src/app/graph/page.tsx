@@ -77,7 +77,7 @@ export default function GraphPage() {
 
   useEffect(() => {
     // Read initial mode from sessionStorage (set by landing page)
-    let savedMode: 'guided' | 'explore' | 'campaign' | 'build' | 'roi' | null = null;
+    let savedMode: 'guided' | 'explore' | 'campaign' | 'build' | 'roi' | 'role' | null = null;
     try {
       if (typeof window !== 'undefined') {
         savedMode = sessionStorage.getItem('initialMode') as typeof savedMode;
@@ -101,7 +101,7 @@ export default function GraphPage() {
     setLinearGraphData(linearData);
     setSteps(presentationStepsData as PresentationStep[]);
 
-    // Start with linear view in guided/build/roi mode, full graph in explore/campaign mode
+    // Start with linear view in guided/build/roi mode, full graph in explore/campaign/role mode
     if (activeMode === 'guided' || activeMode === 'build' || activeMode === 'roi') {
       setGraphData(linearData);
     } else {
@@ -112,6 +112,9 @@ export default function GraphPage() {
       }
       if (activeMode === 'campaign') {
         startCampaign();
+      }
+      if (activeMode === 'role') {
+        setRolePickerOpen(true);
       }
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -185,6 +188,26 @@ export default function GraphPage() {
           <CampaignPanel />
           <CampaignSummary />
           <ZoomControls />
+        </>
+      ) : mode === 'role' ? (
+        <>
+          <GraphControls />
+          <SearchBar />
+          <ZoomControls />
+
+          {/* Show RoleInsightPanel when role is active, NodeDetailPanel otherwise */}
+          {roleActive ? (
+            <RoleInsightPanel onChangeRole={() => setRolePickerOpen(true)} />
+          ) : (
+            <NodeDetailPanel />
+          )}
+
+          {/* Role picker modal — non-dismissable until role selected in role mode */}
+          <RolePicker
+            open={rolePickerOpen}
+            onClose={() => setRolePickerOpen(false)}
+            isRoleMode
+          />
         </>
       ) : (
         <>
