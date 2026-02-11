@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useCampaignStore } from '@/lib/store/campaign-store';
 import { usePresentationStore } from '@/lib/store/presentation-store';
 import { useGraphStore } from '@/lib/store/graph-store';
+import { useSessionStore } from '@/lib/store/session-store';
 
 export default function CampaignSummary() {
   const {
@@ -34,6 +35,8 @@ export default function CampaignSummary() {
   const loadFullGraph = useGraphStore(s => s.loadFullGraph);
   const selectNode = useGraphStore(s => s.selectNode);
   const clearHighlights = useGraphStore(s => s.clearHighlights);
+
+  const orgProfile = useSessionStore(s => s.orgProfile);
 
   const gatesPassed = decisions.filter(d => {
     const dl = d.decision.toLowerCase();
@@ -129,6 +132,17 @@ export default function CampaignSummary() {
                 <span className="text-center text-foreground font-semibold">{revisionCount}</span>
               </div>
             </div>
+
+            {/* Org profile context — shown when session has org data */}
+            {orgProfile && (
+              <p className="text-[10px] text-muted-foreground/60 mb-4 leading-relaxed">
+                Based on {orgProfile.companyName || 'your organization'}&apos;s profile, this campaign
+                represents approximately {totalEstimatedMinutes > 0
+                  ? `${Math.round((totalEstimatedMinutes / (orgProfile.marketingHeadcount * 160)) * 100)}%`
+                  : '—'
+                } of monthly operational capacity.
+              </p>
+            )}
 
             {/* Decision summary */}
             {decisions.length > 0 && (

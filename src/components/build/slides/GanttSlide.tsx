@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { useSessionStore } from '@/lib/store/session-store';
 import type { BuildStep } from '@/data/build-steps';
 
 interface GanttSlideProps {
@@ -24,6 +25,16 @@ export default function GanttSlide({ step }: GanttSlideProps) {
   const prerequisites = content.prerequisites ?? [];
   const assumptions = content.assumptions ?? [];
 
+  // Team size recommendation based on org profile from session store
+  const orgProfile = useSessionStore(s => s.orgProfile);
+  const teamRecommendation = orgProfile
+    ? orgProfile.marketingHeadcount >= 200
+      ? 'Enterprise team (10-15 people, 28 weeks)'
+      : orgProfile.marketingHeadcount >= 50
+        ? 'Standard team (6-10 people, 20 weeks)'
+        : 'Lean team (3-5 people, 16 weeks)'
+    : null;
+
   // Dynamically determine total weeks from phase data
   const maxWeek = phases.reduce((max, p) => Math.max(max, p.endWeek), 0);
   const totalWeeks = Math.max(maxWeek, 28);
@@ -36,9 +47,21 @@ export default function GanttSlide({ step }: GanttSlideProps) {
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="text-xs text-muted-foreground text-center mb-6 max-w-3xl mx-auto italic"
+          className="text-xs text-muted-foreground text-center mb-2 max-w-3xl mx-auto italic"
         >
           &ldquo;{content.tagline}&rdquo;
+        </motion.p>
+      )}
+
+      {/* Team size recommendation from session org profile */}
+      {teamRecommendation && (
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.1 }}
+          className="text-[10px] text-center mb-4 text-[#5B9ECF]"
+        >
+          Recommended for {orgProfile?.companyName || 'your org'} ({orgProfile?.marketingHeadcount} headcount): {teamRecommendation}
         </motion.p>
       )}
 

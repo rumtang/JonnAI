@@ -5,6 +5,7 @@ import { useShallow } from 'zustand/react/shallow';
 import { motion, AnimatePresence } from 'framer-motion';
 import { usePresentationStore } from '@/lib/store/presentation-store';
 import { useGraphStore } from '@/lib/store/graph-store';
+import { useSessionStore } from '@/lib/store/session-store';
 import { getGraphRef } from '@/lib/graph/graph-ref';
 import { ChevronLeft, ChevronRight, Play, Pause, Compass, Mouse, Users, Layers } from 'lucide-react';
 import { GraphNode, GraphLink, StepMeta } from '@/lib/graph/types';
@@ -288,6 +289,7 @@ export default function PresentationController() {
     resetFilters();
     setMode('explore');
     loadFullGraph();
+    useSessionStore.getState().setGuidedTourCompleted();
   }, [clearHighlights, resetFilters, setMode, loadFullGraph]);
 
   // Fly camera to the position defined in the current presentation step

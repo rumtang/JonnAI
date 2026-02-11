@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { GraphNode, GraphLink, StepMeta, GateMeta } from '../graph/types';
+import { useSessionStore } from './session-store';
 
 // The main workflow path (flows-to chain) — used to determine "next node"
 const MAIN_WORKFLOW_ORDER = [
@@ -310,6 +311,15 @@ export const useCampaignStore = create<CampaignState>((set, get) => ({
         isComplete: true,
         revisionCount: state.revisionCount + revisionInc,
         escalationCount: state.escalationCount + escalationInc,
+      });
+      // Persist results to cross-mode session store
+      useSessionStore.getState().setCampaignResults({
+        totalSteps: state.stepCount,
+        totalMinutes: state.totalEstimatedMinutes,
+        revisions: state.revisionCount + revisionInc,
+        escalations: state.escalationCount + escalationInc,
+        gatesApproved: state.decisions.filter(dd => dd.decision.toLowerCase() === 'approve').length,
+        completedAt: Date.now(),
       });
       return null;
     }

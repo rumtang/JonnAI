@@ -1,10 +1,11 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useMemo, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Slider } from '@/components/ui/slider';
 import { ArrowRight, Calculator } from 'lucide-react';
 import { useRoiStore } from '@/lib/store/roi-store';
+import { useSessionStore } from '@/lib/store/session-store';
 import {
   INDUSTRY_BUDGET_RATIOS,
   computeRoi,
@@ -64,6 +65,21 @@ export default function QuickCalcSlide({ step }: QuickCalcSlideProps) {
   const setOrg = useRoiStore(s => s.setOrg);
   const setQuickCalcMode = useRoiStore(s => s.setQuickCalcMode);
   const goToStep = useRoiStore(s => s.goToStep);
+
+  // Pre-populate from session store if user already configured org data in another mode
+  const hydrated = useRef(false);
+  useEffect(() => {
+    if (hydrated.current) return;
+    const sessionOrg = useSessionStore.getState().orgProfile;
+    if (sessionOrg) {
+      hydrated.current = true;
+      setOrg({
+        annualRevenue: sessionOrg.annualRevenue,
+        industry: sessionOrg.industry,
+        companyName: sessionOrg.companyName,
+      });
+    }
+  }, [setOrg]);
 
   // Defaults for non-quick-calc fields
   const defaults = useMemo(() => ({

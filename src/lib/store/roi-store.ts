@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { ROI_STEPS } from '@/data/roi-steps';
+import { useSessionStore } from './session-store';
 import {
   computeBaseline,
   computeRoi,
@@ -192,6 +193,13 @@ export const useRoiStore = create<RoiState>((set, get) => ({
     const state = get();
     const org = { ...state.org, ...partial };
     set({ org, ...recalculate({ ...state, org }) });
+    // Sync to cross-mode session store
+    useSessionStore.getState().setOrgProfile({
+      annualRevenue: org.annualRevenue,
+      industry: org.industry || '',
+      marketingHeadcount: org.marketingHeadcount,
+      companyName: org.companyName || '',
+    });
   },
 
   setMartech: (partial) => {
