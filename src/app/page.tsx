@@ -86,10 +86,10 @@ export default function Home() {
           transition={{ delay: 0.15, duration: 0.6 }}
           className="text-5xl md:text-6xl font-bold mb-6 leading-tight font-[family-name:var(--font-playfair)]"
         >
-          <span className="text-foreground">The Organizational</span>
+          <span className="text-foreground">The</span>
           <br />
           <span className="bg-gradient-to-r from-[#C9A04E] via-[#5B9ECF] to-[#9B7ACC] bg-clip-text text-transparent">
-            Intelligence Layer
+            Infrastructure Layer
           </span>
         </motion.h1>
 
@@ -100,8 +100,9 @@ export default function Home() {
           transition={{ delay: 0.25 }}
           className="text-lg text-muted-foreground mb-4 max-w-xl mx-auto leading-relaxed"
         >
-          Why building a semantic knowledge layer matters at least as much as the agents themselves.
-          Explore the deep complexity of marketing campaign workflows.
+          Agents will commoditize. The infrastructure underneath them won&apos;t. Explore how
+          organizational knowledge graphs, human-in-the-loop governance, and AI agents work
+          together in enterprise content production.
         </motion.p>
 
         {/* Value proposition */}
@@ -111,29 +112,21 @@ export default function Home() {
           transition={{ delay: 0.28 }}
           className="text-sm text-muted-foreground/70 mb-3 max-w-2xl mx-auto leading-relaxed"
         >
-          Enterprise marketing teams using organizational intelligence layers see 2-5x faster campaign cycles
-          and 150-250% ROI on their infrastructure investment.
+          An interactive model of the marketing campaign lifecycle — from brief to measurement —
+          showing where AI handles volume, where humans maintain judgment, and where the knowledge
+          layer makes both effective.
         </motion.p>
 
         {/* Credibility signals */}
-        <motion.div
+        <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3 }}
-          className="flex flex-wrap justify-center gap-x-4 gap-y-1 mb-12"
+          className="text-xs text-muted-foreground/50 mb-12 max-w-2xl mx-auto"
         >
-          <span className="text-[10px] text-muted-foreground/40 uppercase tracking-wider">
-            Built for S&P 500 marketing operations
-          </span>
-          <span className="text-muted-foreground/20">|</span>
-          <span className="text-[10px] text-muted-foreground/40 uppercase tracking-wider">
-            Benchmarked against Gartner, McKinsey &amp; Forrester data
-          </span>
-          <span className="text-muted-foreground/20">|</span>
-          <span className="text-[10px] text-muted-foreground/40 uppercase tracking-wider">
-            11 verticals, $100M–$750B revenue
-          </span>
-        </motion.div>
+          Financial model benchmarks sourced from Gartner 2025, McKinsey, Salesforce, and Forrester
+          research. Model your organization&apos;s specific business case in the ROI Simulator.
+        </motion.p>
 
         {/* Mode selection buttons */}
         <motion.div
@@ -173,15 +166,6 @@ export default function Home() {
           ))}
         </motion.div>
 
-        {/* Bottom note */}
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.5 }}
-          className="text-xs text-muted-foreground/50 mt-16"
-        >
-          All benchmarks sourced from Gartner 2025, McKinsey, Salesforce, and Forrester research
-        </motion.p>
       </motion.div>
     </div>
   );
