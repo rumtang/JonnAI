@@ -2,7 +2,7 @@
 
 import { useState, useCallback } from 'react';
 import { motion } from 'framer-motion';
-import { Copy, Check, TrendingUp, Clock, DollarSign, BarChart3, Shield, Download, RefreshCw } from 'lucide-react';
+import { Copy, Check, TrendingUp, Clock, DollarSign, BarChart3, Shield, Download, RefreshCw, Eye, EyeOff } from 'lucide-react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { useRoiStore } from '@/lib/store/roi-store';
 import { SCENARIO_MULTIPLIERS, CFO_FRAMEWORK, AGENT_INTENSITY_LEVELS } from '@/lib/roi/engine';
@@ -160,6 +160,8 @@ export default function ExecutiveSummarySlide({ step }: ExecutiveSummarySlidePro
   const agentIntensity = useRoiStore(s => s.agentIntensity);
   const viewMode = useRoiStore(s => s.viewMode);
   const setViewMode = useRoiStore(s => s.setViewMode);
+  const disabledStreams = useRoiStore(s => s.disabledStreams);
+  const toggleStream = useRoiStore(s => s.toggleStream);
   const [copied, setCopied] = useState(false);
 
   const companyName = org.companyName?.trim() || '';
@@ -410,6 +412,7 @@ export default function ExecutiveSummarySlide({ step }: ExecutiveSummarySlidePro
             <table className="w-full text-[9px]">
               <thead>
                 <tr className="border-b border-muted-foreground/10">
+                  <th className="w-6 py-1.5" />
                   <th className="text-left py-1.5 text-muted-foreground font-medium">Value Stream</th>
                   <th className="text-left py-1.5 text-muted-foreground font-medium">Enabled By</th>
                   <th className="text-left py-1.5 text-muted-foreground font-medium">Type</th>
@@ -426,12 +429,25 @@ export default function ExecutiveSummarySlide({ step }: ExecutiveSummarySlidePro
                   { label: 'Content Velocity', streamKey: 'contentVelocity' as ValueStreamKey, value: vs.contentVelocity, type: 'Savings', color: '#5B9ECF' },
                   { label: 'Operational Efficiency', streamKey: 'operationalEfficiency' as ValueStreamKey, value: vs.operationalEfficiency, type: 'Savings', color: '#D4856A' },
                   { label: 'Attribution Improvement', streamKey: 'attributionImprovement' as ValueStreamKey, value: vs.attributionImprovement, type: 'Savings', color: '#f59e0b' },
-                ].filter(s => s.value > 0).map((stream) => {
+                ].map((stream) => {
+                  const isDisabled = disabledStreams.has(stream.streamKey);
                   const enablers = getPrimaryActionsForStream(stream.streamKey);
                   return (
-                    <tr key={stream.label} className="border-b border-muted-foreground/5">
+                    <tr key={stream.label} className={`border-b border-muted-foreground/5 ${isDisabled ? 'opacity-40' : ''}`}>
+                      <td className="py-1.5">
+                        <button
+                          onClick={() => toggleStream(stream.streamKey)}
+                          className="p-0.5 rounded hover:bg-muted-foreground/10 transition-colors"
+                          title={isDisabled ? `Include ${stream.label}` : `Exclude ${stream.label}`}
+                        >
+                          {isDisabled
+                            ? <EyeOff className="w-3 h-3 text-muted-foreground/50" />
+                            : <Eye className="w-3 h-3 text-muted-foreground" />}
+                        </button>
+                      </td>
                       <td className="py-1.5 font-medium" style={{ color: stream.color }}>
                         {stream.label}
+                        {isDisabled && <span className="ml-1 text-[7px] text-muted-foreground/50">(excluded)</span>}
                       </td>
                       <td className="py-1.5">
                         <span className="flex gap-0.5" title={enablers.map(a => a.title).join(', ')}>
@@ -450,16 +466,17 @@ export default function ExecutiveSummarySlide({ step }: ExecutiveSummarySlidePro
                         </span>
                       </td>
                       <td className="py-1.5 text-right font-semibold" style={{ color: stream.color }}>
-                        {formatCompact(stream.value)}
+                        {isDisabled ? '–' : formatCompact(stream.value)}
                       </td>
                       <td className="py-1.5 text-right text-muted-foreground">
-                        {outputs.totalAnnualValue > 0 ? `${((stream.value / outputs.totalAnnualValue) * 100).toFixed(1)}%` : '–'}
+                        {isDisabled ? '–' : outputs.totalAnnualValue > 0 ? `${((stream.value / outputs.totalAnnualValue) * 100).toFixed(1)}%` : '–'}
                       </td>
                     </tr>
                   );
                 })}
                 {/* Total row */}
                 <tr className="border-t-2 border-muted-foreground/20">
+                  <td></td>
                   <td className="py-2 font-semibold text-foreground">Total Annual Value</td>
                   <td></td>
                   <td></td>

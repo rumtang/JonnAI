@@ -32,6 +32,7 @@ export default function CfoSummarySlide({ step }: CfoSummarySlideProps) {
   const pain = useRoiStore(s => s.pain);
   const investment = useRoiStore(s => s.investment);
   const assumptions = useRoiStore(s => s.assumptions);
+  const disabledStreams = useRoiStore(s => s.disabledStreams);
 
   const { totalInvestment, annualOpEx, timeline, irr } = outputs;
   const tco3yr = totalInvestment + annualOpEx * 3;
@@ -67,8 +68,8 @@ export default function CfoSummarySlide({ step }: CfoSummarySlideProps) {
 
   // Sensitivity analysis: vary content time savings and ROAS lift ±25%
   const sensitivity = useMemo(
-    () => computeSensitivity(org, martech, ops, pain, investment, assumptions),
-    [org, martech, ops, pain, investment, assumptions]
+    () => computeSensitivity(org, martech, ops, pain, investment, assumptions, disabledStreams),
+    [org, martech, ops, pain, investment, assumptions, disabledStreams]
   );
 
   // Opportunity cost of delay

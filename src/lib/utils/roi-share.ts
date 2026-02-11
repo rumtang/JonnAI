@@ -18,6 +18,7 @@ export interface RoiShareConfig {
   // Investment
   invest: number;     // totalInvestmentAmount
   weeks: number;      // implementationWeeks
+  ds?: string[];      // disabled ValueStreamKey[] (backward-compatible)
 }
 
 export function encodeRoiConfig(config: RoiShareConfig): string {

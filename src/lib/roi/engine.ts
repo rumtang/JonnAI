@@ -420,7 +420,7 @@ export interface StreamAdoptionParams {
   maxRealization36mo: number;      // Ceiling cap at month 36
 }
 
-type ValueStreamKey = keyof ValueStreams;
+export type ValueStreamKey = keyof ValueStreams;
 
 export const STREAM_ADOPTION_PARAMS: Record<ValueStreamKey, StreamAdoptionParams> = {
   // Martech audit completes early (week 12), but SaaS licenses are annual contracts.
@@ -906,6 +906,7 @@ export function computeSensitivity(
   pain: OperationalPain,
   investment: TransformationInvestment,
   baseAssumptions: ImprovementAssumptions,
+  disabledStreams?: Set<ValueStreamKey>,
 ): SensitivityMatrix {
   const offsets = [-0.25, 0, 0.25];
   const baseContent = baseAssumptions.contentTimeSavingsPct;
@@ -927,7 +928,7 @@ export function computeSensitivity(
         contentTimeSavingsPct: baseContent * (1 + contentOff),
         roasLiftPct: baseRoas * (1 + roasOff),
       };
-      const result = computeRoi(org, martech, ops, pain, investment, modified);
+      const result = computeRoi(org, martech, ops, pain, investment, modified, disabledStreams);
       return result.paybackMonths;
     });
   });
@@ -949,9 +950,17 @@ export function computeRoi(
   pain: OperationalPain,
   investment: TransformationInvestment,
   assumptions: ImprovementAssumptions,
+  disabledStreams?: Set<ValueStreamKey>,
 ): RoiOutputs {
   const baseline = computeBaseline(org, martech, ops, pain);
   const vs = computeValueStreams(baseline, martech, ops, pain, assumptions);
+
+  // Zero out any disabled streams — all downstream calculations automatically exclude them
+  if (disabledStreams) {
+    for (const key of disabledStreams) {
+      vs[key] = 0;
+    }
+  }
 
   const totalInvestment = investment.totalInvestmentAmount;
   const totalAnnualValue =

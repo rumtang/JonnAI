@@ -17,6 +17,7 @@ import {
   type AgentIntensity,
   type BaselineOutputs,
   type RoiOutputs,
+  type ValueStreamKey,
 } from '@/lib/roi/engine';
 
 // ─── Enterprise Default Input Values ────────────────────────────────
@@ -108,6 +109,9 @@ interface RoiState {
   // View mode (marketing vs CFO)
   viewMode: 'marketing' | 'cfo';
 
+  // Disabled value streams (toggled off in the UI)
+  disabledStreams: Set<ValueStreamKey>;
+
   // Computed outputs
   baseline: BaselineOutputs;
   outputs: RoiOutputs;
@@ -128,6 +132,7 @@ interface RoiState {
   setActiveScenario: (scenario: Scenario) => void;
   setViewMode: (mode: 'marketing' | 'cfo') => void;
   setQuickCalcMode: (on: boolean) => void;
+  toggleStream: (key: ValueStreamKey) => void;
 
   // Sharing
   exportConfig: () => RoiShareConfig;
@@ -145,12 +150,13 @@ function recalculate(state: {
   pain: OperationalPain;
   investment: TransformationInvestment;
   assumptions: ImprovementAssumptions;
+  disabledStreams: Set<ValueStreamKey>;
 }) {
   return {
     baseline: computeBaseline(state.org, state.martech, state.ops, state.pain),
     outputs: computeRoi(
       state.org, state.martech, state.ops, state.pain,
-      state.investment, state.assumptions,
+      state.investment, state.assumptions, state.disabledStreams,
     ),
   };
 }
@@ -170,6 +176,7 @@ export const useRoiStore = create<RoiState>((set, get) => ({
   activeScenario: 'expected',
   agentIntensity: 'medium',
   viewMode: 'marketing',
+  disabledStreams: new Set<ValueStreamKey>(),
 
   baseline: initialBaseline,
   outputs: initialOutputs,
@@ -253,9 +260,16 @@ export const useRoiStore = create<RoiState>((set, get) => ({
   setViewMode: (mode) => set({ viewMode: mode }),
   setQuickCalcMode: (on) => set({ quickCalcMode: on, currentStepIndex: on ? 0 : 1 }),
 
+  toggleStream: (key) => {
+    const state = get();
+    const next = new Set(state.disabledStreams);
+    if (next.has(key)) next.delete(key); else next.add(key);
+    set({ disabledStreams: next, ...recalculate({ ...state, disabledStreams: next }) });
+  },
+
   exportConfig: () => {
-    const { org, investment, agentIntensity, activeScenario } = get();
-    return {
+    const { org, investment, agentIntensity, activeScenario, disabledStreams } = get();
+    const config: RoiShareConfig = {
       rev: org.annualRevenue,
       ind: org.industry || '',
       name: org.companyName || '',
@@ -267,6 +281,10 @@ export const useRoiStore = create<RoiState>((set, get) => ({
       invest: investment.totalInvestmentAmount,
       weeks: investment.implementationWeeks,
     };
+    if (disabledStreams.size > 0) {
+      config.ds = [...disabledStreams];
+    }
+    return config;
   },
 
   importConfig: (config) => {
@@ -286,15 +304,17 @@ export const useRoiStore = create<RoiState>((set, get) => ({
       implementationWeeks: config.weeks,
     };
     const assumptions = { ...INTENSITY_PRESETS[config.intensity] };
+    const disabledStreams = new Set<ValueStreamKey>((config.ds ?? []) as ValueStreamKey[]);
     set({
       org,
       investment,
       agentIntensity: config.intensity,
       activeScenario: config.scenario,
       assumptions,
+      disabledStreams,
       quickCalcMode: false,
       currentStepIndex: 0,
-      ...recalculate({ ...state, org, investment, assumptions }),
+      ...recalculate({ ...state, org, investment, assumptions, disabledStreams }),
     });
   },
 
@@ -310,6 +330,7 @@ export const useRoiStore = create<RoiState>((set, get) => ({
     activeScenario: 'expected',
     agentIntensity: 'medium',
     viewMode: 'marketing',
+    disabledStreams: new Set<ValueStreamKey>(),
     baseline: initialBaseline,
     outputs: initialOutputs,
   }),
