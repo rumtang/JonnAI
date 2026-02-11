@@ -162,8 +162,8 @@ export default function PresentationController() {
 
   const currentStep = steps[currentStepIndex];
   const isTitleSlide = currentStep?.action === 'show-title-slide';
-  const isPipelineSlide = currentStep?.id === 'act1-lifecycle' || currentStep?.id === 'act1-pain-points';
-  const isTransitionSlide = currentStep?.id === 'act2-agents-and-context';
+  const isPipelineSlide = currentStep?.id === 'act1-lifecycle';
+  const isTransitionSlide = currentStep?.id === 'act2-agents-and-context' || currentStep?.id === 'act1-pain-points';
   const showPipelineOverlay = isTitleSlide || isPipelineSlide || isTransitionSlide;
   // Scrim stays high on slides 1-3 so the 2D overlay is the primary visual
   const scrimOpacity = isTitleSlide ? 0.95 : 0.90;
