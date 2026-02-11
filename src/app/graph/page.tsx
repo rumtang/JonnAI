@@ -24,7 +24,7 @@ import ExplorePrompts from '@/components/graph/ExplorePrompts';
 
 import { useGraphStore } from '@/lib/store/graph-store';
 import { useSessionStore } from '@/lib/store/session-store';
-import { usePresentationStore } from '@/lib/store/presentation-store';
+import { usePresentationStore, type AppMode } from '@/lib/store/presentation-store';
 import { useCampaignStore } from '@/lib/store/campaign-store';
 import { useRoleInsightStore } from '@/lib/store/role-insight-store';
 import { navigateToNode } from '@/lib/utils/camera-navigation';
@@ -74,6 +74,10 @@ export default function GraphPage() {
   const [showExploreWelcome, setShowExploreWelcome] = useState(false);
   const prevModeRef = useRef(mode);
   const isMobile = useIsMobile();
+
+  // Journey sequence tracking
+  const journeyRef = useRef<string[] | null>(null);
+  const [journeyIndex, setJourneyIndex] = useState(0);
   const currentNodeId = useCampaignStore(s => s.currentNodeId);
   const startCampaign = useCampaignStore(s => s.startCampaign);
 
@@ -87,6 +91,17 @@ export default function GraphPage() {
     } catch {
       // sessionStorage may be disabled (e.g. private browsing, security policy)
     }
+
+    // Read journey sequence if present
+    try {
+      if (typeof window !== 'undefined') {
+        const journeyRaw = sessionStorage.getItem('journeySequence');
+        if (journeyRaw) {
+          journeyRef.current = JSON.parse(journeyRaw);
+          sessionStorage.removeItem('journeySequence');
+        }
+      }
+    } catch { /* ignore */ }
 
     if (savedMode) {
       setMode(savedMode);
@@ -153,6 +168,24 @@ export default function GraphPage() {
     prevModeRef.current = mode;
   }, [mode]);
 
+  // Advance to next mode in the audience journey
+  const advanceJourney = () => {
+    const journey = journeyRef.current;
+    if (!journey) return;
+    const nextIdx = journeyIndex + 1;
+    if (nextIdx < journey.length) {
+      setJourneyIndex(nextIdx);
+      // Use ModeToggle's logic by directly changing mode via presentation store
+      // The ModeToggle handleModeChange takes care of camera/graph resets
+      // But we need to trigger it — simplest approach: set mode and let the mode effect handle it
+      const nextMode = journey[nextIdx] as AppMode;
+      setMode(nextMode);
+    } else {
+      // Journey complete — clear it
+      journeyRef.current = null;
+    }
+  };
+
   // Floating "Run a Campaign" CTA for explore mode
   const handleStartCampaign = () => {
     setMode('campaign');
@@ -178,6 +211,23 @@ export default function GraphPage() {
 
       {/* UI Overlays */}
       <ModeToggle />
+
+      {/* Journey progress indicator + Next button */}
+      {journeyRef.current && journeyRef.current.length > 1 && (
+        <div className="fixed top-4 left-1/2 -translate-x-1/2 z-[51] flex items-center gap-3 px-4 py-2 rounded-full glass-panel">
+          <span className="text-[10px] text-muted-foreground/60">
+            Journey: Step {journeyIndex + 1} of {journeyRef.current.length}
+          </span>
+          {journeyIndex < journeyRef.current.length - 1 && (
+            <button
+              onClick={advanceJourney}
+              className="text-xs font-semibold text-[#14B8A6] hover:text-[#14B8A6]/80 transition-colors"
+            >
+              Next &rarr;
+            </button>
+          )}
+        </div>
+      )}
 
       {mode === 'guided' ? (
         <PresentationController />

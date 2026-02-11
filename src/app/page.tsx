@@ -2,70 +2,76 @@
 
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
+import { ArrowRight } from 'lucide-react';
+import type { AppMode } from '@/lib/store/presentation-store';
+
+// ─── Audience journey paths ──────────────────────────────────
+const AUDIENCE_PATHS = [
+  {
+    title: 'Marketing Leader',
+    description: 'Understand the workflow, see how AI transforms your team, test it with a campaign, then model the ROI.',
+    journey: ['guided', 'role', 'campaign', 'roi'] as AppMode[],
+    steps: '4 modes',
+    time: '~20 min',
+    color: '#C9A04E',
+    icon: '\uD83C\uDFAF',
+  },
+  {
+    title: 'Finance / Business Case',
+    description: 'Start with a quick business case projection, then see the build timeline and investment structure.',
+    journey: ['roi', 'build'] as AppMode[],
+    steps: '2 modes',
+    time: '~10 min',
+    color: '#14B8A6',
+    icon: '\uD83D\uDCCA',
+  },
+  {
+    title: 'Implementation / Technical',
+    description: 'Explore the full knowledge graph, see how to build it, then model the financial case for stakeholders.',
+    journey: ['explore', 'build', 'roi'] as AppMode[],
+    steps: '3 modes',
+    time: '~15 min',
+    color: '#E88D67',
+    icon: '\u2699\uFE0F',
+  },
+];
+
+// ─── Direct access modes ─────────────────────────────────────
+const DIRECT_MODES: { key: AppMode; label: string; color: string }[] = [
+  { key: 'guided',   label: 'Guided Tour',    color: '#C9A04E' },
+  { key: 'role',     label: 'Your Role + AI',  color: '#5B9ECF' },
+  { key: 'roi',      label: 'ROI Simulator',   color: '#14B8A6' },
+  { key: 'campaign', label: 'Campaign',        color: '#4CAF50' },
+  { key: 'build',    label: 'Build It',        color: '#E88D67' },
+  { key: 'explore',  label: 'Explore',         color: '#9B7ACC' },
+];
 
 export default function Home() {
   const router = useRouter();
 
-  const handleStart = (mode: 'guided' | 'explore' | 'campaign' | 'build' | 'roi' | 'role') => {
+  const handleStart = (mode: AppMode) => {
     if (typeof window !== 'undefined') {
       sessionStorage.setItem('initialMode', mode);
+      sessionStorage.removeItem('journeySequence');
     }
     router.push('/graph');
   };
 
-  const modes = [
-    {
-      key: 'guided' as const,
-      label: 'Guided Tour',
-      description: 'Narrated walkthrough of the content production lifecycle',
-      color: '#C9A04E',
-      badge: 'Start Here',
-    },
-    {
-      key: 'role' as const,
-      label: 'Your Role + AI',
-      description: 'See how AI transforms your specific role across the workflow',
-      color: '#5B9ECF',
-      badge: 'For Practitioners',
-    },
-    {
-      key: 'roi' as const,
-      label: 'ROI Simulator',
-      description: 'Model the financial case for knowledge graph infrastructure',
-      color: '#14B8A6',
-      badge: 'For Finance',
-    },
-    {
-      key: 'campaign' as const,
-      label: 'Campaign',
-      description: 'Step through the workflow, making decisions at each gate',
-      color: '#4CAF50',
-      badge: null,
-    },
-    {
-      key: 'build' as const,
-      label: 'Build It',
-      description: 'See how to build this infrastructure for your team',
-      color: '#E88D67',
-      badge: null,
-    },
-    {
-      key: 'explore' as const,
-      label: 'Explore',
-      description: 'Navigate the full 3D knowledge graph freely',
-      color: '#9B7ACC',
-      badge: null,
-    },
-  ];
+  const handleJourney = (journey: AppMode[]) => {
+    if (typeof window !== 'undefined') {
+      sessionStorage.setItem('initialMode', journey[0]);
+      sessionStorage.setItem('journeySequence', JSON.stringify(journey));
+    }
+    router.push('/graph');
+  };
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center relative overflow-hidden">
-      {/* Content */}
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
-        className="relative z-10 text-center max-w-3xl px-6"
+        className="relative z-10 text-center max-w-4xl px-6"
       >
         {/* Pre-title */}
         <motion.div
@@ -122,50 +128,89 @@ export default function Home() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3 }}
-          className="text-xs text-muted-foreground/50 mb-12 max-w-2xl mx-auto"
+          className="text-xs text-muted-foreground/50 mb-10 max-w-2xl mx-auto"
         >
           Financial model benchmarks sourced from Gartner 2025, McKinsey, Salesforce, and Forrester
           research. Model your organization&apos;s specific business case in the ROI Simulator.
         </motion.p>
 
-        {/* Mode selection buttons */}
+        {/* Section A: Audience Paths */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.35 }}
-          className="flex flex-wrap justify-center gap-3 max-w-3xl mx-auto"
+          className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-4xl mx-auto mb-8"
         >
-          {modes.map(({ key, label, description, color, badge }) => (
+          {AUDIENCE_PATHS.map((path, i) => (
             <button
-              key={key}
-              onClick={() => handleStart(key)}
-              className={`group relative px-4 py-2.5 rounded-xl glass-panel hover:shadow-lg transition-all duration-300 w-full sm:w-[calc(50%-0.375rem)] lg:w-[calc(33.333%-0.5rem)] ${
-                badge === 'Start Here' ? 'ring-1 ring-[#C9A04E]/30' : ''
-              }`}
+              key={path.title}
+              onClick={() => handleJourney(path.journey)}
+              className="group text-left p-5 rounded-2xl glass-panel hover:shadow-lg transition-all duration-300 border border-white/5 hover:border-white/15"
             >
-              {badge && (
-                <span
-                  className="absolute -top-2 right-3 px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider"
-                  style={{ backgroundColor: `${color}20`, color }}
-                >
-                  {badge}
+              <div className="flex items-center gap-2 mb-3">
+                <span className="text-xl">{path.icon}</span>
+                <h3 className="text-sm font-bold" style={{ color: path.color }}>
+                  {path.title}
+                </h3>
+              </div>
+              <p className="text-xs text-muted-foreground leading-relaxed mb-4">
+                {path.description}
+              </p>
+
+              {/* Journey steps preview */}
+              <div className="flex items-center gap-1 mb-3 flex-wrap">
+                {path.journey.map((mode, j) => {
+                  const dm = DIRECT_MODES.find(m => m.key === mode);
+                  return (
+                    <span key={mode} className="flex items-center gap-1">
+                      <span
+                        className="text-[9px] font-semibold px-1.5 py-0.5 rounded-full"
+                        style={{ backgroundColor: `${dm?.color || '#fff'}15`, color: dm?.color }}
+                      >
+                        {dm?.label}
+                      </span>
+                      {j < path.journey.length - 1 && (
+                        <ArrowRight className="w-2.5 h-2.5 text-muted-foreground/30" />
+                      )}
+                    </span>
+                  );
+                })}
+              </div>
+
+              <div className="flex items-center justify-between text-[10px] text-muted-foreground/50">
+                <span>{path.steps} &middot; {path.time}</span>
+                <span className="group-hover:translate-x-0.5 transition-transform" style={{ color: path.color }}>
+                  Start &rarr;
                 </span>
-              )}
-              <div className="text-left">
-                <p
-                  className="text-sm font-semibold transition-colors"
-                  style={{ color }}
-                >
-                  {label}
-                </p>
-                <p className="text-xs text-muted-foreground mt-0.5 leading-snug">
-                  {description}
-                </p>
               </div>
             </button>
           ))}
         </motion.div>
 
+        {/* Section B: Direct Access */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.45 }}
+          className="max-w-3xl mx-auto"
+        >
+          <p className="text-[10px] text-muted-foreground/40 uppercase tracking-wider mb-3">
+            Or jump directly to
+          </p>
+          <div className="flex flex-wrap justify-center gap-2">
+            {DIRECT_MODES.map(({ key, label, color }) => (
+              <button
+                key={key}
+                onClick={() => handleStart(key)}
+                className="px-3 py-1.5 rounded-lg text-xs font-medium glass-panel
+                           text-muted-foreground hover:text-foreground transition-all duration-200"
+                style={{ borderColor: `${color}20` }}
+              >
+                <span style={{ color }}>{label}</span>
+              </button>
+            ))}
+          </div>
+        </motion.div>
       </motion.div>
     </div>
   );
