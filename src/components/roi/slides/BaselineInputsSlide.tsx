@@ -302,10 +302,10 @@ export default function BaselineInputsSlide({ step }: BaselineInputsSlideProps) 
               <SliderRow
                 label="Marketing Budget (% of Revenue)"
                 value={org.marketingBudgetPct}
-                min={3}
+                min={0.01}
                 max={15}
-                step={0.1}
-                format={(v) => `${v.toFixed(1)}%`}
+                step={0.01}
+                format={(v) => v < 1 ? `${v.toFixed(2)}%` : `${v.toFixed(1)}%`}
                 onChange={(v) => setOrg({ marketingBudgetPct: v })}
                 color="#5B9ECF"
                 benchmark={
