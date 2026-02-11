@@ -21,7 +21,7 @@
   {
     "id": "act1-lifecycle",
     "title": "The Marketing Lifecycle",
-    "narration": "Every marketing team draws this on a whiteboard — the clean, linear pipeline from brief to publish. In reality, this map is a lie of omission. It hides the 60% of time spent on rework, the approval cycles that kill velocity, and the tribal knowledge that walks out the door every time someone leaves. The question isn't whether the process works. It's how much it costs when it breaks.",
+    "narration": "Most marketing teams could draw this on a whiteboard — a clean, linear pipeline from brief to publish. In practice, this version leaves a lot out. It doesn't show the rework cycles, the approval delays, or the institutional knowledge that disappears when people move on. The process works well enough. The question is what it actually costs.",
     "cameraPosition": {
       "x": -60,
       "y": 30,
@@ -46,7 +46,7 @@
   {
     "id": "act2-agents-and-context",
     "title": "Adding Agents — And What They Actually Need",
-    "narration": "The first instinct is to bolt AI agents onto the existing pipeline — an agent for research, another for drafting, one for SEO. This gets results fast: first-draft generation drops from hours to minutes. But it also creates a new problem. Without shared context, each agent operates in isolation. The research agent doesn't know what the brand guide says. The SEO agent doesn't know what the compliance team flagged last quarter. Speed without coherence just produces more content to fix.",
+    "narration": "A common first step is to add AI agents to the existing pipeline — one for research, another for drafting, one for SEO. This can speed things up significantly. But without shared context, each agent tends to operate in isolation. The research agent may not know what the brand guide says. The SEO agent may not know what compliance flagged last quarter. Faster output without coherence often just creates more content to review.",
     "cameraPosition": {
       "x": -100,
       "y": -80,
@@ -71,7 +71,7 @@
   {
     "id": "act1-pain-points",
     "title": "Where the Pipeline Breaks",
-    "narration": "At enterprise scale, this pipeline breaks in predictable ways. Twenty percent of content gets reworked because the brief was ambiguous. Approval cycles average seven business days because reviewers lack context. Sixty percent of marketer time goes to administrative coordination, not strategic work. These aren't efficiency problems — they're structural failures baked into a linear model that doesn't match how work actually flows.",
+    "narration": "At scale, this pipeline tends to break in familiar ways. Briefs are ambiguous, so content gets reworked. Reviewers lack context, so approval cycles stretch out. A significant share of marketer time goes to coordination rather than strategic work. These are less about efficiency and more about a linear model that doesn't reflect how work actually flows.",
     "cameraPosition": {
       "x": 0,
       "y": 200,
@@ -90,7 +90,7 @@
   {
     "id": "act3-graph-reveal",
     "title": "But Agents Have to Navigate the Real World",
-    "narration": "This is what agents actually have to navigate. Not a clean pipeline — a network of review gates, knowledge inputs, agent capabilities, and feedback loops. The complexity isn't a bug; it's the reality of enterprise content production at scale. The organizations that perform aren't the ones that simplify this away. They're the ones that build intelligence to navigate it.",
+    "narration": "This is closer to what agents need to navigate. Not a clean pipeline — a network of review gates, knowledge inputs, agent capabilities, and feedback loops. The complexity here isn't accidental. It reflects how enterprise content production actually works. The question is whether you try to simplify it away or build the intelligence to work with it.",
     "cameraPosition": {
       "x": 0,
       "y": 0,
@@ -109,7 +109,7 @@
   {
     "id": "act4-intelligence-layer",
     "title": "The Intelligence Layer",
-    "narration": "Every agent in this graph depends on the same foundation: brand voice guides, audience personas, compliance rules, performance data. This is the intelligence layer — the structured knowledge that tells agents what to say, who to say it to, and what boundaries to respect. Build this layer well, and every agent gets smarter. Neglect it, and agents hallucinate faster.",
+    "narration": "The agents in this graph share a common dependency: brand voice guides, audience personas, compliance rules, performance data. This is the intelligence layer — structured knowledge that helps agents understand what to produce, for whom, and within what boundaries. When this layer is well-maintained, agent output improves. When it's incomplete, output quality tends to drop.",
     "cameraPosition": {
       "x": 60,
       "y": 0,
@@ -136,7 +136,7 @@
   {
     "id": "act5-human-roles",
     "title": "Human-in-the-Loop as Design Principle",
-    "narration": "Agents handle volume and velocity. Humans handle judgment and accountability. Every gate in this graph marks a point where human decision-making is irreplaceable — brand taste, legal interpretation, strategic direction.",
+    "narration": "Agents can handle volume and velocity. Humans are better placed for judgment and accountability. The gates in this graph mark points where human decision-making adds the most value — brand taste, legal interpretation, strategic direction.",
     "cameraPosition": {
       "x": 0,
       "y": -60,
@@ -155,7 +155,7 @@
   {
     "id": "act5-operating-model",
     "title": "The Operating Model Shift",
-    "narration": "The shift isn't from manual to automated — it's from executing tasks to orchestrating systems. Every role transforms: content directors become workflow architects, brand managers become governance designers.",
+    "narration": "The shift is less about automation and more about orchestration. Roles start to evolve — content directors spend more time on workflow design, brand managers focus more on governance frameworks.",
     "cameraPosition": {
       "x": 100,
       "y": -50,
@@ -174,7 +174,7 @@
   {
     "id": "act6-close",
     "title": "The Path to Agentic Operations",
-    "narration": "The path is clear: understand the process, map the intelligence layer, then build the foundation agents need to perform. Better models won't save you — better knowledge will. The organizations building that layer now are the ones whose agents will actually work.",
+    "narration": "The practical path forward: understand the process, map the intelligence layer, then build the foundation that helps agents perform. Better models will keep arriving — but they'll work best when they have better knowledge to draw on.",
     "cameraPosition": {
       "x": 0,
       "y": 0,
