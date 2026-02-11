@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState, useRef, Suspense } from 'react';
-import { AnimatePresence } from 'framer-motion';
 import { useIsMobile } from '@/lib/hooks/use-is-mobile';
 import GraphScene from '@/components/graph/GraphScene';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
@@ -18,7 +17,6 @@ import CampaignPanel from '@/components/graph/CampaignMode/CampaignPanel';
 import CampaignSummary from '@/components/graph/CampaignMode/CampaignSummary';
 import RoleController from '@/components/role/RoleController';
 import RolePicker from '@/components/graph/RoleMode/RolePicker';
-import ExploreWelcome from '@/components/graph/ExploreWelcome';
 import ExplorePrompts from '@/components/graph/ExplorePrompts';
 
 import { useGraphStore } from '@/lib/store/graph-store';
@@ -69,7 +67,6 @@ export default function GraphPage() {
   const { setSteps, mode, setMode } = usePresentationStore();
   const campaignActive = useCampaignStore(s => s.isActive);
   const [rolePickerOpen, setRolePickerOpen] = useState(false);
-  const [showExploreWelcome, setShowExploreWelcome] = useState(false);
   const prevModeRef = useRef(mode);
   const isMobile = useIsMobile();
 
@@ -175,11 +172,8 @@ export default function GraphPage() {
     }
   }, [mode]);
 
-  // Show welcome overlay when transitioning from guided tour to explore mode
+  // Track previous mode for journey transitions
   useEffect(() => {
-    if (prevModeRef.current === 'guided' && mode === 'explore') {
-      setShowExploreWelcome(true);
-    }
     prevModeRef.current = mode;
   }, [mode]);
 
@@ -273,24 +267,8 @@ export default function GraphPage() {
 
           <NodeDetailPanel />
 
-          {/* Welcome overlay — shown when entering explore from guided tour */}
-          <AnimatePresence>
-            {showExploreWelcome && (
-              <ExploreWelcome
-                onExploreGraph={() => setShowExploreWelcome(false)}
-                onSelectRole={() => {
-                  setShowExploreWelcome(false);
-                  // Switch to role mode to pick a role
-                  setMode('role');
-                  setRolePickerOpen(true);
-                }}
-                onDismiss={() => setShowExploreWelcome(false)}
-              />
-            )}
-          </AnimatePresence>
-
           {/* Discovery prompts — shown for first-time explorers */}
-          {!showExploreWelcome && !useSessionStore.getState().guidedTourCompleted && (
+          {!useSessionStore.getState().guidedTourCompleted && (
             <ExplorePrompts />
           )}
 
