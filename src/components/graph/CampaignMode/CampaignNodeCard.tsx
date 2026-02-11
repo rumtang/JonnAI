@@ -21,12 +21,18 @@ export default function CampaignNodeCard() {
   const currentNodeId = useCampaignStore(s => s.currentNodeId);
   const advanceToNext = useCampaignStore(s => s.advanceToNext);
   const makeGateDecision = useCampaignStore(s => s.makeGateDecision);
+  const visitedNodes = useCampaignStore(s => s.visitedNodes);
+  const revisionCount = useCampaignStore(s => s.revisionCount);
   const graphData = useGraphStore(s => s.graphData);
   const selectNode = useGraphStore(s => s.selectNode);
   const [showDetails, setShowDetails] = useState(false);
 
   const currentNode = graphData.nodes.find(n => n.id === currentNodeId);
   if (!currentNode) return null;
+
+  // Detect if this node is being revisited (revision loop-back)
+  const visitCountForNode = visitedNodes.filter(id => id === currentNodeId).length;
+  const isRevision = visitCountForNode > 1;
 
   const style = NODE_STYLES[currentNode.type];
   const narrative = STEP_NARRATIVES[currentNode.id];
@@ -89,6 +95,8 @@ export default function CampaignNodeCard() {
         connectedInputs={connectedInputs}
         onAdvance={handleAdvance}
         onDecision={handleDecision}
+        isRevision={isRevision}
+        visitCountForNode={visitCountForNode}
       />
     );
   }
@@ -111,6 +119,11 @@ export default function CampaignNodeCard() {
             <Badge variant="outline" className="text-xs" style={{ borderColor: style?.color + '60', color: style?.color }}>
               {currentNode.type}
             </Badge>
+            {isRevision && (
+              <Badge className="text-[10px] bg-amber-500/15 text-amber-400 border-amber-500/30 hover:bg-amber-500/15">
+                Revision #{visitCountForNode - 1}
+              </Badge>
+            )}
             <span className="text-xs text-muted-foreground truncate">{currentNode.label}</span>
           </div>
         </div>
@@ -382,7 +395,7 @@ function NarrativeBlock({ block }: { block: ContentBlock }) {
 /* ── Fallback: original layout for nodes without narratives ── */
 
 function FallbackCard({
-  currentNode, style, connectedAgents, connectedInputs, onAdvance, onDecision,
+  currentNode, style, connectedAgents, connectedInputs, onAdvance, onDecision, isRevision, visitCountForNode,
 }: {
   currentNode: GraphNode;
   style: { color: string; emoji: string } | undefined;
@@ -390,6 +403,8 @@ function FallbackCard({
   connectedInputs: GraphNode[];
   onAdvance: () => void;
   onDecision: (d: string) => void;
+  isRevision: boolean;
+  visitCountForNode: number;
 }) {
   return (
     <div>
@@ -402,9 +417,16 @@ function FallbackCard({
         </div>
         <div>
           <h3 className="text-base font-semibold text-foreground">{currentNode.label}</h3>
-          <Badge variant="outline" className="text-xs mt-0.5" style={{ borderColor: style?.color + '60', color: style?.color }}>
-            {currentNode.type}
-          </Badge>
+          <div className="flex items-center gap-2 mt-0.5">
+            <Badge variant="outline" className="text-xs" style={{ borderColor: style?.color + '60', color: style?.color }}>
+              {currentNode.type}
+            </Badge>
+            {isRevision && (
+              <Badge className="text-[10px] bg-amber-500/15 text-amber-400 border-amber-500/30 hover:bg-amber-500/15">
+                Revision #{visitCountForNode - 1}
+              </Badge>
+            )}
+          </div>
         </div>
       </div>
 

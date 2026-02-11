@@ -108,6 +108,28 @@ export default function CampaignSummary() {
               />
             </div>
 
+            {/* Baseline comparison — manual vs. AI-assisted */}
+            <div className="mb-6 rounded-xl border border-white/10 overflow-hidden">
+              <div className="grid grid-cols-4 text-[10px] font-semibold text-muted-foreground/60 uppercase tracking-wider px-3 py-2 bg-white/5">
+                <span />
+                <span className="text-center">Steps</span>
+                <span className="text-center">Time</span>
+                <span className="text-center">Revisions</span>
+              </div>
+              <div className="grid grid-cols-4 text-xs px-3 py-2.5 border-t border-white/5">
+                <span className="text-muted-foreground">Without AI</span>
+                <span className="text-center text-foreground/60">~37</span>
+                <span className="text-center text-foreground/60">~22.5 hrs</span>
+                <span className="text-center text-foreground/60">Est. 12</span>
+              </div>
+              <div className="grid grid-cols-4 text-xs px-3 py-2.5 border-t border-white/5 bg-[#4CAF50]/5">
+                <span className="text-[#4CAF50] font-semibold">Your Campaign</span>
+                <span className="text-center text-foreground font-semibold">{stepCount}</span>
+                <span className="text-center text-foreground font-semibold">{timeLabel}</span>
+                <span className="text-center text-foreground font-semibold">{revisionCount}</span>
+              </div>
+            </div>
+
             {/* Decision summary */}
             {decisions.length > 0 && (
               <div className="mb-6">

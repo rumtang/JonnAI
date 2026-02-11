@@ -1732,6 +1732,11 @@
       "type": "returns-to"
     },
     {
+      "source": "brief-approval",
+      "target": "research-insights",
+      "type": "escalates-to"
+    },
+    {
       "source": "quality-check",
       "target": "draft-content",
       "type": "returns-to"
@@ -1745,6 +1750,11 @@
       "source": "stakeholder-signoff",
       "target": "final-edit",
       "type": "returns-to"
+    },
+    {
+      "source": "stakeholder-signoff",
+      "target": "executive-reporting",
+      "type": "escalates-to"
     },
     {
       "source": "performance-review",
@@ -1978,7 +1988,7 @@
     },
     {
       "source": "legal-compliance-gate",
-      "target": "brand-compliance",
+      "target": "legal-review",
       "type": "returns-to"
     },
     {
@@ -2498,7 +2508,7 @@
     },
     {
       "source": "governance-gate",
-      "target": "receive-request",
+      "target": "content-governance",
       "type": "returns-to"
     },
     {

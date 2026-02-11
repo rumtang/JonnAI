@@ -214,6 +214,8 @@ export const useCampaignStore = create<CampaignState>((set, get) => ({
     let action = `Decision: ${decision}`;
     let revisionInc = 0;
     let escalationInc = 0;
+    let revisionPenaltyMinutes = 0;
+    let escalationPenaltyMinutes = 0;
 
     if (d === 'approve' || d === 'pass') {
       // Advance via flows-to, preferring the main workflow path
@@ -245,6 +247,13 @@ export const useCampaignStore = create<CampaignState>((set, get) => ({
       icon = '\uD83D\uDD04';
       action = `Decision: ${decision} \u21A9`;
       revisionInc = 1;
+
+      // Revision penalty: add 50% of target step's time (revision is faster than initial)
+      if (targetNode?.type === 'step') {
+        const targetMeta = targetNode.meta as StepMeta;
+        const targetMinutes = parseEstimatedMinutes(targetMeta?.estimatedTime);
+        revisionPenaltyMinutes = Math.round(targetMinutes * 0.5);
+      }
     } else if (d.startsWith('escalate')) {
       // Follow escalates-to link
       const link = graphData.links.find(l => {
@@ -258,6 +267,8 @@ export const useCampaignStore = create<CampaignState>((set, get) => ({
       icon = '\uD83D\uDEA8';
       action = `Decision: ${decision} \u26A0`;
       escalationInc = 1;
+      // Escalation penalty: flat 60 minutes for human review of escalated items
+      escalationPenaltyMinutes = 60;
     } else if (d === 'optimize') {
       // Follow flows-to link (optimize leads to draft-content)
       const link = graphData.links.find(l => {
@@ -332,6 +343,7 @@ export const useCampaignStore = create<CampaignState>((set, get) => ({
       decisions: [...state.decisions, { gateId: currentId, decision, timestamp: Date.now() }],
       revisionCount: state.revisionCount + revisionInc,
       escalationCount: state.escalationCount + escalationInc,
+      totalEstimatedMinutes: state.totalEstimatedMinutes + revisionPenaltyMinutes + escalationPenaltyMinutes,
       stepCount: state.stepCount + 1,
       log: [...logEntries, ...state.log],
     });
