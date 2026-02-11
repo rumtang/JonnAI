@@ -87,6 +87,7 @@ const initialOutputs = computeRoi(
 interface RoiState {
   // Navigation
   currentStepIndex: number;
+  quickCalcMode: boolean;
 
   // Input groups
   org: OrganizationProfile;
@@ -124,6 +125,7 @@ interface RoiState {
   setAgentIntensity: (level: AgentIntensity) => void;
   setActiveScenario: (scenario: Scenario) => void;
   setViewMode: (mode: 'marketing' | 'cfo') => void;
+  setQuickCalcMode: (on: boolean) => void;
 
   // Lifecycle
   reset: () => void;
@@ -150,6 +152,7 @@ function recalculate(state: {
 // ─── Store ───────────────────────────────────────────────────────────
 export const useRoiStore = create<RoiState>((set, get) => ({
   currentStepIndex: 0,
+  quickCalcMode: true,
 
   org: { ...DEFAULT_ORG },
   martech: { ...DEFAULT_MARTECH },
@@ -235,9 +238,11 @@ export const useRoiStore = create<RoiState>((set, get) => ({
 
   setActiveScenario: (scenario) => set({ activeScenario: scenario }),
   setViewMode: (mode) => set({ viewMode: mode }),
+  setQuickCalcMode: (on) => set({ quickCalcMode: on, currentStepIndex: on ? 0 : 1 }),
 
   reset: () => set({
     currentStepIndex: 0,
+    quickCalcMode: true,
     org: { ...DEFAULT_ORG },
     martech: { ...DEFAULT_MARTECH },
     ops: { ...DEFAULT_OPS },

@@ -9,6 +9,7 @@ import { usePresentationStore } from '@/lib/store/presentation-store';
 import { useGraphStore } from '@/lib/store/graph-store';
 import { useIsMobile } from '@/lib/hooks/use-is-mobile';
 import { ROI_STEPS } from '@/data/roi-steps';
+import QuickCalcSlide from './slides/QuickCalcSlide';
 import BaselineInputsSlide from './slides/BaselineInputsSlide';
 import MartechMediaSlide from './slides/MartechMediaSlide';
 import OpsContentSlide from './slides/OpsContentSlide';
@@ -17,19 +18,20 @@ import PlaybookSlide from './slides/PlaybookSlide';
 import BeforeAfterSlide from './slides/BeforeAfterSlide';
 import ExecutiveSummarySlide from './slides/ExecutiveSummarySlide';
 
-// ─── Act Definitions (7 slides, 5 acts) ────────────────────────────
+// ─── Act Definitions (8 slides, 6 acts) ────────────────────────────
 const ACTS = [
-  { label: 'Your Marketing Machine', slides: [0] },
-  { label: 'Where the Money Goes', slides: [1, 2] },
-  { label: 'The Transformation', slides: [3, 4] },
-  { label: 'Before & After', slides: [5] },
-  { label: 'Your Investment Case', slides: [6] },
+  { label: 'Quick Estimate', slides: [0] },
+  { label: 'Your Marketing Machine', slides: [1] },
+  { label: 'Where the Money Goes', slides: [2, 3] },
+  { label: 'The Transformation', slides: [4, 5] },
+  { label: 'Before & After', slides: [6] },
+  { label: 'Your Investment Case', slides: [7] },
 ];
 
-// Input slides are indices 0, 1, 2 — show "Skip to Results" on these
-const INPUT_SLIDE_INDICES = [0, 1, 2];
+// Input slides are indices 1, 2, 3 — show "Skip to Results" on these (not quick calc)
+const INPUT_SLIDE_INDICES = [1, 2, 3];
 // The timeline slide is the first results slide
-const TIMELINE_SLIDE_INDEX = 3;
+const TIMELINE_SLIDE_INDEX = 4;
 
 export default function RoiController() {
   const currentStepIndex = useRoiStore(s => s.currentStepIndex);
@@ -81,6 +83,8 @@ export default function RoiController() {
   // ─── Slide Router ──────────────────────────────────────────────
   const renderSlide = () => {
     switch (step.layout) {
+      case 'quick-calc':
+        return <QuickCalcSlide step={step} />;
       case 'org-budget-profile':
         return <BaselineInputsSlide step={step} />;
       case 'martech-media':

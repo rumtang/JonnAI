@@ -2,6 +2,7 @@
 // 7 slides across 5 acts. Enterprise-grade financial model for S&P 100+.
 
 export type RoiLayout =
+  | 'quick-calc'
   | 'org-budget-profile'
   | 'martech-media'
   | 'ops-content'
@@ -25,6 +26,20 @@ export interface RoiStep {
 }
 
 export const ROI_STEPS: RoiStep[] = [
+  // ─── Quick Calc (index 0) ─────────────────────────────────────────
+  {
+    id: 'quick-calc',
+    act: 0,
+    actLabel: 'Quick Estimate',
+    title: 'Quick Business Case',
+    subtitle: 'Three inputs. Instant projection.',
+    layout: 'quick-calc',
+    themeColor: '#14B8A6',
+    content: {
+      tagline: 'Start with what you know. Refine later.',
+    },
+  },
+
   // ─── ACT 1: Your Marketing Machine Today ──────────────────────────
   {
     id: 'org-budget-profile',
