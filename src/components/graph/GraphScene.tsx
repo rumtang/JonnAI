@@ -38,9 +38,67 @@ function getCachedGlowTexture(color: string): THREE.Texture {
   return tex;
 }
 
+// Material caches — prevent recreating identical GPU resources per render
+const physicalMaterialCache = new Map<string, THREE.MeshPhysicalMaterial>();
+function getCachedPhysicalMaterial(colorHex: string, opacity: number, emissive: boolean): THREE.MeshPhysicalMaterial {
+  const cacheKey = `${colorHex}-${opacity.toFixed(2)}-${emissive ? 1 : 0}`;
+  let mat = physicalMaterialCache.get(cacheKey);
+  if (!mat) {
+    const color = getCachedColor(colorHex);
+    mat = new THREE.MeshPhysicalMaterial({
+      color,
+      metalness: 0.3,
+      roughness: 0.15,
+      clearcoat: 0.8,
+      clearcoatRoughness: 0.1,
+      transparent: true,
+      opacity,
+      emissive: emissive ? color : new THREE.Color(0x000000),
+      emissiveIntensity: emissive ? 0.3 : 0,
+    });
+    physicalMaterialCache.set(cacheKey, mat);
+  }
+  return mat;
+}
+
+const spriteMaterialCache = new Map<string, THREE.SpriteMaterial>();
+function getCachedSpriteMaterial(glowColor: string, opacity: number): THREE.SpriteMaterial {
+  const cacheKey = `${glowColor}-${opacity.toFixed(2)}`;
+  let mat = spriteMaterialCache.get(cacheKey);
+  if (!mat) {
+    mat = new THREE.SpriteMaterial({
+      map: getCachedGlowTexture(glowColor),
+      transparent: true,
+      opacity,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending,
+    });
+    spriteMaterialCache.set(cacheKey, mat);
+  }
+  return mat;
+}
+
+const ringMaterialCache = new Map<string, THREE.MeshBasicMaterial>();
+function getCachedRingMaterial(color: number, opacity: number): THREE.MeshBasicMaterial {
+  const cacheKey = `${color}-${opacity}`;
+  let mat = ringMaterialCache.get(cacheKey);
+  if (!mat) {
+    mat = new THREE.MeshBasicMaterial({
+      color,
+      transparent: true,
+      opacity,
+      side: THREE.DoubleSide,
+    });
+    ringMaterialCache.set(cacheKey, mat);
+  }
+  return mat;
+}
+
 export default function GraphScene() {
   const fgRef = useRef<any>(null);
   const rotationRef = useRef<number | null>(null);
+  const isInteracting = useRef(false);
+  const interactionTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // State values — re-render only when these change
   const {
@@ -176,9 +234,10 @@ export default function GraphScene() {
       }
     }, 500);
 
-    // Slow scene rotation when no node is hovered/selected
+    // Slow scene rotation — pauses during user interaction
     const animate = () => {
       rotationRef.current = requestAnimationFrame(animate);
+      if (isInteracting.current) return;
       try {
         const scene = fg.scene?.();
         if (scene) {
@@ -231,59 +290,30 @@ export default function GraphScene() {
 
     const geometry = geometries[style.geometry] || geometries.icosahedron;
 
-    // Crystalline MeshPhysicalMaterial with clearcoat
-    const color = getCachedColor(style.color);
-    const material = new THREE.MeshPhysicalMaterial({
-      color: color,
-      metalness: 0.3,
-      roughness: 0.15,
-      clearcoat: 0.8,
-      clearcoatRoughness: 0.1,
-      transparent: true,
-      opacity: isDimmed ? 0.35 : 0.95,
-      emissive: isHighlighted ? color : new THREE.Color(0x000000),
-      emissiveIntensity: isHighlighted ? 0.3 : 0,
-    });
+    // Crystalline MeshPhysicalMaterial — cached to avoid GPU object creation
+    const material = getCachedPhysicalMaterial(style.color, isDimmed ? 0.35 : 0.95, !!isHighlighted);
 
     const mesh = new THREE.Mesh(geometry, material);
     mesh.scale.setScalar(size);
     group.add(mesh);
 
-    // Soft glow sprite with additive blending
-    const spriteMaterial = new THREE.SpriteMaterial({
-      map: getCachedGlowTexture(isCampaignCurrent ? '#4CAF50' : style.color),
-      transparent: true,
-      opacity: isDimmed ? 0.04 : (isCampaignCurrent ? 0.45 : isHighlighted ? 0.30 : 0.12),
-      depthWrite: false,
-      blending: THREE.AdditiveBlending,
-    });
-    const glowSprite = new THREE.Sprite(spriteMaterial);
+    // Soft glow sprite with additive blending — cached materials
+    const glowColor = isCampaignCurrent ? '#4CAF50' : style.color;
+    const glowOpacity = isDimmed ? 0.04 : (isCampaignCurrent ? 0.45 : isHighlighted ? 0.30 : 0.12);
+    const glowSprite = new THREE.Sprite(getCachedSpriteMaterial(glowColor, glowOpacity));
     glowSprite.scale.setScalar(isCampaignCurrent ? size * 6 : size * 4);
     group.add(glowSprite);
 
     // Campaign current-node ring indicator
     if (isCampaignCurrent) {
       const ringGeom = new THREE.RingGeometry(size * 1.3, size * 1.6, 32);
-      const ringMat = new THREE.MeshBasicMaterial({
-        color: 0x4CAF50,
-        transparent: true,
-        opacity: 0.7,
-        side: THREE.DoubleSide,
-      });
-      const ring = new THREE.Mesh(ringGeom, ringMat);
+      const ring = new THREE.Mesh(ringGeom, getCachedRingMaterial(0x4CAF50, 0.7));
       group.add(ring);
     }
 
     // Campaign visited node — subtle green tint on glow
     if (isCampaignVisited && !isCampaignCurrent) {
-      const visitedGlow = new THREE.SpriteMaterial({
-        map: getCachedGlowTexture('#4CAF50'),
-        transparent: true,
-        opacity: 0.15,
-        depthWrite: false,
-        blending: THREE.AdditiveBlending,
-      });
-      const visitedSprite = new THREE.Sprite(visitedGlow);
+      const visitedSprite = new THREE.Sprite(getCachedSpriteMaterial('#4CAF50', 0.15));
       visitedSprite.scale.setScalar(size * 3);
       group.add(visitedSprite);
     }
@@ -331,9 +361,19 @@ export default function GraphScene() {
     return group;
   }, [hoveredNode, selectedNode, highlightedNodeIds, neighborSet, hasHighlights, geometries, campaignActive, campaignNodeId, campaignVisitedSet, campaignNeighborSet]);
 
+  // Pause rotation on interaction, resume after 3s idle
+  const markInteracting = useCallback(() => {
+    isInteracting.current = true;
+    if (interactionTimer.current) clearTimeout(interactionTimer.current);
+    interactionTimer.current = setTimeout(() => {
+      isInteracting.current = false;
+    }, 3000);
+  }, []);
+
   // Handle node click - fly camera to node (cinematic 2500ms)
   // Breadcrumbs only track connection navigation in NodeDetailPanel, not direct clicks.
   const handleNodeClick = useCallback((node: GraphNode) => {
+    markInteracting();
     // Reveal neighbors when progressive reveal is active
     if (progressiveReveal) expandNode(node.id);
     selectNode(node);
@@ -349,10 +389,11 @@ export default function GraphScene() {
         2500
       );
     }
-  }, [selectNode, setDetailPanelOpen, progressiveReveal, expandNode]);
+  }, [selectNode, setDetailPanelOpen, progressiveReveal, expandNode, markInteracting]);
 
   // Handle node hover
   const handleNodeHover = useCallback((node: GraphNode | null) => {
+    if (node) markInteracting();
     // Block hover highlight when a node is manually selected (not in campaign mode)
     if (selectedNode && !campaignActive) return;
     hoverNode(node || null);
@@ -362,7 +403,7 @@ export default function GraphScene() {
     } else {
       clearHighlights();
     }
-  }, [hoverNode, graphData.links, setHighlightedNodeIds, clearHighlights, selectedNode, campaignActive]);
+  }, [hoverNode, graphData.links, setHighlightedNodeIds, clearHighlights, selectedNode, campaignActive, markInteracting]);
 
   // Handle background click - deselect
   const handleBackgroundClick = useCallback(() => {
