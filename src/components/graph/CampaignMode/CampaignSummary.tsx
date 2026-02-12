@@ -121,11 +121,11 @@ export default function CampaignSummary() {
             className="glass-panel rounded-2xl p-8 max-w-md w-full mx-4"
           >
             <h2 className="text-2xl font-bold text-foreground mb-2">
-              {isFrontOffice ? 'Journey Complete' : 'Campaign Complete'}
+              {isFrontOffice ? 'Walkthrough Complete' : 'Campaign Complete'}
             </h2>
             <p className="text-sm text-muted-foreground mb-6">
               {isFrontOffice
-                ? 'Here\u2019s a summary of your customer journey walkthrough.'
+                ? 'Here\u2019s how your front office pipeline performed.'
                 : 'Here\u2019s a summary of your content campaign walkthrough.'}
             </p>
 
@@ -185,7 +185,7 @@ export default function CampaignSummary() {
             {/* Org profile context — shown when session has org data */}
             {orgProfile && (
               <p className="text-[10px] text-muted-foreground/60 mb-4 leading-relaxed">
-                Based on {orgProfile.companyName || 'your organization'}&apos;s profile, this {isFrontOffice ? 'journey' : 'campaign'}
+                Based on {orgProfile.companyName || 'your organization'}&apos;s profile, this {isFrontOffice ? 'pipeline' : 'campaign'}
                 {' '}represents approximately {totalEstimatedMinutes > 0
                   ? `${Math.round((totalEstimatedMinutes / (orgProfile.marketingHeadcount * 160)) * 100)}%`
                   : '—'

@@ -81,7 +81,7 @@ function getWorkflowConfig() {
     return {
       order: MAIN_WORKFLOW_ORDER_FRONTOFFICE,
       startNode: 'mktg-campaign-planning',
-      campaignLabel: 'Customer Journey',
+      campaignLabel: 'Customer Management',
     };
   }
   return {
@@ -356,11 +356,13 @@ export const useCampaignStore = create<CampaignState>((set, get) => ({
     } else if (d === 'archive') {
       // End the campaign
       icon = '\uD83D\uDCE6';
-      action = `Decision: ${decision} — Campaign Complete`;
+      const { campaignLabel: label } = getWorkflowConfig();
+      action = `Decision: ${decision} — ${label} Complete`;
     } else if (d === 'hold') {
       // End the campaign (hold = paused)
       icon = '\u23F8\uFE0F';
-      action = `Decision: ${decision} — Campaign Paused`;
+      const { campaignLabel: label } = getWorkflowConfig();
+      action = `Decision: ${decision} — ${label} Paused`;
     }
 
     const logEntry: CampaignLogEntry = {

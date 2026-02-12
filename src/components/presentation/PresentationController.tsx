@@ -680,7 +680,7 @@ export default function PresentationController() {
               >
                 <span className="bg-gradient-to-r from-[#C9A04E] via-[#5B9ECF] to-[#9B7ACC] bg-clip-text text-transparent">
                   {lens === 'frontoffice'
-                    ? 'Every Customer Journey Starts with a System'
+                    ? 'From Lead to Renewal: One Intelligent Pipeline'
                     : 'Every Campaign Starts with a Pipeline'}
                 </span>
               </motion.h1>
@@ -693,7 +693,7 @@ export default function PresentationController() {
                 className="text-lg text-muted-foreground max-w-xl mx-auto leading-relaxed"
               >
                 {lens === 'frontoffice'
-                  ? 'We\u2019ll explore the organizational intelligence layer across the full front office \u2014 marketing, sales, service, and customer success'
+                  ? 'How organizational intelligence powers customer management across marketing, sales, service, and customer success'
                   : 'We\u2019ll explore the organizational intelligence layer through the lens of the marketing campaign lifecycle'}
               </motion.p>
             </div>

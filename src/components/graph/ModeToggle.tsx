@@ -112,8 +112,8 @@ export default function ModeToggle() {
     },
     {
       key: 'campaign',
-      label: lens === 'frontoffice' ? 'Journey' : 'Campaign',
-      shortLabel: lens === 'frontoffice' ? 'Journey' : 'Run',
+      label: lens === 'frontoffice' ? 'Manage' : 'Campaign',
+      shortLabel: lens === 'frontoffice' ? 'Manage' : 'Run',
       activeColor: '#4CAF50',
       activeBg: 'bg-[#4CAF50]/20',
     },

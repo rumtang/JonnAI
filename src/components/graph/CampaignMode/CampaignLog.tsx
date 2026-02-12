@@ -24,7 +24,7 @@ export default function CampaignLog() {
   return (
     <div className="mt-4 border-t border-border pt-3">
       <h4 className="text-xs font-semibold text-muted-foreground mb-2">
-        {lens === 'frontoffice' ? 'Journey Log' : 'Campaign Log'}
+        {lens === 'frontoffice' ? 'Activity Log' : 'Campaign Log'}
       </h4>
       <div className="space-y-1 max-h-48 overflow-y-auto">
         {log.map((entry, i) => (

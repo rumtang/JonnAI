@@ -140,7 +140,7 @@ export default function GraphPage() {
       ? (seedGraphFrontofficeData as unknown as GraphData)
       : (seedGraphData as unknown as GraphData);
     const linearData = savedLens === 'frontoffice'
-      ? buildLinearGraphData(linearProcessFrontofficeData, 'Customer Journey')
+      ? buildLinearGraphData(linearProcessFrontofficeData, 'Customer Pipeline')
       : buildLinearGraphData();
     const steps = savedLens === 'frontoffice'
       ? (presentationStepsFrontofficeData as PresentationStep[])
@@ -313,11 +313,11 @@ export default function GraphPage() {
             >
               <div className="text-center">
                 <p className={`font-semibold text-[#4CAF50] group-hover:text-[#66BB6A] transition-colors ${isMobile ? 'text-xs' : 'text-sm'}`}>
-                  {'\u25B6'} {lens === 'frontoffice' ? 'Start a Journey' : 'Run a Campaign'}
+                  {'\u25B6'} {lens === 'frontoffice' ? 'Manage Customers' : 'Run a Campaign'}
                 </p>
                 {!isMobile && (
                   <p className="text-xs text-muted-foreground mt-0.5">
-                    {lens === 'frontoffice' ? 'Walk the customer journey end to end' : 'Walk through the workflow step by step'}
+                    {lens === 'frontoffice' ? 'Walk the pipeline from lead to renewal' : 'Walk through the workflow step by step'}
                   </p>
                 )}
               </div>
