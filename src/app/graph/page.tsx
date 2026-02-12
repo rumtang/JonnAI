@@ -202,7 +202,7 @@ export default function GraphPage() {
   };
 
   return (
-    <div className="graph-page">
+    <div className="graph-page relative w-screen h-screen overflow-hidden">
       {/* Main 3D Graph — fills the layout, sits above crystalline bg */}
       <div className="absolute inset-0 z-10">
         <ErrorBoundary>
