@@ -331,25 +331,65 @@ export default function GraphScene() {
     }
   }, [filteredGraphData]);
 
+  // IMPORTANT: nodeThreeObject callback must have a STABLE reference.
+  // When react-kapsule detects the callback reference changed, ForceGraph3D
+  // calls state.nodeDataMapper.clear() which disposes ALL existing node
+  // THREE.js objects (geometries + materials) via emptyObject(). Our
+  // nodeGroupCache then holds disposed (invisible) objects.
+  // FIX: Use refs for volatile state (hover, highlights, campaign) so the
+  // callback reference stays stable. Only rebuild when geometries or
+  // filteredGraphData change (rare structural changes).
+  const hoveredNodeRef = useRef(hoveredNode);
+  const selectedNodeRef = useRef(selectedNode);
+  const highlightedNodeIdsRef = useRef(highlightedNodeIds);
+  const neighborSetRef = useRef(neighborSet);
+  const hasHighlightsRef = useRef(hasHighlights);
+  const campaignActiveRef = useRef(campaignActive);
+  const campaignNodeIdRef = useRef(campaignNodeId);
+  const campaignVisitedSetRef = useRef(campaignVisitedSet);
+  const campaignNeighborSetRef = useRef(campaignNeighborSet);
+
+  // Keep refs in sync with state
+  useEffect(() => { hoveredNodeRef.current = hoveredNode; }, [hoveredNode]);
+  useEffect(() => { selectedNodeRef.current = selectedNode; }, [selectedNode]);
+  useEffect(() => { highlightedNodeIdsRef.current = highlightedNodeIds; }, [highlightedNodeIds]);
+  useEffect(() => { neighborSetRef.current = neighborSet; }, [neighborSet]);
+  useEffect(() => { hasHighlightsRef.current = hasHighlights; }, [hasHighlights]);
+  useEffect(() => { campaignActiveRef.current = campaignActive; }, [campaignActive]);
+  useEffect(() => { campaignNodeIdRef.current = campaignNodeId; }, [campaignNodeId]);
+  useEffect(() => { campaignVisitedSetRef.current = campaignVisitedSet; }, [campaignVisitedSet]);
+  useEffect(() => { campaignNeighborSetRef.current = campaignNeighborSet; }, [campaignNeighborSet]);
+
   // Custom node rendering with crystalline materials — uses object cache
   // to avoid recreating THREE.Group/Mesh/Sprite on every hover change
   const nodeThreeObject = useCallback((node: GraphNode) => {
     const style = NODE_STYLES[node.type] || NODE_STYLES.step;
     const size = (node.val || style.baseSize) * 0.8;
 
-    // Campaign mode visual state
-    const isCampaignCurrent = campaignActive && node.id === campaignNodeId;
-    const isCampaignVisited = campaignActive && campaignVisitedSet.has(node.id);
-    const isCampaignNeighbor = campaignActive && campaignNeighborSet.has(node.id);
+    // Read volatile state from refs (avoids changing callback reference on hover/select)
+    const _campaignActive = campaignActiveRef.current;
+    const _campaignNodeId = campaignNodeIdRef.current;
+    const _campaignVisitedSet = campaignVisitedSetRef.current;
+    const _campaignNeighborSet = campaignNeighborSetRef.current;
+    const _selectedNode = selectedNodeRef.current;
+    const _highlightedNodeIds = highlightedNodeIdsRef.current;
+    const _hoveredNode = hoveredNodeRef.current;
+    const _neighborSet = neighborSetRef.current;
+    const _hasHighlights = hasHighlightsRef.current;
 
-    const isSelected = selectedNode && selectedNode.id === node.id;
-    const isHighlighted = highlightedNodeIds.has(node.id) ||
-                          (hoveredNode && neighborSet.has(node.id)) ||
+    // Campaign mode visual state
+    const isCampaignCurrent = _campaignActive && node.id === _campaignNodeId;
+    const isCampaignVisited = _campaignActive && _campaignVisitedSet.has(node.id);
+    const isCampaignNeighbor = _campaignActive && _campaignNeighborSet.has(node.id);
+
+    const isSelected = _selectedNode && _selectedNode.id === node.id;
+    const isHighlighted = _highlightedNodeIds.has(node.id) ||
+                          (_hoveredNode && _neighborSet.has(node.id)) ||
                           isCampaignCurrent || isCampaignVisited || isCampaignNeighbor;
-    const isDimmed = campaignActive
+    const isDimmed = _campaignActive
       ? (!isCampaignCurrent && !isCampaignVisited && !isCampaignNeighbor)
-      : (hasHighlights && !isHighlighted && !isSelected &&
-         !(hoveredNode && hoveredNode.id === node.id));
+      : (_hasHighlights && !isHighlighted && !isSelected &&
+         !(_hoveredNode && _hoveredNode.id === node.id));
 
     const cached = nodeGroupCache.get(node.id);
 
@@ -488,7 +528,87 @@ export default function GraphScene() {
     });
 
     return group;
-  }, [hoveredNode, selectedNode, highlightedNodeIds, neighborSet, hasHighlights, geometries, campaignActive, campaignNodeId, campaignVisitedSet, campaignNeighborSet, filteredGraphData]);
+  // Only structural deps — volatile state (hover, select, campaign, highlights)
+  // is read via refs so this callback reference stays stable and ForceGraph3D
+  // does NOT dispose existing THREE objects on every interaction.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [geometries, filteredGraphData]);
+
+  // Update cached node visuals when volatile state changes (hover, highlight, campaign).
+  // Since nodeThreeObject callback is stable, ForceGraph3D won't re-invoke it on
+  // these changes. We iterate the cache ourselves and mutate materials/colors in place.
+  useEffect(() => {
+    if (nodeGroupCache.size === 0) return;
+
+    // Build lookup map for O(1) node access
+    const nodeMap = new Map(filteredGraphData.nodes.map(n => [n.id, n]));
+
+    for (const [nodeId, cached] of nodeGroupCache) {
+      const node = nodeMap.get(nodeId);
+      if (!node) continue;
+      const style = NODE_STYLES[node.type] || NODE_STYLES.step;
+      const size = (node.val || style.baseSize) * 0.8;
+
+      const isCampaignCurrent = campaignActive && node.id === campaignNodeId;
+      const isCampaignVisited = campaignActive && campaignVisitedSet.has(node.id);
+      const isCampaignNeighbor = campaignActive && campaignNeighborSet.has(node.id);
+      const isSelected = selectedNode && selectedNode.id === node.id;
+      const isHighlighted = highlightedNodeIds.has(node.id) ||
+                            (hoveredNode && neighborSet.has(node.id)) ||
+                            isCampaignCurrent || isCampaignVisited || isCampaignNeighbor;
+      const isDimmed = campaignActive
+        ? (!isCampaignCurrent && !isCampaignVisited && !isCampaignNeighbor)
+        : (hasHighlights && !isHighlighted && !isSelected &&
+           !(hoveredNode && hoveredNode.id === node.id));
+
+      const { mesh, glowSprite, labelSprite, ownerSprite, group } = cached;
+
+      mesh.material = getCachedPhysicalMaterial(style.color, isDimmed ? 0.35 : 0.95, !!isHighlighted);
+
+      const glowColor = isCampaignCurrent ? '#4CAF50' : style.color;
+      const glowOpacity = isDimmed ? 0.04 : (isCampaignCurrent ? 0.45 : isHighlighted ? 0.30 : 0.12);
+      glowSprite.material = getCachedSpriteMaterial(glowColor, glowOpacity);
+      glowSprite.scale.setScalar(isCampaignCurrent ? size * 6 : size * 4);
+
+      labelSprite.color = isDimmed ? 'rgba(40,40,50,0.35)' : 'rgba(40,40,50,0.90)';
+      labelSprite.backgroundColor = isDimmed ? 'rgba(250,248,245,0.3)' : 'rgba(250,248,245,0.85)';
+
+      if (ownerSprite) {
+        const ownerColors: Record<string, string> = {
+          agent: 'rgba(155,122,204,0.85)',
+          human: 'rgba(91,158,207,0.85)',
+          shared: 'rgba(201,160,78,0.85)',
+        };
+        const stepMeta = node.meta as StepMeta;
+        ownerSprite.color = isDimmed ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.9)';
+        ownerSprite.backgroundColor = isDimmed ? 'rgba(0,0,0,0.15)' : (ownerColors[stepMeta.owner] || 'rgba(0,0,0,0.4)');
+      }
+
+      // Campaign ring
+      if (isCampaignCurrent && !cached.campaignRing) {
+        const ring = new THREE.Mesh(getCachedRingGeometry(size * 1.3, size * 1.6), getCachedRingMaterial(0x4CAF50, 0.7));
+        group.add(ring);
+        cached.campaignRing = ring;
+      } else if (!isCampaignCurrent && cached.campaignRing) {
+        group.remove(cached.campaignRing);
+        cached.campaignRing = undefined;
+      }
+
+      // Campaign visited sprite
+      if (isCampaignVisited && !isCampaignCurrent && !cached.visitedSprite) {
+        const vs = new THREE.Sprite(getCachedSpriteMaterial('#4CAF50', 0.15));
+        vs.scale.setScalar(size * 3);
+        group.add(vs);
+        cached.visitedSprite = vs;
+      } else if ((!isCampaignVisited || isCampaignCurrent) && cached.visitedSprite) {
+        group.remove(cached.visitedSprite);
+        cached.visitedSprite.geometry.dispose();
+        cached.visitedSprite = undefined;
+      }
+    }
+  }, [hoveredNode, selectedNode, highlightedNodeIds, neighborSet, hasHighlights,
+      campaignActive, campaignNodeId, campaignVisitedSet, campaignNeighborSet,
+      filteredGraphData]);
 
   // Pause rotation on interaction, resume after 3s idle.
   // Restart the RAF loop if it was stopped by the 30s idle timeout.
