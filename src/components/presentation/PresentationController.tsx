@@ -587,7 +587,7 @@ export default function PresentationController() {
                   className="mb-6"
                 >
                   <span className="px-4 py-1.5 rounded-full text-xs font-medium glass-panel text-primary">
-                    From Agents to Agentic
+                    Strategic Briefing
                   </span>
                 </motion.div>
 
@@ -599,7 +599,11 @@ export default function PresentationController() {
                   className="text-4xl md:text-5xl font-bold mb-6 leading-tight font-[family-name:var(--font-playfair)]"
                 >
                   <span className="bg-gradient-to-r from-[#C9A04E] via-[#5B9ECF] to-[#9B7ACC] bg-clip-text text-transparent">
-                    The Agentic Mesh
+                    Extracting Value from AI
+                  </span>
+                  <br />
+                  <span className="text-foreground/80 text-2xl md:text-3xl">
+                    From Agents to Agentic
                   </span>
                 </motion.h1>
 
@@ -611,19 +615,17 @@ export default function PresentationController() {
                   className="space-y-4 text-base md:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed"
                 >
                   <p>
-                    Deploying agents is the first step.
+                    Most organizations have deployed AI agents.
                     <br />
-                    To capture the real promise of AI, you have to go further —
+                    The real gains come from what you give them to work with.
                   </p>
                   <p className="text-foreground font-medium">
-                    from agents to agentic thinking.
+                    Structure your strategy, brand, and governance as operational intelligence.
                   </p>
                   <p className="text-sm text-muted-foreground/70">
-                    That means encoding your business — strategy, brand, governance —
+                    So agents can execute with the same judgment
                     <br />
-                    as infrastructure agents can draw on.
-                    <br />
-                    It{"'"}s the only way to stay in control of your brand and operations at scale.
+                    your best people bring.
                   </p>
                 </motion.div>
               </div>

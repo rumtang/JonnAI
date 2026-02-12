@@ -1,8 +1,8 @@
 [
   {
     "id": "act0-strategic-context",
-    "title": "The Agentic Mesh",
-    "narration": "Deploying AI agents is only the first step. To truly capture the promise of AI, organizations need to shift from agents to agentic thinking — building the infrastructure that lets agents operate with the same judgment, brand voice, and governance that your best people bring. That means encoding your business: your strategy, your standards, your rules of engagement — as a structured intelligence layer that agents can draw on. Without it, you're handing execution to systems that don't understand your brand or your boundaries. The path to agentic operations is learning how to make your organization machine-readable.",
+    "title": "Extracting Value from AI: From Agents to Agentic",
+    "narration": "Most organizations have deployed AI agents. But agents alone don't unlock the real economics — the ability to drive more revenue from every campaign while cutting the cost of content production and governance. That requires a shift from agents to agentic thinking: structuring your strategy, your brand standards, and your rules of engagement so that agents can execute with the same judgment your best people bring. Without that structure, you're handing execution to systems that don't understand your brand or your boundaries. Agentic thinking is how you scale AI operations without losing control.",
     "cameraPosition": {
       "x": 0,
       "y": 0,
