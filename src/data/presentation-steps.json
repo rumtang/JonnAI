@@ -40,7 +40,7 @@
   {
     "id": "act1-lifecycle",
     "title": "The Marketing Lifecycle",
-    "narration": "Most marketing teams could draw this on a whiteboard — a clean, linear pipeline from brief to publish. In practice, this version leaves a lot out. It doesn't show the rework cycles, the approval delays, or the institutional knowledge that disappears when people move on. The process works well enough. The question is what it actually costs.",
+    "narration": "Most marketing teams could draw this on a whiteboard — a clean, linear pipeline from brief to publish. In practice, this version leaves a lot out. It doesn't show the rework cycles, the approval delays, or the institutional knowledge that disappears when people move on.",
     "cameraPosition": {
       "x": -60,
       "y": 30,
@@ -109,7 +109,7 @@
   {
     "id": "act3-graph-reveal",
     "title": "But Agents Have to Navigate the Real World",
-    "narration": "This is closer to what agents need to navigate. Not a clean pipeline — a network of review gates, knowledge inputs, agent capabilities, and feedback loops. The complexity here isn't accidental. It reflects how enterprise content production actually works. The question is whether you try to simplify it away or build the intelligence to work with it.",
+    "narration": "This is closer to what agents need to navigate. Not a clean pipeline — a network of review gates, knowledge inputs, agent capabilities, and feedback loops. The complexity here isn't accidental. It reflects how enterprise content production actually works. Building the intelligence to work with it is what separates agentic operations from simple automation.",
     "cameraPosition": {
       "x": 0,
       "y": 0,

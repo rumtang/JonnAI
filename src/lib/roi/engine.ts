@@ -224,6 +224,31 @@ export const AGENT_INTENSITY_LEVELS: Record<AgentIntensity, {
   },
 };
 
+// Investment defaults per intensity level — what it actually costs to build
+// each level of organizational intelligence infrastructure.
+// These are total project costs (platform + KG build + integration + change management).
+export const INTENSITY_INVESTMENT_DEFAULTS: Record<AgentIntensity, {
+  totalInvestmentAmount: number;
+  implementationWeeks: number;
+  rationale: string;
+}> = {
+  low: {
+    totalInvestmentAmount: 10_000_000,    // $10M
+    implementationWeeks: 20,              // ~5 months
+    rationale: 'Basic knowledge graph schema, 3-5 tool integrations, AI-assisted drafting & simple approvals. Small team (8-15 people).',
+  },
+  medium: {
+    totalInvestmentAmount: 20_000_000,    // $20M
+    implementationWeeks: 28,              // ~7 months
+    rationale: 'Full ontology + multi-domain KG, end-to-end workflow orchestration, 10-20 tool integrations, governance gates. Medium team (15-25 people).',
+  },
+  high: {
+    totalInvestmentAmount: 35_000_000,    // $35M
+    implementationWeeks: 44,              // ~10 months
+    rationale: 'Complete digital twin of marketing ops, real-time pipelines, self-optimizing agents, predictive resource allocation, full security & audit. Large team (25-40 people).',
+  },
+};
+
 export const INTENSITY_PRESETS: Record<AgentIntensity, ImprovementAssumptions> = {
   low: {
     roasLiftPct: 6,

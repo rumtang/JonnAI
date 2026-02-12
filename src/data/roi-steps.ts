@@ -90,7 +90,7 @@ export const ROI_STEPS: RoiStep[] = [
     layout: 'timeline-dual',
     themeColor: '#14B8A6',
     content: {
-      tagline: 'The knowledge graph pays for itself. The question is when, not if.',
+      tagline: 'Cumulative value typically exceeds investment within 12–18 months.',
     },
   },
 

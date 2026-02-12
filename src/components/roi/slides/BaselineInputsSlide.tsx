@@ -1,10 +1,10 @@
 'use client';
 
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback, useMemo, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Slider } from '@/components/ui/slider';
 import { useRoiStore } from '@/lib/store/roi-store';
-import { INDUSTRY_BUDGET_RATIOS, SOURCE_ATTRIBUTION, AGENT_INTENSITY_LEVELS, type AgentIntensity } from '@/lib/roi/engine';
+import { INDUSTRY_BUDGET_RATIOS, SOURCE_ATTRIBUTION, AGENT_INTENSITY_LEVELS, INTENSITY_INVESTMENT_DEFAULTS, type AgentIntensity } from '@/lib/roi/engine';
 import WaterfallChart from '../charts/WaterfallChart';
 import AnimatedNumber from '../charts/AnimatedNumber';
 import SourceTooltip from '../shared/SourceTooltip';
@@ -193,6 +193,11 @@ export default function BaselineInputsSlide({ step }: BaselineInputsSlideProps) 
     formatWithCommas(investment.totalInvestmentAmount)
   );
 
+  // Sync text field when store value changes (e.g. intensity level switch)
+  useEffect(() => {
+    setInvestmentText(formatWithCommas(investment.totalInvestmentAmount));
+  }, [investment.totalInvestmentAmount]);
+
   // Handle log slider change → update text field
   const handleInvestmentSlider = useCallback((v: number) => {
     setInvestment({ totalInvestmentAmount: v });
@@ -352,8 +357,70 @@ export default function BaselineInputsSlide({ step }: BaselineInputsSlideProps) 
             <h4 className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground mb-3 flex items-center gap-2">
               <span>💎</span> Transformation Investment
             </h4>
-            <div className="space-y-3">
-              {/* Investment amount: log slider + text input side by side */}
+
+            {/* Investment range summary */}
+            <div className="rounded-lg bg-muted-foreground/5 p-3 mb-3">
+              <p className="text-[8px] text-muted-foreground mb-2">
+                Building the organizational intelligence layer — from basic AI-assisted workflows to fully autonomous operations
+              </p>
+              <div className="flex items-baseline justify-center gap-1.5 mb-2">
+                <span className="text-lg font-bold text-[#5B9ECF]">{formatCurrency(INTENSITY_INVESTMENT_DEFAULTS.low.totalInvestmentAmount)}</span>
+                <span className="text-[10px] text-muted-foreground/50">–</span>
+                <span className="text-lg font-bold text-[#C9A04E]">{formatCurrency(INTENSITY_INVESTMENT_DEFAULTS.high.totalInvestmentAmount)}</span>
+              </div>
+              <p className="text-[7px] text-muted-foreground/50 text-center">
+                depending on agentification intensity
+              </p>
+            </div>
+
+            {/* Agentification Intensity Selector — drives investment */}
+            <div className="space-y-2 mb-3">
+              <span className="text-[9px] text-muted-foreground">Agentification Intensity</span>
+              <div className="grid grid-cols-3 gap-2">
+                {(['low', 'medium', 'high'] as AgentIntensity[]).map((level) => {
+                  const info = AGENT_INTENSITY_LEVELS[level];
+                  const inv = INTENSITY_INVESTMENT_DEFAULTS[level];
+                  const isSelected = agentIntensity === level;
+                  const colorMap: Record<AgentIntensity, string> = {
+                    low: '#5B9ECF',
+                    medium: '#14B8A6',
+                    high: '#C9A04E',
+                  };
+                  const color = colorMap[level];
+                  return (
+                    <button
+                      key={level}
+                      onClick={() => setAgentIntensity(level)}
+                      className="rounded-lg p-2 text-left transition-all"
+                      style={{
+                        border: `1.5px solid ${isSelected ? color : 'rgba(128,128,128,0.2)'}`,
+                        backgroundColor: isSelected ? `${color}10` : 'transparent',
+                      }}
+                    >
+                      <p className="text-[9px] font-semibold" style={{ color: isSelected ? color : undefined }}>
+                        {info.label}
+                      </p>
+                      <p className="text-[7px] text-muted-foreground leading-tight mt-0.5">
+                        {info.shortDescription}
+                      </p>
+                      <p className="text-[8px] font-semibold mt-1" style={{ color: isSelected ? color : 'inherit' }}>
+                        {formatCurrency(inv.totalInvestmentAmount)} · {Math.round(inv.implementationWeeks / 4.33)}mo
+                      </p>
+                    </button>
+                  );
+                })}
+              </div>
+              <p className="text-[7px] text-muted-foreground/60 leading-relaxed">
+                {AGENT_INTENSITY_LEVELS[agentIntensity].description}
+              </p>
+              <p className="text-[7px] text-muted-foreground/40 leading-relaxed italic">
+                {INTENSITY_INVESTMENT_DEFAULTS[agentIntensity].rationale}
+              </p>
+            </div>
+
+            {/* Fine-tune sliders */}
+            <div className="pt-3 border-t border-muted-foreground/10 space-y-3">
+              <p className="text-[8px] text-muted-foreground/50">Fine-tune for your organization</p>
               <div className="space-y-1">
                 <div className="flex items-center justify-between">
                   <span className="text-[9px] text-muted-foreground">Total Investment</span>
@@ -390,44 +457,6 @@ export default function BaselineInputsSlide({ step }: BaselineInputsSlideProps) 
                 color="#14B8A6"
                 benchmark="Enterprise phased build: 6-24 months typical"
               />
-
-              {/* Agentification Intensity Selector */}
-              <div className="pt-3 border-t border-muted-foreground/10 space-y-2">
-                <span className="text-[9px] text-muted-foreground">Agentification Intensity</span>
-                <div className="grid grid-cols-3 gap-2">
-                  {(['low', 'medium', 'high'] as AgentIntensity[]).map((level) => {
-                    const info = AGENT_INTENSITY_LEVELS[level];
-                    const isSelected = agentIntensity === level;
-                    const colorMap: Record<AgentIntensity, string> = {
-                      low: '#5B9ECF',
-                      medium: '#14B8A6',
-                      high: '#C9A04E',
-                    };
-                    const color = colorMap[level];
-                    return (
-                      <button
-                        key={level}
-                        onClick={() => setAgentIntensity(level)}
-                        className="rounded-lg p-2 text-left transition-all"
-                        style={{
-                          border: `1.5px solid ${isSelected ? color : 'rgba(128,128,128,0.2)'}`,
-                          backgroundColor: isSelected ? `${color}10` : 'transparent',
-                        }}
-                      >
-                        <p className="text-[9px] font-semibold" style={{ color: isSelected ? color : undefined }}>
-                          {info.label}
-                        </p>
-                        <p className="text-[7px] text-muted-foreground leading-tight mt-0.5">
-                          {info.shortDescription}
-                        </p>
-                      </button>
-                    );
-                  })}
-                </div>
-                <p className="text-[7px] text-muted-foreground/60 leading-relaxed">
-                  {AGENT_INTENSITY_LEVELS[agentIntensity].description}
-                </p>
-              </div>
             </div>
           </motion.div>
 

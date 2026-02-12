@@ -7,6 +7,7 @@ import {
   computeRoi,
   computeWeightedCycleWeeks,
   INTENSITY_PRESETS,
+  INTENSITY_INVESTMENT_DEFAULTS,
   type OrganizationProfile,
   type MartechAndMedia,
   type ContentAndCampaignOps,
@@ -253,7 +254,17 @@ export const useRoiStore = create<RoiState>((set, get) => ({
   setAgentIntensity: (level) => {
     const state = get();
     const assumptions = { ...INTENSITY_PRESETS[level] };
-    set({ agentIntensity: level, assumptions, ...recalculate({ ...state, assumptions }) });
+    const investmentDefaults = INTENSITY_INVESTMENT_DEFAULTS[level];
+    const investment = {
+      totalInvestmentAmount: investmentDefaults.totalInvestmentAmount,
+      implementationWeeks: investmentDefaults.implementationWeeks,
+    };
+    set({
+      agentIntensity: level,
+      assumptions,
+      investment,
+      ...recalculate({ ...state, assumptions, investment }),
+    });
   },
 
   setActiveScenario: (scenario) => set({ activeScenario: scenario }),
