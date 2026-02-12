@@ -128,12 +128,14 @@ export default function PresentationController() {
     steps,
     isPlaying,
     mode,
+    lens,
   } = usePresentationStore(
     useShallow((s) => ({
       currentStepIndex: s.currentStepIndex,
       steps: s.steps,
       isPlaying: s.isPlaying,
       mode: s.mode,
+      lens: s.lens,
     }))
   );
   const setMode = usePresentationStore(s => s.setMode);
@@ -677,7 +679,9 @@ export default function PresentationController() {
                 className="text-4xl md:text-5xl font-bold mb-4 leading-tight font-[family-name:var(--font-playfair)]"
               >
                 <span className="bg-gradient-to-r from-[#C9A04E] via-[#5B9ECF] to-[#9B7ACC] bg-clip-text text-transparent">
-                  Every Campaign Starts with a Pipeline
+                  {lens === 'frontoffice'
+                    ? 'Every Customer Journey Starts with a System'
+                    : 'Every Campaign Starts with a Pipeline'}
                 </span>
               </motion.h1>
 
@@ -688,7 +692,9 @@ export default function PresentationController() {
                 transition={{ delay: 0.5 }}
                 className="text-lg text-muted-foreground max-w-xl mx-auto leading-relaxed"
               >
-                We&apos;ll explore the organizational intelligence layer through the lens of the marketing campaign lifecycle
+                {lens === 'frontoffice'
+                  ? 'We\u2019ll explore the organizational intelligence layer across the full front office \u2014 marketing, sales, service, and customer success'
+                  : 'We\u2019ll explore the organizational intelligence layer through the lens of the marketing campaign lifecycle'}
               </motion.p>
             </div>
 

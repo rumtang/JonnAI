@@ -2,10 +2,12 @@
 
 import { useShallow } from 'zustand/react/shallow';
 import { useCampaignStore, getPhaseForNode } from '@/lib/store/campaign-store';
+import { usePresentationStore } from '@/lib/store/presentation-store';
 import { useGraphStore } from '@/lib/store/graph-store';
 import { useState } from 'react';
 
-const PHASES = ['Plan', 'Create', 'Review', 'Publish', 'Measure', 'Optimize'];
+const PHASES_MARKETING = ['Plan', 'Create', 'Review', 'Publish', 'Measure', 'Optimize'];
+const PHASES_FRONTOFFICE = ['Marketing', 'Sales', 'Service', 'Customer Success'];
 
 export default function CampaignHeader() {
   const { campaignName, currentNodeId, stepCount, revisionCount, totalEstimatedMinutes } = useCampaignStore(
@@ -19,9 +21,12 @@ export default function CampaignHeader() {
   );
   const setCampaignName = useCampaignStore(s => s.setCampaignName);
   const graphData = useGraphStore(s => s.graphData);
+  const lens = usePresentationStore(s => s.lens);
   const [isEditing, setIsEditing] = useState(false);
   const [editValue, setEditValue] = useState(campaignName);
 
+  const isFrontOffice = lens === 'frontoffice';
+  const PHASES = isFrontOffice ? PHASES_FRONTOFFICE : PHASES_MARKETING;
   const currentPhase = getPhaseForNode(currentNodeId, graphData.nodes);
 
   // Format total time
@@ -96,7 +101,7 @@ export default function CampaignHeader() {
 
       {/* Stats row */}
       <div className="flex items-center gap-3 text-xs text-muted-foreground">
-        <span>Step {stepCount} of ~31</span>
+        <span>Step {stepCount} of ~{isFrontOffice ? 28 : 31}</span>
         <span className="text-muted-foreground/30">|</span>
         <span>{'\u23F1'} {timeLabel} elapsed</span>
         <span className="text-muted-foreground/30">|</span>

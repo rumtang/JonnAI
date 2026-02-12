@@ -33,6 +33,8 @@ export default function CampaignSummary() {
   const startCampaign = useCampaignStore(s => s.startCampaign);
 
   const setMode = usePresentationStore(s => s.setMode);
+  const lens = usePresentationStore(s => s.lens);
+  const isFrontOffice = lens === 'frontoffice';
 
   const loadFullGraph = useGraphStore(s => s.loadFullGraph);
   const selectNode = useGraphStore(s => s.selectNode);
@@ -118,9 +120,13 @@ export default function CampaignSummary() {
             transition={{ type: 'spring', damping: 20, stiffness: 200 }}
             className="glass-panel rounded-2xl p-8 max-w-md w-full mx-4"
           >
-            <h2 className="text-2xl font-bold text-foreground mb-2">Campaign Complete</h2>
+            <h2 className="text-2xl font-bold text-foreground mb-2">
+              {isFrontOffice ? 'Journey Complete' : 'Campaign Complete'}
+            </h2>
             <p className="text-sm text-muted-foreground mb-6">
-              Here&apos;s a summary of your content campaign walkthrough.
+              {isFrontOffice
+                ? 'Here\u2019s a summary of your customer journey walkthrough.'
+                : 'Here\u2019s a summary of your content campaign walkthrough.'}
             </p>
 
             {/* Stats grid */}
@@ -179,8 +185,8 @@ export default function CampaignSummary() {
             {/* Org profile context — shown when session has org data */}
             {orgProfile && (
               <p className="text-[10px] text-muted-foreground/60 mb-4 leading-relaxed">
-                Based on {orgProfile.companyName || 'your organization'}&apos;s profile, this campaign
-                represents approximately {totalEstimatedMinutes > 0
+                Based on {orgProfile.companyName || 'your organization'}&apos;s profile, this {isFrontOffice ? 'journey' : 'campaign'}
+                {' '}represents approximately {totalEstimatedMinutes > 0
                   ? `${Math.round((totalEstimatedMinutes / (orgProfile.marketingHeadcount * 160)) * 100)}%`
                   : '—'
                 } of monthly operational capacity.

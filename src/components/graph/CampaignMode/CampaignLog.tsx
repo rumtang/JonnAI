@@ -2,12 +2,14 @@
 
 import { useCampaignStore, CampaignLogEntry } from '@/lib/store/campaign-store';
 import { useGraphStore } from '@/lib/store/graph-store';
+import { usePresentationStore } from '@/lib/store/presentation-store';
 import { navigateToNode } from '@/lib/utils/camera-navigation';
 
 export default function CampaignLog() {
   const log = useCampaignStore(s => s.log);
   const graphData = useGraphStore(s => s.graphData);
   const selectNode = useGraphStore(s => s.selectNode);
+  const lens = usePresentationStore(s => s.lens);
 
   if (log.length === 0) return null;
 
@@ -21,7 +23,9 @@ export default function CampaignLog() {
 
   return (
     <div className="mt-4 border-t border-border pt-3">
-      <h4 className="text-xs font-semibold text-muted-foreground mb-2">Campaign Log</h4>
+      <h4 className="text-xs font-semibold text-muted-foreground mb-2">
+        {lens === 'frontoffice' ? 'Journey Log' : 'Campaign Log'}
+      </h4>
       <div className="space-y-1 max-h-48 overflow-y-auto">
         {log.map((entry, i) => (
           <button

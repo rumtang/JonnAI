@@ -13,7 +13,7 @@ import { motion } from 'framer-motion';
 
 export default function ModeToggle() {
   const isMobile = useIsMobile();
-  const { mode } = usePresentationStore(useShallow((s) => ({ mode: s.mode })));
+  const { mode, lens } = usePresentationStore(useShallow((s) => ({ mode: s.mode, lens: s.lens })));
   const setMode = usePresentationStore(s => s.setMode);
   const reset = usePresentationStore(s => s.reset);
 
@@ -112,8 +112,8 @@ export default function ModeToggle() {
     },
     {
       key: 'campaign',
-      label: 'Campaign',
-      shortLabel: 'Run',
+      label: lens === 'frontoffice' ? 'Journey' : 'Campaign',
+      shortLabel: lens === 'frontoffice' ? 'Journey' : 'Run',
       activeColor: '#4CAF50',
       activeBg: 'bg-[#4CAF50]/20',
     },

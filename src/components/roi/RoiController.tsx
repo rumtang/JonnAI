@@ -21,11 +21,19 @@ import BeforeAfterSlide from './slides/BeforeAfterSlide';
 import ExecutiveSummarySlide from './slides/ExecutiveSummarySlide';
 import CfoSummarySlide from './slides/CfoSummarySlide';
 
-// ─── Act Definitions (8 slides, 6 acts) ────────────────────────────
-const ACTS = [
+// ─── Act Definitions (lens-aware) ──────────────────────────────────
+const ACTS_MARKETING = [
   { label: 'Quick Estimate', slides: [0] },
   { label: 'Your Marketing Machine', slides: [1] },
   { label: 'Where the Money Goes', slides: [2, 3] },
+  { label: 'The Transformation', slides: [4, 5] },
+  { label: 'Before & After', slides: [6] },
+  { label: 'Your Investment Case', slides: [7] },
+];
+const ACTS_FRONTOFFICE = [
+  { label: 'Quick Estimate', slides: [0] },
+  { label: 'Your Front Office', slides: [1] },
+  { label: 'Where Revenue Leaks', slides: [2, 3] },
   { label: 'The Transformation', slides: [4, 5] },
   { label: 'Before & After', slides: [6] },
   { label: 'Your Investment Case', slides: [7] },
@@ -52,6 +60,7 @@ export default function RoiController() {
 
   const lens = usePresentationStore(s => s.lens);
   const roiSteps = lens === 'frontoffice' ? ROI_STEPS_FRONTOFFICE : ROI_STEPS;
+  const ACTS = lens === 'frontoffice' ? ACTS_FRONTOFFICE : ACTS_MARKETING;
 
   const isMobile = useIsMobile();
   const [methodologyOpen, setMethodologyOpen] = useState(false);

@@ -72,7 +72,7 @@ export default function GraphPage() {
   const setFullGraphData = useGraphStore(s => s.setFullGraphData);
   const setLinearGraphData = useGraphStore(s => s.setLinearGraphData);
   const selectNode = useGraphStore(s => s.selectNode);
-  const { setSteps, mode, setMode } = usePresentationStore();
+  const { setSteps, mode, setMode, lens } = usePresentationStore();
   const campaignActive = useCampaignStore(s => s.isActive);
   const [rolePickerOpen, setRolePickerOpen] = useState(false);
   const prevModeRef = useRef(mode);
@@ -313,11 +313,11 @@ export default function GraphPage() {
             >
               <div className="text-center">
                 <p className={`font-semibold text-[#4CAF50] group-hover:text-[#66BB6A] transition-colors ${isMobile ? 'text-xs' : 'text-sm'}`}>
-                  {'\u25B6'} Run a Campaign
+                  {'\u25B6'} {lens === 'frontoffice' ? 'Start a Journey' : 'Run a Campaign'}
                 </p>
                 {!isMobile && (
                   <p className="text-xs text-muted-foreground mt-0.5">
-                    Walk through the workflow step by step
+                    {lens === 'frontoffice' ? 'Walk the customer journey end to end' : 'Walk through the workflow step by step'}
                   </p>
                 )}
               </div>
