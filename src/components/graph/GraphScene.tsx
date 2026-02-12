@@ -224,15 +224,10 @@ export default function GraphScene() {
     const fg = fgRef.current;
     setGraphRef(fg);
 
-    // Scale force parameters by link density so denser graphs (e.g. frontoffice
-    // with 175 links) spread out more than sparser ones (marketing with 49 links).
-    const { graphData: gd } = useGraphStore.getState();
-    const linkCount = gd.links.length;
-    const chargeStrength = linkCount > 100 ? -900 : -600;
-    const linkDistance = linkCount > 100 ? 80 : 50;
+    // Force settings: strong repulsion + long link distance for readable layouts
     fg.d3Force('center', forceCenter(0, 0, 0).strength(0.01));
-    fg.d3Force('charge')?.strength(chargeStrength);
-    fg.d3Force('link')?.distance(linkDistance);
+    fg.d3Force('charge')?.strength(-900);
+    fg.d3Force('link')?.distance(80);
 
     const lights: THREE.Light[] = [];
 
