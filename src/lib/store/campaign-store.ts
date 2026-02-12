@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { GraphNode, GraphLink, StepMeta, GateMeta } from '../graph/types';
 import { useSessionStore } from './session-store';
+import { usePresentationStore } from './presentation-store';
 
 // The main workflow path (flows-to chain) — used to determine "next node"
 const MAIN_WORKFLOW_ORDER = [
@@ -36,6 +37,59 @@ const MAIN_WORKFLOW_ORDER = [
   'content-governance',
   'governance-gate',
 ];
+
+// Front office: customer journey across Marketing → Sales → Service → CS
+const MAIN_WORKFLOW_ORDER_FRONTOFFICE = [
+  // Marketing
+  'mktg-campaign-planning',
+  'mktg-brief-approval',
+  'mktg-content-creation',
+  'mktg-creative-review',
+  'mktg-brand-compliance',
+  'mktg-seo-optimization',
+  'mktg-distribution',
+  'mktg-performance-tracking',
+  // Handoff: Marketing → Sales
+  'handoff-mql-to-sql',
+  // Sales
+  'sales-lead-intake',
+  'sales-qualification',
+  'sales-qualification-gate',
+  'sales-discovery',
+  'sales-proposal',
+  'sales-deal-review',
+  'sales-negotiation',
+  'sales-pricing-gate',
+  'sales-close',
+  // Handoff: Sales → CS
+  'handoff-deal-to-onboard',
+  // Customer Success
+  'cs-onboarding',
+  'cs-health-monitoring',
+  'cs-health-alert',
+  'cs-qbr-preparation',
+  'cs-expansion-identification',
+  'cs-expansion-gate',
+  'cs-renewal-management',
+  'cs-advocacy',
+];
+
+// Helper: select correct workflow + start node based on active lens
+function getWorkflowConfig() {
+  const lens = usePresentationStore.getState().lens;
+  if (lens === 'frontoffice') {
+    return {
+      order: MAIN_WORKFLOW_ORDER_FRONTOFFICE,
+      startNode: 'mktg-campaign-planning',
+      campaignLabel: 'Customer Journey',
+    };
+  }
+  return {
+    order: MAIN_WORKFLOW_ORDER,
+    startNode: 'campaign-planning',
+    campaignLabel: 'Content Campaign',
+  };
+}
 
 export interface CampaignLogEntry {
   nodeId: string;
@@ -116,10 +170,12 @@ export const useCampaignStore = create<CampaignState>((set, get) => ({
   isComplete: false,
 
   startCampaign: () => {
+    const { startNode, campaignLabel } = getWorkflowConfig();
     set({
       isActive: true,
-      currentNodeId: 'campaign-planning',
-      visitedNodes: ['campaign-planning'],
+      campaignName: campaignLabel,
+      currentNodeId: startNode,
+      visitedNodes: [startNode],
       decisions: [],
       revisionCount: 0,
       escalationCount: 0,
@@ -161,7 +217,8 @@ export const useCampaignStore = create<CampaignState>((set, get) => ({
       icon: '\u2705',
     };
 
-    // Find the next node via flows-to, preferring the main workflow path
+    // Find the next node via flows-to (or hands-off-to for cross-domain handoffs)
+    const { order } = getWorkflowConfig();
     const flowsToLinks = graphData.links.filter(l => {
       const sId = typeof l.source === 'object' ? (l.source as GraphNode).id : l.source;
       return sId === currentId && l.type === 'flows-to';
@@ -169,13 +226,26 @@ export const useCampaignStore = create<CampaignState>((set, get) => ({
 
     const mainPathLink = flowsToLinks.find(l => {
       const tId = typeof l.target === 'object' ? (l.target as GraphNode).id : l.target;
-      return MAIN_WORKFLOW_ORDER.includes(tId);
+      return order.includes(tId);
     });
 
-    const flowsToLink = mainPathLink || flowsToLinks[0];
+    let flowsToLink = mainPathLink || flowsToLinks[0];
+
+    // Fallback: follow hands-off-to links (cross-domain handoffs in front office)
+    if (!flowsToLink) {
+      const handoffLinks = graphData.links.filter(l => {
+        const sId = typeof l.source === 'object' ? (l.source as GraphNode).id : l.source;
+        return sId === currentId && l.type === 'hands-off-to';
+      });
+      const mainHandoff = handoffLinks.find(l => {
+        const tId = typeof l.target === 'object' ? (l.target as GraphNode).id : l.target;
+        return order.includes(tId);
+      });
+      flowsToLink = mainHandoff || handoffLinks[0];
+    }
 
     if (!flowsToLink) {
-      console.warn('[Campaign] advanceToNext: no flows-to link from:', currentId);
+      console.warn('[Campaign] advanceToNext: no flows-to or hands-off-to link from:', currentId);
       return null;
     }
 
@@ -219,14 +289,15 @@ export const useCampaignStore = create<CampaignState>((set, get) => ({
     let escalationPenaltyMinutes = 0;
 
     if (d === 'approve' || d === 'pass') {
-      // Advance via flows-to, preferring the main workflow path
+      // Advance via flows-to (or hands-off-to), preferring the main workflow path
+      const { order } = getWorkflowConfig();
       const ftLinks = graphData.links.filter(l => {
         const sId = typeof l.source === 'object' ? (l.source as GraphNode).id : l.source;
-        return sId === currentId && l.type === 'flows-to';
+        return sId === currentId && (l.type === 'flows-to' || l.type === 'hands-off-to');
       });
       const mainLink = ftLinks.find(l => {
         const tId = typeof l.target === 'object' ? (l.target as GraphNode).id : l.target;
-        return MAIN_WORKFLOW_ORDER.includes(tId);
+        return order.includes(tId);
       });
       const link = mainLink || ftLinks[0];
       if (link) {
@@ -361,19 +432,22 @@ export const useCampaignStore = create<CampaignState>((set, get) => ({
     return targetNode;
   },
 
-  resetCampaign: () => set({
-    isActive: false,
-    campaignName: 'Content Campaign',
-    currentNodeId: 'campaign-planning',
-    visitedNodes: [],
-    decisions: [],
-    revisionCount: 0,
-    escalationCount: 0,
-    totalEstimatedMinutes: 0,
-    stepCount: 0,
-    log: [],
-    isComplete: false,
-  }),
+  resetCampaign: () => {
+    const { startNode, campaignLabel } = getWorkflowConfig();
+    set({
+      isActive: false,
+      campaignName: campaignLabel,
+      currentNodeId: startNode,
+      visitedNodes: [],
+      decisions: [],
+      revisionCount: 0,
+      escalationCount: 0,
+      totalEstimatedMinutes: 0,
+      stepCount: 0,
+      log: [],
+      isComplete: false,
+    });
+  },
 }));
 
 /**

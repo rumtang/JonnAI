@@ -10,6 +10,7 @@ import { usePresentationStore } from '@/lib/store/presentation-store';
 import { useGraphStore } from '@/lib/store/graph-store';
 import { useIsMobile } from '@/lib/hooks/use-is-mobile';
 import { ROI_STEPS } from '@/data/roi-steps';
+import { ROI_STEPS_FRONTOFFICE } from '@/data/roi-steps-frontoffice';
 import QuickCalcSlide from './slides/QuickCalcSlide';
 import BaselineInputsSlide from './slides/BaselineInputsSlide';
 import MartechMediaSlide from './slides/MartechMediaSlide';
@@ -49,10 +50,13 @@ export default function RoiController() {
   const exportConfig = useRoiStore(s => s.exportConfig);
   const viewMode = useRoiStore(s => s.viewMode);
 
+  const lens = usePresentationStore(s => s.lens);
+  const roiSteps = lens === 'frontoffice' ? ROI_STEPS_FRONTOFFICE : ROI_STEPS;
+
   const isMobile = useIsMobile();
   const [methodologyOpen, setMethodologyOpen] = useState(false);
   const [copied, setCopied] = useState(false);
-  const step = ROI_STEPS[currentStepIndex];
+  const step = roiSteps[currentStepIndex];
 
   // Keyboard navigation
   useEffect(() => {
@@ -145,7 +149,7 @@ export default function RoiController() {
             </span>
           )}
           <span className="text-xs text-muted-foreground/50">
-            {currentStepIndex + 1} / {ROI_STEPS.length}
+            {currentStepIndex + 1} / {roiSteps.length}
           </span>
 
           {/* Skip to Results — shown only on input slides */}
@@ -234,7 +238,7 @@ export default function RoiController() {
                       isCurrent
                         ? { backgroundColor: step.themeColor }
                         : isVisited
-                        ? { backgroundColor: `${ROI_STEPS[slideIndex].themeColor}80` }
+                        ? { backgroundColor: `${roiSteps[slideIndex].themeColor}80` }
                         : undefined
                     }
                   />
@@ -247,7 +251,7 @@ export default function RoiController() {
         {/* Next */}
         <button
           onClick={nextStep}
-          disabled={currentStepIndex === ROI_STEPS.length - 1}
+          disabled={currentStepIndex === roiSteps.length - 1}
           className="p-2 rounded-full glass-panel text-muted-foreground hover:text-foreground disabled:opacity-30 disabled:cursor-not-allowed transition-all"
         >
           <ChevronRight className={isMobile ? 'w-4 h-4' : 'w-5 h-5'} />

@@ -7,7 +7,10 @@ import { useGraphStore } from '@/lib/store/graph-store';
 import { navigateToNode } from '@/lib/utils/camera-navigation';
 import { NODE_STYLES } from '@/lib/graph/node-styles';
 import { ROLE_MAP } from '@/lib/roles/role-definitions';
+import { ROLE_MAP_FRONTOFFICE } from '@/lib/roles/role-definitions-frontoffice';
 import { STEP_NARRATIVES, ContentBlock, CampaignJourney } from '@/data/step-narratives';
+import { STEP_NARRATIVES_FRONTOFFICE } from '@/data/step-narratives-frontoffice';
+import { usePresentationStore } from '@/lib/store/presentation-store';
 import { Badge } from '@/components/ui/badge';
 import { GraphNode, StepMeta, GateMeta, AgentMeta, InputMeta } from '@/lib/graph/types';
 import {
@@ -34,9 +37,13 @@ export default function CampaignNodeCard() {
   const visitCountForNode = visitedNodes.filter(id => id === currentNodeId).length;
   const isRevision = visitCountForNode > 1;
 
+  const lens = usePresentationStore(s => s.lens);
+  const narratives = lens === 'frontoffice' ? STEP_NARRATIVES_FRONTOFFICE : STEP_NARRATIVES;
+  const roleMap = lens === 'frontoffice' ? ROLE_MAP_FRONTOFFICE : ROLE_MAP;
+
   const style = NODE_STYLES[currentNode.type];
-  const narrative = STEP_NARRATIVES[currentNode.id];
-  const role = narrative ? ROLE_MAP.get(narrative.roleId) : undefined;
+  const narrative = narratives[currentNode.id];
+  const role = narrative ? roleMap.get(narrative.roleId) : undefined;
   // Prefer campaign-specific third-person journey; fall back to role-based journey
   const campaignJourney = narrative?.campaignJourney;
   const roleJourney = role?.narrative.nodeJourneys[currentNode.id];

@@ -31,17 +31,21 @@ import { decodeRoiConfig } from '@/lib/utils/roi-share';
 import seedGraphData from '@/data/seed-graph.json';
 import seedGraphFrontofficeData from '@/data/seed-graph-frontoffice.json';
 import linearProcessData from '@/data/linear-process.json';
+import linearProcessFrontofficeData from '@/data/linear-process-frontoffice.json';
 import presentationStepsData from '@/data/presentation-steps.json';
 import presentationStepsFrontofficeData from '@/data/presentation-steps-frontoffice.json';
 import { GraphData, GraphNode, GraphLink, PresentationStep } from '@/lib/graph/types';
 
-function buildLinearGraphData(): GraphData {
-  const nodes: GraphNode[] = linearProcessData.steps.map((step) => ({
+function buildLinearGraphData(
+  data: typeof linearProcessData = linearProcessData,
+  groupLabel = 'Content Lifecycle',
+): GraphData {
+  const nodes: GraphNode[] = data.steps.map((step) => ({
     id: step.id,
     type: 'step' as const,
     label: step.label,
     description: step.description,
-    group: 'Content Lifecycle',
+    group: groupLabel,
     val: 8,
     fx: step.x,
     fy: 0,
@@ -49,10 +53,10 @@ function buildLinearGraphData(): GraphData {
   }));
 
   const links: GraphLink[] = [];
-  for (let i = 0; i < linearProcessData.steps.length - 1; i++) {
+  for (let i = 0; i < data.steps.length - 1; i++) {
     links.push({
-      source: linearProcessData.steps[i].id,
-      target: linearProcessData.steps[i + 1].id,
+      source: data.steps[i].id,
+      target: data.steps[i + 1].id,
       type: 'linear-flow' as const,
       particles: 5,
       particleSpeed: 0.008,
@@ -135,7 +139,9 @@ export default function GraphPage() {
     const fullData = savedLens === 'frontoffice'
       ? (seedGraphFrontofficeData as unknown as GraphData)
       : (seedGraphData as unknown as GraphData);
-    const linearData = buildLinearGraphData();
+    const linearData = savedLens === 'frontoffice'
+      ? buildLinearGraphData(linearProcessFrontofficeData, 'Customer Journey')
+      : buildLinearGraphData();
     const steps = savedLens === 'frontoffice'
       ? (presentationStepsFrontofficeData as PresentationStep[])
       : (presentationStepsData as PresentationStep[]);

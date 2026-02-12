@@ -1,0 +1,21 @@
+{
+  "steps": [
+    { "id": "ls-attract",   "label": "Attract",   "description": "Run campaigns, create content, and generate demand across channels",  "x": -700 },
+    { "id": "ls-qualify",   "label": "Qualify",    "description": "Score leads, verify fit, and hand off marketing-qualified leads",     "x": -500 },
+    { "id": "ls-discover",  "label": "Discover",   "description": "Run discovery calls, map needs, and build the business case",        "x": -300 },
+    { "id": "ls-propose",   "label": "Propose",    "description": "Build proposals, negotiate terms, and navigate deal reviews",        "x": -100 },
+    { "id": "ls-close",     "label": "Close",      "description": "Finalize contracts, book revenue, and trigger onboarding",           "x": 100 },
+    { "id": "ls-onboard",   "label": "Onboard",    "description": "Implement the solution, drive adoption, and establish health baseline", "x": 300 },
+    { "id": "ls-grow",      "label": "Grow",       "description": "Monitor health, run QBRs, identify expansion, and manage renewals",  "x": 500 },
+    { "id": "ls-support",   "label": "Support",    "description": "Triage cases, resolve issues, and capture knowledge",                "x": 700 }
+  ],
+  "agents": [
+    { "id": "la-campaign",     "label": "Campaign Planner",       "parentStep": "ls-attract" },
+    { "id": "la-scoring",      "label": "Lead Scoring Engine",    "parentStep": "ls-qualify" },
+    { "id": "la-sales-intel",  "label": "Sales Intelligence",     "parentStep": "ls-discover" },
+    { "id": "la-proposal",     "label": "Proposal Generator",     "parentStep": "ls-propose" },
+    { "id": "la-onboard",      "label": "Onboarding Agent",       "parentStep": "ls-onboard" },
+    { "id": "la-health",       "label": "Health Monitor",         "parentStep": "ls-grow" },
+    { "id": "la-triage",       "label": "Triage Agent",           "parentStep": "ls-support" }
+  ]
+}

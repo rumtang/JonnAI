@@ -15,40 +15,46 @@ import {
 } from 'lucide-react';
 import { GraphNode, StepMeta, GateMeta, AgentMeta, InputMeta } from '@/lib/graph/types';
 import { ROLE_DEFINITIONS, type JourneyStage, type NodeJourney, type RoleDefinition } from '@/lib/roles/role-definitions';
+import { ROLE_DEFINITIONS_FRONTOFFICE } from '@/lib/roles/role-definitions-frontoffice';
+import { usePresentationStore } from '@/lib/store/presentation-store';
 import NavigationBreadcrumb from './NavigationBreadcrumb';
 
 // ─── Node → Role Journey Lookup ──────────────────────────────
-// Built once at module load — maps each node ID to the roles and
-// journey data that reference it.
+// Built once per lens at module load — maps each node ID to the
+// roles and journey data that reference it.
 
 interface NodeRoleJourney {
   role: RoleDefinition;
   journey: NodeJourney;
 }
 
-const NODE_JOURNEY_MAP = new Map<string, NodeRoleJourney[]>();
-
-for (const role of ROLE_DEFINITIONS) {
-  const allNodeIds = [
-    ...role.ownedSteps,
-    ...role.reviewedGates,
-    ...role.relatedAgents,
-    ...role.relatedInputs,
-  ];
-  for (const nodeId of allNodeIds) {
-    const journey = role.narrative.nodeJourneys[nodeId];
-    if (!journey) continue;
-    let entries = NODE_JOURNEY_MAP.get(nodeId);
-    if (!entries) {
-      entries = [];
-      NODE_JOURNEY_MAP.set(nodeId, entries);
-    }
-    // Avoid duplicate role entries for the same node
-    if (!entries.some(e => e.role.id === role.id)) {
-      entries.push({ role, journey });
+function buildJourneyMap(definitions: RoleDefinition[]): Map<string, NodeRoleJourney[]> {
+  const map = new Map<string, NodeRoleJourney[]>();
+  for (const role of definitions) {
+    const allNodeIds = [
+      ...role.ownedSteps,
+      ...role.reviewedGates,
+      ...role.relatedAgents,
+      ...role.relatedInputs,
+    ];
+    for (const nodeId of allNodeIds) {
+      const journey = role.narrative.nodeJourneys[nodeId];
+      if (!journey) continue;
+      let entries = map.get(nodeId);
+      if (!entries) {
+        entries = [];
+        map.set(nodeId, entries);
+      }
+      if (!entries.some(e => e.role.id === role.id)) {
+        entries.push({ role, journey });
+      }
     }
   }
+  return map;
 }
+
+const NODE_JOURNEY_MAP = buildJourneyMap(ROLE_DEFINITIONS);
+const NODE_JOURNEY_MAP_FRONTOFFICE = buildJourneyMap(ROLE_DEFINITIONS_FRONTOFFICE);
 
 // Stage display config
 const STAGE_CONFIG = [
@@ -81,6 +87,8 @@ export default function NodeDetailPanel() {
   const { detailPanelOpen } = useUIStore(useShallow((s) => ({ detailPanelOpen: s.detailPanelOpen })));
   const setDetailPanelOpen = useUIStore(s => s.setDetailPanelOpen);
   const isMobile = useIsMobile();
+  const lens = usePresentationStore(s => s.lens);
+  const journeyMap = lens === 'frontoffice' ? NODE_JOURNEY_MAP_FRONTOFFICE : NODE_JOURNEY_MAP;
 
   const handleClose = () => {
     selectNode(null);
@@ -145,8 +153,8 @@ export default function NodeDetailPanel() {
   // Look up journey data for the selected node
   const journeyEntries = useMemo(() => {
     if (!selectedNode) return [];
-    return NODE_JOURNEY_MAP.get(selectedNode.id) || [];
-  }, [selectedNode]);
+    return journeyMap.get(selectedNode.id) || [];
+  }, [selectedNode, journeyMap]);
 
   return (
     <AnimatePresence>

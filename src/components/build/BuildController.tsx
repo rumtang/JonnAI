@@ -8,6 +8,7 @@ import { usePresentationStore } from '@/lib/store/presentation-store';
 import { useGraphStore } from '@/lib/store/graph-store';
 import { useIsMobile } from '@/lib/hooks/use-is-mobile';
 import { BUILD_STEPS } from '@/data/build-steps';
+import { BUILD_STEPS_FRONTOFFICE } from '@/data/build-steps-frontoffice';
 import { getGraphRef } from '@/lib/graph/graph-ref';
 import TitleSlide from './slides/TitleSlide';
 import TimelineSlide from './slides/TimelineSlide';
@@ -41,13 +42,16 @@ export default function BuildController() {
   const clearHighlights = useGraphStore(s => s.clearHighlights);
   const resetFilters = useGraphStore(s => s.resetFilters);
 
+  const lens = usePresentationStore(s => s.lens);
+  const buildSteps = lens === 'frontoffice' ? BUILD_STEPS_FRONTOFFICE : BUILD_STEPS;
+
   const isMobile = useIsMobile();
   const [graphPeek, setGraphPeek] = useState(false);
-  const step = BUILD_STEPS[currentStepIndex];
+  const step = buildSteps[currentStepIndex];
 
   // Highlight related graph nodes when build step changes
   useEffect(() => {
-    const currentStep = BUILD_STEPS[currentStepIndex];
+    const currentStep = buildSteps[currentStepIndex];
     if (currentStep?.relatedNodeIds?.length) {
       setHighlightedNodeIds(new Set(currentStep.relatedNodeIds));
     } else {
@@ -71,7 +75,7 @@ export default function BuildController() {
     const graphInstance = getGraphRef();
     if (!graphInstance) return;
 
-    const currentStep = BUILD_STEPS[currentStepIndex];
+    const currentStep = buildSteps[currentStepIndex];
     if (!currentStep?.relatedNodeIds?.length) return;
 
     const { graphData } = useGraphStore.getState();
@@ -279,7 +283,7 @@ export default function BuildController() {
                       isCurrent
                         ? { backgroundColor: step.themeColor }
                         : isVisited
-                        ? { backgroundColor: `${BUILD_STEPS[slideIndex].themeColor}80` }
+                        ? { backgroundColor: `${buildSteps[slideIndex].themeColor}80` }
                         : undefined
                     }
                   />

@@ -87,6 +87,7 @@ export interface RoleDefinition {
   relatedAgents: string[];
   relatedInputs: string[];
   narrative: RoleNarrative;
+  painPoints?: string[];  // Optional — used by front office lens roles
 }
 
 export function computeRoleStats(role: RoleDefinition, totalGraphNodes: number) {

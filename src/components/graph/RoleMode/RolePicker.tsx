@@ -10,9 +10,14 @@ import {
   type RoleCategory,
   type RoleDefinition,
 } from '@/lib/roles/role-definitions';
+import {
+  ROLE_DEFINITIONS_FRONTOFFICE,
+  ROLE_CATEGORIES_FRONTOFFICE,
+} from '@/lib/roles/role-definitions-frontoffice';
 import { ROLE_ICON_MAP } from '@/lib/roles/role-icons';
 import { useRoleInsight } from '@/lib/roles/use-role-insight';
 import { useGraphStore } from '@/lib/store/graph-store';
+import { usePresentationStore } from '@/lib/store/presentation-store';
 
 const CATEGORY_ORDER: RoleCategory[] = ['strategy', 'creative', 'governance', 'operations', 'growth'];
 
@@ -27,20 +32,24 @@ export default function RolePicker({ open, onClose, isRoleMode = false }: RolePi
   const graphData = useGraphStore((s) => s.graphData);
   const totalNodes = graphData.nodes.length || 26; // fallback to known count
 
+  const lens = usePresentationStore(s => s.lens);
+  const roleDefinitions = lens === 'frontoffice' ? ROLE_DEFINITIONS_FRONTOFFICE : ROLE_DEFINITIONS;
+  const roleCategories = lens === 'frontoffice' ? ROLE_CATEGORIES_FRONTOFFICE : ROLE_CATEGORIES;
+
   const handleSelectRole = (roleId: string) => {
     activateRole(roleId);
     onClose();
   };
 
-  // Group roles by category
+  // Group roles by category — rebuilds when lens changes
   const grouped = useMemo(() => {
     const map = new Map<RoleCategory, RoleDefinition[]>();
     for (const cat of CATEGORY_ORDER) map.set(cat, []);
-    for (const role of ROLE_DEFINITIONS) {
+    for (const role of roleDefinitions) {
       map.get(role.category)?.push(role);
     }
     return map;
-  }, []);
+  }, [roleDefinitions]);
 
   return (
     <AnimatePresence>
@@ -85,7 +94,7 @@ export default function RolePicker({ open, onClose, isRoleMode = false }: RolePi
               {CATEGORY_ORDER.map((cat) => {
                 const roles = grouped.get(cat);
                 if (!roles || roles.length === 0) return null;
-                const catMeta = ROLE_CATEGORIES[cat];
+                const catMeta = roleCategories[cat];
                 const CatIcon = ROLE_ICON_MAP[catMeta.iconName];
 
                 return (
