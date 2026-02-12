@@ -1,28 +1,5 @@
-// ─────────────────────────────────────────────────────────────────────────────
-// EXPANDED Role Definitions — Marketing Campaign Knowledge Graph
-// ─────────────────────────────────────────────────────────────────────────────
-// This file replaces role-definitions.ts with 8-10x richer content per role.
-// Key changes:
-//   1. JourneyStage expanded with optional painPoints, benchmarks, outcomes,
-//      roleEvolution, and antiPatterns fields (backward compatible).
-//   2. RoleNarrative expanded with optional stageOverviews per maturity stage.
-//   3. All owned-step and reviewed-gate journeys rewritten with industry
-//      benchmarks, specific scenarios, and role-appropriate voice.
-//   4. Support node journeys (agents, inputs) added so "What Supports You"
-//      section renders on stage slides.
-//
-// Sources cited in benchmarks:
-//   - Gartner CMO Spend Survey 2024-2025
-//   - Salesforce State of Marketing 2024
-//   - McKinsey "The Value of Getting Personalization Right" (2023)
-//   - Adobe Content Supply Chain Research (2024)
-//   - Forrester Cross-Channel Attribution (2024)
-//   - Nucleus Research Marketing Automation ROI (2024)
-//   - Salesforce Agentforce deployment data (H1 2025)
-//   - MarketingProfs B2B Content Benchmarks (2024)
-//   - Content Marketing Institute / Orbit Media (2024)
-//   - CSA Research / Nimdzi Localization (2025)
-// ─────────────────────────────────────────────────────────────────────────────
+// Role definitions derived from the marketing campaign graph's gate reviewers
+// and step owners. Each role maps to specific nodes and carries narrative insight.
 
 export type RoleCategory = 'strategy' | 'creative' | 'governance' | 'operations' | 'growth';
 
@@ -34,44 +11,21 @@ export const ROLE_CATEGORIES: Record<RoleCategory, { label: string; subtitle: st
   growth:     { label: 'Growth',     subtitle: 'Multiply the impact', iconName: 'TrendingUp' },
 };
 
-// ─── Expanded Interfaces ────────────────────────────────────────────────────
-
 export interface JourneyStage {
-  summary: string;               // 2-3 sentence headline — vivid and specific
-  detail: string;                // Rich paragraph with examples, mechanisms, and context
-
-  // NEW — optional rich fields for deeper slide content
-  painPoints?: string[];         // 2-4 specific, relatable challenges at this stage
-  benchmarks?: string[];         // 2-3 industry data points with source attribution
-  outcomes?: string[];           // 2-3 measurable results or expected changes
-  roleEvolution?: string;        // How the person's day-to-day work shifts at this stage
-  antiPatterns?: string[];       // 1-2 common mistakes or failure modes
+  summary: string;  // 1 short sentence — the headline
+  detail: string;   // 2-3 sentences with one concrete example or mechanism
 }
 
+// 3-stage journey for a specific node within a role
 export interface NodeJourney {
   preAI: JourneyStage;
   aiAgents: JourneyStage;
   aiAgentic: JourneyStage;
 }
 
-// Stage-level narrative overview — framing paragraph for each maturity stage
-export interface StageOverview {
-  narrative: string;             // 2-3 sentence framing of this stage for this role
-  timeAllocation: string;        // How time is distributed, e.g. "60% admin, 25% reviews, 15% strategy"
-  criticalMetrics: string[];     // 3-5 KPIs that matter most at this stage
-  strategicOpportunity: string;  // The single biggest opportunity at this stage
-}
-
 export interface RoleNarrative {
-  nodeJourneys: Record<string, NodeJourney>;
+  nodeJourneys: Record<string, NodeJourney>;  // keyed by node ID — covers all steps and gates in the pipeline
   keyInsight: string;
-
-  // NEW — optional stage-level overviews for richer slide framing
-  stageOverviews?: {
-    preAI: StageOverview;
-    aiAgents: StageOverview;
-    aiAgentic: StageOverview;
-  };
 }
 
 export interface RoleDefinition {
@@ -82,8 +36,10 @@ export interface RoleDefinition {
   iconName: string;
   category: RoleCategory;
   accentColor: string;
+  // Node IDs this role directly owns or reviews
   ownedSteps: string[];
   reviewedGates: string[];
+  // Related agents and inputs the role depends on
   relatedAgents: string[];
   relatedInputs: string[];
   narrative: RoleNarrative;
@@ -96,18 +52,12 @@ export function computeRoleStats(role: RoleDefinition, totalGraphNodes: number) 
   return { steps, gates, total, coveragePct: Math.round((total / totalGraphNodes) * 100) };
 }
 
-// ─── Role Definitions ───────────────────────────────────────────────────────
-
 export const ROLE_DEFINITIONS: RoleDefinition[] = [
-
-  // ═══════════════════════════════════════════════════════════════════════════
-  // ROLE 1: CONTENT DIRECTOR
-  // ═══════════════════════════════════════════════════════════════════════════
   {
     id: 'content-director',
     title: 'Content Director',
-    description: 'Owns the brief phase and approves content briefs before creation begins. The strategic gatekeeper who determines what gets made, why it matters, and whether it meets the bar.',
-    tagline: 'Scopes and approves every brief — the highest-leverage editorial decision in the pipeline.',
+    description: 'Owns the brief phase and approves content briefs before creation begins.',
+    tagline: 'Scopes and approves every brief.',
     iconName: 'FileText',
     category: 'strategy',
     accentColor: '#5B9ECF',
@@ -116,477 +66,646 @@ export const ROLE_DEFINITIONS: RoleDefinition[] = [
     relatedAgents: ['research-agent', 'writer-agent'],
     relatedInputs: ['content-strategy', 'audience-personas', 'scoring-matrix'],
     narrative: {
-      stageOverviews: {
-        preAI: {
-          narrative: 'Before AI, the Content Director is the bottleneck the organization cannot see. Every request flows through one person\'s judgment, one person\'s calendar, one person\'s bandwidth. The role is 70% administrative triage and 30% strategic thinking — an inversion of where value actually lives.',
-          timeAllocation: '35% request triage and intake, 25% brief writing, 20% approval reviews, 10% governance checks, 10% strategic planning',
-          criticalMetrics: ['Brief-to-approval cycle time', 'Request backlog depth', 'Brief revision rate', 'Stakeholder satisfaction score', 'Content calendar adherence'],
-          strategicOpportunity: 'Most Content Directors spend the majority of their time on work any competent coordinator could do — the strategic judgment that justifies the role\'s seniority is exercised in the margins.',
-        },
-        aiAgents: {
-          narrative: 'AI agents absorb the administrative layer: structuring requests, drafting briefs, pre-scoring priorities. The Content Director shifts from processing every item to reviewing exceptions and refining agent outputs. The transition feels like going from air traffic control to flight planning.',
-          timeAllocation: '15% exception review, 25% brief refinement and strategic direction, 20% agent calibration, 25% strategic planning, 15% stakeholder alignment',
-          criticalMetrics: ['Agent accuracy rate (brief quality)', 'Exception-to-total ratio', 'Strategic time recaptured', 'Brief approval speed', 'Scoring model precision'],
-          strategicOpportunity: 'The 30-40% of time freed from administrative tasks creates space for the work that actually differentiates content: competitive intelligence, audience insight synthesis, and editorial vision.',
-        },
-        aiAgentic: {
-          narrative: 'The Content Director becomes a system architect rather than a content processor. Routine work flows autonomously through scoring models, auto-generated briefs, and self-operating governance gates. Human judgment concentrates on the 15-20% of decisions where competitive intuition, organizational politics, and strategic ambiguity intersect.',
-          timeAllocation: '5% system monitoring, 15% model calibration and rule updates, 30% strategic planning, 30% cross-functional leadership, 20% high-stakes editorial decisions',
-          criticalMetrics: ['Autonomous completion rate', 'Model drift detection', 'Strategic content ROI', 'Escalation quality (false positive rate)', 'Pipeline velocity'],
-          strategicOpportunity: 'The role\'s value proposition inverts: instead of being measured by throughput (briefs approved per week), the Content Director is measured by the quality of the system they\'ve built and the strategic bets they make on the content that only they can greenlight.',
-        },
-      },
       nodeJourneys: {
-        // ── OWNED STEPS ──────────────────────────────────────────────────
-
         'receive-request': {
           preAI: {
-            summary: 'Request intake consumes 6-8 hours weekly in manual triage — sorting stakeholder emails, Slack threads, meeting follow-ups, and project management tickets into a workable queue that no one else can decipher.',
-            detail: 'Enterprise content requests arrive through at least four channels (email, Slack, PM tools, and verbal asks in meetings) with no standard format. The Content Director spends roughly 15% of each week normalizing these into structured briefs: extracting the actual ask from the stakeholder narrative, cross-referencing against the content calendar, checking for duplicates, and estimating resource requirements. The most common failure mode is scope ambiguity — stakeholders describe outcomes ("we need awareness content") without specifying audience, format, or success criteria, forcing 2-3 rounds of clarification before a brief can even be written. In enterprise environments, a single content request often involves 51-200 people across the creation and approval chain, which means intake errors compound exponentially downstream.',
-            painPoints: [
-              'Duplicate requests from different stakeholders for the same campaign surface only after work has started on both — wasting 10-15 hours of creative time per incident',
-              'Priority shifts weekly as executives lobby; the "most urgent" request from Monday is deprioritized by Thursday, but the resources are already allocated',
-              'Verbal requests in meetings bypass intake entirely, creating shadow work that never appears in capacity planning or pipeline reporting',
-              'No single system of record means the Content Director IS the system of record — vacation or illness creates a complete pipeline stall',
-            ],
-            benchmarks: [
-              '89% of enterprise marketing teams require 3+ approval stages per content piece — intake quality determines how many of those stages trigger rework (Adobe/Storyteq 2024)',
-              '58% of marketers spend 40%+ of their time managing reviews and approvals rather than strategic work (Adobe Content Supply Chain Research)',
-              '47% of enterprise marketers report 51-200 people involved in creating, reviewing, and approving a single content piece (MarketingProfs B2B Benchmarks 2024)',
-            ],
-            outcomes: [
-              'Average request-to-brief cycle: 3-5 business days for standard requests, 7-10 for complex campaigns',
-              'Rework caused by intake errors: estimated 20-30% of total content production time in organizations without standardized intake',
-            ],
-            roleEvolution: 'At this stage, the Content Director is fundamentally a traffic controller. The most valued skill is speed of triage, not strategic judgment. The role feels administrative even though the decisions are consequential — a misclassified request wastes weeks of downstream effort.',
+            summary: 'You triage every incoming request by hand, sorting stakeholder asks into a spreadsheet queue.',
+            detail: 'Requests arrive via email, Slack, and meetings in inconsistent formats. You spend hours each week normalizing them into something actionable.',
           },
           aiAgents: {
-            summary: 'An intake agent structures every request into a standard brief template before it reaches the queue — pre-categorized with audience data, strategic alignment scores, and duplicate flags. Triage drops from 6-8 hours to 1-2 hours weekly.',
-            detail: 'AI intake agents parse requests from email, Slack, and project tools, extracting key fields (audience, format, deadline, strategic alignment) and pre-populating brief templates. The system cross-references incoming requests against the content calendar and flags duplicates or conflicts before they reach the Content Director. The human role shifts from assembling information to validating and prioritizing — reviewing pre-scored requests rather than manually classifying each one. The key risk at this stage is over-trust: agents are good at pattern-matching against historical requests but poor at detecting genuinely new strategic directions that do not fit existing scoring rubrics. Content Directors who delegate too much intake oversight lose the peripheral vision that lets them spot emerging themes before they become obvious.',
-            painPoints: [
-              'Agent scoring models require 3-6 months of historical data to calibrate — early outputs produce high false-positive rates for "strategic alignment" scoring',
-              'Stakeholders who discover the scoring system learn to game intake forms by using keywords that artificially boost priority scores',
-              'The transition period (weeks 4-12) often feels worse than manual intake because the Content Director is now reviewing agent outputs AND catching errors, not just doing it themselves',
-            ],
-            benchmarks: [
-              'AI-assisted workflow tools deliver 30-40% reduction in coordination time within the first year (Salesforce State of Marketing 2024)',
-              'Intake automation reduces request-to-brief cycle from 3-5 days to same-day for standard requests in mature implementations',
-              'LinkedIn research: professionals using AI for research and intake tasks save an average of 1.5 hours per week (LinkedIn 2025)',
-            ],
-            outcomes: [
-              'Content Director time on intake drops from 15% to 5% of weekly hours — freeing roughly 4-6 hours per week for brief quality and strategic oversight',
-              'Duplicate request detection catches 60-70% of overlapping work before resources are allocated',
-              'Stakeholder satisfaction with intake responsiveness typically improves 40-50% due to faster acknowledgment and structured status updates',
-            ],
-            roleEvolution: 'The Content Director transitions from traffic controller to editorial strategist. Instead of processing every request, the role focuses on the 20-30% of requests that require genuine strategic judgment — new audience segments, competitive responses, or cross-functional campaigns where automated scoring lacks context. The most important new skill is calibrating the intake agent\'s scoring model, not faster personal triage.',
+            summary: 'An intake agent structures requests into a standard format before they reach your queue.',
+            detail: 'Requests arrive pre-categorized with audience data and strategic alignment scores. You validate priorities instead of assembling them.',
           },
           aiAgentic: {
-            summary: 'Requests auto-classify, score, and route end-to-end. The system handles 70-80% of intake volume autonomously — the Content Director intervenes only on strategic arbitration that scoring models cannot resolve.',
-            detail: 'Fully agentic intake operates as a continuous triage system: requests are parsed, classified, scored against strategic criteria, checked for duplicates and calendar conflicts, and routed to the appropriate brief template — all without human intervention for standard categories. The Content Director defines scoring weights, strategic priorities, and escalation thresholds rather than processing individual requests. Mature deployments report 60%+ of incoming requests resolved autonomously. The main challenge shifts from intake efficiency to governance: ensuring the scoring model reflects current strategic priorities (not last quarter\'s), that escalation thresholds surface genuinely ambiguous cases without creating noise, and that the system captures weak signals about emerging market themes that autonomous routing would otherwise bury. The Content Director who succeeds at this stage treats the intake system as a product they maintain, not a tool they use.',
-            painPoints: [
-              'Scoring model drift: strategic priorities change quarterly but model recalibration is deprioritized as "operational maintenance" rather than recognized as strategic work',
-              'Loss of peripheral awareness — the Content Director no longer sees every request, which means weak signals about emerging market themes or shifting stakeholder priorities can go undetected for weeks',
-              'Organizational trust deficit: some stakeholders resist autonomous routing because they want a human to acknowledge their request, regardless of system efficiency',
-            ],
-            benchmarks: [
-              '60% of incoming requests resolved autonomously in mature agentic deployments (Salesforce Agentforce case study: 1-800-Accountant, 2025)',
-              'Agent creation surged 119% between January-June 2025, indicating rapid enterprise adoption of autonomous workflow agents (Salesforce H1 2025 Index)',
-              'Agentic intake reduces average request latency to under 15 minutes for standard categories vs. 3-5 days manual (industry composite)',
-            ],
-            outcomes: [
-              'Intake becomes a system property rather than a role responsibility — the Content Director\'s personal time allocation to routine intake approaches zero',
-              'Pipeline predictability improves significantly because intake is no longer gated by one person\'s calendar or cognitive load',
-              'The Content Director can run "what-if" analyses on intake patterns — surfacing which request types are growing, which stakeholders are overloading the system, and where strategic gaps exist',
-            ],
-            roleEvolution: 'The Content Director\'s relationship with intake inverts entirely. Instead of spending time processing requests, the role becomes a system designer: maintaining scoring models, defining escalation logic, and calibrating the boundary between "routine" and "strategic." The most critical skill is knowing when the model is wrong — recognizing that a request flagged as routine is actually a strategic signal, or that an escalated item is noise the model hasn\'t learned to filter yet.',
+            summary: 'Requests are auto-classified, scored, and routed — you only see those that need strategic arbitration.',
+            detail: 'The system handles intake end-to-end for routine requests. Your involvement starts where automated scoring can\'t resolve competing priorities.',
           },
         },
-
         'write-brief': {
           preAI: {
-            summary: 'Every brief is written from scratch — translating stakeholder requests into structured creative direction through manual research, audience alignment, and iterative stakeholder negotiation.',
-            detail: 'Brief writing is the Content Director\'s core craft, but it is also their primary bottleneck. Each brief requires synthesizing the stakeholder ask, audience data, competitive context, brand guidelines, and content calendar availability into a document that creative teams can execute against. In enterprise environments, the average blog post takes over 4 hours to produce from outline to publishable form (Orbit Media), and the brief itself consumes 30-60 minutes of that. The deeper problem is consistency: when one person writes all briefs, quality tracks their energy level and bandwidth. Friday afternoon briefs are measurably different from Tuesday morning briefs. Stakeholder negotiation adds another layer — the original request rarely matches what the organization actually needs, and the Content Director must navigate the gap without alienating the requester.',
-            painPoints: [
-              'Brief quality is directly correlated to the Content Director\'s bandwidth — when the queue is deep, briefs get thinner, and creative teams fill the gaps with assumptions that produce rework',
-              'Stakeholders often conflate what they want (a blog post about their product) with what the audience needs (guidance on solving a specific problem), requiring diplomatic redirection',
-              'Historical brief data lives in the Content Director\'s memory, not in a queryable system — lessons from past campaigns are not systematically applied to new briefs',
-            ],
-            benchmarks: [
-              'Average blog post production time: 4 hours 10 minutes from outline to publishable form (Orbit Media / HubSpot 2024)',
-              '41% of B2B marketers cite workflow and content approval as a top operational challenge (MarketingProfs 2024)',
-              'Content production costs represent 10-15% of total marketing budget in enterprise organizations, with brief quality as the primary determinant of production efficiency',
-            ],
-            outcomes: [
-              'Brief-to-creative handoff takes 1-3 days depending on complexity, with 20-30% of briefs requiring at least one revision before creative work begins',
-              'The Content Director can produce 8-15 briefs per week at quality; beyond that, shortcuts appear as vague objectives, missing audience specifics, or recycled messaging frameworks',
-            ],
-            roleEvolution: 'Brief writing is where the Content Director\'s strategic judgment is most visible — a great brief compresses complex strategic intent into actionable creative direction. But at this stage, the volume of briefs crowds out the thinking time that makes each one good. The role feels like an assembly line with a quality-sensitive final station.',
+            summary: 'You draft every brief yourself, translating stakeholder requests into structured creative direction.',
+            detail: 'Each brief requires manual research, audience alignment, and stakeholder negotiation. Output quality depends entirely on your bandwidth.',
           },
           aiAgents: {
-            summary: 'AI drafts the brief from templates, audience data, and historical patterns — the Content Director reviews and refines instead of writing from scratch. Brief production shifts from creation to curation.',
-            detail: 'The agent assembles audience data from the CDP, competitive context from research tools, and strategic guidelines from the content strategy into a structured first draft. The Content Director reshapes this draft rather than building it from nothing — adding strategic nuance, adjusting the audience framing, and sharpening the creative direction. First-draft quality is typically 60-70% of final, meaning the human contribution concentrates on the 30-40% that requires judgment: tone calibration, competitive positioning, and creative risk appetite. The danger at this stage is "default acceptance" — reviewing an AI-drafted brief is cognitively different from writing one, and Content Directors who do not actively challenge agent outputs find themselves approving mediocre briefs that technically meet criteria but lack strategic edge. The best practitioners develop a "red pen" discipline: reading agent-generated briefs with the assumption that the first draft is a starting point, not a suggestion.',
-            painPoints: [
-              'AI-drafted briefs tend toward the median — they match historical patterns well but rarely propose the contrarian angle or unexpected format that produces breakthrough content',
-              'Review fatigue: approving 20 agent-drafted briefs feels less demanding than writing 10, but the cognitive cost of quality evaluation is high and the failure mode is subtle (approving "good enough" when "excellent" was achievable)',
-              'Calibrating the agent requires explicit articulation of implicit editorial standards — knowledge the Content Director may not have documented or even consciously recognized',
-            ],
-            benchmarks: [
-              'AI content tools reduce first-draft generation time by 40-60%, but total production cycle savings are 25-35% when review and refinement are included (composite from Jasper, Writer benchmarks)',
-              'Organizations report 60-80% reduction in revision cycles when AI drafts embed brand voice features from the start (Jasper 2024)',
-              'Total content production costs drop 30-40% with AI-assisted drafting at enterprise scale (industry composite)',
-            ],
-            outcomes: [
-              'Brief production capacity doubles or triples without additional headcount — the Content Director can oversee 25-40 briefs per week with maintained quality',
-              'Creative team satisfaction improves because briefs arrive with more complete context (audience data, competitive examples, performance benchmarks from similar past content)',
-              'The Content Director\'s strategic contribution per brief increases because the administrative production work is absorbed by the agent',
-            ],
-            roleEvolution: 'The Content Director stops being a writer and becomes an editor — not of content, but of strategy. The daily rhythm shifts from "produce briefs" to "shape the editorial judgment that produces them." This is a genuine seniority gain, but it requires a different skill set: the ability to evaluate and improve someone else\'s work (even an AI\'s) rather than producing one\'s own.',
+            summary: 'An AI drafts the brief from your templates — you review and refine instead of writing from scratch.',
+            detail: 'The agent assembles audience data, competitive context, and strategic guidelines into a first draft. You reshape it rather than create it.',
           },
           aiAgentic: {
-            summary: 'Routine briefs auto-generate and route for approval without Content Director involvement. Direct writing drops to the 20% of briefs that genuinely require strategic authorship — competitive responses, new market entries, and crisis communications.',
-            detail: 'The agentic brief system handles the full lifecycle for standard content types: pulling audience data, assembling the brief from templates and historical patterns, scoring it against strategic criteria, and routing it for creative execution — all autonomously. The Content Director intervenes only when the system detects strategic ambiguity (competing priorities, new audience segments, requests that do not match any historical pattern) or when the brief\'s risk score exceeds a defined threshold. The critical shift is from throughput to system quality: the Content Director\'s output is no longer "briefs written per week" but "brief system accuracy" — how often autonomous briefs produce content that meets strategic objectives without human correction. This requires a fundamentally different relationship with the work: monitoring aggregate outcomes rather than inspecting individual items, calibrating the system based on downstream performance data, and intervening only when the system cannot resolve ambiguity on its own.',
-            painPoints: [
-              'The Content Director must resist the urge to review every brief — selective intervention is harder than comprehensive review because it requires trusting the system while staying alert for drift',
-              'Auto-generated briefs for genuinely novel content types (new product category, new audience segment, new competitive landscape) can be confidently wrong — they apply historical patterns to situations where those patterns do not apply',
-              'Organizational power dynamics shift: if the Content Director no longer writes most briefs, some stakeholders question the role\'s necessity, requiring a visible demonstration of strategic value',
-            ],
-            benchmarks: [
-              'Autonomous content workflows handle 70-80% of standard brief types without human intervention in mature deployments (industry composite from Salesforce, Adobe implementations)',
-              'The 20% of briefs requiring human strategic authorship typically generate 60%+ of measured content ROI — confirming that the role\'s value concentrates in the long tail of high-stakes decisions',
-              'Marketing automation returns $5.44 for every $1 spent over 3 years, with brief automation as a significant contributor to that ratio (Nucleus Research 2024)',
-            ],
-            outcomes: [
-              'The Content Director\'s personal brief writing drops to 3-5 per week, but each one addresses the organization\'s highest-stakes content challenges',
-              'Pipeline velocity for standard content increases 3-5x because there is no human gating on routine briefs',
-              'Content quality becomes more consistent because the automated system applies the same standards to every brief, eliminating the variability inherent in human bandwidth fluctuations',
-            ],
-            roleEvolution: 'The Content Director becomes a strategic architect who designs the system that produces briefs, not the person who writes them. The most important activities at this stage are: (1) calibrating the brief-generation model quarterly to reflect evolving strategy, (2) authoring the high-stakes briefs that require competitive intuition no model can replicate, and (3) making the case to leadership for the editorial bets that only a human strategist would take.',
+            summary: 'Routine briefs auto-generate and route for approval without your involvement.',
+            detail: 'You only see briefs that fail scoring thresholds or involve ambiguous strategic calls. Your direct writing drops to the 20% that genuinely needs your hand.',
           },
         },
-
         'content-governance': {
           preAI: {
-            summary: 'Governance policies are enforced manually — checking each content piece against taxonomy rules, compliance requirements, and quality standards scattered across multiple reference documents that different reviewers interpret differently.',
-            detail: 'Content governance at the pre-AI stage is a consistency problem masquerading as a compliance problem. The rules exist (taxonomy standards, compliance requirements, quality thresholds), but they live in scattered documents, wiki pages, and institutional memory. Different reviewers interpret the same policy differently, producing inconsistent enforcement that frustrates both creators and stakeholders. The Content Director spends 10-15% of weekly time on governance activities — mostly checking whether content adheres to taxonomy, messaging architecture, and regulatory requirements. The deeper issue is that governance reviews happen late in the pipeline, meaning non-compliant content has already consumed creative resources by the time violations are caught. In regulated industries (financial services, healthcare, pharma), governance failures carry regulatory risk that goes far beyond editorial inconvenience.',
-            painPoints: [
-              'Governance rules are distributed across 5-10 reference documents with no single source of truth — reviewers waste time locating the relevant standard before they can evaluate content',
-              'Inconsistent enforcement creates a credibility problem: creators learn that governance depends on which reviewer they get, not on the actual rules, eroding organizational trust in the process',
-              'Late-stage governance catches force rework on content that has already been through creative production, review, and stakeholder approval — each rejection costs 2-3x the original production time',
-            ],
-            benchmarks: [
-              '81% of companies struggle with maintaining brand consistency across channels — governance is the mechanism that is supposed to prevent this (Lucidpress/Marq State of Brand Consistency)',
-              'Companies with high brand consistency achieve 2.4x higher average growth rates than inconsistent competitors (Marq 2021)',
-              'Off-brand content contributes to 32% of customers leaving after a single bad brand experience (Marq Brand Consistency Report)',
-            ],
-            outcomes: [
-              'Governance review adds 1-3 days to the content pipeline for each piece, with an estimated 15-20% rejection rate requiring revision cycles',
-              'The Content Director\'s governance authority is diluted by inconsistent enforcement — the role becomes reactive (catching violations) rather than proactive (preventing them)',
-            ],
-            roleEvolution: 'Governance feels like policing rather than strategy. The Content Director knows that consistent governance drives brand value, but the daily reality is reviewing individual pieces against rules that should be self-enforcing. The highest-value governance work — evolving the taxonomy, updating standards for new content types, aligning governance with business strategy — gets deprioritized because the review queue never empties.',
+            summary: 'You enforce governance policies manually, checking each piece against taxonomy and compliance rules.',
+            detail: 'Governance reviews are inconsistent because the rules live in scattered documents. Different reviewers interpret the same policy differently.',
           },
           aiAgents: {
-            summary: 'A governance agent flags taxonomy mismatches, policy violations, and quality threshold failures before content reaches the Content Director — automated checks surface issues early so human review concentrates on judgment calls, not compliance scanning.',
-            detail: 'AI governance agents encode the scattered policy documents into a unified rule set that is applied consistently across all content. Automated checks catch 70-80% of violations before human review: taxonomy misclassifications, missing metadata, messaging architecture deviations, and regulatory keyword triggers. The Content Director shifts from comprehensive compliance scanning to exception handling — reviewing items that the agent flags as ambiguous or that fall in the grey zone between compliant and non-compliant. The most impactful change is timing: governance checks move earlier in the pipeline, catching issues before creative production is complete rather than after. This prevents the costly late-stage rework that characterizes manual governance. The risk at this stage is over-reliance on automated rules for nuanced judgments — the agent can enforce explicit rules but cannot evaluate whether content is strategically appropriate, culturally sensitive, or reputationally sound.',
-            painPoints: [
-              'Agent governance rules must be explicitly codified — implicit standards ("we just know when something feels off-brand") cannot be automated without significant upfront documentation effort',
-              'False positives in early months can undermine creator confidence in the governance system, producing workarounds that bypass automated checks entirely',
-            ],
-            benchmarks: [
-              'AI brand compliance tools (Acrolinx, Writer, Grammarly Business) report 70-80% of routine compliance checks handled autonomously in mature implementations',
-              'Early-stage governance checks reduce late-pipeline rejection rates by 40-60%, significantly reducing rework costs',
-            ],
-            outcomes: [
-              'Content Director governance time drops from 10-15% to 3-5% of weekly hours, concentrated entirely on edge cases and policy evolution',
-              'Pipeline rejection rates at the governance gate drop by half because violations are caught and corrected during creation, not after',
-              'Governance consistency improves measurably because the agent applies the same rules to every piece — eliminating reviewer-dependent variation',
-            ],
-            roleEvolution: 'The Content Director transitions from governance enforcer to governance architect. The daily work shifts from "does this comply?" to "are our compliance rules still right?" — maintaining the rule set, adjudicating edge cases that the agent cannot resolve, and evolving standards as content types and regulatory landscapes change.',
+            summary: 'A governance agent flags taxonomy mismatches and policy violations before content reaches you.',
+            detail: 'Automated checks surface issues early. You focus on interpreting edge cases rather than scanning for obvious violations.',
           },
           aiAgentic: {
-            summary: 'Governance is embedded in the creation process itself — violations are blocked or flagged during drafting, not discovered in review. The Content Director maintains the governance system and adjudicates the rare exceptions the system escalates.',
-            detail: 'In the fully agentic model, governance rules are enforcement constraints within the content creation pipeline rather than a separate review step. The drafting agent, the brief generator, and the publishing system all reference the governance framework in real time, preventing non-compliant content from being produced in the first place. The Content Director\'s governance role becomes architectural: defining the rules, monitoring their effectiveness through compliance dashboards, and updating them as business strategy, regulatory requirements, and content types evolve. When exceptions arise — a new content type that does not fit existing taxonomy, a regulatory change that requires policy interpretation, a reputational risk scenario with no precedent — the Content Director makes the judgment call and codifies the decision as a new rule. This creates a self-improving governance loop: every exception resolved by a human becomes a rule that the system enforces automatically going forward.',
-            painPoints: [
-              'Governance system maintenance is invisible work that organizations undervalue — the system "just works" until it doesn\'t, and the Content Director must advocate for ongoing calibration resources',
-              'Rule proliferation: as more edge cases are codified, the governance rule set grows in complexity, potentially creating contradictions or overly restrictive constraints that stifle creative work',
-            ],
-            benchmarks: [
-              'Embedded governance (rules enforced during creation rather than in review) reduces compliance cycle time by 70-90% compared to batch review models',
-              'Organizations with automated governance report 20% revenue growth potential from improved brand consistency across channels (Marq 2021)',
-            ],
-            outcomes: [
-              'The governance gate becomes a verification checkpoint rather than a decision point — most content passes automatically because it was compliant by construction',
-              'The Content Director\'s governance decisions carry disproportionate weight because each one becomes a system-wide precedent, not a one-off ruling',
-              'Governance reporting shifts from "violation count" to "system health" — tracking rule coverage, exception rates, and compliance consistency across content types',
-            ],
-            roleEvolution: 'The Content Director becomes the governance system\'s product owner. The role\'s output is not "content reviewed" but "governance system effectiveness" — measured by how rarely exceptions occur, how quickly new content types are covered, and how consistently the organization\'s brand and compliance standards are maintained at scale.',
+            summary: 'Governance is embedded in the creation process — violations are blocked before content is even drafted.',
+            detail: 'The system enforces your governance framework at every step. You maintain the rules and adjudicate the rare exceptions.',
           },
         },
-
         'content-scoring': {
           preAI: {
-            summary: 'Content requests are scored and prioritized against business objectives using spreadsheets and subjective judgment — criteria live in the Content Director\'s head or a reference document that nobody else consults consistently.',
-            detail: 'Content scoring at this stage is part science, part politics. The Content Director maintains a mental model of organizational priorities — which business units need content, which campaigns are highest-impact, which stakeholder requests align with strategic goals — and applies this model to incoming requests through a combination of spreadsheet tracking and judgment calls. The problem is transparency: when priorities are not visible and objectively scored, stakeholders perceive the system as arbitrary. Requests from senior executives get fast-tracked regardless of strategic merit. Pet projects consume resources that should go to higher-impact work. The Content Director becomes a political buffer rather than a strategic allocator, spending more time justifying decisions than making them. In enterprises with 80+ monthly campaigns and 500+ content assets, manual scoring cannot operate at the speed or consistency the pipeline demands.',
-            painPoints: [
-              'Scoring criteria are implicit — when the Content Director is unavailable, no one else can prioritize the queue, creating single-point-of-failure risk for the entire content pipeline',
-              'Political pressure overrides strategic scoring: a VP\'s request gets prioritized over a higher-ROI campaign because organizational dynamics trump analytical frameworks',
-              'Prioritization changes weekly as business conditions shift, but the scoring model (if it exists) is not updated in real time — creating a lag between strategic reality and resource allocation',
-              'There is no feedback loop between content performance and scoring — high-priority content that underperforms is not systematically analyzed to improve future prioritization',
-            ],
-            benchmarks: [
-              '42% of marketers still rely on manual spreadsheet-based processes for critical workflow decisions like prioritization and attribution (RevSure State of Marketing Attribution 2024)',
-              'Enterprise marketing teams produce 80+ campaigns and 500+ content assets monthly — manual scoring at this volume guarantees inconsistency and fatigue-driven errors',
-              'Only 14% of companies have fully automated lead-to-revenue tracking, suggesting that content scoring against business outcomes remains largely manual and disconnected (RevSure 2024)',
-            ],
-            outcomes: [
-              'Scoring decisions take 15-30 minutes per request for complex campaigns, compounding across 80+ monthly requests into a significant time investment',
-              'An estimated 20-30% of content production resources are allocated to work that does not align with the organization\'s stated strategic priorities (industry estimate from marketing operations surveys)',
-            ],
-            roleEvolution: 'The Content Director at this stage is part strategist, part diplomat. The scoring function should be analytical, but it operates politically because the criteria are not transparent, the data is not systematic, and the feedback loop is absent. The role\'s authority depends on personal credibility rather than system-level rigor.',
+            summary: 'You score and prioritize content requests against business objectives in a spreadsheet.',
+            detail: 'Scoring criteria live in your head or a reference doc nobody else checks consistently. Prioritization changes weekly as stakeholders lobby.',
           },
           aiAgents: {
-            summary: 'A scoring agent applies the Content Director\'s rubric automatically — requests arrive pre-scored against strategic criteria, audience alignment, and historical performance. The Content Director reviews the ranked queue and adjusts edge cases rather than scoring each item individually.',
-            detail: 'The AI scoring agent encodes the Content Director\'s prioritization criteria into a model that evaluates every incoming request against strategic alignment, audience value, resource requirements, and historical ROI for similar content types. Requests arrive in the queue pre-ranked with confidence scores, supporting data, and flags for items that fall near decision boundaries. The Content Director reviews the rankings, overrides scores where strategic context exceeds the model\'s knowledge, and adjusts scoring weights as priorities evolve. The most significant improvement is speed: scoring that took 15-30 minutes per complex request now takes 2-3 minutes of validation. The secondary improvement is transparency — when the scoring model is explicit and visible, stakeholders can see why their request was ranked where it was, reducing political friction by 40-50%. The risk is model ossification: if scoring weights are not updated quarterly, the model optimizes for last quarter\'s priorities.',
-            painPoints: [
-              'Stakeholders scrutinize automated scores more aggressively than they challenged manual prioritization — the explicitness of the model invites debate about individual scoring criteria',
-              'The scoring model performs poorly on novel content types (new formats, new audiences, new competitive dynamics) because it lacks historical data for comparison',
-            ],
-            benchmarks: [
-              'AI-assisted prioritization reduces scoring time per request from 15-30 minutes to 2-3 minutes of validation, a 5-10x efficiency gain',
-              'Transparent scoring frameworks reduce stakeholder escalation requests by 40-50% because priorities are visible and evidence-based',
-              'PathFactory and similar content intelligence platforms report that engagement-based scoring models predict content ROI with 60-70% accuracy (PathFactory analytics benchmarks)',
-            ],
-            outcomes: [
-              'The Content Director can process the full weekly request volume in 2-3 hours instead of 8-12, freeing a full day per week for strategic work',
-              'Resource allocation improves measurably because scoring decisions are consistent, transparent, and based on data rather than political dynamics',
-              'A feedback loop emerges: content performance data feeds back into the scoring model, improving prediction accuracy over time',
-            ],
-            roleEvolution: 'The Content Director shifts from scorer to calibrator. The daily question changes from "what should we prioritize?" to "is our prioritization model reflecting current strategic reality?" This is a genuine seniority upgrade — the role moves from operational decision-making to system design.',
+            summary: 'A scoring agent applies your rubric automatically — you review the ranked queue instead of building it.',
+            detail: 'Requests arrive pre-scored against your criteria. You adjust weights and override edge cases rather than scoring each item.',
           },
           aiAgentic: {
-            summary: 'Scoring runs continuously as requests enter the system. Low-priority items are routed automatically to standard production workflows. The Content Director\'s time shifts from scoring individual items to calibrating the scoring model itself and making the strategic bets the model cannot.',
-            detail: 'The fully agentic scoring system operates as a continuous evaluation engine: every incoming request is scored, ranked, and routed based on strategic criteria, resource availability, and predicted ROI — without human intervention for standard categories. The Content Director defines scoring policy (weights, thresholds, routing rules) and monitors system performance through dashboards that track scoring accuracy, resource utilization, and content ROI by priority tier. Human intervention concentrates on two activities: (1) recalibrating the model quarterly to reflect strategic shifts, and (2) making allocation decisions for the 10-15% of requests where strategic ambiguity exceeds the model\'s resolution — competitive responses, executive-sponsored initiatives, and emerging opportunities that do not fit historical patterns. The system also generates strategic intelligence: patterns in request types, shifts in stakeholder priorities, and gaps between content production and business objectives that inform the Content Director\'s strategic planning.',
-            painPoints: [
-              'Autonomous scoring creates a "filter bubble" risk — the system optimizes for what has worked historically, potentially missing strategic pivots that require investing in unproven content types',
-              'Quarterly model recalibration requires 4-8 hours of focused analysis that competes with other strategic responsibilities for calendar space',
-            ],
-            benchmarks: [
-              'Autonomous scoring systems can evaluate and route 95%+ of standard content requests without human intervention, concentrating human judgment on the 5% where it has highest leverage',
-              'Organizations with data-driven content prioritization report 15-25% improvement in content ROI compared to manual or politically-driven allocation (industry composite)',
-            ],
-            outcomes: [
-              'Scoring becomes invisible to the Content Director for routine work — attention focuses entirely on strategic exceptions and model governance',
-              'The organization gains a real-time view of content demand vs. supply, enabling proactive capacity planning rather than reactive fire-fighting',
-              'The Content Director\'s strategic credibility increases because prioritization decisions are backed by transparent, data-driven models rather than perceived as subjective judgment calls',
-            ],
-            roleEvolution: 'The Content Director becomes a portfolio manager for content investments. The scoring system is the analytical engine; the human provides the strategic thesis that the engine cannot generate on its own. The role\'s value is measured not by throughput but by the quality of the strategic bets made on the content the model cannot score.',
+            summary: 'Scoring runs continuously as requests enter the system — low-priority items never reach your queue.',
+            detail: 'The system triages incoming requests before you see them. Your time shifts from scoring individual items to calibrating the scoring model itself.',
           },
         },
-
         'brief-approval': {
           preAI: {
-            summary: 'Every brief waits for the Content Director\'s personal review and approval before creative work begins — creating a bottleneck that adds 2-5 days to every campaign and forces rush requests to skip quality checks entirely.',
-            detail: 'Brief approval is the pipeline\'s critical bottleneck because every brief must pass through one person\'s calendar. In a typical enterprise week, the Content Director reviews 15-25 briefs, each requiring 20-40 minutes of focused attention. The queue backs up predictably: Monday morning brings last week\'s carryover plus new requests, and by Wednesday the approval backlog has pushed campaign timelines by 2-3 days. Rush requests from senior stakeholders skip the queue entirely — producing a two-tier system where "important" briefs get fast-tracked without proper review and "normal" briefs wait. This two-tier dynamic erodes the quality function the gate is supposed to serve: the briefs most likely to need strategic scrutiny (high-visibility, politically sensitive, resource-intensive) are the ones most likely to bypass the review because of time pressure.',
-            painPoints: [
-              'The Content Director\'s PTO creates a complete pipeline stall — there is no backup approver with equivalent strategic context, so briefs either wait or get waved through by a proxy who cannot evaluate strategic alignment',
-              'Rush approvals produce a false sense of speed: the brief gets approved in hours, but the downstream rework from missed issues costs 3-5x the time that proper review would have taken',
-              'Approval fatigue is real — reviewing brief #20 of the week does not receive the same cognitive attention as brief #3, creating a quality gradient that correlates with queue position',
-            ],
-            benchmarks: [
-              '80% of marketers experience delays getting timely feedback on content — brief approval is typically the first and most impactful delay point (Adobe Content Supply Chain Research)',
-              'Each approval stage adds an average of 1+ business day to campaign timelines; with 3+ stages required, brief-to-launch cycles routinely exceed 2 weeks (WebRand 2024)',
-              'Risk-based approval tiers (auto-approve low-risk, human-review high-risk) can reduce approval cycle time by 30-50% within 60-90 days of implementation (industry composite)',
-            ],
-            outcomes: [
-              'Average brief approval time: 2-5 days in queue + 20-40 minutes of actual review — the waiting time dwarfs the review time by 10-50x',
-              'Estimated 15-20% of approved briefs require revision after creative work begins, suggesting the approval review is not catching issues effectively under time pressure',
-            ],
-            roleEvolution: 'The Content Director at the approval gate is a bottleneck with a title. The role\'s strategic judgment is real and valuable, but the delivery mechanism (sequential personal review of every brief) ensures that judgment is diluted by volume and compressed by time pressure. The gate exists to protect quality, but its implementation actively undermines it.',
+            summary: 'You review and approve every brief personally before creative work begins.',
+            detail: 'Approval bottlenecks are common because every brief waits for your calendar. Rush requests skip the queue, creating quality inconsistency.',
           },
           aiAgents: {
-            summary: 'Pre-scored briefs arrive with risk flags, alignment scores, and historical comparisons — the Content Director approves faster because the analytical prep work is done. Approval speed doubles for standard briefs; attention concentrates on the flagged exceptions.',
-            detail: 'The AI agent pre-processes each brief before it reaches the approval queue: scoring strategic alignment, flagging risk factors (regulatory exposure, brand voice deviations, resource conflicts), and attaching historical comparisons to similar past briefs (including their performance outcomes). The Content Director opens each brief with a structured summary rather than raw content, reducing review time from 20-40 minutes to 5-15 minutes for standard briefs. Flagged items receive deeper attention. The approval gate gains a data layer it previously lacked: the Content Director can see not just "what this brief proposes" but "how similar briefs have performed, what risks the model detects, and where this brief deviates from strategic guidelines." The result is faster approvals that are also better-informed — the traditional trade-off between speed and quality is partially resolved because the agent handles the analytical work that consumed most of the review time.',
-            painPoints: [
-              'The Content Director must learn to trust agent risk flags — early in the transition, the tendency is to duplicate the agent\'s analysis rather than building on it, negating the time savings',
-              'Agent scoring can create anchoring bias: the Content Director\'s assessment of a brief is influenced by the agent\'s pre-score, potentially missing issues the agent was not trained to detect',
-            ],
-            benchmarks: [
-              'AI-assisted approval reviews reduce per-brief review time by 50-70% for standard content types (composite from workflow automation implementations)',
-              'Pre-scoring reduces approval bottleneck-induced delays from 2-5 days to same-day or next-day for 60-70% of briefs',
-            ],
-            outcomes: [
-              'Content Director approval throughput increases 2-3x without quality degradation — the queue no longer backs up on a weekly cycle',
-              'Rush requests decrease because standard approval is fast enough to meet most timelines — the two-tier system erodes',
-              'Brief rejection quality improves because the Content Director can articulate specific data-backed reasons for revisions rather than general concerns',
-            ],
-            roleEvolution: 'The Content Director at this stage is a strategic reviewer, not a gatekeeper. The daily experience shifts from "clear the queue" to "evaluate the exceptions" — the briefs that reach focused review are genuinely ambiguous, not routine. This makes the approval function intellectually engaging again, which improves the quality of each decision.',
+            summary: 'Pre-scored briefs arrive with risk flags, so you approve faster and catch problems earlier.',
+            detail: 'The agent highlights strategic misalignment and missing context before you open the brief. Your approval speed doubles because prep work is done.',
           },
           aiAgentic: {
-            summary: 'Standard briefs auto-approve when they pass scoring thresholds. The Content Director reviews only flagged exceptions — typically 15-20% of volume — where competitive intuition, organizational politics, or strategic ambiguity exceed any scoring rubric.',
-            detail: 'The fully agentic approval gate operates as a threshold-based system: briefs that score above defined thresholds on strategic alignment, brand compliance, audience fit, and resource feasibility are approved automatically and routed to creative production. The Content Director reviews only the briefs that the system flags — those below threshold, those with conflicting signals (high strategic alignment but high regulatory risk), and those involving novel content types the model has not seen before. This concentrates the Content Director\'s judgment on the decisions where human intuition has the highest marginal value over automated scoring. The critical governance challenge is threshold calibration: set them too low and the gate becomes meaningless; set them too high and the queue backs up again. Quarterly recalibration based on downstream content performance is essential.',
-            painPoints: [
-              'Auto-approved briefs that produce underperforming content create organizational anxiety about the gate\'s effectiveness — the Content Director must be able to demonstrate that system-approved briefs perform at least as well as manually-approved ones',
-              'Some stakeholders perceive auto-approval as "no one reviewed this" rather than "the system reviewed this" — managing organizational trust in algorithmic gates requires active communication',
-            ],
-            benchmarks: [
-              'Organizations implementing risk-based auto-approval report 30-50% reduction in total brief-to-launch cycle time (industry composite)',
-              'The 15-20% of briefs requiring human review typically represent the highest-stakes content decisions — competitive responses, new market entries, executive-visibility campaigns',
-            ],
-            outcomes: [
-              'The approval gate ceases to be a bottleneck — pipeline velocity for standard content is no longer constrained by one person\'s calendar',
-              'Content Director strategic time increases dramatically because routine approvals are eliminated, not just accelerated',
-              'The organization develops a data-driven understanding of what makes a brief "good" — the scoring model\'s criteria become a shared strategic vocabulary',
-            ],
-            roleEvolution: 'The Content Director\'s approval authority becomes more powerful by becoming more selective. Each approval decision carries more weight because it addresses a genuinely ambiguous scenario, not a routine checkpoint. The role\'s strategic credibility increases because the Content Director is visibly focused on the hardest problems, not buried in a queue.',
+            summary: 'Standard briefs auto-approve when they pass scoring thresholds — you review only flagged exceptions.',
+            detail: 'The gate becomes self-operating for routine work. You intervene on high-stakes briefs where competitive intuition outweighs any rubric.',
           },
         },
-
         'governance-gate': {
           preAI: {
-            summary: 'The governance gate is staffed with manual reviews — checking taxonomy compliance, content standards, and regulatory requirements. Every review adds 1-3 days, and feedback arrives late enough to guarantee expensive rework.',
-            detail: 'The governance gate at the pre-AI stage functions as a late-stage compliance checkpoint rather than a quality assurance mechanism. Content that has already been through creative production, editorial review, and stakeholder negotiation arrives at the gate for taxonomy and compliance verification. When issues are found — and they are found in an estimated 15-20% of submissions — the rework cost is significant: the content must cycle back through creation and review stages, consuming 2-3x the original production time. The fundamental design flaw is timing: governance catches problems too late for efficient correction. The Content Director staffs this gate with their own reviews or delegates to compliance reviewers who may not have the full strategic context, producing inconsistent enforcement.',
-            painPoints: [
-              'Late-stage rejections at the governance gate demoralize creative teams who invested significant effort in content that was "almost done" — the rejection feels punitive rather than protective',
-              'Governance criteria are interpreted inconsistently by different reviewers, creating unpredictable outcomes that make pipeline planning unreliable',
-              'The gate adds 1-3 days to the pipeline for EVERY content piece, regardless of risk level — low-risk content pays the same time tax as high-risk content',
-            ],
-            benchmarks: [
-              'Content governance failures contribute to the 81% of companies that struggle with brand consistency across channels (Lucidpress/Marq)',
-              'Late-stage compliance rejections cost 2-3x the original production time due to rework cascading through upstream stages',
-              'Organizations with inconsistent governance enforcement report 20-30% higher content production costs than those with standardized, automated checks',
-            ],
-            outcomes: [
-              'Governance adds an average of 2 days to campaign timelines — a fixed cost that applies to every piece regardless of actual risk',
-              'The Content Director\'s authority at this gate is undermined by the perception that governance is a speed bump rather than a quality mechanism',
-            ],
-            roleEvolution: 'The Content Director at this gate feels more like a compliance officer than a strategist. The work is necessary but not intellectually engaging — it is pattern-matching against rules that should be self-enforcing, not judgment calls that require editorial expertise.',
+            summary: 'You staff this gate with manual reviews, checking taxonomy compliance and content standards.',
+            detail: 'Gate reviews add days to the timeline. Feedback loops are slow because issues are caught late in the process.',
           },
           aiAgents: {
-            summary: 'Automated governance checks handle taxonomy, compliance, and standard quality criteria. The Content Director reviews only escalated exceptions — items the system flags as ambiguous or novel.',
-            detail: 'AI governance agents apply the full rule set consistently to every piece of content, checking taxonomy classification, regulatory compliance, brand voice adherence, and quality thresholds before the content reaches the human gate. Most content passes automatically; the Content Director reviews only the flagged exceptions — typically 10-20% of volume — where the agent detects ambiguity, novelty, or conflicting signals. The gate becomes faster and more consistent: standard content clears in minutes rather than days, and the Content Director\'s reviews focus on items that genuinely require strategic judgment. The key improvement is not just speed but fairness — every content piece is evaluated against the same rules, eliminating the reviewer-dependent variation that characterized manual governance.',
-            painPoints: [
-              'False positives from the governance agent can create alert fatigue — if 30% of flags are wrong, the Content Director starts ignoring the system',
-              'The transition requires comprehensive documentation of governance rules that may currently be implicit or informally understood',
-            ],
-            benchmarks: [
-              'Automated governance checks reduce gate cycle time from 1-3 days to hours for standard content, with only flagged exceptions requiring multi-day review',
-              'Consistent automated enforcement reduces late-stage rejection rates by 40-60% compared to manual review processes',
-            ],
-            outcomes: [
-              'Governance gate throughput increases 5-10x for standard content without quality degradation',
-              'The Content Director\'s governance time drops from a fixed cost per content piece to a variable cost that scales with the exception rate',
-              'Creator confidence in the governance process improves because outcomes are predictable and consistent',
-            ],
-            roleEvolution: 'The Content Director at this gate becomes a judge rather than an inspector — handling the genuinely ambiguous cases where rules conflict, precedent is unclear, or strategic context overrides standard governance criteria.',
+            summary: 'Automated governance checks handle taxonomy and policy — you review only the escalated exceptions.',
+            detail: 'Most content passes the gate automatically. Your reviews focus on novel content types or ambiguous policy interpretations.',
           },
           aiAgentic: {
-            summary: 'The governance gate self-operates within defined parameters. The Content Director monitors system health and updates rules — every policy decision cascades automatically across all future content.',
-            detail: 'The fully agentic governance gate is a self-operating system: content is evaluated, classified, and either cleared or flagged automatically based on the Content Director\'s codified rules. The human role is architectural — maintaining the rule set, monitoring compliance dashboards for drift (gradual degradation of governance effectiveness over time), and making precedent-setting decisions on novel scenarios that the system cannot resolve. The most powerful aspect of this model is the feedback loop: every human governance decision becomes a new rule in the system, meaning the Content Director\'s judgment compounds over time. Each exception resolved today prevents a category of similar issues from reaching the gate in the future.',
-            painPoints: [
-              'Rule set complexity can grow unchecked — without periodic simplification, governance rules accumulate contradictions and over-specificity that constrain creative work unnecessarily',
-              'The Content Director must maintain deep familiarity with a system they rarely interact with directly — monitoring dashboards requires a different cognitive mode than hands-on review',
-            ],
-            benchmarks: [
-              'Self-operating governance gates in mature implementations handle 90%+ of content autonomously, with human review reserved for precedent-setting decisions',
-              'Rule-based governance systems that are recalibrated quarterly maintain 95%+ effectiveness; those left uncalibrated for 6+ months show measurable drift in compliance outcomes',
-            ],
-            outcomes: [
-              'The governance gate effectively disappears from the pipeline timeline for standard content — compliance is a property of the system, not a stage in the process',
-              'The Content Director\'s governance legacy is codified — their judgment lives in the system and continues to enforce standards even when they are not personally reviewing content',
-            ],
-            roleEvolution: 'The Content Director becomes the governance system\'s architect and custodian. The role\'s governance output is not "content reviewed" but "governance system health" — measured by exception rates, rule coverage, and the speed at which new content types are covered by the existing framework.',
+            summary: 'The governance gate self-operates within your defined parameters — you monitor drift and update rules.',
+            detail: 'You shift from gatekeeping individual pieces to maintaining the governance system itself. Updates you make cascade across all future content.',
           },
         },
-
-        // ── SUPPORT NODES (agents + inputs) ─────────────────────────────
-
-        'research-agent': {
+        'research-insights': {
           preAI: {
-            summary: 'Research is a manual effort — the Content Director gathers audience data, competitive intelligence, and market context from multiple disconnected tools to inform brief quality.',
-            detail: 'Without AI research support, the Content Director relies on marketing analytics dashboards, competitive monitoring services, social listening tools, and institutional knowledge to build the context layer for each brief. This research step is often abbreviated under time pressure, meaning briefs are written with incomplete audience data or stale competitive intelligence. The research burden falls disproportionately on the Content Director because they are the only person with enough strategic context to know what data matters.',
+            summary: 'You gather audience and market research manually, compiling data from multiple sources for editorial quality.',
+            detail: 'Research is scattered across tools, reports, and tribal knowledge. Building a complete picture for editorial quality takes days and the data is often stale by the time you use it.',
           },
           aiAgents: {
-            summary: 'A research agent surfaces relevant audience data, competitive context, and trending topics automatically — delivering structured intelligence that the Content Director curates rather than assembles.',
-            detail: 'The research agent pulls data from the CDP, competitive monitoring tools, search trend databases, and social listening platforms, delivering a structured intelligence brief for each content request. The Content Director reviews and interprets this data rather than gathering it — reducing research time from hours to minutes per brief while improving the depth and currency of the intelligence available.',
+            summary: 'AI research tools surface audience and market data relevant to your editorial quality needs automatically.',
+            detail: 'Research agents pull relevant data from multiple sources and present editorial quality insights in a structured format. You curate and interpret rather than gather.',
           },
           aiAgentic: {
-            summary: 'Autonomous research agents continuously update the intelligence layer — the Content Director sets strategic research priorities rather than executing individual searches.',
-            detail: 'Research agents proactively surface insights from market signals, audience behavior data, and competitive movements without being prompted. The Content Director defines what the system should monitor and how insights should be prioritized, then consumes structured intelligence feeds rather than conducting ad hoc research. The most valuable output at this stage is not individual data points but pattern detection: emerging topics, shifting audience needs, and competitive moves that create content opportunities.',
+            summary: 'Autonomous research agents continuously update editorial quality intelligence — you set the strategic lens.',
+            detail: 'Research agents proactively surface editorial quality insights from market signals, audience data, and competitive movements. You shape research priorities, not execute searches.',
           },
         },
-
-        'writer-agent': {
+        'draft-content': {
           preAI: {
-            summary: 'Content creation depends entirely on human writers — the Content Director manages a team of writers whose output quality varies with bandwidth, expertise, and brief clarity.',
-            detail: 'Without AI writing support, the Content Director oversees a team of human writers who produce all content from scratch. Output quality is directly correlated to brief quality and writer availability — when the team is stretched thin, quality drops. The Content Director spends significant time reviewing drafts, providing feedback, and managing revision cycles that stem from unclear briefs or writer-brief misalignment.',
+            summary: 'You review drafts created entirely by hand, checking each one for alignment with editorial quality.',
+            detail: 'First drafts vary wildly in quality and editorial quality alignment. You often send content back for multiple revision cycles, creating bottlenecks in the pipeline.',
           },
           aiAgents: {
-            summary: 'AI writing agents produce first drafts with brand voice and audience alignment embedded, reducing the creative team\'s production burden and the Content Director\'s revision cycles.',
-            detail: 'Writer agents generate first drafts that are 60-70% of final quality, allowing human writers to focus on strategic refinement, creative differentiation, and nuanced messaging rather than blank-page production. The Content Director\'s revision cycles decrease because AI-drafted content arrives pre-aligned with brand voice, audience data, and strategic guidelines. The human writer\'s role shifts from producer to editor and creative enhancer.',
+            summary: 'AI generates first drafts with editorial quality guidelines embedded, reducing your revision cycles.',
+            detail: 'Drafting agents produce content aligned with your editorial quality standards from the start. You focus on strategic refinement rather than basic corrections.',
           },
           aiAgentic: {
-            summary: 'Autonomous writing agents handle routine content production end-to-end — human writers concentrate on high-stakes, creatively demanding content where AI output lacks the strategic edge or emotional nuance the brand requires.',
-            detail: 'Writing agents produce publication-ready content for standard content types (social posts, email variations, SEO content, product descriptions) autonomously. Human writers are reserved for content that requires original thinking, emotional nuance, or strategic positioning that AI cannot reliably produce. The Content Director manages this human-AI workforce allocation as a strategic decision: which content types benefit from human authorship, and which are adequately served by AI production.',
+            summary: 'Autonomous drafting agents produce content meeting editorial quality standards — you set creative direction.',
+            detail: 'Drafting agents generate content that passes your editorial quality criteria automatically. You focus on strategic vision and creative differentiation rather than quality control.',
           },
         },
-
-        'content-strategy': {
+        'seo-optimization': {
           preAI: {
-            summary: 'The content strategy document is a static artifact — updated quarterly at best, referenced inconsistently, and disconnected from day-to-day content production decisions.',
-            detail: 'Content strategy exists as a PowerPoint deck or Google Doc that the Content Director updates periodically and references when writing briefs. It informs high-level direction but is rarely consulted by the broader team during production. The gap between strategic intent and execution widens throughout each quarter as market conditions change but the strategy document does not.',
+            summary: 'SEO optimization is manual and disconnected from your editorial quality priorities.',
+            detail: 'Keyword research and meta optimization happen separately from your editorial quality workflow. You rarely see SEO data until after content is already in review.',
           },
           aiAgents: {
-            summary: 'AI tools surface strategy-relevant data (audience shifts, competitive moves, performance trends) that keep the content strategy current — the Content Director updates strategic direction based on live signals rather than quarterly reviews.',
-            detail: 'The content strategy becomes a living document because AI tools continuously surface data that challenges or confirms strategic assumptions. The Content Director incorporates audience behavior shifts, competitive content analysis, and performance data into strategic updates at a much higher frequency — monthly or bi-weekly rather than quarterly. The strategy document becomes a dynamic artifact that the team references actively because it reflects current reality.',
+            summary: 'AI SEO tools optimize content while preserving your editorial quality priorities.',
+            detail: 'SEO agents suggest keywords and meta improvements that align with your editorial quality goals. You approve optimizations rather than manually researching keywords.',
           },
           aiAgentic: {
-            summary: 'Autonomous strategy agents monitor market signals and recommend strategic adjustments — the Content Director curates strategic direction from AI-generated recommendations rather than building it from scratch.',
-            detail: 'Strategy agents analyze audience data, competitive signals, and content performance to generate recommended strategic adjustments: emerging topics to pursue, declining themes to deprioritize, audience segments showing new patterns, and competitive gaps that represent content opportunities. The Content Director evaluates these recommendations against organizational priorities and competitive positioning to make strategic decisions that the AI cannot. The strategy document updates itself with AI-generated data and awaits the Content Director\'s strategic interpretation.',
+            summary: 'Autonomous SEO agents optimize continuously within editorial quality boundaries — you define the strategy.',
+            detail: 'SEO agents self-optimize content based on real-time search signals and your editorial quality guardrails. You set strategic keywords and constraints, not individual page optimizations.',
           },
         },
-
-        'audience-personas': {
+        'brand-compliance': {
           preAI: {
-            summary: 'Audience personas are workshop artifacts — created during annual planning, based on assumptions and limited data, and increasingly disconnected from actual audience behavior as the year progresses.',
-            detail: 'Personas were built during a strategy offsite using a mix of sales team anecdotes, survey data, and market research. They capture demographic and psychographic profiles but rarely reflect behavioral patterns or evolving needs. The Content Director references personas during brief writing but knows they are approximations — the real audience understanding lives in the Content Director\'s accumulated experience, not in the persona documents.',
+            summary: 'Brand checks are subjective and slow, creating delays in your editorial quality workflow.',
+            detail: 'Brand reviewers interpret guidelines differently. Inconsistent enforcement of tone, terminology, and messaging means editorial quality is harder to maintain at scale.',
           },
           aiAgents: {
-            summary: 'AI-enriched personas incorporate CDP behavioral data and content engagement patterns — giving the Content Director evidence-based audience intelligence that updates with real usage data.',
-            detail: 'Persona profiles are enriched by AI agents that analyze CDP data, content engagement patterns, search behavior, and conversion paths. The Content Director works with personas that reflect how the audience actually behaves, not how the organization assumed they would. This data-enriched view improves brief quality because audience needs are grounded in evidence rather than assumptions.',
+            summary: 'AI brand checkers flag violations and score editorial quality alignment before human review.',
+            detail: 'Brand agents scan content against guidelines and highlight editorial quality issues. You make judgment calls on edge cases rather than catching basic violations.',
           },
           aiAgentic: {
-            summary: 'Autonomous persona agents maintain living audience models that update continuously from behavioral data — the Content Director sets segmentation strategy while the system maintains accuracy.',
-            detail: 'Personas become living models that evolve with real-time behavioral data. Autonomous agents detect audience segment shifts (emerging needs, declining engagement, new behavioral patterns) and update persona profiles automatically. The Content Director curates the segmentation framework — defining which segments matter strategically and how content should be differentiated across them — while the system maintains the factual accuracy of each profile.',
+            summary: 'Autonomous brand agents enforce compliance at scale with editorial quality rules — you update the rulebook.',
+            detail: 'Brand agents apply and evolve compliance checks across all content automatically. Your editorial quality standards are codified as machine-enforceable rules that you govern and refine.',
           },
         },
-
-        'scoring-matrix': {
+        'final-edit': {
           preAI: {
-            summary: 'The scoring matrix is a spreadsheet with weighted criteria that the Content Director maintains manually — applied inconsistently and rarely updated to reflect changing strategic priorities.',
-            detail: 'The scoring matrix defines the criteria by which content requests are prioritized: strategic alignment, audience value, resource requirements, and estimated ROI. It exists as a spreadsheet or document that the Content Director references during scoring, but its criteria are not systematically applied to every request, and updates happen reactively (when a high-profile misallocation is noticed) rather than proactively.',
+            summary: 'Final edits depend entirely on editor availability, blocking your editorial quality timelines.',
+            detail: 'A single editor bottleneck means content waits in queue. Your editorial quality deadlines slip because there is no way to parallelize the final polish step.',
           },
           aiAgents: {
-            summary: 'AI operationalizes the scoring matrix — applying criteria consistently to every request and providing data-backed scoring that the Content Director validates rather than manually calculates.',
-            detail: 'The scoring matrix becomes an automated evaluation engine that the AI agent applies to every incoming request. Criteria weights are explicit and visible, scoring is consistent across all requests, and the Content Director validates edge cases rather than manually calculating scores. The matrix also gains a feedback loop: content performance data is matched to initial scores, allowing the Content Director to see which scoring criteria actually predict success.',
+            summary: 'AI editing assistants handle mechanical fixes, freeing your editorial quality focus for strategic polish.',
+            detail: 'Editing agents catch grammar, style, and consistency issues automatically. Your editorial quality perspective is reserved for nuance and narrative quality.',
           },
           aiAgentic: {
-            summary: 'Autonomous scoring agents continuously optimize the matrix based on content performance data — the Content Director sets strategic priorities and the system learns which criteria best predict content ROI.',
-            detail: 'The scoring matrix becomes a self-improving model that learns from content performance data. Autonomous agents adjust criteria weights based on what actually predicts content success, surfacing recommendations for the Content Director to approve. The Content Director\'s role shifts from maintaining the matrix to governing it — approving model changes, overriding recommendations when strategic context exceeds the model\'s data, and ensuring the scoring criteria reflect current organizational priorities.',
+            summary: 'Autonomous editing agents polish content to publication standard — your editorial quality bar is encoded as policy.',
+            detail: 'Editing agents handle all mechanical and stylistic refinement autonomously. Your editorial quality standards are embedded as editorial policies that improve with each iteration.',
+          },
+        },
+        'schedule-publish': {
+          preAI: {
+            summary: 'Publishing is a manual CMS process with no connection to your editorial quality planning.',
+            detail: 'Each piece requires manual scheduling, metadata entry, and CMS configuration. Your editorial quality goals are disconnected from the publish timeline.',
+          },
+          aiAgents: {
+            summary: 'AI scheduling agents suggest optimal publish timing based on editorial quality data.',
+            detail: 'Publishing agents recommend times and configurations informed by your editorial quality priorities. You approve the schedule rather than manually configuring CMS settings.',
+          },
+          aiAgentic: {
+            summary: 'Autonomous publishing agents manage scheduling end-to-end using editorial quality optimization logic.',
+            detail: 'Publishing agents handle CMS configuration, timing optimization, and deployment autonomously within your editorial quality constraints. You set publishing policies, not individual schedules.',
+          },
+        },
+        'distribute': {
+          preAI: {
+            summary: 'Content distribution is manual channel-by-channel, with limited visibility into editorial quality.',
+            detail: 'Each channel requires separate formatting, scheduling, and posting. There is no unified view of how distribution supports your editorial quality objectives.',
+          },
+          aiAgents: {
+            summary: 'AI distribution agents adapt content per channel with editorial quality rules built in.',
+            detail: 'Distribution agents format and deploy content across channels following your editorial quality guidelines. You monitor and adjust rather than manually posting to each platform.',
+          },
+          aiAgentic: {
+            summary: 'Autonomous distribution agents manage all channels with editorial quality rules — you govern the playbook.',
+            detail: 'Distribution agents deploy, adapt, and optimize content across every channel following your editorial quality playbook. You evolve distribution strategy, not execute individual channel posts.',
+          },
+        },
+        'track-performance': {
+          preAI: {
+            summary: 'Performance tracking is fragmented across tools, making editorial quality assessment difficult.',
+            detail: 'You pull data from analytics dashboards, social platforms, and CRM separately. Building a complete picture for editorial quality requires manual data stitching.',
+          },
+          aiAgents: {
+            summary: 'AI dashboards surface editorial quality metrics in real time without manual data pulling.',
+            detail: 'Performance agents aggregate data and highlight the editorial quality signals that matter to you. You analyze trends rather than building dashboards from scratch.',
+          },
+          aiAgentic: {
+            summary: 'Autonomous tracking agents monitor editorial quality metrics continuously and trigger alerts and actions.',
+            detail: 'Performance agents stream editorial quality data and automatically trigger optimization workflows when thresholds are breached. You define KPIs and review strategic implications.',
+          },
+        },
+        'generate-report': {
+          preAI: {
+            summary: 'Reports are built manually in spreadsheets, often missing the editorial quality metrics you need.',
+            detail: 'Report creation takes hours of data gathering and formatting. The metrics that matter for editorial quality are often buried or missing entirely from standard templates.',
+          },
+          aiAgents: {
+            summary: 'AI generates reports with editorial quality metrics pre-formatted and insights highlighted.',
+            detail: 'Reporting agents compile your editorial quality data into structured templates with automated analysis. You add strategic narrative rather than wrangling data.',
+          },
+          aiAgentic: {
+            summary: 'Autonomous reporting agents produce editorial quality reports on demand with strategic recommendations.',
+            detail: 'Reporting agents generate editorial quality analyses with actionable recommendations automatically. You consume insights and set strategic direction rather than producing reports.',
+          },
+        },
+        'optimize': {
+          preAI: {
+            summary: 'Content optimization is reactive and slow, with limited connection to editorial quality data.',
+            detail: 'Optimization decisions rely on gut feel and delayed data. Your editorial quality insights rarely feed back into content updates in a timely way.',
+          },
+          aiAgents: {
+            summary: 'AI recommends optimizations based on editorial quality signals and historical performance.',
+            detail: 'Optimization agents suggest specific changes tied to your editorial quality metrics. You approve and prioritize recommendations rather than diagnosing issues manually.',
+          },
+          aiAgentic: {
+            summary: 'Autonomous optimization agents improve content continuously using editorial quality signals — you set boundaries.',
+            detail: 'Optimization agents test, iterate, and improve content based on editorial quality data within your guardrails. You define acceptable ranges and review significant changes.',
+          },
+        },
+        'quality-check': {
+          preAI: {
+            summary: 'Quality checks are inconsistent manual reviews with no standard editorial quality criteria.',
+            detail: 'Quality varies by reviewer and day. There is no automated baseline for readability, accuracy, or editorial quality alignment, leading to uneven content standards.',
+          },
+          aiAgents: {
+            summary: 'AI quality gates enforce baseline standards, letting you focus on editorial quality nuance.',
+            detail: 'Quality agents score readability, accuracy, and SEO automatically. Your editorial quality evaluation focuses on strategic alignment rather than mechanical checks.',
+          },
+          aiAgentic: {
+            summary: 'Autonomous quality agents enforce standards continuously — editorial quality baselines are self-maintaining.',
+            detail: 'Quality agents apply and evolve quality standards based on your editorial quality benchmarks. You set quality policies that the system enforces and improves over time.',
+          },
+        },
+        'brand-review': {
+          preAI: {
+            summary: 'Brand reviews are subjective gates that slow your editorial quality pipeline.',
+            detail: 'Reviewers apply brand guidelines inconsistently. What passes one review fails the next, creating unpredictable delays in your editorial quality workflow.',
+          },
+          aiAgents: {
+            summary: 'AI brand agents pre-score content, surfacing editorial quality issues before your review.',
+            detail: 'Brand review agents apply guidelines consistently and flag editorial quality deviations. You handle exceptions and judgment calls rather than full content scans.',
+          },
+          aiAgentic: {
+            summary: 'Autonomous brand agents review all content at scale — you govern editorial quality policy evolution.',
+            detail: 'Brand review agents handle all compliance checking autonomously with your editorial quality rules. You update brand guidelines and review the rare edge case that requires human judgment.',
+          },
+        },
+        'stakeholder-signoff': {
+          preAI: {
+            summary: 'Stakeholder sign-off is a bottleneck where executives delay your editorial quality timelines.',
+            detail: 'Senior approvers are busy and unresponsive. Your editorial quality work stalls while waiting for sign-off, and last-minute changes create downstream chaos.',
+          },
+          aiAgents: {
+            summary: 'AI prepares sign-off packages with editorial quality summaries for faster executive approval.',
+            detail: 'Sign-off agents compile context, changes, and editorial quality impact assessments for approvers. Executives review structured summaries rather than raw content.',
+          },
+          aiAgentic: {
+            summary: 'Autonomous agents handle routine sign-offs within editorial quality parameters — executives approve strategy only.',
+            detail: 'Sign-off agents clear content that meets all editorial quality criteria automatically. Executives only review strategic pivots or high-risk content that breaches defined thresholds.',
+          },
+        },
+        'performance-review': {
+          preAI: {
+            summary: 'Performance reviews are infrequent manual assessments that underserve your editorial quality needs.',
+            detail: 'Reviews happen quarterly at best, using outdated data. Your editorial quality perspective is often missing from the evaluation criteria entirely.',
+          },
+          aiAgents: {
+            summary: 'AI evaluates content against KPIs and highlights editorial quality trends for your review.',
+            detail: 'Review agents surface performance data with editorial quality context pre-attached. You make optimize/archive decisions based on structured analysis rather than raw metrics.',
+          },
+          aiAgentic: {
+            summary: 'Autonomous review agents evaluate and act on performance with editorial quality logic — you set the framework.',
+            detail: 'Review agents continuously assess content against your editorial quality KPIs and trigger optimize/refresh/archive workflows automatically. You define the evaluation framework.',
+          },
+        },
+        'social-listening': {
+          preAI: {
+            summary: 'Social listening is ad hoc keyword monitoring with no systematic link to editorial quality.',
+            detail: 'You check social platforms manually for relevant conversations. Insights rarely reach your editorial quality workflow before they become stale or irrelevant.',
+          },
+          aiAgents: {
+            summary: 'AI monitoring tools surface trending topics and sentiment relevant to editorial quality in real time.',
+            detail: 'Listening agents track conversations and flag editorial quality signals across platforms. You act on curated insights rather than monitoring feeds manually.',
+          },
+          aiAgentic: {
+            summary: 'Autonomous listening agents track and respond to editorial quality signals across all platforms in real time.',
+            detail: 'Listening agents monitor social channels and proactively surface editorial quality opportunities and risks. You set monitoring priorities and review strategic findings.',
+          },
+        },
+        'visual-asset-creation': {
+          preAI: {
+            summary: 'Visual asset creation is a slow design queue disconnected from your editorial quality needs.',
+            detail: 'Design requests go into a backlog with unclear priorities. Your editorial quality requirements are often lost in translation between brief and final asset.',
+          },
+          aiAgents: {
+            summary: 'AI design tools generate asset options aligned with editorial quality requirements.',
+            detail: 'Design agents produce visual variants following your editorial quality guidelines. You select and refine from AI-generated options rather than directing from scratch.',
+          },
+          aiAgentic: {
+            summary: 'Autonomous design agents produce visual assets within editorial quality guidelines — you set creative direction.',
+            detail: 'Design agents generate publication-ready visuals following your editorial quality standards. You define the creative vision and approve hero assets while routine visuals ship autonomously.',
+          },
+        },
+        'legal-review': {
+          preAI: {
+            summary: 'Legal review is an opaque process that creates unpredictable delays in your editorial quality work.',
+            detail: 'Legal feedback arrives late with minimal context. You cannot predict how long review will take, making editorial quality planning unreliable.',
+          },
+          aiAgents: {
+            summary: 'AI legal screening flags compliance risks early, reducing editorial quality surprises downstream.',
+            detail: 'Legal agents pre-scan content for regulatory issues and editorial quality risks. You get early warnings rather than discovering problems at the sign-off stage.',
+          },
+          aiAgentic: {
+            summary: 'Autonomous legal agents clear routine content and escalate only true editorial quality risks to human counsel.',
+            detail: 'Legal agents scan and clear standard content autonomously using your editorial quality rule framework. Human lawyers handle novel risk scenarios and precedent-setting decisions only.',
+          },
+        },
+        'accessibility-check': {
+          preAI: {
+            summary: 'Accessibility checking is a manual afterthought, rarely connected to your editorial quality process.',
+            detail: 'WCAG compliance and inclusive language reviews happen late in the pipeline. Your editorial quality work is already done when accessibility issues force rework.',
+          },
+          aiAgents: {
+            summary: 'AI accessibility tools catch WCAG violations automatically, protecting your editorial quality standards.',
+            detail: 'Accessibility agents scan for inclusive language and alt-text compliance. Your editorial quality requirements benefit from automated baseline checks before human review.',
+          },
+          aiAgentic: {
+            summary: 'Autonomous accessibility agents enforce WCAG and inclusive standards — editorial quality is guaranteed by default.',
+            detail: 'Accessibility agents ensure all content meets compliance standards before publication. Your editorial quality benefits from guaranteed accessibility without manual checking overhead.',
+          },
+        },
+        'localize-content': {
+          preAI: {
+            summary: 'Localization is a slow, manual translation process that delays your editorial quality for global markets.',
+            detail: 'Each market requires separate translation, cultural review, and compliance checking. Your editorial quality suffers because localized versions lag weeks behind the original.',
+          },
+          aiAgents: {
+            summary: 'AI translation agents accelerate localization while respecting editorial quality requirements.',
+            detail: 'Localization agents produce initial translations with editorial quality context preserved. You review for cultural nuance rather than translating from scratch.',
+          },
+          aiAgentic: {
+            summary: 'Autonomous localization agents adapt content for all markets simultaneously — your editorial quality scales globally.',
+            detail: 'Localization agents handle translation, cultural adaptation, and regional compliance autonomously. Your editorial quality is maintained across markets without manual per-locale effort.',
+          },
+        },
+        'ab-variant-creation': {
+          preAI: {
+            summary: 'A/B variants are created manually with limited connection to your editorial quality hypotheses.',
+            detail: 'Test variants rely on guesswork rather than data. Your editorial quality insights rarely inform variant design, reducing the value of testing efforts.',
+          },
+          aiAgents: {
+            summary: 'AI generates test variants informed by editorial quality data and historical performance.',
+            detail: 'Variant agents create headlines, CTAs, and imagery options based on your editorial quality hypotheses. You select winning approaches rather than brainstorming from zero.',
+          },
+          aiAgentic: {
+            summary: 'Autonomous variant agents design, deploy, and learn from tests using editorial quality hypotheses — you set the agenda.',
+            detail: 'Variant agents run continuous testing experiments informed by your editorial quality objectives. You define what to test and review strategic learnings while the system iterates autonomously.',
+          },
+        },
+        'content-repurposing': {
+          preAI: {
+            summary: 'Content repurposing is manual reformatting, disconnected from your editorial quality goals.',
+            detail: 'Each derivative asset is created from scratch. Your editorial quality requirements are not systematically applied when repurposing content across formats.',
+          },
+          aiAgents: {
+            summary: 'AI repurposing agents derive secondary assets with editorial quality consistency built in.',
+            detail: 'Repurposing agents transform primary content into channel-specific formats following your editorial quality guidelines. You approve derivatives rather than recreating each manually.',
+          },
+          aiAgentic: {
+            summary: 'Autonomous repurposing agents derive all secondary assets automatically within editorial quality guidelines.',
+            detail: 'Repurposing agents transform primary content into every derivative format following your editorial quality rules. You set format strategy while the system handles production at scale.',
+          },
+        },
+        'archive-tag': {
+          preAI: {
+            summary: 'Content archiving is inconsistent, making editorial quality-related retrieval nearly impossible.',
+            detail: 'Tagging and taxonomy are applied inconsistently or not at all. Finding past content relevant to editorial quality requires searching through unstructured repositories.',
+          },
+          aiAgents: {
+            summary: 'AI tagging agents classify content automatically, making editorial quality retrieval faster.',
+            detail: 'Archive agents apply taxonomy and metadata based on your editorial quality categories. You validate classifications rather than manually tagging every asset.',
+          },
+          aiAgentic: {
+            summary: 'Autonomous archive agents maintain perfect taxonomy — editorial quality retrieval is instant and reliable.',
+            detail: 'Archive agents classify, tag, and organize all content using your editorial quality taxonomy automatically. You evolve the taxonomy structure while the system maintains it flawlessly.',
+          },
+        },
+        'legal-compliance-gate': {
+          preAI: {
+            summary: 'Legal compliance gates create unpredictable holds that delay your editorial quality deadlines.',
+            detail: 'Legal sign-off timing is opaque and variable. Your editorial quality timelines are at the mercy of legal review queues with no visibility into status.',
+          },
+          aiAgents: {
+            summary: 'AI pre-screening reduces legal gate delays by resolving routine editorial quality checks automatically.',
+            detail: 'Compliance agents handle standard checks and only escalate editorial quality edge cases to human lawyers. Your timelines are more predictable because routine items clear faster.',
+          },
+          aiAgentic: {
+            summary: 'Autonomous compliance gates clear routine content instantly — only novel editorial quality risks reach human lawyers.',
+            detail: 'Compliance agents handle standard legal checks autonomously using your editorial quality risk framework. Human review is reserved for unprecedented scenarios and policy updates.',
+          },
+        },
+        'localization-quality-gate': {
+          preAI: {
+            summary: 'Localization quality gates are inconsistent, creating editorial quality risks in global markets.',
+            detail: 'Quality checks for localized content vary by market and reviewer. Your editorial quality standards are unevenly applied across regions and languages.',
+          },
+          aiAgents: {
+            summary: 'AI quality checks catch translation errors before they affect your editorial quality outcomes.',
+            detail: 'Localization QA agents verify accuracy and cultural fit automatically. Your editorial quality standards are applied consistently across all target markets.',
+          },
+          aiAgentic: {
+            summary: 'Autonomous QA agents ensure localization quality across all markets — editorial quality is guaranteed globally.',
+            detail: 'Localization QA agents validate every market adaptation autonomously against your editorial quality standards. You set quality criteria while the system enforces them at scale.',
+          },
+        },
+        'segment-mapping': {
+          preAI: {
+            summary: 'Segment mapping is manual spreadsheet work with limited visibility into editorial quality impact.',
+            detail: 'Mapping content variants to audience segments is done in spreadsheets. Your editorial quality data is disconnected from the personalization logic.',
+          },
+          aiAgents: {
+            summary: 'AI agents map variants to segments using editorial quality data from the CDP.',
+            detail: 'Segment agents recommend variant-audience matches based on your editorial quality signals. You review the mapping rather than building it manually in spreadsheets.',
+          },
+          aiAgentic: {
+            summary: 'Autonomous segment agents map and optimize variant-audience matches using live editorial quality signals.',
+            detail: 'Segment agents continuously refine variant-audience mappings based on real-time editorial quality data. You define segmentation strategy while the system executes and optimizes automatically.',
+          },
+        },
+        'dynamic-assembly': {
+          preAI: {
+            summary: 'Dynamic content assembly is rigid and template-bound, limiting your editorial quality options.',
+            detail: 'Personalized experiences require engineering support for each variant. Your editorial quality vision is constrained by inflexible assembly templates.',
+          },
+          aiAgents: {
+            summary: 'AI assembly agents construct personalized experiences informed by editorial quality rules.',
+            detail: 'Assembly agents combine content components per segment following your editorial quality logic. You define rules and review outputs rather than manually configuring each variant.',
+          },
+          aiAgentic: {
+            summary: 'Autonomous assembly agents construct personalized experiences in real time — editorial quality logic is self-optimizing.',
+            detail: 'Assembly agents build dynamic experiences per segment using your editorial quality rules and real-time behavioral signals. You govern personalization policies, not individual assembly configurations.',
+          },
+        },
+        'personalization-qa': {
+          preAI: {
+            summary: 'Personalization QA is manual spot-checking that misses editorial quality gaps.',
+            detail: 'Testing every segment-variant combination is impossible manually. Your editorial quality concerns are only caught when users report issues post-launch.',
+          },
+          aiAgents: {
+            summary: 'AI QA agents validate personalization coverage and flag editorial quality gaps before launch.',
+            detail: 'QA agents test every segment-variant combination against your editorial quality requirements. You review exception reports rather than manually spot-checking combinations.',
+          },
+          aiAgentic: {
+            summary: 'Autonomous QA agents validate every personalization scenario — editorial quality gaps are caught before launch.',
+            detail: 'Personalization QA agents test all segment-variant combinations against your editorial quality requirements automatically. You set acceptance criteria while the system validates at scale.',
+          },
+        },
+        'campaign-planning': {
+          preAI: {
+            summary: 'Campaign planning is a manual coordination effort with fragmented editorial quality inputs.',
+            detail: 'Campaign plans are built in decks and spreadsheets with incomplete data. Your editorial quality perspective is often incorporated too late in the planning cycle.',
+          },
+          aiAgents: {
+            summary: 'AI planning agents draft campaign frameworks with editorial quality data pre-integrated.',
+            detail: 'Planning agents pull audience, budget, and performance data into campaign templates. Your editorial quality priorities shape the plan from the start rather than being retrofitted.',
+          },
+          aiAgentic: {
+            summary: 'Autonomous planning agents generate campaign frameworks using editorial quality intelligence — you set objectives.',
+            detail: 'Planning agents produce data-driven campaign plans with your editorial quality priorities embedded. You define strategic goals while the system optimizes tactics and resource allocation.',
+          },
+        },
+        'consent-check': {
+          preAI: {
+            summary: 'Consent checking is a manual compliance step that adds friction to your editorial quality process.',
+            detail: 'Verifying GDPR/CCPA consent for targeting requires manual cross-referencing. Your editorial quality work is delayed while compliance status is manually confirmed.',
+          },
+          aiAgents: {
+            summary: 'AI consent agents verify targeting compliance automatically, reducing editorial quality friction.',
+            detail: 'Consent agents cross-reference CDP signals against GDPR/CCPA rules for your editorial quality needs. You handle exceptions rather than manually verifying every segment.',
+          },
+          aiAgentic: {
+            summary: 'Autonomous consent agents enforce privacy compliance at scale — editorial quality is guaranteed by architecture.',
+            detail: 'Consent agents verify targeting compliance in real time across all segments using your editorial quality framework. You set privacy policies while the system enforces them automatically.',
+          },
+        },
+        'paid-creative-production': {
+          preAI: {
+            summary: 'Paid creative production runs separately from organic, fragmenting your editorial quality oversight.',
+            detail: 'Ad creative and organic content are produced in silos. Your editorial quality perspective is applied inconsistently between paid and organic channels.',
+          },
+          aiAgents: {
+            summary: 'AI production agents generate paid variants from organic content with editorial quality consistency.',
+            detail: 'Paid creative agents adapt organic content for ad platforms following your editorial quality guidelines. You approve and fine-tune rather than producing ad creative from scratch.',
+          },
+          aiAgentic: {
+            summary: 'Autonomous production agents create paid variants at scale within editorial quality guardrails — you set the strategy.',
+            detail: 'Paid creative agents generate ad variants from organic content following your editorial quality guidelines. You define creative strategy while the system produces and optimizes at scale.',
+          },
+        },
+        'attribution-modeling': {
+          preAI: {
+            summary: 'Attribution modeling is manual and unreliable, undermining your editorial quality reporting.',
+            detail: 'Last-click attribution dominates despite its flaws. Your editorial quality decisions lack the multi-touch perspective needed for accurate performance assessment.',
+          },
+          aiAgents: {
+            summary: 'AI attribution models surface multi-touch insights relevant to your editorial quality priorities.',
+            detail: 'Attribution agents calculate content ROI across channels using your editorial quality weightings. You interpret strategic implications rather than building models manually.',
+          },
+          aiAgentic: {
+            summary: 'Autonomous attribution agents run multi-touch models continuously — editorial quality insights update in real time.',
+            detail: 'Attribution agents calculate content ROI across all channels using your editorial quality framework. You interpret strategic implications while the system handles modeling complexity.',
+          },
+        },
+        'executive-reporting': {
+          preAI: {
+            summary: 'Executive reports are manually assembled, often missing the editorial quality narrative you need.',
+            detail: 'Building executive dashboards takes hours of data wrangling. The editorial quality story you want to tell is lost in generic reporting templates.',
+          },
+          aiAgents: {
+            summary: 'AI builds executive dashboards with editorial quality narratives pre-drafted for leadership.',
+            detail: 'Reporting agents synthesize data into executive formats with your editorial quality story embedded. You refine the narrative rather than assembling data from scratch.',
+          },
+          aiAgentic: {
+            summary: 'Autonomous reporting agents produce executive dashboards with editorial quality narratives — you add strategic context.',
+            detail: 'Executive reporting agents synthesize all data into leadership-ready formats with your editorial quality story embedded. You provide strategic commentary on auto-generated insights.',
+          },
+        },
+        'competitive-response': {
+          preAI: {
+            summary: 'Competitive response is slow and reactive, giving you no editorial quality advantage.',
+            detail: 'By the time you spot a competitor move and respond, the moment has passed. Your editorial quality approach cannot adapt fast enough to real-time competitive signals.',
+          },
+          aiAgents: {
+            summary: 'AI competitive agents surface signals and draft responses aligned with editorial quality strategy.',
+            detail: 'Competitive agents monitor market moves and suggest editorial quality-aligned responses. You approve and refine reactive content rather than spotting threats manually.',
+          },
+          aiAgentic: {
+            summary: 'Autonomous competitive agents detect and draft responses in real time — editorial quality moves are countered instantly.',
+            detail: 'Competitive agents monitor signals, draft responses, and deploy within your editorial quality guardrails. You approve high-stakes responses while routine reactions ship autonomously.',
+          },
+        },
+        'journey-mapping': {
+          preAI: {
+            summary: 'Journey mapping is a manual exercise that rarely reflects your editorial quality reality.',
+            detail: 'Customer journey maps are created in workshops and quickly go stale. Your editorial quality perspective is a snapshot, not a living view of how content performs at each stage.',
+          },
+          aiAgents: {
+            summary: 'AI journey agents map content to lifecycle stages using editorial quality data from the CDP.',
+            detail: 'Journey agents dynamically map content to customer stages based on your editorial quality framework. You validate the mapping rather than building it manually in workshops.',
+          },
+          aiAgentic: {
+            summary: 'Autonomous journey agents maintain living maps using real-time editorial quality data — you shape the strategy.',
+            detail: 'Journey agents dynamically map content to lifecycle stages using live editorial quality signals. You define journey frameworks while the system optimizes content placement continuously.',
+          },
+        },
+        'sentiment-monitoring': {
+          preAI: {
+            summary: 'Sentiment monitoring is sporadic manual checking with no systematic link to editorial quality.',
+            detail: 'You check brand sentiment reactively rather than proactively. Your editorial quality decisions are made without real-time audience feedback signals.',
+          },
+          aiAgents: {
+            summary: 'AI sentiment agents track brand reception in real time, alerting you to editorial quality risks.',
+            detail: 'Sentiment agents analyze audience reactions and flag editorial quality concerns before they escalate. You respond to alerts rather than manually checking platforms.',
+          },
+          aiAgentic: {
+            summary: 'Autonomous sentiment agents monitor and respond to editorial quality signals around the clock — you govern escalation.',
+            detail: 'Sentiment agents track audience reactions and trigger editorial quality responses automatically. You set escalation thresholds and review strategic implications of sentiment shifts.',
+          },
+        },
+        'sales-enablement': {
+          preAI: {
+            summary: 'Sales enablement content is created ad hoc, disconnected from your editorial quality strategy.',
+            detail: 'Sales teams request materials outside the content pipeline. Your editorial quality standards are not applied to battle cards, decks, and one-pagers created in isolation.',
+          },
+          aiAgents: {
+            summary: 'AI agents generate sales materials from marketing content with editorial quality alignment.',
+            detail: 'Sales enablement agents transform marketing assets into battle cards and decks following your editorial quality standards. You approve rather than creating each piece manually.',
+          },
+          aiAgentic: {
+            summary: 'Autonomous enablement agents keep sales materials current with editorial quality alignment — you set the playbook.',
+            detail: 'Enablement agents automatically update battle cards, decks, and case studies as your editorial quality data evolves. You define the sales narrative while the system produces materials at scale.',
+          },
+        },
+        'influencer-brief': {
+          preAI: {
+            summary: 'Influencer briefs are manual documents with limited editorial quality guardrails.',
+            detail: 'Creator briefs are written from scratch each time. Your editorial quality guidelines are inconsistently communicated to external partners and influencers.',
+          },
+          aiAgents: {
+            summary: 'AI agents draft influencer briefs with editorial quality guardrails embedded automatically.',
+            detail: 'Brief agents generate creator guidelines from your editorial quality requirements and past successful collaborations. You customize rather than writing each brief from scratch.',
+          },
+          aiAgentic: {
+            summary: 'Autonomous brief agents generate creator guidelines with editorial quality guardrails — you approve partnerships.',
+            detail: 'Brief agents produce personalized influencer guidelines using your editorial quality framework and creator history. You focus on relationship strategy while briefs ship autonomously.',
+          },
+        },
+        'ugc-moderation': {
+          preAI: {
+            summary: 'UGC moderation is manual screening that cannot scale to protect editorial quality.',
+            detail: 'User-generated content is reviewed one piece at a time. Your editorial quality standards cannot be consistently enforced across the volume of submissions.',
+          },
+          aiAgents: {
+            summary: 'AI moderation agents screen UGC for brand safety and editorial quality compliance at scale.',
+            detail: 'Moderation agents filter user-generated content against your editorial quality criteria. You review borderline cases rather than manually screening every submission.',
+          },
+          aiAgentic: {
+            summary: 'Autonomous moderation agents screen all UGC for editorial quality compliance at scale — you govern edge cases.',
+            detail: 'Moderation agents filter user-generated content using your editorial quality rules continuously. You update moderation policies and review borderline cases that the system escalates.',
+          },
+        },
+        'channel-orchestration': {
+          preAI: {
+            summary: 'Channel orchestration is manual coordination with no systematic editorial quality integration.',
+            detail: 'Cross-channel timing is managed in spreadsheets and Slack. Your editorial quality requirements for sequencing and coordination are often overridden by ad hoc changes.',
+          },
+          aiAgents: {
+            summary: 'AI orchestration agents sequence distribution with editorial quality rules for timing and cadence.',
+            detail: 'Orchestration agents coordinate cross-channel timing based on your editorial quality requirements. You set rules and review the sequence rather than managing each channel individually.',
+          },
+          aiAgentic: {
+            summary: 'Autonomous orchestration agents manage all channel timing with editorial quality logic — you set the playbook.',
+            detail: 'Orchestration agents handle cross-channel sequencing, timing, and coordination autonomously using your editorial quality rules. You evolve the orchestration strategy while the system executes.',
           },
         },
       },
-      keyInsight: 'Brief approval is where strategic judgment has the highest leverage — and the highest bottleneck cost. Organizations that automate this gate discover that competitive intuition cannot be reduced to a scoring rubric, but 80% of the decisions that currently require it actually do not. The Content Director\'s value concentrates when volume disperses.',
+      keyInsight: 'Brief approval is where strategic judgment has the highest leverage. Organizations that automate this gate discover that competitive intuition can\'t be reduced to a scoring rubric.',
     },
   },
-
-
-  // ═══════════════════════════════════════════════════════════════════════════
-  // ROLE 2: BRAND MANAGER
-  // ═══════════════════════════════════════════════════════════════════════════
   {
     id: 'brand-manager',
     title: 'Brand Manager',
-    description: 'Reviews content for brand compliance and can escalate to stakeholder sign-off. The immune system of organizational identity — catching inconsistencies before they reach the market.',
-    tagline: 'Guards tone, voice, and identity — the 20% of decisions that require human expertise.',
+    description: 'Reviews content for brand compliance and can escalate to stakeholder sign-off.',
+    tagline: 'Guards tone, voice, and identity.',
     iconName: 'ShieldCheck',
     category: 'governance',
     accentColor: '#D4856A',
@@ -595,177 +714,35 @@ export const ROLE_DEFINITIONS: RoleDefinition[] = [
     relatedAgents: ['writer-agent'],
     relatedInputs: ['brand-guide'],
     narrative: {
-      stageOverviews: {
-        preAI: {
-          narrative: 'Brand management is manual gatekeeping. A single person reviews every piece of copy, every design asset, every customer touchpoint. Speed is impossible; consistency is inconsistent because no human can hold 40 brand rules perfectly in working memory across dozens of reviews daily.',
-          timeAllocation: '68% routine compliance checks, 20% exception handling, 8% strategic guidance, 4% training and escalation',
-          criticalMetrics: ['Review turnaround time (currently 2-5 days)', 'Brand consistency score across digital properties (typically 45-60%)', 'Number of brand violations caught post-launch', 'Time spent on routine vs. strategic decisions', 'Stakeholder satisfaction with brand enforcement'],
-          strategicOpportunity: 'Build a documented framework that captures what "brand compliance" actually means — not just the rules, but the judgment calls that separate "close enough" from "unacceptable." This framework becomes the blueprint for AI augmentation.',
-        },
-        aiAgents: {
-          narrative: 'AI tools (Acrolinx, Writer, custom classifiers) take the rote work off the Brand Manager\'s desk. They flag tone violations, style drift, template misuse, and forbidden word lists. The Brand Manager reviews machine-flagged exceptions rather than everything. The tooling is competent but domain-naive: it catches what is easy to measure.',
-          timeAllocation: '48% managing AI exceptions, 24% training and tuning models, 18% strategic guidance, 10% novel brand issues',
-          criticalMetrics: ['AI precision on routine compliance (70-80% of checks automated)', 'False positive rate requiring manual review', 'Time savings per review cycle', 'Brand consistency improvement (typically 65-75%)', 'Cost per compliance check (down 40-60%)'],
-          strategicOpportunity: 'Use the bandwidth freed by automation to build a brand context library — documented examples of cultural sensitivity, competitor positioning, and emerging trend response. This becomes institutional knowledge that survives team turnover.',
-        },
-        aiAgentic: {
-          narrative: 'AI agents deeply understand brand context and can reason about ambiguity. They explain their decisions, suggest revisions, or escalate only when judgment calls require cultural or competitive sensitivity. The Brand Manager becomes a director of brand interpretation rather than an inspector of compliance.',
-          timeAllocation: '15% reviewing escalated edge cases, 25% brand strategy evolution, 30% competitive brand analysis, 20% cultural sensitivity and trend monitoring, 10% system governance',
-          criticalMetrics: ['Brand consistency score (target: 90%+)', 'Autonomous resolution rate (target: 85%+)', 'Time to market for brand-compliant content', 'Escalation quality (signal vs. noise)', 'Post-launch brand violation rate (target: <2%)'],
-          strategicOpportunity: 'With operational brand enforcement automated, the Brand Manager\'s role evolves from defensive (preventing violations) to offensive (shaping brand evolution, monitoring competitive positioning, and building cultural relevance). This is the difference between brand management and brand leadership.',
-        },
-      },
       nodeJourneys: {
         'brand-compliance': {
           preAI: {
-            summary: 'Every content piece is manually reviewed against brand guidelines for tone, terminology, visual consistency, and messaging alignment. The Brand Manager processes 20-40 reviews per week, with most surfacing no issues — the role is largely routine compliance checking that masks the 20% of decisions requiring genuine expertise.',
-            detail: 'Brand compliance at scale is a consistency problem. The Brand Manager checks content against a brand guide that specifies tone, voice, visual standards, and messaging pillars. But "on-brand" is not binary — it is a spectrum of judgment calls that depend on audience, channel, context, and competitive positioning. A phrase that works on LinkedIn may violate brand voice on a product page. Visual consistency across 8+ channels requires pattern recognition that degrades with fatigue. The real cost is not the time spent reviewing — it is the inconsistency that results from human cognitive limits. Companies with high brand consistency achieve 2.4x higher average growth rates than inconsistent competitors, making the Brand Manager\'s accuracy directly tied to revenue.',
-            painPoints: [
-              'Brand guidelines live in a 50-100 page document that no one reads end-to-end; reviewers develop personal mental models that diverge from each other over time',
-              'Review turnaround of 2-5 days creates scheduling bottlenecks that pressure teams to skip brand review on "low-risk" content — which is where brand drift actually starts',
-              '81% of companies struggle with maintaining brand consistency across channels, suggesting the manual review model has structural limits (Lucidpress/Marq)',
-              'Post-launch brand violations are 3-5x more expensive to fix than pre-launch catches due to audience exposure and coordination costs',
-            ],
-            benchmarks: [
-              '81% of companies struggle with maintaining brand consistency across channels (Marq Brand Consistency Report)',
-              'Companies with high brand consistency achieve 2.4x higher average growth rates (Marq 2021)',
-              '32% of customers leave after a single bad brand experience (PwC / Marq composite)',
-            ],
-            outcomes: [
-              'Brand consistency score across digital properties: typically 45-60% without AI augmentation',
-              'Review cycle adds 2-5 business days to content timeline per piece',
-              'Post-launch brand violations: 5-10% of published content (estimated, often uncaught)',
-            ],
-            roleEvolution: 'The Brand Manager is an inspector on an assembly line. Expertise is exercised in the margins between reviews, not during them. The most common failure mode is approval fatigue: after reviewing 30 pieces, the 31st gets less scrutiny regardless of its risk level.',
+            summary: 'You manually review every content piece against brand guidelines for tone, terminology, and visual consistency.',
+            detail: 'Most reviews surface no issues — the role is largely routine compliance checking with occasional catches on messaging drift.',
           },
           aiAgents: {
-            summary: 'An AI agent pre-scans content for brand voice scores, terminology violations, and visual consistency before it reaches the Brand Manager. 70-80% of routine checks are automated, reducing the queue to exception-only reviews and cutting turnaround from days to hours.',
-            detail: 'AI brand compliance tools (Acrolinx, Writer, custom classifiers) score content against brand guidelines in real-time. They check tone against a trained voice model, flag forbidden terminology, detect messaging drift from approved pillars, and validate visual assets against brand templates. The Brand Manager receives a pre-screened queue: content that passed automated checks moves forward without review; content flagged for exceptions requires human judgment. The critical shift is from "review everything" to "review the interesting cases." The Brand Manager\'s judgment concentrates on ambiguous situations: a campaign that deliberately pushes brand boundaries for a new audience, content that responds to a competitor\'s messaging in a way that requires tonal calibration, or culturally sensitive content where automated tools lack context.',
-            painPoints: [
-              'AI brand tools are competent at detecting what is easy to measure (word choice, tone score, template adherence) but blind to what is hard to measure (cultural appropriateness, competitive positioning, audience resonance)',
-              'False positives consume Brand Manager time without adding value — flagging content as "off-brand" when it is deliberately pushing boundaries for strategic reasons',
-              'Training the AI model requires explicit articulation of implicit brand rules — many Brand Managers discover they cannot document the judgment calls they make intuitively',
-            ],
-            benchmarks: [
-              'AI brand compliance tools automate 70-80% of routine checks (Writer/Acrolinx benchmarks 2024)',
-              'Brand consistency score improves to 65-75% with AI-augmented review (industry composite)',
-              'Review turnaround drops from 2-5 days to same-day for AI-cleared content (Writer case studies)',
-            ],
-            outcomes: [
-              'Brand Manager review queue drops by 70-80%, focusing on genuinely ambiguous cases',
-              'Brand consistency improves to 65-75% as automated checks apply standards uniformly',
-              'Cost per compliance check drops 40-60% while throughput increases 3-5x',
-            ],
-            roleEvolution: 'The Brand Manager shifts from inspector to calibrator. The daily work changes from "read everything and check" to "tune the model, review exceptions, and handle the judgment calls that AI cannot." The most important new skill is understanding what the AI gets wrong and why.',
+            summary: 'An AI agent pre-scans content for brand voice scores and terminology violations before it reaches you.',
+            detail: 'You stop reviewing everything and start reviewing exceptions. Automated checks catch 80% of issues, so your queue drops dramatically.',
           },
           aiAgentic: {
-            summary: 'Brand compliance becomes a continuous system property, not a batch review step. Agents enforce brand rules during content creation, not after — catching violations before content is even drafted. The Brand Manager defines rules, handles edge cases involving cultural sensitivity and competitive positioning, and evolves the brand as a living system.',
-            detail: 'Agentic brand compliance operates at the point of creation: when a writer or AI drafts content, brand agents evaluate it in real-time and suggest corrections before the draft is complete. Visual assets are checked against brand templates as they are created. The agentic layer understands context — a social media post for Gen Z can use casual tone that would violate brand guidelines for an enterprise whitepaper. The Brand Manager intervenes only on genuinely novel situations: a new market entry requiring brand voice adaptation, a crisis communication that demands tonal recalibration, or a competitive response where the brand\'s positioning relative to a rival must be hand-crafted. The key challenge at this stage is brand evolution: with compliance automated, the Brand Manager\'s value shifts from enforcement to strategy — shaping how the brand adapts to new audiences, cultural shifts, and competitive dynamics.',
-            painPoints: [
-              'Automated brand enforcement at the creation stage requires deep integration with content creation tools — many legacy workflows resist this integration',
-              'The Brand Manager must resist the urge to review content that the system has already cleared — selective oversight requires trust',
-              'Brand evolution (adapting the brand to new markets, audiences, or cultural contexts) requires strategic judgment that no model can replicate — if the Brand Manager focuses only on enforcement governance, the brand stagnates',
-            ],
-            benchmarks: [
-              'Agentic brand enforcement achieves 90%+ consistency across channels (industry target for mature deployments)',
-              'Post-launch brand violation rate drops to <2% (vs. 5-10% with manual review)',
-              'Brand compliance cost per content piece approaches near-zero for standard content types (industry composite)',
-            ],
-            outcomes: [
-              'Brand consistency reaches 90%+ across all channels and content types',
-              'Content-to-market time for brand-compliant content drops by 60-70% vs. manual review',
-              'Brand Manager time shifts from enforcement (was 68%) to strategic brand evolution (now 55%+)',
-            ],
-            roleEvolution: 'The Brand Manager becomes a brand strategist and cultural interpreter. Their most important activities are: (1) evolving the brand voice for new audiences and channels, (2) monitoring competitive brand positioning and recommending responses, (3) governing the agentic enforcement system to ensure it reflects current brand strategy, and (4) handling the genuinely novel edge cases where cultural sensitivity, competitive dynamics, or organizational politics require human judgment.',
+            summary: 'Brand compliance becomes a continuous system property, not a batch review step.',
+            detail: 'Agents enforce brand rules during content creation, not after. You define the rules and handle edge cases — cultural sensitivity, emerging trends, reputational judgment.',
           },
         },
         'brand-review': {
           preAI: {
-            summary: 'Brand review is a formal gate where the Brand Manager evaluates content against brand standards before publication. Reviews are batched weekly, creating bottlenecks that pressure teams to submit late or skip review entirely on "safe" content.',
-            detail: 'The brand review gate is where content quality is formally assessed against brand standards. The Brand Manager reads each piece, evaluates tone, messaging, visual consistency, and audience appropriateness. Feedback is delivered via comments in a shared document or approval tool. The gate adds 2-5 days to the content timeline and is often the single largest scheduling bottleneck in the pipeline.',
-            painPoints: [
-              'Batch review creates feast-or-famine cycles: nothing to review for days, then 15 pieces due Friday',
-              'Feedback loops are slow; by the time revisions are made, the creator has moved on to other projects',
-              'Teams learn to avoid the gate by classifying content as "low-risk" when it is not',
-            ],
-            benchmarks: [
-              'Average brand review cycle: 2-5 business days (industry average)',
-              'Content that bypasses brand review has 3x higher brand violation rate (industry estimate)',
-            ],
-            outcomes: [
-              'Brand review catches 70-80% of violations before publication',
-              'But review bottleneck causes 15-20% of content to skip the gate entirely',
-            ],
-            roleEvolution: 'The Brand Manager spends 60%+ of time on formal review activities that add days to the timeline. Strategic brand work (evolution, competitive positioning) is deferred to quarterly planning.',
+            summary: 'You are the final checkpoint ensuring no off-brand content reaches publication.',
+            detail: 'Every piece queues for your review. Volume-driven fatigue means genuine issues occasionally slip through because you\'re reviewing dozens of items daily.',
           },
           aiAgents: {
-            summary: 'AI pre-screening automates the brand review gate for routine content. Only flagged exceptions reach the Brand Manager, reducing the gate from a multi-day bottleneck to a same-day decision point for edge cases.',
-            detail: 'The brand review gate splits into two lanes: AI-cleared content flows through automatically with a compliance score logged; AI-flagged content enters the Brand Manager\'s review queue with specific violation indicators. The Brand Manager reviews only the flagged items, focusing on the judgment calls the AI cannot make.',
-            painPoints: [
-              'Splitting the gate into two lanes requires clear thresholds — too strict and everything gets flagged; too lenient and violations pass through',
-              'The Brand Manager must validate that AI-cleared content actually meets standards via periodic audits',
-            ],
-            benchmarks: [
-              'AI-augmented brand review reduces gate time to same-day for 70-80% of content (Writer/Acrolinx)',
-              'Flagged-exception review takes 5-10 minutes per item vs. 15-20 minutes for full review',
-            ],
-            outcomes: [
-              'Brand review gate time drops from 2-5 days to same-day for most content',
-              'No content bypasses the gate because automated review is instant and non-blocking',
-              'Brand Manager reviews 5-10 escalated items per week instead of 20-40 full reviews',
-            ],
-            roleEvolution: 'The Brand Manager shifts from gate operator to gate architect. They define the scoring thresholds, audit AI decisions periodically, and handle the exception queue.',
+            summary: 'The gate pre-filters content with brand scoring — only items below threshold reach your review queue.',
+            detail: 'Your queue shrinks to items that genuinely need human judgment: tone nuance, cultural context, brand evolution decisions.',
           },
           aiAgentic: {
-            summary: 'The brand review gate self-operates within Brand Manager-defined parameters. Content is evaluated during creation, not after — violations are prevented rather than caught. The Brand Manager monitors drift and updates rules as brand strategy evolves.',
-            detail: 'Agentic brand review embeds in the content creation workflow. Brand agents evaluate content as it is being written, flagging issues in real-time and suggesting corrections. The formal gate becomes a verification step rather than a discovery step — most content arrives brand-compliant because violations were caught during creation. The Brand Manager sets the rules, monitors system performance, and handles the rare escalations where cultural or competitive context requires human judgment.',
-            painPoints: [
-              'Embedding brand review in the creation workflow requires content creators to accept real-time AI feedback — organizational change management is required',
-              'The Brand Manager must balance enforcement rigor with creative freedom — too strict and the system kills creative risk-taking',
-            ],
-            benchmarks: [
-              'Pre-creation brand enforcement prevents 90%+ of violations before the formal gate (industry composite)',
-              'Brand review gate cycle time: near-zero for compliant content; <4 hours for escalated items (Salesforce Agentforce 2025)',
-            ],
-            outcomes: [
-              'Brand violations at publication drop to <2% of all content',
-              'Content-to-market time improves 60-70% as the brand gate is no longer a scheduling bottleneck',
-              'Brand Manager spends <5 hours per week on formal review activities; remainder is strategic brand work',
-            ],
-            roleEvolution: 'The Brand Manager becomes a brand evolution strategist. Enforcement is automated; the human role concentrates on adapting the brand to new markets, audiences, and competitive dynamics.',
+            summary: 'Brand-compliant content flows through automatically — you review only reputationally sensitive or novel content.',
+            detail: 'The gate becomes self-operating for standard content. Your reviews carry more weight because each one involves genuine ambiguity.',
           },
         },
-
-        // ── SUPPORT NODES ────────────────────────────────────────────────
-        'writer-agent': {
-          preAI: {
-            summary: 'Content is created entirely by human writers with varying skill levels and brand familiarity.',
-            detail: 'Writers produce drafts that the Brand Manager must review for brand compliance. Quality variance across writers is the primary driver of review volume.',
-          },
-          aiAgents: {
-            summary: 'AI writing agents produce brand-voice-aligned first drafts, reducing the Brand Manager\'s review burden by 50-60%.',
-            detail: 'Writer agents are trained on the brand guide and produce drafts that are pre-aligned with brand voice and style. This reduces brand review catch rates and allows the Brand Manager to focus on nuanced judgment calls.',
-          },
-          aiAgentic: {
-            summary: 'Autonomous writing agents produce brand-compliant content end-to-end, with real-time brand enforcement during drafting.',
-            detail: 'Writer agents integrate with brand compliance agents to produce content that meets brand standards by construction. The Brand Manager\'s review burden drops to near-zero for standard content types.',
-          },
-        },
-        'brand-guide': {
-          preAI: {
-            summary: 'A static PDF or document that specifies brand voice, visual standards, and messaging pillars — referenced manually during reviews.',
-            detail: 'The brand guide is a reference document that the Brand Manager consults during reviews. It is updated annually or less frequently, and may not reflect current brand evolution.',
-          },
-          aiAgents: {
-            summary: 'The brand guide becomes a machine-readable asset that AI compliance tools reference during automated checks.',
-            detail: 'Brand guidelines are encoded into AI compliance tools as scoring rubrics, word lists, and tone models. Updates to the guide are reflected in AI behavior within hours.',
-          },
-          aiAgentic: {
-            summary: 'The brand guide evolves into a living system that updates based on brand performance data and competitive positioning.',
-            detail: 'The brand guide is maintained as a dynamic knowledge base that agentic systems reference in real-time. Brand Manager updates are cascaded to all AI agents immediately.',
-          },
-        },
-
         'receive-request': {
           preAI: {
             summary: 'You protect incoming requests manually, sorting through emails and Slack messages for brand consistency.',
@@ -1369,20 +1346,15 @@ export const ROLE_DEFINITIONS: RoleDefinition[] = [
           },
         },
       },
-      keyInsight: 'Brand managers are the immune system of organizational identity. In the preAI era, they performed exhausting, repetitive scrutiny that masked a deeper problem: they had no leverage over systemic quality. AI does not eliminate brand judgment — it exposes the 20% of decisions that actually require human expertise. The shift from "inspector of bad work" to "arbiter of ambiguous cases" is psychologically significant.',
+      keyInsight: 'Brand risk is reputational risk. The review volume shrinks but each decision carries more weight because only genuinely ambiguous cases reach you.',
     },
   },
-
-
-  // ═══════════════════════════════════════════════════════════════════════════
-  // ROLE 3: EDITOR / CONTENT LEAD
-  // ═══════════════════════════════════════════════════════════════════════════
   {
     id: 'editor',
     title: 'Editor / Content Lead',
-    description: 'Oversees content drafting, SEO optimization, final polish, and accessibility — the quality backbone of the content pipeline. The irreducible value is taste.',
-    tagline: 'The irreducible value is taste — distinguishing technically correct from genuinely good.',
-    iconName: 'Pencil',
+    description: 'Owns the final edit step and co-reviews the quality gate with AI assistance.',
+    tagline: 'Last human to touch the words.',
+    iconName: 'PenTool',
     category: 'creative',
     accentColor: '#9B7ACC',
     ownedSteps: ['draft-content', 'seo-optimization', 'final-edit', 'accessibility-check'],
@@ -1390,316 +1362,77 @@ export const ROLE_DEFINITIONS: RoleDefinition[] = [
     relatedAgents: ['writer-agent', 'seo-agent', 'accessibility-agent'],
     relatedInputs: ['brand-guide', 'seo-tools', 'accessibility-standards'],
     narrative: {
-      stageOverviews: {
-        preAI: {
-          narrative: 'Hand-crafted workflows where the Editor bears full cognitive load for quality decisions, structural integrity, and voice consistency. Every piece flows through one person\'s editorial judgment — the quality floor is high but the throughput ceiling is low.',
-          timeAllocation: '35% draft review and feedback, 20% SEO optimization, 20% final editing and polish, 15% accessibility checks, 10% strategic editorial planning',
-          criticalMetrics: ['Draft revision cycles per piece', 'Time-to-publish from first draft', 'Content quality score', 'SEO ranking for target keywords', 'Accessibility compliance rate'],
-          strategicOpportunity: 'Most editorial time is spent on mechanical quality (grammar, structure, keyword density) rather than strategic quality (narrative power, audience resonance, competitive differentiation). The ratio needs to invert.',
-        },
-        aiAgents: {
-          narrative: 'Specialized agents handle mechanical tasks — grammar, keyword density, basic structure, accessibility compliance. The Editor pivots to higher-level guidance, refinement, and the judgment that transforms adequate into compelling.',
-          timeAllocation: '15% agent output review, 25% strategic editorial guidance, 20% narrative refinement, 15% agent calibration, 25% editorial strategy',
-          criticalMetrics: ['Agent-assisted draft quality on first pass', 'Editorial intervention rate', 'Time savings per piece', 'Content performance improvement', 'Voice consistency score'],
-          strategicOpportunity: 'With mechanical quality automated, the Editor can focus on what AI cannot do: infusing content with strategic intent, emotional resonance, and the contrarian angles that produce breakthrough performance.',
-        },
-        aiAgentic: {
-          narrative: 'Orchestrated agent ecosystem executes with autonomy; the Editor becomes architect of creative standards and arbiter of resonance in a system that increasingly self-corrects. The paradox: as AI eliminates mechanical work, the Editor\'s role becomes simultaneously less visible and more essential.',
-          timeAllocation: '5% system monitoring, 15% quality standard governance, 30% high-stakes editorial decisions, 25% editorial strategy, 25% creative direction',
-          criticalMetrics: ['Autonomous publishing rate', 'Content performance vs. benchmark', 'Editorial intervention quality (value-add per intervention)', 'System accuracy and consistency', 'Audience engagement trends'],
-          strategicOpportunity: 'In a world where any system can produce technically correct content in minutes, the Editor\'s remaining superpower — taste, voice coherence, audience resonance — is what separates adequate from compelling. The hardest part is proving this value when the visible work disappears.',
-        },
-      },
       nodeJourneys: {
         'draft-content': {
           preAI: {
-            summary: 'Editors work directly with writers in iterative cycles, reshaping rough drafts into publishable narratives. Structure, voice, and narrative flow are negotiated through multiple rounds of feedback that average 4+ hours per blog post from outline to publication.',
-            detail: 'In traditional editorial workflows, the Editor receives drafts from writers at various skill levels, each with their own voice and structural tendencies. The Editor reads for wholeness: Does the opening command attention? Do ideas build logically? Does the voice stay consistent? This requires deep reading, marginal notes, sometimes radical restructuring. Writers at 25th percentile skill require 2-3x editorial intervention vs. 75th percentile peers, creating unpredictable workload.',
-            painPoints: [
-              'Multiple revision cycles delay publication and consume Editor time proportional to writer skill variance',
-              'Extracting the kernel of a writer\'s intent from unclear initial drafts requires detective work and deep reading',
-              'Voice consistency across multiple writers creates constant micro-corrections and brand drift',
-              'Balancing directive feedback with collaborative tone is emotionally taxing and slows iteration',
-            ],
-            benchmarks: [
-              'Average blog post production: 4 hours 10 minutes from outline to publishable form (Orbit Media/HubSpot 2024)',
-              'Editorial revisions account for 20-30% of total production time in traditional workflows (industry composite)',
-              'Writers at 25th percentile skill require 2-3x editorial intervention vs. 75th percentile peers (estimated)',
-            ],
-            outcomes: [
-              'Published content reflects consistent brand voice and narrative standards',
-              'Throughput limited by Editor bandwidth: typically 8-15 quality pieces per week',
-              'Editor cognitive load peaks mid-week, creating quality variance across the publication calendar',
-            ],
-            roleEvolution: 'The Editor is simultaneously the quality floor and the throughput ceiling. Strategic editorial thinking is compressed into whatever time remains after production editing is complete.',
+            summary: 'You either write the first draft yourself or heavily rewrite whatever a junior writer produces.',
+            detail: 'Drafting depends on your availability and expertise. Quality is inconsistent because different writers interpret the brief differently, and you catch problems only at final edit.',
           },
           aiAgents: {
-            summary: 'AI generates first drafts with brand voice features embedded, reducing revision cycles by 60-80%. The Editor\'s role shifts from rewriting prose to injecting strategic intent — taking technically solid drafts and infusing them with narrative momentum and audience resonance.',
-            detail: 'AI writing agents produce drafts trained on the brand guide and audience data. First-draft quality is typically 60-70% of final, meaning the Editor concentrates on the 30-40% that requires judgment: tone calibration, competitive positioning, creative risk appetite, and narrative structure. The danger is "default acceptance" — reviewing AI drafts is cognitively different from writing, and Editors who do not actively challenge agent outputs find themselves approving mediocre content that technically meets criteria but lacks strategic edge.',
-            painPoints: [
-              'AI-drafted content tends toward the median — matching historical patterns well but rarely proposing contrarian angles or unexpected formats',
-              'Review fatigue: approving 20 agent-drafted pieces feels less demanding than writing 10, but the cognitive cost of quality evaluation is high',
-              'Calibrating the agent requires explicit articulation of implicit editorial standards that the Editor may not have documented',
-            ],
-            benchmarks: [
-              'AI content tools reduce first-draft generation time by 40-60% (Jasper/Writer benchmarks 2024)',
-              'Organizations report 60-80% reduction in revision cycles with AI-assisted drafting (Jasper 2024)',
-              'Total content production costs drop 30-40% with AI-assisted drafting at scale (industry composite)',
-            ],
-            outcomes: [
-              'Editorial throughput doubles or triples without additional headcount',
-              'Creative team satisfaction improves because drafts arrive with more complete context',
-              'Editor\'s strategic contribution per piece increases as administrative production work is absorbed',
-            ],
-            roleEvolution: 'The Editor stops being a rewriter and becomes a creative director — not of visuals, but of narrative strategy. The daily rhythm shifts from "fix drafts" to "shape the editorial judgment that produces them."',
+            summary: 'An AI writer produces a structured first draft from the approved brief — you shape the narrative rather than starting from blank.',
+            detail: 'Drafts arrive with correct structure, keyword integration, and brand voice applied. Your role shifts from generating words to evaluating whether the argument holds together.',
           },
           aiAgentic: {
-            summary: 'Autonomous drafting agents produce publication-ready content for standard types. The Editor intervenes only on high-stakes content where narrative power, competitive positioning, or audience resonance requires human taste — the 20% of content that generates 60%+ of measured performance.',
-            detail: 'Agentic drafting handles the full lifecycle for standard content: assembling audience data, generating the draft, checking quality, and routing for publication. The Editor intervenes only when the system detects strategic ambiguity or when content risk exceeds a defined threshold. The critical shift is from content production to content system governance.',
-            painPoints: [
-              'The Editor must resist reviewing every piece — selective intervention requires trust in the system',
-              'Auto-generated content for genuinely novel topics can be confidently wrong',
-              'If the Editor no longer touches most content, some stakeholders question the role\'s necessity',
-            ],
-            benchmarks: [
-              'Autonomous content workflows handle 70-80% of standard content types without editorial intervention (industry composite)',
-              'The 20% of content requiring human editorial typically generates 60%+ of measured content ROI (industry estimate)',
-            ],
-            outcomes: [
-              'Editor\'s personal content work drops to 5-10 pieces per week, each addressing highest-stakes challenges',
-              'Pipeline velocity for standard content increases 3-5x',
-              'Content quality becomes more consistent because the automated system applies the same standards uniformly',
-            ],
-            roleEvolution: 'The Editor becomes a creative standards architect. The most important activities: calibrating the quality model, authoring the content that requires human taste, and making the editorial bets that only a human would take.',
+            summary: 'Routine content drafts itself end-to-end — you engage only when the brief requires original thinking or creative risk.',
+            detail: 'The system handles formulaic content autonomously. Your editorial involvement concentrates on the 20% of content where narrative craft genuinely differentiates the output.',
           },
         },
         'seo-optimization': {
           preAI: {
-            summary: 'Editor manually researches keywords, optimizes titles and meta descriptions, checks density, and validates internal linking — adding 30-60 minutes of SEO work per content piece on top of editorial duties.',
-            detail: 'SEO optimization is a manual, research-intensive process layered on top of editorial work. The Editor researches target keywords, analyzes competitor content for the same terms, optimizes headings and meta descriptions, checks keyword density, and validates internal linking structure. The work is mechanical but consequential — poor SEO optimization can render well-written content invisible.',
-            painPoints: [
-              'SEO work competes for Editor time with editorial quality — one typically suffers at the expense of the other',
-              'Keyword research requires 15-30 minutes per piece; the data changes monthly as search patterns evolve',
-              'Optimizing for SEO often conflicts with narrative quality — keyword-stuffed content reads poorly',
-            ],
-            benchmarks: [
-              'SEO optimization adds 30-60 minutes per content piece to the editorial workflow (industry average)',
-              'Content with optimized SEO outperforms unoptimized content by 2-5x in organic traffic (various sources)',
-            ],
-            outcomes: [
-              'SEO-optimized content ranks for target keywords 60-70% of the time',
-              'Editor bandwidth constrains the number of pieces that receive full SEO treatment',
-            ],
-            roleEvolution: 'SEO is treated as an editorial afterthought — applied after the content is "done" rather than integrated into the drafting process.',
+            summary: 'You or a specialist manually insert keywords, write meta descriptions, and restructure headings for search performance.',
+            detail: 'SEO optimization is often an afterthought bolted onto finished drafts. It frequently conflicts with narrative flow, forcing trade-offs between readability and search ranking.',
           },
           aiAgents: {
-            summary: 'AI SEO agents handle keyword research, competitor analysis, and on-page optimization automatically. The Editor reviews SEO recommendations alongside editorial decisions, reducing SEO time from 30-60 minutes to 5 minutes per piece.',
-            detail: 'SEO agents analyze search intent, identify target keywords, and recommend optimizations (headings, meta descriptions, internal links) automatically. The Editor integrates SEO recommendations into the editorial workflow rather than treating them as a separate step.',
-            painPoints: [
-              'AI SEO tools can over-optimize for metrics at the expense of readability',
-              'Search algorithm changes require model retraining; agents may optimize for last quarter\'s ranking signals',
-            ],
-            benchmarks: [
-              'AI-assisted SEO reduces optimization time from 30-60 minutes to 5 minutes per piece (Surfer/Clearscope benchmarks)',
-              'AI-optimized content achieves 20-30% higher organic traffic vs. manually optimized (industry composite)',
-            ],
-            outcomes: [
-              'Every piece of content receives full SEO optimization (vs. selective treatment)',
-              'Organic traffic improves 20-30% due to consistent, data-driven optimization',
-            ],
-            roleEvolution: 'SEO shifts from an editorial burden to an embedded system. The Editor focuses on the intersection of search intent and narrative quality.',
+            summary: 'An SEO agent optimizes keyword placement, meta tags, and heading structure automatically while preserving your editorial intent.',
+            detail: 'SEO becomes a parallel process, not a sequential bottleneck. You review the agent\'s changes to ensure optimization hasn\'t flattened the voice or distorted the argument.',
           },
           aiAgentic: {
-            summary: 'Agentic SEO systems continuously optimize content for search performance — updating existing content, identifying keyword gaps, and recommending new content opportunities. SEO becomes a system property, not a per-piece task.',
-            detail: 'SEO agents operate continuously: monitoring search rankings, updating existing content for freshness signals, identifying keyword gaps, and recommending new content opportunities. The Editor reviews SEO-driven content recommendations as part of editorial strategy.',
-            painPoints: [
-              'Continuous SEO optimization can conflict with content governance (who approves changes to published content?)',
-              'Agents may recommend content topics that are SEO-optimal but strategically irrelevant',
-            ],
-            benchmarks: [
-              'Agentic SEO maintains content freshness and ranking signals automatically (industry standard for enterprise)',
-              'Continuous optimization drives 40-50% organic traffic improvement over 12 months (Clearscope/industry composite)',
-            ],
-            outcomes: [
-              'SEO performance improves continuously without Editor intervention',
-              'Content gap analysis surfaces strategic opportunities for new content',
-            ],
-            roleEvolution: 'The Editor delegates SEO execution entirely to the agentic layer and focuses on whether search-driven content serves the broader editorial strategy.',
+            summary: 'SEO optimization is embedded in the drafting process — content is born search-ready without a separate optimization step.',
+            detail: 'The system integrates SEO constraints during creation rather than retrofitting them. You audit edge cases where search optimization and editorial quality genuinely conflict.',
           },
         },
         'final-edit': {
           preAI: {
-            summary: 'The Editor performs a final quality pass on every content piece before publication — checking grammar, fact accuracy, voice consistency, and visual/text alignment. This is the last human checkpoint before content reaches the audience.',
-            detail: 'Final editing is the quality backstop. The Editor reads the full piece one last time, checking for errors that survived previous rounds, verifying facts, ensuring voice consistency, and confirming that the piece delivers on the promise of its headline. This step adds 15-30 minutes per piece but catches issues that would damage credibility if published.',
-            painPoints: [
-              'Final edit is cognitively demanding after hours of earlier review work — fatigue-driven errors are the main risk',
-              'No systematic checklist means different Editors catch different categories of issues',
-            ],
-            outcomes: [
-              'Final edit catches 5-10% additional issues missed in earlier rounds',
-              'Published error rate: 2-5% of content contains at least one error post-publication',
-            ],
+            summary: 'You\'re the last person to touch every piece — refining narrative flow, checking facts, and polishing the final draft.',
+            detail: 'Much of your time goes to fixing issues that could have been caught earlier: readability problems, SEO gaps, inconsistent structure.',
           },
           aiAgents: {
-            summary: 'AI handles grammar, fact-checking, and style consistency in the final pass. The Editor\'s final review focuses on narrative quality, audience resonance, and the "does this land?" judgment that no algorithm can replicate.',
-            detail: 'AI final-edit tools handle the mechanical quality checks: grammar, spelling, fact verification against source data, style guide compliance. The Editor\'s final pass concentrates on the qualitative assessment.',
-            outcomes: [
-              'Published error rate drops to <1% with AI-augmented final editing',
-              'Editor\'s final review time drops from 15-30 minutes to 5 minutes for standard content',
-            ],
+            summary: 'Writing assistants handle readability scoring, SEO optimization, and structural consistency before content reaches you.',
+            detail: 'First drafts arrive cleaner. You spend less time on mechanics and more on whether the piece actually says something worth reading.',
           },
           aiAgentic: {
-            summary: 'Agentic final-edit systems handle the complete quality pass for standard content. The Editor performs final review only on high-stakes or high-risk content where publication errors carry reputational cost.',
-            detail: 'Final editing becomes fully automated for standard content types. The Editor reviews only content flagged for elevated risk.',
-            outcomes: [
-              'Final edit is automated for 80%+ of standard content',
-              'Editor\'s personal final reviews reserved for high-stakes content',
-            ],
-          },
-        },
-        'accessibility-check': {
-          preAI: {
-            summary: 'Accessibility compliance is checked manually against WCAG guidelines — alt text, heading hierarchy, color contrast, link text. It is the most commonly skipped editorial step due to time pressure.',
-            detail: 'Accessibility checking requires specialized knowledge of WCAG guidelines. The Editor or a dedicated QA reviewer checks alt text, heading structure, color contrast, link descriptiveness, and reading order. It is frequently deprioritized under deadline pressure.',
-            painPoints: [
-              'Accessibility is the first step skipped when deadlines tighten',
-              'WCAG guidelines are complex; most Editors are not accessibility specialists',
-            ],
-            benchmarks: [
-              'Only 3-5% of websites are WCAG 2.1 AA compliant (WebAIM Million survey)',
-              'Accessibility-related lawsuits increased 300%+ in the past 5 years (UsableNet)',
-            ],
-          },
-          aiAgents: {
-            summary: 'AI accessibility agents automatically check alt text, heading hierarchy, contrast ratios, and link text. The Editor reviews flagged issues rather than performing manual audits.',
-            detail: 'Accessibility agents scan content against WCAG standards automatically, flagging issues with recommended fixes. The Editor approves fixes and handles edge cases.',
-            outcomes: [
-              'Accessibility compliance rate improves from 30-40% to 80%+ with AI-assisted checking',
-              'Accessibility checking no longer competes for Editor time with other editorial priorities',
-            ],
-          },
-          aiAgentic: {
-            summary: 'Agentic accessibility systems enforce WCAG compliance during content creation, preventing violations before they occur. Accessibility becomes a system guarantee rather than a review step.',
-            detail: 'Accessibility compliance is enforced at the creation stage. Content that violates WCAG standards is corrected automatically or flagged before draft completion.',
-            outcomes: [
-              'WCAG compliance approaches 95%+ across all published content',
-              'Accessibility-related legal risk drops significantly',
-            ],
+            summary: 'Routine content bypasses your desk entirely — you edit only pieces requiring narrative judgment.',
+            detail: 'The system routes high-scoring content directly to quality check. Your editorial time concentrates on the work where human taste genuinely matters.',
           },
         },
         'quality-check': {
           preAI: {
-            summary: 'The Editor conducts quality reviews as a formal gate — assessing content against quality criteria before it moves to brand review and publication. The gate adds 1-3 days to the timeline.',
-            detail: 'Quality check is a formal gate where the Editor assesses whether content meets the minimum quality bar for publication. This includes structural coherence, audience relevance, voice consistency, and factual accuracy.',
-            painPoints: [
-              'Quality criteria are subjective and vary by Editor',
-              'The gate adds scheduling delay without a systematic checklist',
-            ],
+            summary: 'You run the quality gate, checking every content piece against readability, accuracy, and brand standards.',
+            detail: 'Quality reviews are thorough but slow. Each piece gets the same level of scrutiny regardless of complexity or risk.',
           },
           aiAgents: {
-            summary: 'AI-assisted quality scoring pre-screens content against quality criteria. The Editor reviews only flagged items and borderline cases.',
-            detail: 'Quality agents score content against defined criteria. Content that passes automatically moves forward; flagged content enters the Editor\'s review queue.',
-            outcomes: [
-              'Quality gate time drops from 1-3 days to same-day for AI-cleared content',
-              'Quality consistency improves because the scoring model applies criteria uniformly',
-            ],
+            summary: 'Automated quality scoring handles technical metrics — you evaluate narrative quality and editorial judgment.',
+            detail: 'Readability, SEO, and structure are pre-scored. You focus on whether the piece achieves its strategic intent, not whether it hits a Flesch score.',
           },
           aiAgentic: {
-            summary: 'The quality gate self-operates within Editor-defined parameters. The Editor monitors quality trends and adjusts criteria as editorial standards evolve.',
-            detail: 'Quality checking is continuous and embedded in the creation workflow. The formal gate becomes a verification step rather than a discovery step.',
-            outcomes: [
-              'Quality gate adds zero scheduling delay for standard content',
-              'Editor focuses on evolving quality standards rather than enforcing them',
-            ],
+            summary: 'High-scoring content auto-passes the quality gate — you review only pieces where automated scores diverge from editorial intuition.',
+            detail: 'The gate self-operates for standard content. You engage when something scores well technically but feels wrong editorially — the gap no algorithm closes.',
           },
         },
-
-        // ── SUPPORT NODES ────────────────────────────────────────────────
-        'writer-agent': {
+        'accessibility-check': {
           preAI: {
-            summary: 'Content is created entirely by human writers whose skill levels and brand familiarity vary widely.',
-            detail: 'Human writers produce all drafts. Quality variance creates unpredictable editorial workload.',
+            summary: 'You check alt text, heading hierarchy, and inclusive language manually — often as an afterthought before publication.',
+            detail: 'Accessibility compliance is inconsistent because it depends on individual awareness. Issues are caught late, creating rework at the worst possible moment in the pipeline.',
           },
           aiAgents: {
-            summary: 'AI writing agents produce first drafts with embedded brand voice, reducing editorial revision cycles by 60-80%.',
-            detail: 'Writer agents are trained on brand guidelines and audience data, producing drafts that arrive closer to publication quality.',
+            summary: 'An accessibility agent scans for WCAG violations, missing alt text, and non-inclusive language before content reaches your review.',
+            detail: 'Technical compliance is pre-validated. You focus on whether the content genuinely communicates across ability levels, not whether it passes a checklist.',
           },
           aiAgentic: {
-            summary: 'Autonomous writing agents produce publication-ready content for standard types, with the Editor intervening only on high-stakes pieces.',
-            detail: 'Writing agents handle the full drafting lifecycle for routine content. The Editor\'s involvement is reserved for content requiring human taste and strategic judgment.',
+            summary: 'Accessibility compliance is built into the creation process — content that fails standards is blocked before it reaches your desk.',
+            detail: 'The system enforces accessibility at every step. You engage only when inclusive communication requires editorial judgment — tone for sensitive audiences, language that respects without patronizing.',
           },
         },
-        'seo-agent': {
-          preAI: {
-            summary: 'SEO research and optimization is performed manually by the Editor or a dedicated SEO specialist.',
-            detail: 'Keyword research, competitor analysis, and on-page optimization are manual tasks that add time to the editorial workflow.',
-          },
-          aiAgents: {
-            summary: 'AI SEO agents handle keyword research, competitor analysis, and optimization recommendations automatically.',
-            detail: 'SEO agents analyze search intent and recommend optimizations that the Editor integrates into the editorial workflow.',
-          },
-          aiAgentic: {
-            summary: 'Autonomous SEO agents continuously optimize content for search performance, updating existing content and identifying new opportunities.',
-            detail: 'SEO agents operate continuously, maintaining search rankings and surfacing strategic content opportunities for editorial review.',
-          },
-        },
-        'accessibility-agent': {
-          preAI: {
-            summary: 'Accessibility checks are performed manually by the Editor or QA specialist against WCAG guidelines.',
-            detail: 'Manual accessibility auditing is time-intensive and frequently deprioritized under deadline pressure.',
-          },
-          aiAgents: {
-            summary: 'AI accessibility agents scan content against WCAG standards, flagging violations with recommended fixes.',
-            detail: 'Automated accessibility checking ensures every piece of content is evaluated, regardless of deadline pressure.',
-          },
-          aiAgentic: {
-            summary: 'Autonomous accessibility agents enforce WCAG compliance during creation, preventing violations before content is drafted.',
-            detail: 'Accessibility compliance is embedded in the content creation workflow, ensuring compliance by construction.',
-          },
-        },
-        'brand-guide': {
-          preAI: {
-            summary: 'A static brand guide document that the Editor references for voice and style decisions.',
-            detail: 'The brand guide provides voice, tone, and style standards but is applied through the Editor\'s interpretation.',
-          },
-          aiAgents: {
-            summary: 'The brand guide is encoded into AI tools, enabling automated voice scoring and style checks.',
-            detail: 'Brand standards are operationalized as machine-readable rules that AI tools apply consistently.',
-          },
-          aiAgentic: {
-            summary: 'The brand guide evolves into a living system that updates based on content performance data.',
-            detail: 'Brand standards adapt continuously based on audience engagement and performance signals.',
-          },
-        },
-        'seo-tools': {
-          preAI: {
-            summary: 'SEO tools (Ahrefs, SEMrush, etc.) are used manually by the Editor for keyword research and competitor analysis.',
-            detail: 'Manual tool usage adds research time to the editorial workflow.',
-          },
-          aiAgents: {
-            summary: 'SEO tools are integrated with AI agents for automated research and recommendation.',
-            detail: 'Integration enables real-time SEO recommendations during the editorial process.',
-          },
-          aiAgentic: {
-            summary: 'SEO tools are fully integrated into the agentic layer, providing continuous optimization and monitoring.',
-            detail: 'SEO intelligence is available to all content creation agents in real-time.',
-          },
-        },
-        'accessibility-standards': {
-          preAI: {
-            summary: 'WCAG guidelines referenced manually during accessibility checks.',
-            detail: 'Accessibility standards are applied through manual review against published guidelines.',
-          },
-          aiAgents: {
-            summary: 'WCAG standards are encoded into AI accessibility agents for automated compliance checking.',
-            detail: 'Standards are operationalized as automated checks, ensuring consistent application.',
-          },
-          aiAgentic: {
-            summary: 'Accessibility standards are enforced in real-time during content creation.',
-            detail: 'Standards are embedded into the creation workflow, ensuring compliance by construction.',
-          },
-        },
-
         'receive-request': {
           preAI: {
             summary: 'You refine incoming requests manually, sorting through emails and Slack messages for writing quality.',
@@ -2261,247 +1994,65 @@ export const ROLE_DEFINITIONS: RoleDefinition[] = [
           },
         },
       },
-      keyInsight: 'The Editor\'s paradox: as AI automation eliminates the mechanical work (grammar, keyword density, basic structure), the role becomes simultaneously less visible and more essential. The value shifts from "catching errors" to "defining excellence." In a world where any system can produce technically correct content in minutes, the Editor\'s remaining superpower — taste, voice coherence, audience resonance — is what separates adequate from compelling.',
+      keyInsight: 'The irreducible value of this role is taste — the ability to distinguish between technically correct content and genuinely good content.',
     },
   },
-
-
-  // ═══════════════════════════════════════════════════════════════════════════
-  // ROLE 4: VP MARKETING / STAKEHOLDER
-  // ═══════════════════════════════════════════════════════════════════════════
   {
     id: 'vp-marketing',
     title: 'VP Marketing / Stakeholder',
-    description: 'The executive approver who controls publish timing, distribution, and strategic sign-off. The scarcest resource in the pipeline — every hour of VP Marketing time gates millions in downstream execution.',
-    tagline: 'Your time is the scarcest resource — the system should protect it.',
-    iconName: 'Award',
+    description: 'Final sign-off authority before publication. Oversees scheduling and distribution.',
+    tagline: 'Final sign-off before anything ships.',
+    iconName: 'Crown',
     category: 'strategy',
-    accentColor: '#E6C84C',
+    accentColor: '#4A8CC0',
     ownedSteps: ['schedule-publish', 'distribute'],
     reviewedGates: ['stakeholder-signoff'],
     relatedAgents: [],
     relatedInputs: ['content-strategy'],
     narrative: {
-      stageOverviews: {
-        preAI: {
-          narrative: 'VP Marketing governance is a batched approval bottleneck. Every scheduling decision, distribution confirmation, and campaign sign-off flows through one person\'s calendar. The role is 60% coordination logistics and 40% strategic judgment — an inversion that wastes the organization\'s most expensive decision-maker on the organization\'s most automatable work.',
-          timeAllocation: '40% scheduling and coordination, 25% stakeholder sign-off reviews, 20% distribution logistics, 15% strategic planning',
-          criticalMetrics: ['Brief-to-launch cycle time', 'Approval queue depth', 'On-time launch rate', 'Time spent on routine vs. strategic approvals', 'Distribution synchronization accuracy'],
-          strategicOpportunity: '61% of CMOs report plans driven by operational needs, not market opportunity. The VP Marketing role has the highest leverage for AI-driven time recovery — every hour freed from coordination is an hour available for market strategy.',
-        },
-        aiAgents: {
-          narrative: 'AI agents absorb the coordination layer: modeling resource capacity, proposing publish windows, pre-screening briefs against decision frameworks. The VP Marketing shifts from scheduling coordinator to strategic decision-maker, reviewing exception cards rather than managing calendars.',
-          timeAllocation: '10% scheduling oversight, 15% strategic brief review, 25% distribution monitoring, 30% strategic planning, 20% stakeholder alignment',
-          criticalMetrics: ['Agent-recommended approval accuracy', 'Approval cycle time (target: 1-2 days)', 'On-time launch rate (target: 88-92%)', 'Time recaptured for strategic work', 'Distribution synchronization window'],
-          strategicOpportunity: 'The 40-50% of time freed from coordination creates space for proactive market-oriented planning — responding to competitive moves, capitalizing on market shifts, and setting strategic direction rather than managing operational logistics.',
-        },
-        aiAgentic: {
-          narrative: 'The VP Marketing becomes a policy governor and strategic override authority. Agentic systems autonomously optimize scheduling, distribution, and routine approvals within guardrails the VP sets quarterly. Human judgment concentrates on the 5-10 escalated decisions per week where market context, competitive dynamics, and organizational strategy intersect.',
-          timeAllocation: '5% system monitoring, 15% guardrail updates, 10% escalated approvals, 40% strategic planning, 30% cross-functional leadership',
-          criticalMetrics: ['Autonomous approval rate', 'Escalation quality (signal-to-noise ratio)', 'Portfolio compliance rate', 'Market response time', 'Strategic initiative velocity'],
-          strategicOpportunity: 'The role\'s value proposition inverts: instead of being measured by approvals processed, the VP Marketing is measured by the quality of the strategic guardrails they set and the market opportunities they capture with the time freed from operational overhead.',
-        },
-      },
       nodeJourneys: {
         'schedule-publish': {
           preAI: {
-            summary: 'Weekly edit calendar meetings where VP Marketing timestamps launch windows across 8-12 campaigns manually. Each meeting requires 60-90 minutes of debate over optimal timing, with decisions frequently reversed as new competitive or market signals surface mid-cycle.',
-            detail: 'VP Marketing coordinates with product, sales, and regional teams to slot campaigns into publishing windows. The process relies on email chains, shared spreadsheets, and calendar conflicts. Timing decisions often reverse after campaigns are built because new competitive activity or market events surface mid-cycle. The actual approval takes 10 minutes; the coordination takes 2 weeks. Brief-to-launch for enterprise campaigns typically stretches 2+ weeks with this standard approval chain.',
-            painPoints: [
-              'Time zone and regional activation coordination introduces 3-5 day delays per iteration',
-              'No visibility into downstream resource constraints (design queue, copy reviews, performance partner readiness)',
-              'Changing one timestamp cascades across distribution partners, calendars, and vendor timelines',
-              'Ad hoc timing decisions made after approval (sales pressure, competitive moves) undermine the schedule without formal re-review',
-            ],
-            benchmarks: [
-              'Enterprise campaign brief-to-launch: typically 2+ weeks with standard approval chains',
-              '40% of CMOs take proactive, market-oriented planning approach (Gartner 2024)',
-            ],
-            outcomes: [
-              'Scheduled campaigns go live on the planned date 65-75% of the time',
-              'Timing conflicts resolved via escalation, not prediction',
-            ],
-            roleEvolution: 'VP Marketing attends 3-4 scheduling sessions weekly, reads 40+ emails on timing disputes, and manually inputs final decisions into a spreadsheet. The role feels administrative despite the strategic seniority.',
+            summary: 'You manage the publication calendar, coordinating timing across channels and campaigns.',
+            detail: 'Calendar conflicts are resolved manually. Scheduling decisions depend on your knowledge of competitive timing and campaign cadence.',
           },
           aiAgents: {
-            summary: 'AI agents model resource capacity, competitive intelligence, and regional performance patterns to propose optimal publish windows 48 hours before launch. VP Marketing approves or adjusts in 5 minutes via a visual approval card.',
-            detail: 'Automated agents ingest design queue status, copy review bandwidth, performance partner capacity, and historical performance data for similar content. They cross-reference competitive activity feeds and sentiment trends. The system generates a ranked list of 3 optimal publish windows, each with predicted reach, engagement, and resource contention. VP Marketing sees a simple approval card and can approve with one click or drag-adjust the window with downstream impact simulation in 20 seconds.',
-            painPoints: [
-              'Agents must integrate with 4+ disparate scheduling and planning systems (campaign management, design tools, email providers, social platforms)',
-              'Predicting optimal timing requires historical performance data that is often incomplete or siloed by channel',
-              'VP Marketing still needs context on why the system recommends a specific window — black-box optimization breeds skepticism and ignores strategic nuance',
-            ],
-            benchmarks: [
-              'Risk-based approval tiers reduce cycle time 30-50% (Salesforce State of Marketing 2024)',
-              'AI-driven scheduling improves on-time delivery to 88-92% (industry composite)',
-            ],
-            outcomes: [
-              'Schedule approval time drops from 60-90 minutes to 5 minutes per batch',
-              'Campaigns launch on schedule 88-92% of the time (vs. 65-75%)',
-              'Timing conflicts reduced by 70% via predictive resource modeling',
-            ],
-            roleEvolution: 'VP Marketing reviews a visual approval dashboard for 2-3 minutes daily. The role shifts from reactive scheduling coordinator to strategic decision-maker on outlier requests.',
+            summary: 'Scheduling agents optimize publication timing based on audience data and channel performance.',
+            detail: 'You approve the schedule rather than building it. Agents recommend optimal windows; you override when strategic timing matters more than data.',
           },
           aiAgentic: {
-            summary: 'Agentic systems autonomously optimize publish windows within guardrails set by VP Marketing (brand sensitivity, earnings blackout periods, regional thresholds). VP Marketing intervenes only when market signals trigger a strategic override.',
-            detail: 'The system owns schedule optimization end-to-end. It monitors real-time competitive activity, sentiment velocity, and performance partner capacity. It auto-adjusts windows for lower-priority campaigns when high-priority campaigns face resource contention. For high-stakes launches, the system flags timing decisions for VP Marketing review. VP Marketing sets policy once: "All earnings-period content requires approval. Regional campaigns auto-optimize. Product launches must clear the 72-hour pre-announcement blackout." When unexpected events occur, the system detects the signal, recalculates impact, and either auto-executes or escalates with a clear decision brief.',
-            painPoints: [
-              'Defining the guardrails is itself a strategic exercise — VP Marketing must codify judgment rules that usually live in their head',
-              'The agentic layer must distinguish between "override the system" (market emergency) and "the system is wrong" (strategic blindness)',
-              'Autonomous decision-making erodes accountability if the system makes a high-visibility mistake',
-            ],
-            benchmarks: [
-              '78% of marketing leadership would delegate tactical scheduling if guardrails were transparent (Gartner 2024)',
-              'Agentic systems reduce approval latency to <5 minutes for 95%+ of campaigns (industry composite)',
-            ],
-            outcomes: [
-              'VP Marketing approval time drops to near-zero for routine campaigns; 15-minute deep reviews reserved for strategic decisions',
-              'Schedule optimization runs continuously; timing decisions reflect real-time market conditions, not weekly snapshots',
-              'On-time launch rate reaches 95%+; cascading delays eliminated via predictive rescheduling',
-            ],
-            roleEvolution: 'VP Marketing transitions to a "policy governor" and "tie-breaker" role. They set strategic guardrails once per quarter, review escalated decisions (5-10 per week), and intervene when market signals trigger override scenarios.',
+            summary: 'Publication scheduling runs autonomously within your strategic parameters.',
+            detail: 'Content publishes when conditions are optimal. You set the parameters and intervene only for high-visibility launches that require executive timing.',
           },
         },
         'distribute': {
           preAI: {
-            summary: 'VP Marketing manually coordinates with 4-8 distribution partners (social, email, paid, affiliate, partner networks) to ensure campaigns launch synchronously. Confirmations and follow-ups consume 2-3 hours per campaign.',
-            detail: 'Distribution is a manual relay race. VP Marketing approves content, then sends it to social media managers, email marketers, paid media buyers, affiliate leads, and partner network leads. Each partner has their own intake process. Follow-ups are constant. Partners often report ready-to-go but then hit resource constraints or platform outages at launch time. The actual distribution button is pressed by 6+ people, each adding 2-6 hours of latency.',
-            painPoints: [
-              'No single source of truth on distribution status across channels; VP Marketing manually tracks via email threads and Slack',
-              'Partners queue campaigns manually, introducing data entry errors and priority misclassifications',
-              'Platform outages and partner bandwidth constraints force last-minute delays without systematic contingency planning',
-              'No coordination between channels leads to duplicate messaging or uneven reach',
-            ],
-            benchmarks: [
-              '40% of multi-channel campaigns experience >4 hour delays between channels (industry composite)',
-              'VP Marketing spends 2-3 hours per campaign on distribution logistics (Gartner CMO Survey)',
-            ],
-            outcomes: [
-              'Campaigns distributed across channels within plus/minus 6 hour windows 70% of the time',
-              'Campaign reach uneven across channels due to timing misalignment',
-            ],
-            roleEvolution: 'VP Marketing spends 10+ hours per week chasing distribution partners. The role is dominated by coordination, not strategy.',
+            summary: 'You oversee distribution across channels, ensuring each piece reaches the right audience at the right time.',
+            detail: 'Distribution is manual and channel-by-channel. Coordinating multi-channel launches requires chasing teams across email, social, and paid.',
           },
           aiAgents: {
-            summary: 'AI agents ingest approved creative and automatically queue it across all distribution channels with real-time conflict detection. VP Marketing sees a unified distribution dashboard and only intervenes on partner bottlenecks.',
-            detail: 'Once VP Marketing approves a campaign, the distribution layer automatically routes assets to all relevant channels. Agents connect to social platforms, email service providers, paid media networks, and affiliate systems via APIs. They resolve format differences and queue content at the optimal pre-scheduled time. Real-time checks detect platform outages, partner capacity constraints, and compliance issues. VP Marketing sees a visual status dashboard with issues surfaced as decision cards, not email threads.',
-            painPoints: [
-              'Integrating with legacy systems requires custom adapters and ongoing maintenance',
-              'Format translation and creative optimization can break brand guidelines if not carefully parameterized',
-              'Partner APIs change frequently; agents must be reconfigured when systems update',
-            ],
-            benchmarks: [
-              'AI-driven distribution reduces VP Marketing time per campaign from 2-3 hours to 15 minutes (industry composite)',
-              'Multi-channel synchronization improves to plus/minus 2 hour windows (Salesforce 2024)',
-            ],
-            outcomes: [
-              'Distribution across 6+ channels happens in <30 minutes after approval',
-              'Partner bottlenecks identified and escalated 24 hours before launch, not during',
-              'Multi-channel reach aligned; consistent performance across all channels',
-            ],
-            roleEvolution: 'VP Marketing monitors a real-time distribution dashboard. Tactical work (queueing, format handling, partner coordination) disappears. The role refocuses on escalation decisions and performance accountability.',
+            summary: 'Distribution agents handle channel-specific formatting and delivery — you monitor performance rather than manage logistics.',
+            detail: 'Multi-channel distribution happens simultaneously. You track whether the distribution strategy is working, not whether each post went live.',
           },
           aiAgentic: {
-            summary: 'Agentic systems manage the entire distribution lifecycle — queueing, monitoring, contingency execution, and performance feedback. VP Marketing sees only summary status and intervenes only for strategic conflicts or performance anomalies.',
-            detail: 'Distribution becomes a closed-loop system. Agents autonomously queue approved creative, monitor real-time delivery across all channels, and execute contingency plans if issues arise. The system learns which channels perform best for which content types and optimizes distribution weight dynamically. After distribution, agents track performance signals and feed learnings back to content and scheduling layers. VP Marketing sees a weekly summary and intervenes only when performance signals suggest a systematic issue or a strategic override is needed.',
-            painPoints: [
-              'Agentic distribution must distinguish between acceptable variance and genuine problems; false alarms erode trust',
-              'Learning which channels to prioritize requires multivariate testing and sustained performance monitoring',
-              'Autonomous distribution reduces human visibility into partner behavior; if a vendor degrades service, the agentic layer might mask the problem until it becomes critical',
-            ],
-            benchmarks: [
-              '95%+ on-time delivery with agentic systems (Salesforce Agentforce 2025)',
-              'Multi-channel coordination latency <2 minutes (industry composite)',
-              'Partner bottleneck detection 72 hours in advance (industry composite)',
-            ],
-            outcomes: [
-              'VP Marketing intervention time for distribution issues drops to <2 hours per month',
-              'Campaigns reach all channels within 5-minute windows; synchronized messaging maximized',
-              'Performance feedback flows back to content and strategy layers daily, enabling rapid iteration',
-            ],
-            roleEvolution: 'VP Marketing becomes a performance auditor and strategic override authority. They set distribution policies, review performance weekly, and intervene when the agentic layer flags anomalies or when market conditions demand tactical changes.',
+            summary: 'Distribution executes automatically across all channels — you govern the strategy, not the operations.',
+            detail: 'The system distributes, monitors initial performance, and adjusts in real time. You engage when strategic reallocation is needed, not for execution.',
           },
         },
         'stakeholder-signoff': {
           preAI: {
-            summary: 'VP Marketing conducts async review of campaign briefs, creative concepts, and performance forecasts across email, Slack, and meetings. Approval cycles stretch 5-7 days with back-and-forth clarifications that add coordination cost without adding strategic value.',
-            detail: 'Stakeholder signoff is the formal gating step before production begins. Campaign teams submit briefs for VP Marketing approval. The brief might arrive in a Google Doc, a Slack thread, or a dedicated approval tool. VP Marketing reads it, identifies risks, and either approves or requests revisions. The typical cycle: brief submitted Monday, VP reviews Tuesday, requests clarifications Wednesday, team revises Thursday, final approval Friday. The actual review takes 20-30 minutes; the coordination takes 5-7 days.',
-            painPoints: [
-              'VP Marketing must context-switch between 10+ concurrent review cycles; fatigue leads to approval delays or shallow reviews',
-              'No systematic connection between approved campaigns and actual execution; deviations happen after approval without re-review',
-              'Approval criteria are subjective and vary by VP; teams guess at what will pass',
-              'Stakeholder sign-off is async and text-based; context is lost, leading to misalignment',
-            ],
-            benchmarks: [
-              '61% of CMOs report plans driven by operational needs, not market opportunity (Gartner 2024)',
-              'Average approval cycle: 5-7 days for enterprise campaigns (Adobe Content Supply Chain)',
-            ],
-            outcomes: [
-              'Stakeholder sign-off rate on first submission: 45-55%',
-              'Campaigns approved for production but later deviate from original strategy without re-review',
-            ],
-            roleEvolution: 'VP Marketing spends 5+ hours per week reviewing campaign briefs in fractured channels. Reviews are shallow due to context-switching and competing priorities.',
+            summary: 'You approve content individually, signing off on each high-visibility piece before publication.',
+            detail: 'Your inbox is a bottleneck. Content waits for your review because every escalation lands at the same desk.',
           },
           aiAgents: {
-            summary: 'AI agents pre-screen campaign briefs against VP Marketing\'s decision framework, flag risks, and prepare decision packages with clear approval/rejection rationale. VP Marketing reviews in 5 minutes with full context.',
-            detail: 'Campaign teams submit briefs to an intelligent intake system. AI agents analyze the brief against a learned decision framework: Does the strategy align with OKRs? Does the targeting overlap high-value segments? Is the budget allocation efficient? The system generates a decision package with approval recommendation, risk flags, and suggested revisions. VP Marketing sees a visual decision card, not a 5-page document. They can approve with one click, drill into details, or request revision with suggested edits.',
-            painPoints: [
-              'The decision framework must be explicit and updatable; VP Marketing must codify their judgment rules, which is non-trivial',
-              'Agents can miss contextual nuance (e.g., a campaign that looks misaligned might actually be a tactical competitive response)',
-              'False positives (flagging safe campaigns as risky) lead to approval delay; false negatives erode trust',
-            ],
-            benchmarks: [
-              'AI-augmented review reduces approval time from 5-7 days to 1-2 days (industry composite)',
-              'First-pass approval rate improves to 65-75% with agent-assisted pre-screening (Salesforce 2024)',
-            ],
-            outcomes: [
-              'Stakeholder sign-off cycle collapses from 5-7 days to 1-2 days',
-              'VP Marketing approval time per brief drops to 5 minutes average',
-              'Risk flags surface early, reducing post-approval deviations',
-            ],
-            roleEvolution: 'VP Marketing shifts from detailed reviewer to decision-maker on flagged items. They spend 30 minutes per week on stakeholder sign-off, focused on judgment calls, not document reading.',
+            summary: 'Upstream gates filter routine issues so only content requiring strategic judgment reaches your inbox.',
+            detail: 'Brand, legal, and quality checks happen before you see anything. Your approval queue shrinks to genuinely consequential decisions.',
           },
           aiAgentic: {
-            summary: 'Agentic systems autonomously approve routine campaigns within guardrails, escalate only strategic outliers or policy exceptions to VP Marketing. Approval happens within 2 hours, not 5-7 days.',
-            detail: 'VP Marketing sets strategic guardrails: "Auto-approve campaigns that align with current OKRs, stay within budget allocation by plus/minus 10%, avoid competitors in top-5 threat list, use approved brand assets. Escalate: new competitor responses, spend >$50K, targeting outside core demographic, new channels." The agentic layer processes briefs against these guardrails. Routine campaigns (80%+ of submissions) are auto-approved within minutes. Escalated campaigns generate a decision brief for VP Marketing with context and recommendation.',
-            painPoints: [
-              'Guardrails are imperfect; edge cases will always require human judgment — the system must gracefully escalate without over-constraining teams',
-              'Autonomous approval erodes VP\'s visibility into the portfolio; they must trust the guardrails and the agentic layer\'s enforcement',
-              'If a routine campaign changes mid-execution, the agentic layer must re-evaluate and escalate if the change violates guardrails',
-            ],
-            benchmarks: [
-              '80%+ of campaigns auto-approved within 2 hours in mature agentic deployments (Salesforce Agentforce 2025)',
-              'Escalated decisions require <10 minutes of VP Marketing time (industry composite)',
-              '95%+ approval rate on first submission with agentic pre-screening (industry composite)',
-            ],
-            outcomes: [
-              'Stakeholder sign-off cycle collapses to <2 hours for routine campaigns',
-              'VP Marketing intervention time drops to <5 hours per week',
-              'Portfolio compliance reaches 98%+ (campaigns stay within approved strategy and budget)',
-              'Faster execution enables more rapid response to competitive threats',
-            ],
-            roleEvolution: 'VP Marketing becomes a policy setter and exception handler. They define guardrails quarterly, review 2-5 escalated decisions per week, and trust the agentic layer to enforce them. Time saved from routine approvals is reinvested in market strategy.',
+            summary: 'You govern the system rather than reviewing individual assets — setting thresholds and escalation rules.',
+            detail: 'Most content flows through without your direct approval. You shift from output reviewer to system designer, intervening only where strategic direction is at stake.',
           },
         },
-
-        // ── SUPPORT NODES ────────────────────────────────────────────────
-        'content-strategy': {
-          preAI: {
-            summary: 'VP Marketing manually synthesizes market research, competitive analysis, sales feedback, and product roadmap into a 10-15 page quarterly strategy document that guides downstream campaign planning.',
-            detail: 'Strategy development is a quarterly ritual. VP Marketing interviews product leads, sales directors, customer success, and marketing teams. They review competitive activity, market trends, analyst reports, and customer surveys. The process is static; feedback loops are slow (quarterly review cycles). If the strategy is wrong, all downstream campaigns are orphaned.',
-          },
-          aiAgents: {
-            summary: 'AI agents continuously monitor competitive activity, market sentiment, and campaign performance data, surfacing strategic insights and revision recommendations to VP Marketing weekly.',
-            detail: 'Agents ingest competitive intelligence feeds, social listening data, sales call transcripts, customer survey responses, and campaign performance metrics. VP Marketing receives a weekly strategic digest with recommended adjustments. No ad-hoc strategy revision required; the system keeps strategy aligned with market reality on a rolling basis.',
-          },
-          aiAgentic: {
-            summary: 'Agentic systems continuously optimize content strategy against market signals, automatically cascade revisions to active campaigns, and surface only major strategic decision points to VP Marketing.',
-            detail: 'Strategy becomes a dynamic entity, not a quarterly document. Agents monitor market signals and autonomously adjust strategy guidance when signal confidence exceeds a threshold. For major shifts, the agentic layer escalates to VP Marketing with context and recommendation. The system then cascades the revised strategy to all active campaigns.',
-          },
-        },
-
-        // ── Non-rendered pipeline nodes (preserved for data completeness) ──
-
         'receive-request': {
           preAI: {
             summary: 'You approve incoming requests manually, sorting through emails and Slack messages for strategic alignment.',
@@ -3091,489 +2642,107 @@ export const ROLE_DEFINITIONS: RoleDefinition[] = [
           },
         },
       },
-      keyInsight: 'The pain point is not approval complexity — it\'s attention fragmentation. 61% of CMOs report plans driven by operational needs, not market opportunity. AI removes the busywork; judgment remains. The VP Marketing role has the highest leverage for AI-driven time recovery in the entire pipeline.',
+      keyInsight: 'Your time is the scarcest resource in the pipeline. The system should protect it by ensuring only irreplaceable decisions reach your desk.',
     },
   },
-
-
-  // ═══════════════════════════════════════════════════════════════════════════
-  // ROLE 5: ANALYTICS LEAD
-  // ═══════════════════════════════════════════════════════════════════════════
   {
     id: 'analytics-lead',
     title: 'Analytics Lead',
-    description: 'Owns the measurement layer — tracking, reporting, attribution, optimization, and executive insights. The feedback loop that makes the entire pipeline a learning system.',
-    tagline: 'The performance-review gate can restart the pipeline. That feedback loop makes this a learning system.',
+    description: 'Reviews performance data and decides whether content should be optimized, iterated, or archived.',
+    tagline: 'Closes the feedback loop with data.',
     iconName: 'BarChart3',
-    category: 'growth',
-    accentColor: '#4CAF50',
+    category: 'operations',
+    accentColor: '#D4AD5E',
     ownedSteps: ['track-performance', 'generate-report', 'optimize', 'attribution-modeling', 'executive-reporting'],
     reviewedGates: ['performance-review'],
     relatedAgents: ['performance-agent', 'optimization-agent'],
     relatedInputs: ['analytics-data', 'cdp-profiles', 'budget-allocation', 'channel-benchmarks'],
     narrative: {
-      stageOverviews: {
-        preAI: {
-          narrative: 'Before AI, the Analytics Lead is a data plumber. 50%+ of weekly time is consumed by manual data consolidation and reconciliation across 8-12 platforms. Strategic analysis — the actual value of the role — is compressed into whatever time remains after the spreadsheet work is done.',
-          timeAllocation: '50% data consolidation and reconciliation, 20% report creation, 15% attribution analysis, 10% optimization recommendations, 5% strategic forecasting',
-          criticalMetrics: ['Data consolidation time', 'Report delivery lag', 'Attribution model accuracy', 'Optimization cycle time', 'Budget efficiency (ROAS)'],
-          strategicOpportunity: '42% of marketers still rely on manual spreadsheet attribution. The AI opportunity is not just speed — it\'s accuracy. A 19% average improvement in ROI is not about working faster; it\'s about understanding which channels and touchpoints truly drive conversion.',
-        },
-        aiAgents: {
-          narrative: 'AI agents absorb the data plumbing: automated ingestion, real-time dashboards, anomaly detection. The Analytics Lead transitions from data assembler to data strategist — spending time on analysis and interpretation rather than export and reconciliation.',
-          timeAllocation: '10% data validation, 15% dashboard management, 25% analysis and interpretation, 25% optimization reviews, 25% strategic forecasting',
-          criticalMetrics: ['Real-time dashboard availability', 'Anomaly detection accuracy', 'Multi-touch attribution coverage', 'Optimization recommendation adoption', 'Forecast accuracy'],
-          strategicOpportunity: 'The 40-50% of time freed from data consolidation creates space for the analysis that actually drives budget efficiency — multi-touch attribution, channel interaction modeling, and predictive budget allocation.',
-        },
-        aiAgentic: {
-          narrative: 'The Analytics Lead becomes a strategic advisor and guardrail architect. Agentic systems handle tracking, reporting, attribution, and tactical optimization autonomously. Human judgment concentrates on portfolio strategy, experimental design, and the causal inference that distinguishes correlation from contribution.',
-          timeAllocation: '5% system monitoring, 15% guardrail management, 20% strategic analysis, 25% executive advising, 20% experimental design, 15% portfolio strategy',
-          criticalMetrics: ['Autonomous optimization success rate', 'Causal attribution accuracy', 'Budget allocation efficiency', 'Experimentation velocity', 'Strategic forecast accuracy'],
-          strategicOpportunity: 'The role\'s value proposition inverts: instead of being measured by reports produced, the Analytics Lead is measured by the quality of the optimization system they\'ve built and the strategic insights that only a human can derive from the data.',
-        },
-      },
       nodeJourneys: {
         'track-performance': {
           preAI: {
-            summary: 'Analytics Lead manually exports data from 8-12 sources (GA, ad platforms, email providers, CRM, third-party trackers) and consolidates into spreadsheets for analysis. Weekly consolidation takes 6-8 hours, and insights are stale by 5-7 days.',
-            detail: 'Performance tracking is fragmented. Each channel has its own platform. Analytics Lead exports reports from each, reconciles discrepancies (UTM parameter inconsistencies, timezone offsets, duplicate tracking), and consolidates into a master spreadsheet. Attribution is rudimentary: last-click or first-click only. Multi-touch attribution requires manual investigation. The result is a weekly performance report that VP Marketing adjusts strategy against.',
-            painPoints: [
-              'Data discrepancies across platforms require 2-3 hours of investigation and reconciliation per week',
-              'Last-click attribution obscures the true contribution of awareness and consideration channels',
-              'Manual data exports are error-prone; a single mistake invalidates the entire report',
-              'Performance insights come 5-7 days after the reporting period ends; insights are stale by the time they influence decisions',
-            ],
-            benchmarks: [
-              '42% of marketers rely on manual spreadsheet attribution (RevSure 2024)',
-              'Analytics Lead spends 5-10 hours per week on manual reporting (industry survey)',
-            ],
-            outcomes: [
-              'Weekly performance reports delivered 5-7 days post-period-end',
-              'Attribution accuracy: 60-70% (unknown or miscredited conversions)',
-              'Channel contribution estimates drive tactical budget reallocation quarterly, not continuously',
-            ],
-            roleEvolution: 'Analytics Lead spends 50%+ of their time on data consolidation and reconciliation. Strategic analysis is compressed into the remaining time.',
+            summary: 'You pull performance metrics manually from each platform and consolidate them into tracking dashboards.',
+            detail: 'Data lives in silos — each channel has its own reporting format. Consolidation takes hours before you can even begin analysis.',
           },
           aiAgents: {
-            summary: 'AI agents automatically pull data from all tracking sources, reconcile discrepancies, and surface real-time performance dashboards. Analytics Lead focuses on analysis and interpretation, not data plumbing.',
-            detail: 'Agents connect to GA4, ad platforms, email providers, CRM, and custom tracking via APIs. They automatically map dimensions and metrics, resolve UTM inconsistencies, and reconcile timezone offsets. Data flows continuously into a centralized data warehouse. Real-time dashboards surface performance by channel, campaign, audience segment, and device. Anomaly detection flags unusual patterns. Analytics Lead spends 1-2 hours on analysis instead of 6-8 hours on consolidation.',
-            painPoints: [
-              'Agents must adapt to platform changes (API updates, schema changes); ongoing maintenance required',
-              'Real-time data can be noisy; statistically insignificant spikes can trigger false escalations',
-              'Historical data inconsistencies require manual cleanup before agents can synthesize reliable trends',
-            ],
-            benchmarks: [
-              'AI-augmented tracking reduces manual data consolidation from 6-8 hours to 30 minutes per week (Salesforce 2024)',
-              'Real-time dashboard availability enables daily tactical adjustments vs. weekly (industry composite)',
-            ],
-            outcomes: [
-              'Performance data available in real-time (vs. 5-7 day lag)',
-              'Analytics Lead spends 2-3 hours per week on analysis (vs. 6-8 hours on consolidation)',
-              'Anomaly detection reduces surprise performance drops by 60-70%',
-            ],
-            roleEvolution: 'Analytics Lead transitions from data plumber to data strategist. Time freed from consolidation is reinvested in deeper analysis, audience segmentation, and strategic forecasting.',
+            summary: 'A performance agent aggregates metrics across platforms in real time and flags anomalies.',
+            detail: 'You stop pulling data and start responding to it. Alerts surface underperformers before they become expensive failures.',
           },
           aiAgentic: {
-            summary: 'Agentic systems continuously track performance, auto-detect anomalies with causal analysis, and cascade alerts to downstream teams when action is needed. Analytics Lead reviews a daily digest of significant findings.',
-            detail: 'Performance tracking becomes fully autonomous. Agents ingest data continuously, maintain a real-time data model, and automatically detect anomalies with causal inference. Alerts flow directly to responsible teams. Analytics Lead receives a daily digest of significant findings and digs into watchlisted items if needed.',
-            painPoints: [
-              'Causal inference requires robust experimentation and historical data; incomplete experiments lead to incorrect root cause attribution',
-              'Alerts to downstream teams must be carefully calibrated to avoid alert fatigue',
-              'Autonomous tracking removes Analytics Lead\'s direct visibility into data quality issues',
-            ],
-            benchmarks: [
-              'Anomaly detection with <5% false positive rate (industry target)',
-              'Root cause analysis available within 2 hours of detection (Salesforce Agentforce 2025)',
-            ],
-            outcomes: [
-              'Performance anomalies detected and investigated within 4 hours (vs. 5-7 days)',
-              'Tactical teams can respond in real-time to performance signals',
-              'Analytics Lead spends <30 minutes per week on performance tracking; focus shifts to strategic forecasting',
-            ],
-            roleEvolution: 'Analytics Lead becomes a performance auditor and strategic advisor. They set KPI thresholds and alert criteria quarterly, review escalated investigations daily, and focus on forward-looking analysis.',
+            summary: 'Performance tracking is continuous and triggers downstream actions automatically.',
+            detail: 'The system monitors, flags, and initiates optimization cycles without waiting for your manual review. You design the monitoring thresholds.',
           },
         },
         'generate-report': {
           preAI: {
-            summary: 'Analytics Lead manually crafts weekly and monthly reports: performance summaries, trend analysis, visual dashboards. Report creation takes 3-5 hours per week, and static reports cannot be explored by executives without requesting custom analyses.',
-            detail: 'Report creation is manual and labor-intensive. Analytics Lead pulls data, creates visualizations, writes narrative analysis, and packages into PowerPoint or PDF. Reports are tailored by audience: executive summary for VP Marketing, detailed breakdowns for channel leads. Each report is static — if VP Marketing wants to drill down, they email Analytics Lead for a custom analysis.',
-            painPoints: [
-              'Report creation is repetitive; the same charts and analyses are remade weekly with updated numbers',
-              'Report delivery is batched and async; insights are stale by the time they are read',
-              'Custom analysis requests add 2-4 hours per week of unplanned work',
-              'No direct interactivity; executives cannot drill down or filter data themselves',
-            ],
-            benchmarks: [
-              'Manual reports require 5-10 hours per week of Analytics Lead time (industry survey)',
-              '42% of reports are re-requested or modified post-delivery due to missing details (Gartner)',
-            ],
-            outcomes: [
-              'Weekly reports delivered 2-3 days after period end',
-              'Custom analysis requests add 2-4 hours per week of unplanned work',
-              'Report utilization: 60-70% (some reports are created but not heavily used)',
-            ],
-            roleEvolution: 'Analytics Lead is a report factory. Large portion of time is spent on report design and presentation, not insight generation.',
+            summary: 'You build performance reports from scratch for every reporting cycle, tailoring them to each stakeholder audience.',
+            detail: 'Report generation is time-consuming and repetitive. By the time insights reach decision-makers, the data is often already stale.',
           },
           aiAgents: {
-            summary: 'AI agents auto-generate reports by template, populate with real-time data, and create interactive dashboards. Analytics Lead reviews, adds strategic narrative, and distributes in 30 minutes.',
-            detail: 'Report generation is templated and automated. Agents know audience preferences and populate accordingly. Analytics Lead receives a draft report, spends 20 minutes adding strategic context, and sends. Interactive dashboards let executives self-serve drill-downs without waiting for custom analyses.',
-            painPoints: [
-              'Templates can be rigid; non-standard requests still require manual work',
-              'Interactive dashboards require ongoing maintenance as metrics change',
-              'Agents may surface statistically insignificant trends with high visual emphasis',
-            ],
-            benchmarks: [
-              'Report generation time drops from 3-5 hours to 30 minutes per week (Salesforce 2024)',
-              'Custom analysis requests drop 70% as executives self-serve via interactive dashboards (industry composite)',
-            ],
-            outcomes: [
-              'Weekly reports available same-day or next-day',
-              'Custom analysis turnaround: minutes (self-serve) vs. hours (email request)',
-              'Report utilization increases to 85%+ as interactivity enables exploratory analysis',
-            ],
-            roleEvolution: 'Analytics Lead transitions from report writer to insight curator. They validate automated insights, add strategic narrative, and manage dashboard configuration.',
+            summary: 'Reports auto-generate from templates with real-time data — you add narrative interpretation and strategic context.',
+            detail: 'The agent handles data assembly and visualization. Your value shifts to explaining what the numbers mean and what should change.',
           },
           aiAgentic: {
-            summary: 'Agentic systems auto-generate reports, distribute them proactively based on recipient preferences, and adjust report content based on what executives actually view. Reports become predictive, not historical.',
-            detail: 'Report generation and distribution is fully autonomous. The agentic layer learns what executives actually read and prioritizes accordingly. Monthly reporting shifts from operational metrics to strategic reviews focused on opportunities, risks, and recommendations.',
-            painPoints: [
-              'Predictive reporting requires sufficient historical data on executive preferences; early outputs may be suboptimal',
-              'Autonomous distribution can lead to report saturation if too aggressive with alerts',
-              'Connecting reports to action via downstream agents introduces dependencies and risk',
-            ],
-            benchmarks: [
-              'Report generation time: <10 minutes fully automated (industry composite)',
-              'Executive report engagement: 90%+ vs. 60-70% with manual reports (Gartner)',
-            ],
-            outcomes: [
-              'Executives access real-time insights within hours of period close',
-              'Custom report requests drop to near-zero as agentic system predicts and surfaces needed analyses',
-              'Report-to-action cycle time collapses; insights drive immediate tactical changes',
-            ],
-            roleEvolution: 'Analytics Lead becomes a strategic advisor and insight escalator. They set report strategy quarterly, review escalated anomalies daily, and focus on forward-looking strategy.',
+            summary: 'Reports generate and distribute on schedule, with AI-written executive summaries you approve or override.',
+            detail: 'Routine reporting runs without you. You focus on the interpretive layer — connecting performance data to strategic implications.',
           },
         },
         'optimize': {
           preAI: {
-            summary: 'Analytics Lead reviews weekly performance and makes manual budget reallocation recommendations. Execution lags 3-5 days; optimization is quarterly, not continuous. Recommendations are heuristic, not model-driven.',
-            detail: 'Optimization is a manual, batched process. Analytics Lead identifies underperforming and overperforming channels and recommends budget reallocation. The recommendation goes to VP Marketing, who approves it. Implementation takes 2-3 days. The optimization approach is heuristic without deeper analysis of audience saturation or channel synergies.',
-            painPoints: [
-              'Budget reallocation lags performance signal by 5-10 days; opportunities for rapid response are lost',
-              'No systematic understanding of channel interactions; optimization assumes channel independence',
-              'Quarterly budgeting locks resources for 3 months regardless of mid-quarter performance changes',
-            ],
-            benchmarks: [
-              'Current optimization cycle: 5-10 days from signal to execution (industry average)',
-              'Typical optimization impact: 5-12% improvement in overall ROAS vs. potential 20%+ with continuous optimization',
-            ],
-            outcomes: [
-              'Budget reallocation happens 4x per year (quarterly reviews)',
-              'Average time-to-impact: 2-3 weeks',
-              'Optimization gains: 5-12% per quarter',
-            ],
-            roleEvolution: 'Analytics Lead spends 2-3 hours per week on optimization analysis. The role is reactive rather than proactive.',
+            summary: 'You recommend optimization actions based on performance data — adjusting copy, targeting, or channel mix manually.',
+            detail: 'Optimization cycles are slow because each recommendation requires manual analysis, stakeholder alignment, and implementation.',
           },
           aiAgents: {
-            summary: 'AI agents model channel ROI, audience saturation, and budget elasticity, recommending daily optimization opportunities. Execution happens within 24 hours of recommendation.',
-            detail: 'Agents continuously monitor performance data and model channel dynamics including saturation and halo effects. They generate daily optimization recommendations with expected impact. Analytics Lead reviews in 10 minutes and approves or overrides with strategic context.',
-            painPoints: [
-              'Elasticity and saturation models require sufficient historical data; weak data leads to poor recommendations',
-              'Agents recommend based on ROI/ROAS but may not account for strategic brand-building objectives',
-              'Continuous daily optimization can cause rapid budget fluctuations that confuse campaign managers',
-            ],
-            benchmarks: [
-              'AI-augmented optimization cycle: 24 hours from signal to execution vs. 5-10 days (Salesforce 2024)',
-              'Expected improvement: 15-25% ROAS improvement over 12 weeks (Forrester 2024)',
-            ],
-            outcomes: [
-              'Budget reallocation executes within 24 hours of recommendation',
-              'Optimization drives 15-25% ROAS improvement over 3 months',
-              'Analytics Lead spends 30 minutes per week on optimization reviews',
-            ],
-            roleEvolution: 'Analytics Lead becomes an optimization auditor. They review daily recommendations, approve routine optimizations, and override when strategic factors suggest the agent\'s view is incomplete.',
+            summary: 'The agent recommends specific optimizations based on performance patterns — you approve and prioritize.',
+            detail: 'Recommendations arrive with supporting data. You decide which optimizations are worth the effort rather than identifying them from raw metrics.',
           },
           aiAgentic: {
-            summary: 'Agentic systems autonomously optimize budget allocation across channels in real-time, respecting strategic guardrails set by Analytics Lead. Optimization runs 24/7; human oversight is async.',
-            detail: 'Budget optimization becomes a closed-loop system. Analytics Lead sets strategic guardrails. The agentic layer runs optimization algorithms continuously, monitoring channel interactions and macroeconomic factors. Analytics Lead receives a weekly optimization summary and adjusts guardrails if needed.',
-            painPoints: [
-              'Guardrails must balance constraint and flexibility — overly rigid guardrails hobble the system; too loose and it optimizes away strategic objectives',
-              'Autonomous budget allocation removes Analytics Lead\'s direct control; mistakes can be substantial',
-              'The agentic layer must balance short-term ROAS with longer-term strategic investments',
-            ],
-            benchmarks: [
-              'Continuous optimization drives 25%+ ROAS improvement over 12 months (Forrester 2024)',
-              'Channel experimentation increases 3x with autonomous testing (industry composite)',
-            ],
-            outcomes: [
-              'ROAS improves 25%+ over 12 months vs. quarterly optimization baseline',
-              'Analytics Lead intervention time on optimization: <2 hours per week',
-              'Experimentation velocity increases; new tactics validated and scaled within days',
-            ],
-            roleEvolution: 'Analytics Lead becomes a guardrail architect and strategic capital allocator. The role transitions from tactical optimization to strategic capital allocation.',
+            summary: 'Routine optimizations execute automatically — you govern the optimization strategy and handle edge cases.',
+            detail: 'The system adjusts targeting, refreshes underperforming copy, and reallocates budget within your guardrails. You intervene when optimization requires strategic judgment.',
           },
         },
         'attribution-modeling': {
           preAI: {
-            summary: 'Analytics Lead manually traces customer journeys to assign credit to touchpoints. Multi-touch attribution requires 8-10 hours per week of manual investigation. Most brands default to last-click because anything better is too labor-intensive.',
-            detail: 'Attribution is the holy grail: which touchpoints actually drove conversion? Last-click attribution is simple but wrong. Multi-touch attribution attempts to distribute credit across the journey but is manual and imprecise. Analytics Lead investigates 20-30 journeys per week to build intuition, then applies a heuristic model.',
-            painPoints: [
-              'Manual journey tracing is time-consuming and subjective; two analysts might assign credit differently',
-              'Last-click severely misrepresents the value of awareness and consideration channels',
-              'No systematic understanding of channel synergies; the model assumes channels operate independently',
-            ],
-            benchmarks: [
-              '42% of marketers rely on manual spreadsheet attribution (RevSure 2024)',
-              '19% average improvement in marketing ROI within first year of multi-touch attribution (Forrester)',
-              '26% increase in ROAS for retailers using algorithmic vs. single-touch attribution (Google/industry)',
-            ],
-            outcomes: [
-              'Attribution accuracy: 60-70% (many conversions remain uncredited or miscredited)',
-              'Budget allocation based on flawed attribution; awareness channels may be systematically underfunded',
-            ],
-            roleEvolution: 'Analytics Lead spends 30-40% of their time on manual attribution analysis. Strategic insights are constrained by poor data.',
+            summary: 'You build attribution models manually, mapping content touchpoints to conversion events across channels.',
+            detail: 'Attribution accuracy depends on your modeling assumptions. Cross-channel attribution is approximated because data integration is incomplete.',
           },
           aiAgents: {
-            summary: 'AI agents build multi-touch attribution models from historical journey data, assigning probabilistic credit to each touchpoint automatically. Accuracy improves to 85%+.',
-            detail: 'Agents ingest all available journey data and build machine learning models to predict which touchpoints causally contributed to conversion. The agent assigns credit probabilistically. Analytics Lead validates the model against campaign performance and adjusts if needed.',
-            painPoints: [
-              'ML attribution models require large sample sizes and rich journey data',
-              'Models can surface spurious correlations that mislead budget allocation',
-              'Model maintenance is ongoing; must be retrained as channel mix evolves',
-            ],
-            benchmarks: [
-              'AI-driven attribution accuracy: 85%+ vs. 60-70% with manual models (Forrester 2024)',
-              '19% average ROI improvement within first year of multi-touch attribution (Forrester)',
-            ],
-            outcomes: [
-              'Multi-touch attribution available weekly (not manual investigation)',
-              'Attribution accuracy increases from 60-70% to 85%+',
-              'Awareness and consideration channels receive appropriate credit for first time',
-            ],
-            roleEvolution: 'Analytics Lead transitions from attribution investigator to attribution validator. Time freed from manual attribution is reallocated to strategic analysis.',
+            summary: 'An agent runs multi-touch attribution models continuously, surfacing the highest-impact content paths.',
+            detail: 'Models update in real time. You interpret results and challenge the model\'s assumptions rather than building the models yourself.',
           },
           aiAgentic: {
-            summary: 'Agentic systems build and continuously refine multi-touch attribution models incorporating causal inference and channel synergies. Attribution becomes a strategic asset that drives autonomous budget optimization.',
-            detail: 'Attribution modeling becomes fully automated and causally informed. The agentic layer accounts for channel synergies and uses causal inference techniques to estimate true contribution. It connects attribution to budget optimization, creating a closed loop.',
-            painPoints: [
-              'Causal inference requires robust experimentation and long observation windows',
-              'Autonomous attribution-driven budget optimization can be destabilizing if the model is wrong',
-              'The agentic layer must handle complex scenarios: long sales cycles, multiple products, channel cannibalization',
-            ],
-            benchmarks: [
-              'Causal attribution accuracy: 90%+ (industry target)',
-              'Budget reallocation driven by attribution: 30%+ ROAS improvement over 12 months (Forrester 2024)',
-            ],
-            outcomes: [
-              'Multi-touch attribution integrated into real-time budget optimization',
-              'ROAS improves 30%+ over 12 months as budget is reallocated from overcredited to undercredited channels',
-            ],
-            roleEvolution: 'Analytics Lead becomes an attribution strategist. Attribution becomes a closed-loop system: it measures true channel contribution, informs budget optimization, and validates predictions against outcomes.',
+            summary: 'Attribution feeds directly into budget allocation and content prioritization — a closed loop you monitor.',
+            detail: 'The system connects attribution insights to planning decisions automatically. You validate the model\'s conclusions and flag when business context the model can\'t see should override the data.',
           },
         },
         'executive-reporting': {
           preAI: {
-            summary: 'Analytics Lead prepares monthly executive reports for CMO and CFO with ROI analysis, budget efficiency metrics, and forecast updates. Report creation takes 6-8 hours; delivery lags month-end by 3-5 days.',
-            detail: 'Executive reporting is high-stakes and time-consuming. CMO and CFO want to understand: Is marketing ROI improving? Are we on track? Where should we allocate next quarter? Analytics Lead gathers data, validates accuracy, creates visualizations, and writes narrative analysis. The report is 20-30 pages and takes 6-8 hours. It is delivered 3-5 days after month-end.',
-            painPoints: [
-              'Report preparation is labor-intensive; same analyses remade monthly',
-              'Delivery lag means insights are stale by the time leadership reviews',
-              'CFO and CMO have different information needs; multiple versions required',
-              'Custom analysis requests add 2-4 hours per month of unplanned work',
-            ],
-            benchmarks: [
-              'Marketing automation returns $5.44 for every $1 spent (Nucleus Research 2024)',
-              'Manual executive report preparation: 6-8 hours per month (industry survey)',
-            ],
-            outcomes: [
-              'Executive report delivered 3-5 days after month-end',
-              'Custom analysis requests: 3-5 per month, each requiring 2-4 hours',
-            ],
-            roleEvolution: 'Analytics Lead spends 8-10 hours per month on executive reporting. The role is heavily weighted toward reporting rather than strategic analysis.',
+            summary: 'You compile executive summaries by hand, distilling performance data into narratives leadership can act on.',
+            detail: 'Executive reports require translating technical metrics into business language. The communication overhead is significant — you\'re an analyst and a storyteller.',
           },
           aiAgents: {
-            summary: 'AI agents auto-generate executive dashboards with ROI trends, budget efficiency metrics, forecast models, and scenario planning. Analytics Lead validates insights and adds strategic narrative. Report ready in 2 hours post-month-end.',
-            detail: 'Agents automatically prepare executive reports from real-time data with interactive elements. Executives can run scenarios. Analytics Lead spends 30 minutes validating and adding strategic narrative.',
-            painPoints: [
-              'Forecast models require careful parameterization; unusual situations need manual adjustments',
-              'Interactive dashboards can encourage increasingly detailed executive questions',
-            ],
-            benchmarks: [
-              'Executive report generation time: 2 hours post-month-end vs. 6-8 hours (industry composite)',
-              'Forecast accuracy: 80-85% within 12-month horizon (Gartner)',
-            ],
-            outcomes: [
-              'Executive report available same-day post-month-end',
-              'Scenario planning enables executives to test budget allocation hypotheses in minutes',
-              'Custom analysis requests drop 70% via interactive dashboards',
-            ],
-            roleEvolution: 'Analytics Lead becomes a report curator and strategic advisor. Time freed from report creation is reinvested in strategic analysis and forecasting.',
+            summary: 'An agent drafts executive summaries from performance data — you refine the narrative and strategic framing.',
+            detail: 'The first draft is assembled automatically. You shape the story leadership needs to hear, focusing on implications rather than data compilation.',
           },
           aiAgentic: {
-            summary: 'Agentic systems continuously generate executive dashboards, predict upcoming risks and opportunities, and recommend strategic actions. Monthly reports evolve into quarterly strategic reviews focused on forward-looking strategy.',
-            detail: 'Executive reporting becomes real-time and proactive. The agentic layer maintains live dashboards, predicts risks and opportunities, and handles what-if scenarios automatically. Monthly reporting shifts to quarterly strategic reviews.',
-            painPoints: [
-              'Real-time dashboards can lead to over-reactive decision-making',
-              'Predictive models must be accurate enough to be trustworthy',
-              'Autonomous escalation can lead to alert fatigue',
-            ],
-            benchmarks: [
-              'Real-time executive dashboards available 24/7 (industry standard for agentic deployments)',
-              'Predictive alerts delivered within 1 hour of data anomaly detection (Salesforce Agentforce 2025)',
-            ],
-            outcomes: [
-              'Executives access real-time performance data; no waiting for monthly reports',
-              'Risk and opportunity prediction enables proactive decision-making',
-              'Analytics Lead spends 4-6 hours per month on executive reporting vs. 8-10 hours',
-            ],
-            roleEvolution: 'Analytics Lead becomes a strategic advisor and chief analyst. The role transitions from reporting to strategy: identifying opportunities, forecasting impacts, and recommending capital allocation.',
+            summary: 'Executive reports auto-generate and distribute on cadence — you review only when metrics cross strategic thresholds.',
+            detail: 'Routine reporting reaches leadership without your involvement. You engage when the data tells a story that requires human judgment to interpret.',
           },
         },
         'performance-review': {
           preAI: {
-            summary: 'Analytics Lead reviews campaign performance weekly against targets. Underperformance triggers investigation and recommendation for reallocation or strategy rework. This gate can restart the pipeline.',
-            detail: 'The performance review gate is where campaigns are measured against expectations. Analytics Lead pulls campaign-level data and compares to targets. If a campaign underperforms, they investigate root cause and recommend actions. If multiple campaigns in a category underperform, the gate may restart the pipeline.',
-            painPoints: [
-              'Performance review is batched (weekly), creating lag between underperformance and action',
-              'Determining root cause requires manual investigation and hypothesis testing',
-              'No early warning system; campaigns must run for days before meaningful data accumulates',
-            ],
-            benchmarks: [
-              'Typical campaign review cycle: weekly after launch (industry standard)',
-              'Time-to-decision on campaign optimization: 3-5 days after underperformance detected',
-            ],
-            outcomes: [
-              'Underperforming campaigns identified within 1 week',
-              'Some campaigns allowed to run to completion despite poor performance due to late identification',
-            ],
-            roleEvolution: 'Analytics Lead spends 3-4 hours per week on performance review and investigation.',
+            summary: 'You staff the performance gate, deciding whether each content piece should be optimized, iterated, or archived.',
+            detail: 'Every piece queues for your review. Decisions are one-at-a-time, and the backlog grows faster than you can clear it.',
           },
           aiAgents: {
-            summary: 'AI agents continuously monitor campaign performance, flag underperformance with root cause analysis within 24 hours of launch, and recommend optimization or pause actions.',
-            detail: 'Agents monitor campaign performance in real-time. Within 24 hours of launch, they assess trajectory and trigger root cause analysis if performance is significantly below expected. Analytics Lead reviews decision cards in 5 minutes and approves action.',
-            painPoints: [
-              'Early-stage data (first 24 hours) can be noisy; small sample sizes lead to false positives',
-              'Root cause analysis with limited data requires careful statistical modeling',
-              'Rapid optimization cycles can confuse campaign managers',
-            ],
-            benchmarks: [
-              'Underperformance detection latency: <24 hours (Salesforce 2024)',
-              'Campaign performance improvement through rapid early optimization: 15-20% (industry composite)',
-            ],
-            outcomes: [
-              'Underperforming campaigns identified and optimized within 24 hours',
-              'Early-stage optimization prevents wasted spend on doomed campaigns',
-            ],
-            roleEvolution: 'Analytics Lead reviews daily performance alerts. They approve or override optimization recommendations and focus on strategic investigation.',
+            summary: 'The agent pre-classifies content into optimize/iterate/archive buckets — you confirm or override the recommendation.',
+            detail: 'Routine archival and optimization decisions are pre-made. You focus on the ambiguous cases where data supports multiple paths.',
           },
           aiAgentic: {
-            summary: 'Agentic systems autonomously optimize underperforming campaigns within 24-48 hours of launch. Performance review becomes a strategic gate focused on portfolio-level decisions and feedback loops that restart the pipeline.',
-            detail: 'Performance review becomes autonomous and strategic. The agentic layer monitors continuously and auto-optimizes underperformers. The strategic performance review gate focuses on portfolio-level decisions. The agentic layer escalates portfolio-level insights to Analytics Lead and VP Marketing.',
-            painPoints: [
-              'Autonomous optimization without human oversight can fix tactical issues but miss strategic problems',
-              'Rapid changes can dilute learning and make it harder to understand what truly works',
-              'The system must distinguish between "worth optimizing" and "time to stop"',
-            ],
-            benchmarks: [
-              'Autonomous optimization success rate: 75%+ of campaigns brought to target (Salesforce Agentforce 2025)',
-              'Portfolio-level ROAS stability: +2-5% quarter-over-quarter through continuous optimization (Forrester)',
-            ],
-            outcomes: [
-              'Underperforming campaigns optimized within 24-48 hours; wasted spend reduced 40-50%',
-              'Campaign success rate improves to 85-90% vs. 60-70% with manual review',
-              'Analytics Lead focuses on portfolio strategy and campaign conceptualization',
-            ],
-            roleEvolution: 'Analytics Lead becomes a portfolio strategist and optimization auditor. The role transitions from campaign troubleshooting to strategic capital allocation.',
+            summary: 'The performance gate self-operates for clear cases — archiving underperformers and restarting the pipeline for promising content.',
+            detail: 'This gate can restart the entire pipeline. The feedback loop runs continuously; you design the decision rules and handle the edge cases where data is genuinely ambiguous.',
           },
         },
-
-        // ── SUPPORT NODES ────────────────────────────────────────────────
-        'performance-agent': {
-          preAI: {
-            summary: 'Manual performance tracking via dashboards; checks happen 1-2x daily.',
-            detail: 'Analytics Lead manually monitors dashboards and pulls data for investigation when performance looks off.',
-          },
-          aiAgents: {
-            summary: 'Continuous monitoring with real-time alerts; anomalies flagged within 1 hour.',
-            detail: 'Performance agents monitor all channels continuously, detecting anomalies and alerting Analytics Lead when metrics deviate from expected ranges.',
-          },
-          aiAgentic: {
-            summary: 'Fully autonomous monitoring and tactical optimization; escalates strategic decisions to Analytics Lead.',
-            detail: 'Performance agents handle real-time monitoring, anomaly detection, and tactical optimization autonomously. They escalate only strategic decisions.',
-          },
-        },
-        'optimization-agent': {
-          preAI: {
-            summary: 'Manual budget allocation quarterly; ad hoc optimization based on performance trends.',
-            detail: 'Budget is allocated at the start of each quarter and adjusted infrequently based on manual analysis.',
-          },
-          aiAgents: {
-            summary: 'Daily optimization recommendations; Analytics Lead approves budget reallocation.',
-            detail: 'Optimization agents model channel elasticity and saturation, generating daily recommendations for Analytics Lead review.',
-          },
-          aiAgentic: {
-            summary: 'Autonomous budget optimization within guardrails; escalates portfolio-level decisions to Analytics Lead.',
-            detail: 'Optimization agents run continuous budget allocation algorithms within Analytics Lead-defined guardrails. Portfolio-level strategic decisions are escalated.',
-          },
-        },
-        'analytics-data': {
-          preAI: {
-            summary: 'Manual data consolidation from 8-12 sources; takes 6-8 hours per week.',
-            detail: 'Analytics Lead exports data from each platform, reconciles discrepancies, and consolidates into a master spreadsheet. Data lags by 5-7 days.',
-          },
-          aiAgents: {
-            summary: 'Automated data ingestion via APIs; real-time dashboard available.',
-            detail: 'Agents pull data continuously from all sources, reconcile automatically, and surface in unified dashboard.',
-          },
-          aiAgentic: {
-            summary: 'Fully automated data pipeline with anomaly detection and validation.',
-            detail: 'Agentic systems maintain a real-time data warehouse. Data quality is validated automatically; issues are flagged for review.',
-          },
-        },
-        'cdp-profiles': {
-          preAI: {
-            summary: 'Audience segmentation done manually in email platform; limited integration with analytics.',
-            detail: 'Segments are maintained in the email tool; sync to ad platforms is manual or via limited integration.',
-          },
-          aiAgents: {
-            summary: 'CDP profiles automatically segmented by AI; synced to all channels.',
-            detail: 'Agents build audience segments based on behavioral data and sync to email, ads, and social platforms.',
-          },
-          aiAgentic: {
-            summary: 'Real-time audience segmentation with dynamic segments automatically managed.',
-            detail: 'Agentic systems maintain real-time audience segments, adjust targeting based on behavior changes, and sync across all channels continuously.',
-          },
-        },
-        'budget-allocation': {
-          preAI: {
-            summary: 'Manual quarterly budget planning driven by strategy, not data.',
-            detail: 'VP Marketing and CFO allocate budget based on strategic priorities. Changes mid-quarter are rare.',
-          },
-          aiAgents: {
-            summary: 'Budget recommendations informed by historical ROI; updated monthly.',
-            detail: 'Agents analyze channel ROI and recommend reallocations. Analytics Lead reviews and approves changes.',
-          },
-          aiAgentic: {
-            summary: 'Continuous budget optimization; recommendations updated daily within guardrails.',
-            detail: 'Agentic systems continuously optimize budget allocation. Analytics Lead sets guardrails quarterly; system operates autonomously within them.',
-          },
-        },
-        'channel-benchmarks': {
-          preAI: {
-            summary: 'Manual benchmark collection from industry reports; updated annually.',
-            detail: 'Analytics Lead subscribes to industry research and maintains a benchmark spreadsheet. Benchmarks are static.',
-          },
-          aiAgents: {
-            summary: 'Benchmarks automatically updated monthly from industry feeds; historical trends tracked.',
-            detail: 'Agents ingest industry data feeds and maintain updated benchmarks with historical trend comparison.',
-          },
-          aiAgentic: {
-            summary: 'Real-time benchmark tracking with predictive benchmarks based on market conditions.',
-            detail: 'Agentic systems track industry benchmarks in real-time and adjust for seasonality and market conditions.',
-          },
-        },
-
-        // ── Non-rendered pipeline nodes (preserved for data completeness) ──
-
         'receive-request': {
           preAI: {
             summary: 'You measure incoming requests manually, sorting through emails and Slack messages for data accuracy.',
@@ -4121,10 +3290,9 @@ export const ROLE_DEFINITIONS: RoleDefinition[] = [
           },
         },
       },
-      keyInsight: 'The tension is acute: 42% of marketers still rely on manual spreadsheet attribution. The AI opportunity is not just speed — it\'s accuracy. A 19% average improvement in ROI is not about working faster; it\'s about understanding which channels and touchpoints truly drive conversion. The performance-review gate can restart the pipeline — that feedback loop makes this a learning system.',
+      keyInsight: 'The performance-review gate can restart the entire pipeline. That feedback loop is what makes this a learning system, not a conveyor belt.',
     },
   },
-
   {
     id: 'content-strategist',
     title: 'Content Strategist',
