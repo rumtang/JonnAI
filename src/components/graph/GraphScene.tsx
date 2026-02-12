@@ -78,6 +78,18 @@ function getCachedSpriteMaterial(glowColor: string, opacity: number): THREE.Spri
   return mat;
 }
 
+// Ring geometry cache — avoids creating new RingGeometry on every campaign node update
+const ringGeometryCache = new Map<string, THREE.RingGeometry>();
+function getCachedRingGeometry(innerRadius: number, outerRadius: number): THREE.RingGeometry {
+  const key = `${innerRadius.toFixed(2)}-${outerRadius.toFixed(2)}`;
+  let geom = ringGeometryCache.get(key);
+  if (!geom) {
+    geom = new THREE.RingGeometry(innerRadius, outerRadius, 32);
+    ringGeometryCache.set(key, geom);
+  }
+  return geom;
+}
+
 const ringMaterialCache = new Map<string, THREE.MeshBasicMaterial>();
 function getCachedRingMaterial(color: number, opacity: number): THREE.MeshBasicMaterial {
   const cacheKey = `${color}-${opacity}`;
@@ -112,6 +124,8 @@ export default function GraphScene() {
   const rotationRef = useRef<number | null>(null);
   const isInteracting = useRef(false);
   const interactionTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const idleTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const rotationStopped = useRef(false);
 
   // State values — re-render only when these change
   const {
@@ -193,6 +207,16 @@ export default function GraphScene() {
     cylinder: new THREE.CylinderGeometry(0.8, 0.8, 1.2, 16),
   }), []);
 
+  // Dispose shared GPU resources on unmount (prevents leaks during HMR / navigation)
+  useEffect(() => {
+    return () => {
+      Object.values(geometries).forEach(g => g.dispose());
+      for (const geom of ringGeometryCache.values()) geom.dispose();
+      ringGeometryCache.clear();
+      nodeGroupCache.clear();
+    };
+  }, [geometries]);
+
   // Setup renderer, lighting, and slow rotation on mount
   useEffect(() => {
     if (!fgRef.current) return;
@@ -247,7 +271,8 @@ export default function GraphScene() {
       }
     }, 500);
 
-    // Slow scene rotation — pauses during user interaction
+    // Slow scene rotation — pauses during interaction, stops entirely after 30s idle
+    // to let the GPU enter low-power state (important for MacBook presentations)
     const animate = () => {
       rotationRef.current = requestAnimationFrame(animate);
       if (isInteracting.current) return;
@@ -261,9 +286,20 @@ export default function GraphScene() {
       }
     };
     rotationRef.current = requestAnimationFrame(animate);
+    rotationStopped.current = false;
+
+    // Auto-stop rotation after 30s to save GPU when idle
+    idleTimer.current = setTimeout(() => {
+      if (rotationRef.current !== null) {
+        cancelAnimationFrame(rotationRef.current);
+        rotationRef.current = null;
+        rotationStopped.current = true;
+      }
+    }, 30000);
 
     return () => {
       clearTimeout(timer);
+      if (idleTimer.current) clearTimeout(idleTimer.current);
       if (rotationRef.current !== null) {
         cancelAnimationFrame(rotationRef.current);
       }
@@ -279,16 +315,15 @@ export default function GraphScene() {
       } catch { /* scene may already be destroyed */ }
       setGraphRef(null);
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Clean up stale cache entries when the visible node set changes
   useEffect(() => {
     const visibleIds = new Set(filteredGraphData.nodes.map(n => n.id));
-    for (const [id, cached] of nodeGroupCache) {
+    for (const [id] of nodeGroupCache) {
       if (!visibleIds.has(id)) {
-        // Dispose geometries created specifically for this node (campaign ring)
-        if (cached.campaignRing) cached.campaignRing.geometry.dispose();
-        if (cached.visitedSprite) cached.visitedSprite.geometry.dispose();
+        // Ring geometries and sprite geometries are shared/cached — no per-node dispose needed
         nodeGroupCache.delete(id);
       }
     }
@@ -345,15 +380,13 @@ export default function GraphScene() {
         ownerSprite.backgroundColor = isDimmed ? 'rgba(0,0,0,0.15)' : (ownerColors[stepMeta.owner] || 'rgba(0,0,0,0.4)');
       }
 
-      // Campaign ring: add/remove dynamically
+      // Campaign ring: add/remove dynamically (geometry is cached, not disposed per-node)
       if (isCampaignCurrent && !cached.campaignRing) {
-        const ringGeom = new THREE.RingGeometry(size * 1.3, size * 1.6, 32);
-        const ring = new THREE.Mesh(ringGeom, getCachedRingMaterial(0x4CAF50, 0.7));
+        const ring = new THREE.Mesh(getCachedRingGeometry(size * 1.3, size * 1.6), getCachedRingMaterial(0x4CAF50, 0.7));
         group.add(ring);
         cached.campaignRing = ring;
       } else if (!isCampaignCurrent && cached.campaignRing) {
         group.remove(cached.campaignRing);
-        cached.campaignRing.geometry.dispose();
         cached.campaignRing = undefined;
       }
 
@@ -389,8 +422,7 @@ export default function GraphScene() {
 
     let campaignRing: THREE.Mesh | undefined;
     if (isCampaignCurrent) {
-      const ringGeom = new THREE.RingGeometry(size * 1.3, size * 1.6, 32);
-      campaignRing = new THREE.Mesh(ringGeom, getCachedRingMaterial(0x4CAF50, 0.7));
+      campaignRing = new THREE.Mesh(getCachedRingGeometry(size * 1.3, size * 1.6), getCachedRingMaterial(0x4CAF50, 0.7));
       group.add(campaignRing);
     }
 
@@ -456,13 +488,39 @@ export default function GraphScene() {
     return group;
   }, [hoveredNode, selectedNode, highlightedNodeIds, neighborSet, hasHighlights, geometries, campaignActive, campaignNodeId, campaignVisitedSet, campaignNeighborSet, filteredGraphData]);
 
-  // Pause rotation on interaction, resume after 3s idle
+  // Pause rotation on interaction, resume after 3s idle.
+  // Restart the RAF loop if it was stopped by the 30s idle timeout.
   const markInteracting = useCallback(() => {
     isInteracting.current = true;
     if (interactionTimer.current) clearTimeout(interactionTimer.current);
     interactionTimer.current = setTimeout(() => {
       isInteracting.current = false;
     }, 3000);
+
+    // Restart rotation loop if it was stopped by idle timeout
+    if (rotationStopped.current && fgRef.current) {
+      rotationStopped.current = false;
+      const fg = fgRef.current;
+      const animate = () => {
+        rotationRef.current = requestAnimationFrame(animate);
+        if (isInteracting.current) return;
+        try {
+          const scene = fg.scene?.();
+          if (scene) scene.rotation.y += 0.0002;
+        } catch { /* scene not ready */ }
+      };
+      rotationRef.current = requestAnimationFrame(animate);
+    }
+
+    // Reset idle auto-stop timer
+    if (idleTimer.current) clearTimeout(idleTimer.current);
+    idleTimer.current = setTimeout(() => {
+      if (rotationRef.current !== null) {
+        cancelAnimationFrame(rotationRef.current);
+        rotationRef.current = null;
+        rotationStopped.current = true;
+      }
+    }, 30000);
   }, []);
 
   // Handle node click - fly camera to node (cinematic 2500ms)
@@ -626,7 +684,7 @@ export default function GraphScene() {
       onNodeHover={handleNodeHover as any}
       onBackgroundClick={handleBackgroundClick}
       d3VelocityDecay={0.5}
-      d3AlphaDecay={0.08}
+      d3AlphaDecay={mode === 'explore' ? 0.08 : 0.5}
       warmupTicks={100}
       cooldownTicks={150}
       enableNodeDrag={mode === 'explore' && !campaignActive}

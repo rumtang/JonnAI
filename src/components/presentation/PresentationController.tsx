@@ -187,7 +187,7 @@ export default function PresentationController() {
     if (!showPipelineOverlay && currentStepIndex > 0 && !hintShownRef.current) {
       hintShownRef.current = true;
       setShowInteractionHint(true);
-      const timer = setTimeout(() => setShowInteractionHint(false), 6000);
+      const timer = setTimeout(() => setShowInteractionHint(false), 10000);
       return () => clearTimeout(timer);
     }
   }, [showPipelineOverlay, currentStepIndex]);
@@ -209,8 +209,8 @@ export default function PresentationController() {
 
       // Each stage column is ~80px wide (w-16 md:w-20) + gap spacer (~24px)
       // Total width ≈ 6 * 80 + 5 * 24 = 600px, centered
-      const colWidth = vw < 768 ? 64 : 80;
-      const gapWidth = vw < 768 ? 12 : 24;
+      const colWidth = vw < 768 ? 56 : 64;
+      const gapWidth = vw < 768 ? 30 : 52;
       const totalWidth = 6 * colWidth + 5 * gapWidth;
       const startX = (vw - totalWidth) / 2;
 
@@ -677,7 +677,7 @@ export default function PresentationController() {
                 className="text-4xl md:text-5xl font-bold mb-4 leading-tight font-[family-name:var(--font-playfair)]"
               >
                 <span className="bg-gradient-to-r from-[#C9A04E] via-[#5B9ECF] to-[#9B7ACC] bg-clip-text text-transparent">
-                  The Marketing Campaign Lifecycle
+                  Every Campaign Starts with a Pipeline
                 </span>
               </motion.h1>
 
@@ -766,7 +766,8 @@ export default function PresentationController() {
         {showInteractionHint && (
           <motion.div
             key="interaction-hint"
-            className="fixed top-16 right-6 z-[60] flex items-center gap-3 px-4 py-2.5 rounded-full glass-panel pointer-events-none"
+            className="fixed top-16 right-6 z-[60] flex items-center gap-3 px-4 py-2.5 rounded-full glass-panel cursor-pointer"
+            onClick={() => setShowInteractionHint(false)}
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: 20 }}
@@ -781,6 +782,7 @@ export default function PresentationController() {
             <span className="text-xs text-muted-foreground">
               Scroll to zoom · Drag to rotate
             </span>
+            <span className="text-[9px] text-muted-foreground/40 ml-1">(dismiss)</span>
           </motion.div>
         )}
       </AnimatePresence>

@@ -19,6 +19,7 @@ import CampaignSummary from '@/components/graph/CampaignMode/CampaignSummary';
 import RoleController from '@/components/role/RoleController';
 import RolePicker from '@/components/graph/RoleMode/RolePicker';
 import ExplorePrompts from '@/components/graph/ExplorePrompts';
+import FpsCounter from '@/components/graph/FpsCounter';
 
 import { useGraphStore } from '@/lib/store/graph-store';
 import { useSessionStore } from '@/lib/store/session-store';
@@ -201,13 +202,17 @@ export default function GraphPage() {
   };
 
   return (
-    <>
+    <div className="graph-page">
       {/* Main 3D Graph — fills the layout, sits above crystalline bg */}
       <div className="absolute inset-0 z-10">
         <ErrorBoundary>
           <Suspense fallback={
-            <div className="flex items-center justify-center h-screen">
-              <div className="animate-pulse text-foreground/50">Loading visualization...</div>
+            <div className="flex flex-col items-center justify-center h-screen gap-4">
+              <div className="w-10 h-10 border-2 border-muted-foreground/20 border-t-primary rounded-full animate-spin" />
+              <div className="text-center space-y-1">
+                <p className="text-sm font-medium text-foreground/70">Preparing visualization...</p>
+                <p className="text-xs text-muted-foreground/50">Loading 3D engine and graph data</p>
+              </div>
             </div>
           }>
             <GraphScene />
@@ -302,6 +307,8 @@ export default function GraphPage() {
           </div>
         </>
       )}
-    </>
+
+      <FpsCounter />
+    </div>
   );
 }

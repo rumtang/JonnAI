@@ -101,6 +101,15 @@
   box-shadow: 0 8px 32px oklch(0.65 0.15 45 / 15%);
 }
 
+/* Disable expensive backdrop-filter blur on panels over the WebGL canvas.
+   blur() composited over a 60fps 3D scene is one of the costliest CSS ops.
+   Higher-opacity solid bg preserves the aesthetic without the GPU tax. */
+.graph-page .glass-panel {
+  background: oklch(0.98 0.005 65 / 92%);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
 /* ── Animated crystalline background ── */
 .crystalline-bg {
   position: fixed;
