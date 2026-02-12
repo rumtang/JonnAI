@@ -224,12 +224,15 @@ export default function GraphScene() {
     const fg = fgRef.current;
     setGraphRef(fg);
 
-    // Force settings tuned for 83-node graph (expanded from original 25 nodes).
-    // Center force anchors graph near origin; charge pushes nodes apart;
-    // link distance controls minimum spacing between connected nodes.
+    // Scale force parameters by link density so denser graphs (e.g. frontoffice
+    // with 175 links) spread out more than sparser ones (marketing with 49 links).
+    const { graphData: gd } = useGraphStore.getState();
+    const linkCount = gd.links.length;
+    const chargeStrength = linkCount > 100 ? -900 : -600;
+    const linkDistance = linkCount > 100 ? 80 : 50;
     fg.d3Force('center', forceCenter(0, 0, 0).strength(0.01));
-    fg.d3Force('charge')?.strength(-600);
-    fg.d3Force('link')?.distance(50);
+    fg.d3Force('charge')?.strength(chargeStrength);
+    fg.d3Force('link')?.distance(linkDistance);
 
     const lights: THREE.Light[] = [];
 
