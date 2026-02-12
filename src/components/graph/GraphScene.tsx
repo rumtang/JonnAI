@@ -684,7 +684,7 @@ export default function GraphScene() {
       onNodeHover={handleNodeHover as any}
       onBackgroundClick={handleBackgroundClick}
       d3VelocityDecay={0.5}
-      d3AlphaDecay={mode === 'explore' ? 0.08 : 0.5}
+      d3AlphaDecay={(mode === 'explore' || mode === 'guided') ? 0.08 : 0.5}
       warmupTicks={100}
       cooldownTicks={150}
       enableNodeDrag={mode === 'explore' && !campaignActive}

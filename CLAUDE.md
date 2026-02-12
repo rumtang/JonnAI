@@ -110,5 +110,6 @@ These were toggled back and forth multiple times. The current state is final:
 7 modes: `guided` | `explore` | `campaign` | `build` | `roi` | `role` | (landing page)
 - The mode lives in `presentation-store.ts` as `mode`
 - When switching modes: reset presentation step index, campaign state, and graph selection
-- Physics (`d3AlphaDecay`) is 0.08 in explore, 0.5 in all other modes (freezes layout fast)
+- Physics (`d3AlphaDecay`) is 0.08 in explore/guided, 0.5 in other modes (freezes layout fast)
+  - Guided mode needs 0.08 because the full graph (83 nodes) loads fresh at step 6 and needs ~100 ticks to spread
 - Node drag is only enabled in explore mode when campaign is not active
