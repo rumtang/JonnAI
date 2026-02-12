@@ -1,5 +1,7 @@
 # Project Configuration
 
+Always consider using agents, sub agents and skills. 
+
 ## Who I Am
 I'm a strategist and architect, not a daily coder. I understand APIs, Python, JS, and system
 design at a conceptual level. I need working code, not lessons. Make architecture decisions for

@@ -203,7 +203,7 @@ export default function GraphScene() {
     // Add a center force so nodes stay anchored near the origin
     // Without this, the graph drifts off-screen over time in explore mode
     fg.d3Force('center', forceCenter(0, 0, 0).strength(0.05));
-    fg.d3Force('charge')?.strength(-80);
+    fg.d3Force('charge')?.strength(-250);
 
     const lights: THREE.Light[] = [];
 

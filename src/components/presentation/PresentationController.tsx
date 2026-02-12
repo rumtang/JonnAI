@@ -161,12 +161,13 @@ export default function PresentationController() {
   const setHighlightedNodeIds = useGraphStore(s => s.setHighlightedNodeIds);
 
   const currentStep = steps[currentStepIndex];
+  const isIntroSlide = currentStep?.action === 'show-intro-slide';
   const isTitleSlide = currentStep?.action === 'show-title-slide';
   const isPipelineSlide = currentStep?.id === 'act1-lifecycle';
   const isTransitionSlide = currentStep?.id === 'act2-agents-and-context' || currentStep?.id === 'act1-pain-points';
   const showPipelineOverlay = isTitleSlide || isPipelineSlide || isTransitionSlide;
-  // Scrim stays high on slides 1-3 so the 2D overlay is the primary visual
-  const scrimOpacity = isTitleSlide ? 0.95 : 0.90;
+  // Scrim stays high on pipeline slides so the 2D overlay is the primary visual
+  const scrimOpacity = isTitleSlide ? 0.95 : isIntroSlide ? 0.97 : 0.90;
   const diagramOpacity = 1;
 
   // ─── Flying Agent Transition (slide 3→4) ─────────────────
@@ -306,6 +307,15 @@ export default function PresentationController() {
     if (mode !== 'guided') return;
 
     switch (action) {
+      // ─── Act 0: Strategic Context Intro ────────────────────────
+      case 'show-intro-slide': {
+        hasExplodedRef.current = false;
+        if (linearGraphData) {
+          setGraphData({ ...linearGraphData });
+        }
+        break;
+      }
+
       // ─── Act 1: Linear Pipeline ──────────────────────────────
       case 'show-title-slide': {
         // Going back to pipeline slides means next forward visit should re-explode
@@ -545,6 +555,93 @@ export default function PresentationController() {
         </div>
       )}
 
+      {/* ─── Intro Scrim (strategic context slide) ──────────── */}
+      <AnimatePresence>
+        {isIntroSlide && (
+          <>
+            <motion.div
+              key="intro-scrim"
+              className="fixed inset-0 z-[45] pointer-events-none"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: scrimOpacity }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.8 }}
+            >
+              <div className="absolute inset-0 bg-background backdrop-blur-sm" />
+            </motion.div>
+
+            <motion.div
+              key="intro-content"
+              className="fixed inset-0 z-[60] flex flex-col items-center justify-center pointer-events-none"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              <div className="text-center max-w-3xl px-8">
+                {/* Pill badge */}
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.2 }}
+                  className="mb-6"
+                >
+                  <span className="px-4 py-1.5 rounded-full text-xs font-medium glass-panel text-primary">
+                    From Agents to Agentic
+                  </span>
+                </motion.div>
+
+                {/* Title */}
+                <motion.h1
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3, duration: 0.6 }}
+                  className="text-4xl md:text-5xl font-bold mb-6 leading-tight font-[family-name:var(--font-playfair)]"
+                >
+                  <span className="bg-gradient-to-r from-[#C9A04E] via-[#5B9ECF] to-[#9B7ACC] bg-clip-text text-transparent">
+                    The Agentic Mesh
+                  </span>
+                </motion.h1>
+
+                {/* Core thesis — three beats */}
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.5 }}
+                  className="space-y-4 text-base md:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed"
+                >
+                  <p>
+                    Deploying agents is the first step.
+                    <br />
+                    To capture the real promise of AI, you have to go further —
+                  </p>
+                  <p className="text-foreground font-medium">
+                    from agents to agentic thinking.
+                  </p>
+                  <p className="text-sm text-muted-foreground/70">
+                    That means encoding your business — strategy, brand, governance —
+                    <br />
+                    as infrastructure agents can draw on.
+                    <br />
+                    It{"'"}s the only way to stay in control of your brand and operations at scale.
+                  </p>
+                </motion.div>
+              </div>
+
+              {/* Prompt at bottom */}
+              <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 1.2 }}
+                className="absolute bottom-32 text-sm text-muted-foreground/60"
+              >
+                Press {'\u2192'} to see this in action
+              </motion.p>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+
       {/* ─── Title Content (slide 1 only) ─────────────────── */}
       <AnimatePresence>
         {isTitleSlide && (
@@ -606,10 +703,10 @@ export default function PresentationController() {
         )}
       </AnimatePresence>
 
-      {/* ─── Narration Card (slides 2+) ───────────────────── */}
+      {/* ─── Narration Card (non-title slides) ────────────── */}
       {/* Single AnimatePresence keyed on step id — flattened from nested wrappers */}
       <AnimatePresence mode="wait">
-        {!isTitleSlide && (
+        {!isTitleSlide && !isIntroSlide && (
           <motion.div
             key={currentStep.id}
             initial={{ opacity: 0, y: 20, scale: 0.95 }}
