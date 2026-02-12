@@ -194,7 +194,7 @@ export default function ExecutiveSummarySlide({ step }: ExecutiveSummarySlidePro
         '',
         'FINANCIAL SUMMARY',
         `  Net Present Value (NPV): ${formatCompact(outputs.netPresentValue)}`,
-        `  Internal Rate of Return (IRR): ${isNaN(irr) ? 'N/A' : `${Math.round(irr * 100)}%`}`,
+        `  Internal Rate of Return (IRR): ${isNaN(irr) ? 'N/A' : `${Math.round(irr)}%`}`,
         `  Payback Period: ${outputs.paybackMonths} months`,
         `  Total Capital Required: ${formatCompact(outputs.totalInvestment)}`,
         `  Ongoing Annual Cost: ${formatCompact(outputs.annualOpEx)}`,
@@ -238,7 +238,7 @@ export default function ExecutiveSummarySlide({ step }: ExecutiveSummarySlidePro
       `Total Investment: ${formatCompact(outputs.totalInvestment)}`,
       `Ongoing Annual Cost: ${formatCompact(outputs.annualOpEx)}`,
       `Net Present Value: ${formatCompact(outputs.netPresentValue)}`,
-      `IRR: ${isNaN(irr) ? 'N/A' : `${Math.round(irr * 100)}%`}`,
+      `IRR: ${isNaN(irr) ? 'N/A' : `${Math.round(irr)}%`}`,
       `Annual Value (Full Ramp): ${formatCompact(outputs.totalAnnualValue)}`,
       '',
       'VALUE BREAKDOWN (Annual — $ and % of total)',
@@ -367,7 +367,7 @@ export default function ExecutiveSummarySlide({ step }: ExecutiveSummarySlidePro
               { icon: RefreshCw, label: 'Ongoing Annual Cost', value: outputs.annualOpEx, format: 'currency' as const, color: '#E88D67' },
               { icon: BarChart3, label: 'Net Present Value', value: outputs.netPresentValue, format: 'currency' as const, color: '#9B7ACC' },
               { icon: TrendingUp, label: 'Annual Value', value: outputs.totalAnnualValue, format: 'currency' as const, color: '#C9A04E' },
-              { icon: Shield, label: 'IRR', value: isNaN(irr) ? 0 : irr * 100, format: 'percent' as const, color: '#14B8A6' },
+              { icon: Shield, label: 'IRR', value: isNaN(irr) ? 0 : irr, format: 'percent' as const, color: '#14B8A6' },
             ].map(({ icon: Icon, label, value, format, color }, i) => (
               <motion.div
                 key={label}
@@ -604,7 +604,7 @@ export default function ExecutiveSummarySlide({ step }: ExecutiveSummarySlidePro
           >
             {[
               { label: 'Net Present Value', value: outputs.netPresentValue, format: 'currency' as const, color: '#9B7ACC' },
-              { label: 'Internal Rate of Return', value: isNaN(irr) ? 0 : irr * 100, format: 'percent' as const, color: '#14B8A6' },
+              { label: 'Internal Rate of Return', value: isNaN(irr) ? 0 : irr, format: 'percent' as const, color: '#14B8A6' },
               { label: 'Payback Period', value: outputs.paybackMonths, format: 'months' as const, color: '#C9A04E' },
               { label: 'Capital Required', value: outputs.totalInvestment, format: 'currency' as const, color: '#D4856A' },
               { label: 'Ongoing Annual Cost', value: outputs.annualOpEx, format: 'currency' as const, color: '#E88D67' },
@@ -725,8 +725,8 @@ export default function ExecutiveSummarySlide({ step }: ExecutiveSummarySlidePro
               <div>
                 <h4 className="text-sm font-semibold text-foreground mb-1">Capital Efficiency Assessment</h4>
                 <p className="text-xs text-muted-foreground leading-relaxed">
-                  {!isNaN(irr) && irr * 100 > CFO_FRAMEWORK.hurdle_rate
-                    ? `IRR of ${Math.round(irr * 100)}% exceeds the ${CFO_FRAMEWORK.hurdle_rate}% hurdle rate. Payback within ${outputs.paybackMonths} months demonstrates strong capital efficiency with ${formatCompact(riskAdjustedNpv)} in risk-adjusted net present value.`
+                  {!isNaN(irr) && irr > CFO_FRAMEWORK.hurdle_rate
+                    ? `IRR of ${Math.round(irr)}% exceeds the ${CFO_FRAMEWORK.hurdle_rate}% hurdle rate. Payback within ${outputs.paybackMonths} months demonstrates strong capital efficiency with ${formatCompact(riskAdjustedNpv)} in risk-adjusted net present value.`
                     : `Investment shows a payback period of ${outputs.paybackMonths} months with ${formatCompact(outputs.netPresentValue)} in NPV. Consider phased deployment to optimize capital allocation against the ${CFO_FRAMEWORK.hurdle_rate}% hurdle rate.`
                   }
                 </p>

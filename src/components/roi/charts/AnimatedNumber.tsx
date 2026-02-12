@@ -25,7 +25,7 @@ export default function AnimatedNumber({
         if (Math.abs(v) >= 1_000) return `$${(v / 1_000).toFixed(0)}K`;
         return `$${Math.round(v).toLocaleString()}`;
       case 'percent':
-        return `${Math.round(v)}%`;
+        return `${Math.abs(v) >= 100 ? Math.round(v).toLocaleString() : v.toFixed(1)}%`;
       case 'months':
         return `${Math.round(v)} mo`;
       case 'number':

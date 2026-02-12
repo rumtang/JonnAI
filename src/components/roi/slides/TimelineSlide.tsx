@@ -318,7 +318,7 @@ export default function TimelineSlide({ step }: TimelineSlideProps) {
           <div className="glass-panel rounded-lg p-3 text-center" style={{ borderLeft: '3px solid #14B8A6' }}>
             <p className="text-[8px] text-muted-foreground uppercase tracking-wider mb-1">Internal Rate of Return</p>
             <p className="text-lg font-bold text-[#14B8A6]">
-              {isNaN(outputs.irr) ? 'N/A' : `${Math.round(outputs.irr * 100)}%`}
+              {isNaN(outputs.irr) ? 'N/A' : `${Math.round(outputs.irr)}%`}
             </p>
           </div>
 

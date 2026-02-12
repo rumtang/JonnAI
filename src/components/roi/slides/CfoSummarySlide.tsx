@@ -173,13 +173,13 @@ export default function CfoSummarySlide({ step }: CfoSummarySlideProps) {
             <tr>
               <td className="py-2 text-muted-foreground">IRR</td>
               <td className="py-2 text-center font-semibold text-[#f59e0b]">
-                {isNaN(scenarioReturns.conservative.irr) ? 'N/A' : `${Math.round(scenarioReturns.conservative.irr * 100)}%`}
+                {isNaN(scenarioReturns.conservative.irr) ? 'N/A' : `${Math.round(scenarioReturns.conservative.irr)}%`}
               </td>
               <td className="py-2 text-center font-semibold text-[#14B8A6]">
-                {isNaN(scenarioReturns.expected.irr) ? 'N/A' : `${Math.round(scenarioReturns.expected.irr * 100)}%`}
+                {isNaN(scenarioReturns.expected.irr) ? 'N/A' : `${Math.round(scenarioReturns.expected.irr)}%`}
               </td>
               <td className="py-2 text-center font-semibold text-[#4CAF50]">
-                {isNaN(scenarioReturns.aggressive.irr) ? 'N/A' : `${Math.round(scenarioReturns.aggressive.irr * 100)}%`}
+                {isNaN(scenarioReturns.aggressive.irr) ? 'N/A' : `${Math.round(scenarioReturns.aggressive.irr)}%`}
               </td>
             </tr>
           </tbody>

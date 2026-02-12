@@ -787,8 +787,8 @@ export function calculateIRR(cashFlows: number[], maxIterations = 100, tolerance
     if (Math.abs(dnpv) < 1e-12) return NaN;
     const newRate = rate - npv / dnpv;
     if (Math.abs(newRate - rate) < tolerance) {
-      // Convert monthly rate to annualized
-      return Math.pow(1 + newRate, 12) - 1;
+      // Convert monthly rate to annualized percentage (consistent with other pct values)
+      return (Math.pow(1 + newRate, 12) - 1) * 100;
     }
     rate = newRate;
   }
@@ -850,7 +850,7 @@ export function computeDoNothingCost(
   const quarterlyLosses: number[] = [];
   let cumulative = 0;
   for (let q = 1; q <= 8; q++) {
-    cumulative += marketingBudget * quarterlyErosionRate * q;
+    cumulative += marketingBudget * (1 - Math.pow(1 - quarterlyErosionRate, q));
     quarterlyLosses.push(cumulative);
   }
 
@@ -861,7 +861,7 @@ export function computeDoNothingCost(
   // Year 3: extrapolate compound model for Q9-Q12
   let year3Cumulative = cumulative;
   for (let q = 9; q <= 12; q++) {
-    year3Cumulative += marketingBudget * quarterlyErosionRate * q;
+    year3Cumulative += marketingBudget * (1 - Math.pow(1 - quarterlyErosionRate, q));
   }
   const year3Loss = year3Cumulative;
 

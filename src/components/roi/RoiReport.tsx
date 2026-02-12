@@ -270,7 +270,7 @@ function RoiReportDocument({ org, baseline, outputs, viewMode, agentIntensity = 
           <View style={styles.metricCard}>
             <Text style={styles.metricLabel}>IRR</Text>
             <Text style={[styles.metricValue, { color: colors.teal }]}>
-              {isNaN(irr) ? 'N/A' : `${Math.round(irr * 100)}%`}
+              {isNaN(irr) ? 'N/A' : `${Math.round(irr)}%`}
             </Text>
           </View>
         </View>
