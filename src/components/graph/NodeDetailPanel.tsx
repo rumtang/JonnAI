@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useGraphStore } from '@/lib/store/graph-store';
@@ -9,9 +9,53 @@ import { useIsMobile } from '@/lib/hooks/use-is-mobile';
 import { navigateToNode } from '@/lib/utils/camera-navigation';
 import { NODE_STYLES } from '@/lib/graph/node-styles';
 import { Badge } from '@/components/ui/badge';
-import { X, ArrowRight } from 'lucide-react';
+import {
+  X, ArrowRight, ChevronDown, AlertTriangle,
+  TrendingUp, Target, UserCog,
+} from 'lucide-react';
 import { GraphNode, StepMeta, GateMeta, AgentMeta, InputMeta } from '@/lib/graph/types';
+import { ROLE_DEFINITIONS, type JourneyStage, type NodeJourney, type RoleDefinition } from '@/lib/roles/role-definitions';
 import NavigationBreadcrumb from './NavigationBreadcrumb';
+
+// ─── Node → Role Journey Lookup ──────────────────────────────
+// Built once at module load — maps each node ID to the roles and
+// journey data that reference it.
+
+interface NodeRoleJourney {
+  role: RoleDefinition;
+  journey: NodeJourney;
+}
+
+const NODE_JOURNEY_MAP = new Map<string, NodeRoleJourney[]>();
+
+for (const role of ROLE_DEFINITIONS) {
+  const allNodeIds = [
+    ...role.ownedSteps,
+    ...role.reviewedGates,
+    ...role.relatedAgents,
+    ...role.relatedInputs,
+  ];
+  for (const nodeId of allNodeIds) {
+    const journey = role.narrative.nodeJourneys[nodeId];
+    if (!journey) continue;
+    let entries = NODE_JOURNEY_MAP.get(nodeId);
+    if (!entries) {
+      entries = [];
+      NODE_JOURNEY_MAP.set(nodeId, entries);
+    }
+    // Avoid duplicate role entries for the same node
+    if (!entries.some(e => e.role.id === role.id)) {
+      entries.push({ role, journey });
+    }
+  }
+}
+
+// Stage display config
+const STAGE_CONFIG = [
+  { key: 'preAI' as const,     label: 'Before AI',      color: '#94a3b8' },
+  { key: 'aiAgents' as const,  label: 'With AI Agents', color: '#6BAED6' },
+  { key: 'aiAgentic' as const, label: 'Agentic System', color: '#4CAF50' },
+];
 
 export default function NodeDetailPanel() {
   const {
@@ -98,6 +142,12 @@ export default function NodeDetailPanel() {
     return count;
   }, [progressiveReveal, selectedNode, fullGraphData, revealedNodeIds]);
 
+  // Look up journey data for the selected node
+  const journeyEntries = useMemo(() => {
+    if (!selectedNode) return [];
+    return NODE_JOURNEY_MAP.get(selectedNode.id) || [];
+  }, [selectedNode]);
+
   return (
     <AnimatePresence>
       {detailPanelOpen && selectedNode && (
@@ -156,6 +206,11 @@ export default function NodeDetailPanel() {
               {selectedNode.type === 'input' && renderInputMeta(selectedNode.meta as InputMeta)}
             </div>
 
+            {/* AI Journey — rich content from role definitions */}
+            {journeyEntries.length > 0 && (
+              <AIJourneySection entries={journeyEntries} />
+            )}
+
             {/* Connections */}
             <div>
               <h3 className="text-sm font-semibold text-foreground mb-3">
@@ -213,6 +268,180 @@ export default function NodeDetailPanel() {
     </AnimatePresence>
   );
 }
+
+// ─── AI Journey Section ──────────────────────────────────────
+// Shows how this node evolves across AI maturity stages, sourced
+// from the expanded role definitions.
+
+function AIJourneySection({ entries }: { entries: NodeRoleJourney[] }) {
+  // Use the first role's journey (richest content typically on the primary owner)
+  const { role, journey } = entries[0];
+
+  return (
+    <div className="mb-6">
+      <h3 className="text-sm font-semibold text-foreground mb-1">
+        AI Journey
+      </h3>
+      <p className="text-[10px] text-muted-foreground/60 mb-3">
+        How this evolves &mdash; {role.title} perspective
+      </p>
+      <div className="space-y-2">
+        {STAGE_CONFIG.map((stage) => (
+          <StageCard
+            key={stage.key}
+            stageData={journey[stage.key]}
+            label={stage.label}
+            color={stage.color}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ─── Stage Card ──────────────────────────────────────────────
+// Compact collapsible card for a single AI maturity stage.
+
+function StageCard({ stageData, label, color }: {
+  stageData: JourneyStage;
+  label: string;
+  color: string;
+}) {
+  const [expanded, setExpanded] = useState(false);
+  const hasRichContent = stageData.detail || stageData.painPoints?.length ||
+                          stageData.benchmarks?.length || stageData.outcomes?.length ||
+                          stageData.roleEvolution;
+
+  return (
+    <div
+      className="rounded-lg border overflow-hidden"
+      style={{ borderColor: color + '25' }}
+    >
+      {/* Header — always visible */}
+      <button
+        onClick={() => hasRichContent && setExpanded(!expanded)}
+        className="w-full text-left p-3"
+        style={{ backgroundColor: color + '08' }}
+      >
+        <div className="flex items-center gap-2 mb-1.5">
+          <div
+            className="w-2 h-2 rounded-full shrink-0"
+            style={{ backgroundColor: color }}
+          />
+          <span className="text-[10px] font-semibold uppercase tracking-wider" style={{ color }}>
+            {label}
+          </span>
+          {hasRichContent && (
+            <motion.span
+              animate={{ rotate: expanded ? 180 : 0 }}
+              transition={{ duration: 0.2 }}
+              className="ml-auto"
+            >
+              <ChevronDown className="w-3 h-3" style={{ color: color + '80' }} />
+            </motion.span>
+          )}
+        </div>
+        <p className="text-xs text-foreground/80 leading-relaxed">
+          {stageData.summary}
+        </p>
+      </button>
+
+      {/* Expanded rich content */}
+      <AnimatePresence>
+        {expanded && hasRichContent && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.25, ease: 'easeInOut' }}
+            className="overflow-hidden"
+          >
+            <div className="px-3 pb-3 space-y-2.5 border-t" style={{ borderColor: color + '15' }}>
+              {/* Detail */}
+              {stageData.detail && (
+                <p className="text-[11px] text-muted-foreground leading-relaxed pt-2.5">
+                  {stageData.detail}
+                </p>
+              )}
+
+              {/* Pain Points */}
+              {stageData.painPoints && stageData.painPoints.length > 0 && (
+                <div>
+                  <div className="flex items-center gap-1 mb-1">
+                    <AlertTriangle className="w-3 h-3 text-amber-500/70" />
+                    <span className="text-[9px] font-semibold uppercase tracking-wider text-amber-500/70">
+                      Watch Out For
+                    </span>
+                  </div>
+                  <ul className="space-y-0.5">
+                    {stageData.painPoints.map((point, i) => (
+                      <li key={i} className="flex gap-1.5 text-[10px] text-muted-foreground/70 leading-relaxed">
+                        <span className="mt-1.5 w-1 h-1 rounded-full bg-amber-500/40 shrink-0" />
+                        {point}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {/* Benchmarks */}
+              {stageData.benchmarks && stageData.benchmarks.length > 0 && (
+                <div>
+                  <div className="flex items-center gap-1 mb-1">
+                    <TrendingUp className="w-3 h-3" style={{ color }} />
+                    <span className="text-[9px] font-semibold uppercase tracking-wider" style={{ color }}>
+                      Industry Data
+                    </span>
+                  </div>
+                  <ul className="space-y-0.5">
+                    {stageData.benchmarks.map((bench, i) => (
+                      <li key={i} className="flex gap-1.5 text-[10px] text-muted-foreground/70 leading-relaxed">
+                        <span className="mt-1.5 w-1 h-1 rounded-full shrink-0" style={{ backgroundColor: color + '60' }} />
+                        {bench}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {/* Outcomes */}
+              {stageData.outcomes && stageData.outcomes.length > 0 && (
+                <div>
+                  <div className="flex items-center gap-1 mb-1">
+                    <Target className="w-3 h-3 text-emerald-500/70" />
+                    <span className="text-[9px] font-semibold uppercase tracking-wider text-emerald-500/70">
+                      Expected Outcomes
+                    </span>
+                  </div>
+                  <ul className="space-y-0.5">
+                    {stageData.outcomes.map((outcome, i) => (
+                      <li key={i} className="flex gap-1.5 text-[10px] text-muted-foreground/70 leading-relaxed">
+                        <span className="mt-1.5 w-1 h-1 rounded-full bg-emerald-500/40 shrink-0" />
+                        {outcome}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {/* Role Evolution */}
+              {stageData.roleEvolution && (
+                <div className="flex items-start gap-1.5 pt-1">
+                  <UserCog className="w-3 h-3 mt-0.5 shrink-0 text-muted-foreground/50" />
+                  <p className="text-[10px] italic text-muted-foreground/60 leading-relaxed">
+                    {stageData.roleEvolution}
+                  </p>
+                </div>
+              )}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
+// ─── Existing Helper Components ──────────────────────────────
 
 function MetaRow({ label, value }: { label: string; value: string | undefined }) {
   if (!value) return null;
