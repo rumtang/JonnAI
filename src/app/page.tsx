@@ -110,48 +110,50 @@ export default function Home() {
           together in enterprise content production.
         </motion.p>
 
-        {/* "start here" hand-written annotation */}
-        <motion.div
-          initial={{ opacity: 0, rotate: -3 }}
-          animate={{ opacity: 1, rotate: -3 }}
-          transition={{ delay: 1.0, duration: 0.5 }}
-          className="relative inline-block mb-2"
-        >
-          <span
-            className="text-[#D4AF37] text-lg font-[family-name:var(--font-caveat)]"
-            style={{ fontWeight: 600 }}
-          >
-            start here
-          </span>
-          <HandDrawnArrow />
-        </motion.div>
-
         {/* Mode buttons */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.45 }}
-          className="max-w-3xl mx-auto mt-14"
+          className="max-w-3xl mx-auto mt-10"
         >
           <p className="text-[10px] text-muted-foreground/40 uppercase tracking-wider mb-3">
             Choose your experience
           </p>
-          <div className="flex flex-wrap justify-center gap-2">
+          <div className="flex flex-wrap justify-center gap-2 relative">
             {DIRECT_MODES.map(({ key, label, color }) => {
               const isGuided = key === 'guided';
               return (
-                <button
-                  key={key}
-                  onClick={() => handleStart(key)}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200
-                    ${isGuided
-                      ? 'bg-[#D4AF37]/15 border border-[#D4AF37]/40 text-[#D4AF37] hover:bg-[#D4AF37]/25 hover:border-[#D4AF37]/60 shadow-[0_0_12px_rgba(212,175,55,0.15)]'
-                      : 'glass-panel text-muted-foreground hover:text-foreground'
-                    }`}
-                  style={isGuided ? undefined : { borderColor: `${color}20` }}
-                >
-                  <span style={isGuided ? undefined : { color }}>{label}</span>
-                </button>
+                <div key={key} className={isGuided ? 'relative' : ''}>
+                  {/* "start here" annotation anchored above Guided Tour */}
+                  {isGuided && (
+                    <motion.div
+                      initial={{ opacity: 0, rotate: -3 }}
+                      animate={{ opacity: 1, rotate: -3 }}
+                      transition={{ delay: 1.0, duration: 0.5 }}
+                      className="absolute -top-14 left-1/2 -translate-x-1/2 whitespace-nowrap"
+                    >
+                      <span
+                        className="text-[#D4AF37] text-lg font-[family-name:var(--font-caveat)]"
+                        style={{ fontWeight: 600 }}
+                      >
+                        start here
+                      </span>
+                      <HandDrawnArrow />
+                    </motion.div>
+                  )}
+                  <button
+                    onClick={() => handleStart(key)}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200
+                      ${isGuided
+                        ? 'bg-[#D4AF37]/20 border-2 border-[#D4AF37]/60 text-[#D4AF37] hover:bg-[#D4AF37]/30 hover:border-[#D4AF37]/80 shadow-[0_0_20px_rgba(212,175,55,0.25)] scale-110'
+                        : 'glass-panel text-muted-foreground hover:text-foreground'
+                      }`}
+                    style={isGuided ? undefined : { borderColor: `${color}20` }}
+                  >
+                    <span style={isGuided ? undefined : { color }}>{label}</span>
+                  </button>
+                </div>
               );
             })}
           </div>

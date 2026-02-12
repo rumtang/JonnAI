@@ -1,11 +1,11 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { Copy, Check, TrendingUp, Clock, DollarSign, BarChart3, Shield, Download, RefreshCw, Eye, EyeOff } from 'lucide-react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { useRoiStore } from '@/lib/store/roi-store';
-import { SCENARIO_MULTIPLIERS, CFO_FRAMEWORK, AGENT_INTENSITY_LEVELS } from '@/lib/roi/engine';
+import { SCENARIO_MULTIPLIERS, CFO_FRAMEWORK, AGENT_INTENSITY_LEVELS, INTENSITY_PRESETS, computeRoi, computeBaseline, type AgentIntensity } from '@/lib/roi/engine';
 import { getPrimaryActionsForStream, type ValueStreamKey } from '@/data/roi-actions';
 import AnimatedNumber from '../charts/AnimatedNumber';
 import AnimatedBar from '../charts/AnimatedBar';
@@ -164,6 +164,33 @@ export default function ExecutiveSummarySlide({ step }: ExecutiveSummarySlidePro
   const toggleStream = useRoiStore(s => s.toggleStream);
   const [copied, setCopied] = useState(false);
 
+  // Compute outputs for all three intensity levels using the same org inputs
+  const allLevelOutputs = useMemo(() => {
+    const levels: AgentIntensity[] = ['low', 'medium', 'high'];
+    return levels.map(level => {
+      if (level === agentIntensity) {
+        // Reuse the already-computed outputs for the active level
+        return { level, outputs, baseline };
+      }
+      const levelAssumptions = { ...INTENSITY_PRESETS[level] };
+      const levelBaseline = computeBaseline(org,
+        useRoiStore.getState().martech,
+        useRoiStore.getState().ops,
+        useRoiStore.getState().pain,
+      );
+      const levelOutputs = computeRoi(
+        org,
+        useRoiStore.getState().martech,
+        useRoiStore.getState().ops,
+        useRoiStore.getState().pain,
+        useRoiStore.getState().investment,
+        levelAssumptions,
+        disabledStreams,
+      );
+      return { level, outputs: levelOutputs, baseline: levelBaseline };
+    });
+  }, [org, outputs, baseline, agentIntensity, disabledStreams]);
+
   const companyName = org.companyName?.trim() || '';
   const budgetLabel = formatCompact(baseline.derived.totalMarketingBudget);
   const recommendation = getRecommendation(
@@ -303,43 +330,104 @@ export default function ExecutiveSummarySlide({ step }: ExecutiveSummarySlidePro
         </motion.p>
       )}
 
-      {/* ─── Hero Metric ──────────────────────────────────────── */}
+      {/* ─── Hero: Company Name ──────────────────────────────── */}
+      {companyName && (
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="text-sm font-semibold text-foreground/80 mb-1 text-center"
+        >
+          Investment Case for {companyName}
+        </motion.p>
+      )}
+
+      {/* ─── Three-Level Comparison ─────────────────────────── */}
       <motion.div
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
+        initial={{ opacity: 0, y: 15 }}
+        animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2, type: 'spring', stiffness: 200, damping: 20 }}
-        className="text-center mb-4"
+        className="grid grid-cols-3 gap-3 mb-4"
       >
-        {companyName && (
-          <p className="text-sm font-semibold text-foreground/80 mb-1">
-            Investment Case for {companyName}
-          </p>
-        )}
-        <p className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1">
-          3-Year Return on Investment
-        </p>
-        <AnimatedNumber
-          value={outputs.threeYearRoi}
-          format="percent"
-          className="text-6xl md:text-7xl font-bold text-[#14B8A6]"
-          duration={1.2}
-        />
-        <div className="flex items-center justify-center gap-2 mt-1">
-          <p className="text-sm text-muted-foreground">
-            {formatCompact(outputs.netPresentValue)} net present value on {formatCompact(outputs.totalInvestment)} invested
-          </p>
-          <span
-            className="inline-flex items-center px-2 py-0.5 rounded-full text-[9px] font-semibold"
-            style={{
-              color: { low: '#5B9ECF', medium: '#14B8A6', high: '#C9A04E' }[agentIntensity],
-              backgroundColor: `${{ low: '#5B9ECF', medium: '#14B8A6', high: '#C9A04E' }[agentIntensity]}15`,
-              border: `1px solid ${{ low: '#5B9ECF', medium: '#14B8A6', high: '#C9A04E' }[agentIntensity]}40`,
-            }}
-          >
-            {AGENT_INTENSITY_LEVELS[agentIntensity].label} Intensity
-          </span>
-        </div>
+        {allLevelOutputs.map(({ level, outputs: lo }, i) => {
+          const isActive = level === agentIntensity;
+          const levelColor = { low: '#5B9ECF', medium: '#14B8A6', high: '#C9A04E' }[level];
+          const info = AGENT_INTENSITY_LEVELS[level];
+          return (
+            <motion.button
+              key={level}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.25 + i * 0.1 }}
+              onClick={() => useRoiStore.getState().setAgentIntensity(level)}
+              className={`relative rounded-xl p-4 text-center transition-all duration-300 cursor-pointer
+                ${isActive
+                  ? 'shadow-lg scale-[1.02]'
+                  : 'glass-panel hover:shadow-md opacity-80 hover:opacity-100'
+                }`}
+              style={isActive ? {
+                outline: `2px solid ${levelColor}`,
+                outlineOffset: '-2px',
+                boxShadow: `0 0 24px ${levelColor}20`,
+                border: `2px solid ${levelColor}60`,
+                background: `linear-gradient(135deg, ${levelColor}08, ${levelColor}15)`,
+              } : undefined}
+            >
+              {/* Active badge */}
+              {isActive && (
+                <span
+                  className="absolute -top-2 left-1/2 -translate-x-1/2 px-2 py-0.5 rounded-full text-[7px] font-bold uppercase tracking-wider"
+                  style={{ color: '#fff', backgroundColor: levelColor }}
+                >
+                  Selected
+                </span>
+              )}
+
+              {/* Level label */}
+              <p
+                className="text-[10px] font-semibold uppercase tracking-wider mb-0.5"
+                style={{ color: levelColor }}
+              >
+                {info.label}
+              </p>
+              <p className="text-[8px] text-muted-foreground mb-2">{info.shortDescription}</p>
+
+              {/* ROI — hero number */}
+              <p className="text-3xl md:text-4xl font-bold mb-1" style={{ color: levelColor }}>
+                {Math.round(lo.threeYearRoi)}%
+              </p>
+              <p className="text-[8px] text-muted-foreground uppercase tracking-wider mb-2">3-Year ROI</p>
+
+              {/* Key metrics grid */}
+              <div className="grid grid-cols-2 gap-1.5 text-[8px]">
+                <div className="rounded-md bg-muted-foreground/5 p-1.5">
+                  <p className="text-muted-foreground/60 uppercase tracking-wider mb-0.5">NPV</p>
+                  <p className="font-semibold text-foreground">{formatCompact(lo.netPresentValue)}</p>
+                </div>
+                <div className="rounded-md bg-muted-foreground/5 p-1.5">
+                  <p className="text-muted-foreground/60 uppercase tracking-wider mb-0.5">Payback</p>
+                  <p className="font-semibold text-foreground">{lo.paybackMonths} mo</p>
+                </div>
+                <div className="rounded-md bg-muted-foreground/5 p-1.5">
+                  <p className="text-muted-foreground/60 uppercase tracking-wider mb-0.5">Annual</p>
+                  <p className="font-semibold text-foreground">{formatCompact(lo.totalAnnualValue)}</p>
+                </div>
+                <div className="rounded-md bg-muted-foreground/5 p-1.5">
+                  <p className="text-muted-foreground/60 uppercase tracking-wider mb-0.5">IRR</p>
+                  <p className="font-semibold text-foreground">{isNaN(lo.irr) ? 'N/A' : `${Math.round(lo.irr)}%`}</p>
+                </div>
+              </div>
+            </motion.button>
+          );
+        })}
       </motion.div>
+
+      {/* Investment context line */}
+      <p className="text-[10px] text-muted-foreground text-center mb-3">
+        {formatCompact(outputs.totalInvestment)} investment across all levels &middot; detailed breakdown below for{' '}
+        <span style={{ color: { low: '#5B9ECF', medium: '#14B8A6', high: '#C9A04E' }[agentIntensity], fontWeight: 600 }}>
+          {AGENT_INTENSITY_LEVELS[agentIntensity].label}
+        </span>
+      </p>
 
       {/* ─── View Mode Tabs ──────────────────────────────────── */}
       <Tabs

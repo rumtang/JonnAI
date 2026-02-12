@@ -603,7 +603,7 @@ export default function PresentationController() {
                   </span>
                   <br />
                   <span className="text-foreground/80 text-2xl md:text-3xl">
-                    From Agents to Agentic
+                    From Agents, to Agentic, to Autonomous
                   </span>
                 </motion.h1>
 
@@ -688,7 +688,7 @@ export default function PresentationController() {
                 transition={{ delay: 0.5 }}
                 className="text-lg text-muted-foreground max-w-xl mx-auto leading-relaxed"
               >
-                Understanding the organizational intelligence layer to unlock agentic capabilities
+                We&apos;ll explore the organizational intelligence layer through the lens of the marketing campaign lifecycle
               </motion.p>
             </div>
 
