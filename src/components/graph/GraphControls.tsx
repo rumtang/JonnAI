@@ -10,7 +10,7 @@ import { NODE_STYLES } from '@/lib/graph/node-styles';
 import { NodeType, StepMeta } from '@/lib/graph/types';
 import { Switch } from '@/components/ui/switch';
 import { Button } from '@/components/ui/button';
-import { Filter, RotateCcw, Eye, Focus } from 'lucide-react';
+import { Filter, RotateCcw } from 'lucide-react';
 
 // ─── Business-logic filter presets ─────────────────────────
 type FilterPreset = 'all' | 'human-checkpoints' | 'ai-owned' | 'knowledge-deps' | 'bottlenecks';
@@ -31,14 +31,12 @@ const NODE_TYPE_LABELS: Record<NodeType, string> = {
 };
 
 export default function GraphControls() {
-  const { visibleNodeTypes, progressiveReveal, graphData } = useGraphStore(
-    useShallow((s) => ({ visibleNodeTypes: s.visibleNodeTypes, progressiveReveal: s.progressiveReveal, graphData: s.graphData }))
+  const { visibleNodeTypes, graphData } = useGraphStore(
+    useShallow((s) => ({ visibleNodeTypes: s.visibleNodeTypes, graphData: s.graphData }))
   );
   const toggleNodeTypeVisibility = useGraphStore(s => s.toggleNodeTypeVisibility);
   const resetFilters = useGraphStore(s => s.resetFilters);
   const clearHighlights = useGraphStore(s => s.clearHighlights);
-  const showAllNodes = useGraphStore(s => s.showAllNodes);
-  const resetToCore = useGraphStore(s => s.resetToCore);
 
   // Apply a business-logic filter preset
   const applyPreset = (preset: FilterPreset) => {
@@ -176,29 +174,7 @@ export default function GraphControls() {
             ))}
           </div>
 
-          <div className="border-t border-border mt-4 pt-4 space-y-2">
-            {/* Progressive reveal toggle */}
-            {progressiveReveal ? (
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={showAllNodes}
-                className="w-full justify-start text-muted-foreground hover:text-foreground text-xs"
-              >
-                <Eye className="w-3 h-3 mr-2" />
-                Show All Nodes
-              </Button>
-            ) : (
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={resetToCore}
-                className="w-full justify-start text-muted-foreground hover:text-foreground text-xs"
-              >
-                <Focus className="w-3 h-3 mr-2" />
-                Focus View
-              </Button>
-            )}
+          <div className="border-t border-border mt-4 pt-4">
             <Button
               variant="ghost"
               size="sm"

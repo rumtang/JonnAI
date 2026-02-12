@@ -24,8 +24,6 @@ export default function ModeToggle() {
   const clearHighlights = useGraphStore(s => s.clearHighlights);
   const clearNavigation = useGraphStore(s => s.clearNavigation);
   const selectNode = useGraphStore(s => s.selectNode);
-  const initCoreNodes = useGraphStore(s => s.initCoreNodes);
-
   const startCampaign = useCampaignStore(s => s.startCampaign);
   const resetCampaign = useCampaignStore(s => s.resetCampaign);
 
@@ -60,7 +58,7 @@ export default function ModeToggle() {
       resetBuild();
       resetRoi();
       loadFullGraph();
-      if (fullGraphData) initCoreNodes(fullGraphData);
+      useGraphStore.setState({ progressiveReveal: false });
       // Centered overview of full graph
       fg?.cameraPosition({ x: 0, y: 0, z: 520 }, origin, 1500);
     } else if (newMode === 'campaign') {
