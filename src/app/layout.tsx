@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Playfair_Display } from "next/font/google";
+import { Geist, Geist_Mono, Playfair_Display, Caveat } from "next/font/google";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -14,6 +14,12 @@ const geistMono = Geist_Mono({
 
 const playfair = Playfair_Display({
   variable: "--font-playfair",
+  subsets: ["latin"],
+  weight: ["400", "600", "700"],
+});
+
+const caveat = Caveat({
+  variable: "--font-caveat",
   subsets: ["latin"],
   weight: ["400", "600", "700"],
 });
@@ -36,7 +42,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${playfair.variable} antialiased text-foreground relative`}
+        className={`${geistSans.variable} ${geistMono.variable} ${playfair.variable} ${caveat.variable} antialiased text-foreground relative`}
       >
         <div className="crystalline-bg">
           <div className="gradient-orb-1" />

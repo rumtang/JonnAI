@@ -14,6 +14,44 @@ const DIRECT_MODES: { key: AppMode; label: string; color: string }[] = [
   { key: 'role',     label: 'Your Role + AI',  color: '#5B9ECF' },
 ];
 
+/* ── Hand-drawn curved arrow (SVG path) ───────────────────── */
+function HandDrawnArrow() {
+  return (
+    <svg
+      width="80"
+      height="60"
+      viewBox="0 0 80 60"
+      fill="none"
+      className="absolute"
+      style={{ bottom: -52, left: '50%', transform: 'translateX(-50%)' }}
+    >
+      {/* Curved body */}
+      <motion.path
+        d="M40 2 C38 12, 30 22, 28 32 C26 40, 30 46, 38 50"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        fill="none"
+        initial={{ pathLength: 0, opacity: 0 }}
+        animate={{ pathLength: 1, opacity: 1 }}
+        transition={{ delay: 1.2, duration: 0.6, ease: 'easeOut' }}
+      />
+      {/* Arrow head */}
+      <motion.path
+        d="M32 44 L38 50 L30 52"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        fill="none"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.8, duration: 0.3 }}
+      />
+    </svg>
+  );
+}
+
 export default function Home() {
   const router = useRouter();
 
@@ -72,28 +110,50 @@ export default function Home() {
           together in enterprise content production.
         </motion.p>
 
+        {/* "start here" hand-written annotation */}
+        <motion.div
+          initial={{ opacity: 0, rotate: -3 }}
+          animate={{ opacity: 1, rotate: -3 }}
+          transition={{ delay: 1.0, duration: 0.5 }}
+          className="relative inline-block mb-2"
+        >
+          <span
+            className="text-[#D4AF37] text-lg font-[family-name:var(--font-caveat)]"
+            style={{ fontWeight: 600 }}
+          >
+            start here
+          </span>
+          <HandDrawnArrow />
+        </motion.div>
+
         {/* Mode buttons */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.45 }}
-          className="max-w-3xl mx-auto"
+          className="max-w-3xl mx-auto mt-14"
         >
           <p className="text-[10px] text-muted-foreground/40 uppercase tracking-wider mb-3">
             Choose your experience
           </p>
           <div className="flex flex-wrap justify-center gap-2">
-            {DIRECT_MODES.map(({ key, label, color }) => (
-              <button
-                key={key}
-                onClick={() => handleStart(key)}
-                className="px-3 py-1.5 rounded-lg text-xs font-medium glass-panel
-                           text-muted-foreground hover:text-foreground transition-all duration-200"
-                style={{ borderColor: `${color}20` }}
-              >
-                <span style={{ color }}>{label}</span>
-              </button>
-            ))}
+            {DIRECT_MODES.map(({ key, label, color }) => {
+              const isGuided = key === 'guided';
+              return (
+                <button
+                  key={key}
+                  onClick={() => handleStart(key)}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200
+                    ${isGuided
+                      ? 'bg-[#D4AF37]/15 border border-[#D4AF37]/40 text-[#D4AF37] hover:bg-[#D4AF37]/25 hover:border-[#D4AF37]/60 shadow-[0_0_12px_rgba(212,175,55,0.15)]'
+                      : 'glass-panel text-muted-foreground hover:text-foreground'
+                    }`}
+                  style={isGuided ? undefined : { borderColor: `${color}20` }}
+                >
+                  <span style={isGuided ? undefined : { color }}>{label}</span>
+                </button>
+              );
+            })}
           </div>
         </motion.div>
       </motion.div>
