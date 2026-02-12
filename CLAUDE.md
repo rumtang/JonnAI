@@ -113,3 +113,10 @@ These were toggled back and forth multiple times. The current state is final:
 - Physics (`d3AlphaDecay`) is 0.08 in explore/guided, 0.5 in other modes (freezes layout fast)
   - Guided mode needs 0.08 because the full graph (83 nodes) loads fresh at step 6 and needs ~100 ticks to spread
 - Node drag is only enabled in explore mode when campaign is not active
+
+### Role Definitions — Keep Verbose
+The `src/lib/roles/role-definitions.ts` file (11,900+ lines) is intentionally detailed.
+Each role has rich content: painPoints, benchmarks, outcomes, roleEvolution, antiPatterns,
+stageOverviews with timeAllocation and criticalMetrics. **Do NOT abbreviate, summarize,
+or strip this content.** This is where detail matters — every field is rendered in the
+RoleSlide UI. The `role-definitions.original.ts` is the pre-expansion backup for reference.
