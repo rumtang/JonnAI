@@ -224,10 +224,12 @@ export default function GraphScene() {
     const fg = fgRef.current;
     setGraphRef(fg);
 
-    // Add a center force so nodes stay anchored near the origin
-    // Without this, the graph drifts off-screen over time in explore mode
-    fg.d3Force('center', forceCenter(0, 0, 0).strength(0.05));
-    fg.d3Force('charge')?.strength(-250);
+    // Force settings tuned for 83-node graph (expanded from original 25 nodes).
+    // Center force anchors graph near origin; charge pushes nodes apart;
+    // link distance controls minimum spacing between connected nodes.
+    fg.d3Force('center', forceCenter(0, 0, 0).strength(0.01));
+    fg.d3Force('charge')?.strength(-600);
+    fg.d3Force('link')?.distance(50);
 
     const lights: THREE.Light[] = [];
 
