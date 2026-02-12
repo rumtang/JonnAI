@@ -79,10 +79,12 @@ export default function Home() {
   };
 
   const lensConf = LENS_CONFIG[lens];
-  const modes = BASE_MODES.map(m => ({
-    ...m,
-    label: lens === 'frontoffice' && m.foLabel ? m.foLabel : m.label,
-  }));
+  const modes = BASE_MODES
+    .filter(m => !(lens === 'frontoffice' && m.key === 'roi'))
+    .map(m => ({
+      ...m,
+      label: lens === 'frontoffice' && m.foLabel ? m.foLabel : m.label,
+    }));
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center relative overflow-hidden">

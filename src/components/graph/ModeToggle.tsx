@@ -2,98 +2,13 @@
 
 import { useShallow } from 'zustand/react/shallow';
 import { usePresentationStore, type AppMode } from '@/lib/store/presentation-store';
-import { useGraphStore } from '@/lib/store/graph-store';
-import { useCampaignStore } from '@/lib/store/campaign-store';
-import { useRoleInsightStore } from '@/lib/store/role-insight-store';
-import { useBuildStore } from '@/lib/store/build-store';
-import { useRoiStore } from '@/lib/store/roi-store';
-import { getGraphRef } from '@/lib/graph/graph-ref';
+import { switchMode } from '@/lib/utils/mode-transitions';
 import { useIsMobile } from '@/lib/hooks/use-is-mobile';
 import { motion } from 'framer-motion';
 
 export default function ModeToggle() {
   const isMobile = useIsMobile();
   const { mode, lens } = usePresentationStore(useShallow((s) => ({ mode: s.mode, lens: s.lens })));
-  const setMode = usePresentationStore(s => s.setMode);
-  const reset = usePresentationStore(s => s.reset);
-
-  const { fullGraphData } = useGraphStore(useShallow((s) => ({ fullGraphData: s.fullGraphData })));
-  const loadFullGraph = useGraphStore(s => s.loadFullGraph);
-  const loadLinearView = useGraphStore(s => s.loadLinearView);
-  const resetFilters = useGraphStore(s => s.resetFilters);
-  const clearHighlights = useGraphStore(s => s.clearHighlights);
-  const clearNavigation = useGraphStore(s => s.clearNavigation);
-  const selectNode = useGraphStore(s => s.selectNode);
-  const startCampaign = useCampaignStore(s => s.startCampaign);
-  const resetCampaign = useCampaignStore(s => s.resetCampaign);
-
-  const resetBuild = useBuildStore(s => s.reset);
-  const resetRoi = useRoiStore(s => s.reset);
-
-  const handleModeChange = (newMode: AppMode) => {
-    if (newMode === mode) return;
-    setMode(newMode);
-    selectNode(null);
-    clearHighlights();
-    resetFilters();
-    clearNavigation();
-    useRoleInsightStore.getState().clearRole();
-
-    // Fly camera to a sensible default for each mode so the user
-    // always gets a clean, re-centered view on tab switch.
-    const fg = getGraphRef();
-    const origin = { x: 0, y: 0, z: 0 };
-
-    if (newMode === 'guided') {
-      resetCampaign();
-      resetBuild();
-      resetRoi();
-      reset();
-      loadLinearView();
-      useGraphStore.setState({ progressiveReveal: false });
-      // Title slide position — PresentationController will refine on step execute
-      fg?.cameraPosition({ x: 0, y: 0, z: 800 }, origin, 1500);
-    } else if (newMode === 'explore') {
-      resetCampaign();
-      resetBuild();
-      resetRoi();
-      loadFullGraph();
-      useGraphStore.setState({ progressiveReveal: false });
-      // Centered overview of full graph
-      fg?.cameraPosition({ x: 0, y: 0, z: 520 }, origin, 1500);
-    } else if (newMode === 'campaign') {
-      resetCampaign();
-      resetBuild();
-      resetRoi();
-      loadFullGraph();
-      startCampaign();
-      useGraphStore.setState({ progressiveReveal: false });
-      // Brief overview before the campaign useEffect flies to the first node
-      fg?.cameraPosition({ x: 0, y: 0, z: 520 }, origin, 1200);
-    } else if (newMode === 'build') {
-      resetCampaign();
-      resetBuild();
-      resetRoi();
-      loadFullGraph();
-      useGraphStore.setState({ progressiveReveal: false });
-      // Full graph behind scrim — "View in Graph" needs full node data
-      fg?.cameraPosition({ x: 0, y: 0, z: 520 }, origin, 1500);
-    } else if (newMode === 'roi') {
-      resetCampaign();
-      resetBuild();
-      resetRoi();
-      loadLinearView();
-      useGraphStore.setState({ progressiveReveal: false });
-      fg?.cameraPosition({ x: 0, y: 0, z: 800 }, origin, 1500);
-    } else if (newMode === 'role') {
-      resetCampaign();
-      resetBuild();
-      resetRoi();
-      loadFullGraph();
-      useGraphStore.setState({ progressiveReveal: false });
-      // No camera fly — role mode covers graph with a scrim
-    }
-  };
 
   const modes: { key: AppMode; label: string; shortLabel: string; activeColor: string; activeBg: string }[] = [
     {
@@ -147,10 +62,10 @@ export default function ModeToggle() {
       transition={{ delay: 0.5 }}
       className="fixed top-4 right-4 z-50 flex items-center gap-1 p-1 rounded-full glass-panel"
     >
-      {modes.map(({ key, label, shortLabel, activeColor, activeBg }) => (
+      {modes.filter(m => !(lens === 'frontoffice' && m.key === 'roi')).map(({ key, label, shortLabel, activeColor, activeBg }) => (
         <button
           key={key}
-          onClick={() => handleModeChange(key)}
+          onClick={() => switchMode(key)}
           className={`rounded-full font-medium transition-all duration-300 ${
             isMobile ? 'px-2.5 py-1.5 text-xs' : 'px-4 py-2 text-sm'
           } ${
