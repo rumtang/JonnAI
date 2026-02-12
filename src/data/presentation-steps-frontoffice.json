@@ -1,0 +1,118 @@
+[
+  {
+    "id": "fo-act0-strategic-context",
+    "title": "From Departmental AI to an Operating System",
+    "narration": "Most organizations have deployed AI across marketing, sales, and service separately. Each function optimizes its own pipeline. But customers don't experience departments — they experience a company. The gap between departmental AI and an operating system is the organizational intelligence layer that connects them.",
+    "cameraPosition": { "x": 0, "y": 0, "z": 800 },
+    "cameraLookAt": { "x": 0, "y": 0, "z": 0 },
+    "cameraTransitionMs": 2000,
+    "graphState": "linear",
+    "action": "show-intro-slide",
+    "duration": 20000
+  },
+  {
+    "id": "fo-act1-title",
+    "title": "Every Function Runs Its Own Pipeline",
+    "narration": "",
+    "cameraPosition": { "x": 0, "y": 0, "z": 800 },
+    "cameraLookAt": { "x": 0, "y": 0, "z": 0 },
+    "cameraTransitionMs": 2000,
+    "graphState": "linear",
+    "action": "show-title-slide",
+    "duration": 5000
+  },
+  {
+    "id": "fo-act2-departmental-pipelines",
+    "title": "Familiar Pipelines, Familiar Silos",
+    "narration": "Marketing plans and publishes. Sales qualifies and closes. Service triages and resolves. Customer success monitors and expands. Each workflow is well-understood within its domain. The problem is between them.",
+    "cameraPosition": { "x": -60, "y": 30, "z": 380 },
+    "cameraLookAt": { "x": -60, "y": 30, "z": 0 },
+    "cameraTransitionMs": 2000,
+    "graphState": "linear",
+    "action": "show-teams-by-phase",
+    "filterNodeTypes": ["step"],
+    "highlightLinkTypes": ["flows-to"],
+    "duration": 15000
+  },
+  {
+    "id": "fo-act3-agents-per-department",
+    "title": "Each Department Adds Its Own AI",
+    "narration": "SDR agents in sales. Chatbots in service. Content generators in marketing. Health-score models in customer success. Each agent accelerates its own function. None of them share context. The sales agent doesn't know about the open support ticket. The marketing agent keeps targeting a churning account.",
+    "cameraPosition": { "x": -100, "y": -80, "z": 700 },
+    "cameraLookAt": { "x": 0, "y": 0, "z": 0 },
+    "cameraTransitionMs": 2000,
+    "graphState": "linear",
+    "action": "show-teams-by-phase",
+    "filterNodeTypes": ["step", "agent"],
+    "highlightLinkTypes": ["flows-to", "performs"],
+    "duration": 22000
+  },
+  {
+    "id": "fo-act4-handoff-problem",
+    "title": "The Customer Doesn't Experience Departments",
+    "narration": "A lead that marketing qualified gets ignored by sales — 87% of MQLs never convert. A deal closes but service has no context on what was promised. A customer escalates through support while their CSM doesn't know. Seventy percent of prospects are lost to inadequate follow-up. Every handoff between functions is a potential failure point.",
+    "cameraPosition": { "x": 0, "y": 200, "z": 800 },
+    "cameraLookAt": { "x": 0, "y": 0, "z": 0 },
+    "cameraTransitionMs": 2000,
+    "graphState": "linear",
+    "action": "show-process-chart",
+    "duration": 18000
+  },
+  {
+    "id": "fo-act5-graph-reveal",
+    "title": "This Is What the Front Office Actually Navigates",
+    "narration": "Four departments. Fourteen AI agents. Sixteen shared knowledge sources. Eight cross-functional handoff gates. The complexity isn't accidental — it reflects how enterprise revenue actually works. Seventy-eight nodes and 175 connections. Building intelligence to work within this is what separates an operating system from departmental automation.",
+    "cameraPosition": { "x": 0, "y": 0, "z": 500 },
+    "cameraLookAt": { "x": 0, "y": 0, "z": 0 },
+    "cameraTransitionMs": 4000,
+    "graphState": "full-graph",
+    "action": "explode-to-graph",
+    "duration": 15000
+  },
+  {
+    "id": "fo-act6-intelligence-layer",
+    "title": "Shared Knowledge Connects Everything",
+    "narration": "Customer 360 profiles. Product catalogs. Compliance frameworks. Pricing rules. Territory models. Sixteen shared inputs feed agents across every function. A service agent that knows the customer's purchase history. A sales agent that knows the open support cases. A marketing agent that suppresses at-risk accounts. The intelligence layer is what turns departmental agents into a coordinated system.",
+    "cameraPosition": { "x": 60, "y": 0, "z": 500 },
+    "cameraLookAt": { "x": 60, "y": 0, "z": 0 },
+    "cameraTransitionMs": 2000,
+    "graphState": "full-graph",
+    "action": "show-intelligence-vs-agents",
+    "filterNodeTypes": ["input", "agent"],
+    "highlightLinkTypes": ["uses", "performs"],
+    "duration": 22000
+  },
+  {
+    "id": "fo-act7-cross-functional-gates",
+    "title": "Human Judgment at the Boundaries",
+    "narration": "Agents handle volume and velocity within departments. Humans add the most value at the boundaries — where a marketing-qualified lead becomes a sales opportunity, where a closed deal becomes a service engagement, where a support pattern triggers a CSM intervention. These cross-functional gates are where organizational judgment matters most.",
+    "cameraPosition": { "x": 0, "y": -60, "z": 480 },
+    "cameraLookAt": { "x": 0, "y": 0, "z": 0 },
+    "cameraTransitionMs": 2000,
+    "graphState": "full-graph",
+    "action": "show-human-roles",
+    "duration": 15000
+  },
+  {
+    "id": "fo-act8-operating-model",
+    "title": "Roles Shift from Execution to Orchestration",
+    "narration": "Revenue operations moves from reporting to orchestrating. Sales ops moves from CRM administration to pipeline intelligence. Marketing ops moves from campaign execution to demand system design. The operating model doesn't eliminate roles — it elevates them from departmental execution to cross-functional orchestration.",
+    "cameraPosition": { "x": 100, "y": -50, "z": 600 },
+    "cameraLookAt": { "x": 0, "y": 0, "z": 0 },
+    "cameraTransitionMs": 2000,
+    "graphState": "full-graph",
+    "action": "show-role-overview",
+    "duration": 12000
+  },
+  {
+    "id": "fo-act9-close",
+    "title": "Build the Operating System, Then Let Agents Perform",
+    "narration": "Map the domains. Build the knowledge graph. Connect the handoffs. Then let agents operate with shared context and human governance at the gates that matter. Better models keep arriving. They work best when they have better knowledge to draw on — and when that knowledge spans the entire front office.",
+    "cameraPosition": { "x": 0, "y": 0, "z": 520 },
+    "cameraLookAt": { "x": 0, "y": 0, "z": 0 },
+    "cameraTransitionMs": 2000,
+    "graphState": "full-graph",
+    "action": "show-operating-model",
+    "duration": 15000
+  }
+]

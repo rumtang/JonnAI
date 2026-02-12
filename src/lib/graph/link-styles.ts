@@ -11,6 +11,7 @@ export const LINK_STYLES: Record<LinkType, LinkStyleConfig> = {
   'performs':      { color: '#9B7ACC', particles: 1, width: 1.2, dashed: false },
   'returns-to':   { color: '#D4856A', particles: 2, width: 1.0, dashed: false },
   'linear-flow':  { color: '#C9A04E', particles: 3, width: 3.0, dashed: false },
+  'hands-off-to': { color: '#E88D67', particles: 2, width: 2.5, dashed: false },  // Cross-domain handoff — orange, thick, animated
 };
 
 export function getLinkColor(type: LinkType): string {

@@ -1,18 +1,31 @@
 'use client';
 
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import type { AppMode } from '@/lib/store/presentation-store';
+import type { LensType } from '@/lib/store/presentation-store';
 
-// ─── Direct access modes ─────────────────────────────────────
-const DIRECT_MODES: { key: AppMode; label: string; color: string }[] = [
+// ─── Direct access modes (campaign label swapped per lens) ───
+const BASE_MODES: { key: AppMode; label: string; foLabel?: string; color: string }[] = [
   { key: 'guided',   label: 'Guided Tour',    color: '#C9A04E' },
   { key: 'explore',  label: 'Explore',         color: '#9B7ACC' },
-  { key: 'campaign', label: 'Campaign',        color: '#4CAF50' },
+  { key: 'campaign', label: 'Campaign',        foLabel: 'Customer Journey', color: '#4CAF50' },
   { key: 'build',    label: 'Build It',        color: '#E88D67' },
   { key: 'roi',      label: 'ROI Simulator',   color: '#14B8A6' },
   { key: 'role',     label: 'Your Role + AI',  color: '#5B9ECF' },
 ];
+
+const LENS_CONFIG: Record<LensType, { label: string; subtitle: string }> = {
+  marketing: {
+    label: 'Marketing Operations',
+    subtitle: 'Explore how organizational knowledge graphs, human-in-the-loop governance, and AI agents work together in enterprise content production.',
+  },
+  frontoffice: {
+    label: 'Front Office',
+    subtitle: 'Four departments. Fourteen AI agents. Sixteen shared knowledge sources. See how an organizational intelligence layer connects marketing, sales, service, and customer success into a single operating system.',
+  },
+};
 
 /* ── Hand-drawn curved arrow (SVG path) ───────────────────── */
 function HandDrawnArrow() {
@@ -54,15 +67,22 @@ function HandDrawnArrow() {
 
 export default function Home() {
   const router = useRouter();
+  const [lens, setLens] = useState<LensType>('marketing');
 
   const handleStart = (mode: AppMode) => {
     if (typeof window !== 'undefined') {
       sessionStorage.setItem('initialMode', mode);
+      sessionStorage.setItem('lens', lens);
       sessionStorage.removeItem('journeySequence');
     }
     router.push('/graph');
   };
 
+  const lensConf = LENS_CONFIG[lens];
+  const modes = BASE_MODES.map(m => ({
+    ...m,
+    label: lens === 'frontoffice' && m.foLabel ? m.foLabel : m.label,
+  }));
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center relative overflow-hidden">
@@ -98,17 +118,44 @@ export default function Home() {
           </span>
         </motion.h1>
 
-        {/* Subtitle */}
-        <motion.p
+        {/* Lens Toggle */}
+        <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.25 }}
-          className="text-lg text-muted-foreground mb-10 max-w-xl mx-auto leading-relaxed"
+          transition={{ delay: 0.2 }}
+          className="flex justify-center mb-6"
         >
-          Agents will commoditize. The intelligence underneath them won&apos;t. Explore how
-          organizational knowledge graphs, human-in-the-loop governance, and AI agents work
-          together in enterprise content production.
-        </motion.p>
+          <div className="inline-flex rounded-lg glass-panel p-0.5 gap-0.5">
+            {(Object.keys(LENS_CONFIG) as LensType[]).map((l) => (
+              <button
+                key={l}
+                onClick={() => setLens(l)}
+                className={`px-4 py-1.5 rounded-md text-xs font-medium transition-all duration-200 ${
+                  lens === l
+                    ? 'bg-[#C9A04E]/20 text-[#C9A04E] border border-[#C9A04E]/40'
+                    : 'text-muted-foreground hover:text-foreground'
+                }`}
+              >
+                {LENS_CONFIG[l].label}
+              </button>
+            ))}
+          </div>
+        </motion.div>
+
+        {/* Subtitle — dynamic per lens */}
+        <AnimatePresence mode="wait">
+          <motion.p
+            key={lens}
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -6 }}
+            transition={{ duration: 0.3 }}
+            className="text-lg text-muted-foreground mb-10 max-w-xl mx-auto leading-relaxed"
+          >
+            Agents will commoditize. The intelligence underneath them won&apos;t.{' '}
+            {lensConf.subtitle}
+          </motion.p>
+        </AnimatePresence>
 
         {/* Mode buttons */}
         <motion.div
@@ -121,7 +168,7 @@ export default function Home() {
             Choose your experience
           </p>
           <div className="flex flex-wrap justify-center gap-2 relative">
-            {DIRECT_MODES.map(({ key, label, color }) => {
+            {modes.map(({ key, label, color }) => {
               const isGuided = key === 'guided';
               return (
                 <div key={key} className={isGuided ? 'relative' : ''}>

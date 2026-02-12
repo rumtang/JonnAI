@@ -24,13 +24,15 @@ import FpsCounter from '@/components/graph/FpsCounter';
 import { useGraphStore } from '@/lib/store/graph-store';
 import { useSessionStore } from '@/lib/store/session-store';
 import { useRoiStore } from '@/lib/store/roi-store';
-import { usePresentationStore, type AppMode } from '@/lib/store/presentation-store';
+import { usePresentationStore, type AppMode, type LensType } from '@/lib/store/presentation-store';
 import { useCampaignStore } from '@/lib/store/campaign-store';
 import { navigateToNode } from '@/lib/utils/camera-navigation';
 import { decodeRoiConfig } from '@/lib/utils/roi-share';
 import seedGraphData from '@/data/seed-graph.json';
+import seedGraphFrontofficeData from '@/data/seed-graph-frontoffice.json';
 import linearProcessData from '@/data/linear-process.json';
 import presentationStepsData from '@/data/presentation-steps.json';
+import presentationStepsFrontofficeData from '@/data/presentation-steps-frontoffice.json';
 import { GraphData, GraphNode, GraphLink, PresentationStep } from '@/lib/graph/types';
 
 function buildLinearGraphData(): GraphData {
@@ -81,9 +83,12 @@ export default function GraphPage() {
   useEffect(() => {
     // Read initial mode from sessionStorage (set by landing page)
     let savedMode: 'guided' | 'explore' | 'campaign' | 'build' | 'roi' | 'role' | null = null;
+    let savedLens: LensType = 'marketing';
     try {
       if (typeof window !== 'undefined') {
         savedMode = sessionStorage.getItem('initialMode') as typeof savedMode;
+        const lensVal = sessionStorage.getItem('lens');
+        if (lensVal === 'frontoffice') savedLens = 'frontoffice';
       }
     } catch {
       // sessionStorage may be disabled (e.g. private browsing, security policy)
@@ -121,16 +126,23 @@ export default function GraphPage() {
       setMode(savedMode);
       try { sessionStorage.removeItem('initialMode'); } catch { /* ignore */ }
     }
+    // Persist lens to store
+    usePresentationStore.getState().setLens(savedLens);
 
     const activeMode = savedMode || mode;
 
-    // Load all data
-    const fullData = seedGraphData as unknown as GraphData;
+    // Select graph + presentation data based on lens
+    const fullData = savedLens === 'frontoffice'
+      ? (seedGraphFrontofficeData as unknown as GraphData)
+      : (seedGraphData as unknown as GraphData);
     const linearData = buildLinearGraphData();
+    const steps = savedLens === 'frontoffice'
+      ? (presentationStepsFrontofficeData as PresentationStep[])
+      : (presentationStepsData as PresentationStep[]);
 
     setFullGraphData(fullData);
     setLinearGraphData(linearData);
-    setSteps(presentationStepsData as PresentationStep[]);
+    setSteps(steps);
 
     // Start with linear view in guided/roi mode, full graph in explore/campaign/build/role mode
     if (activeMode === 'guided' || activeMode === 'roi') {

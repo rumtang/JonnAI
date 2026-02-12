@@ -2,15 +2,18 @@ import { create } from 'zustand';
 import { PresentationStep } from '../graph/types';
 
 export type AppMode = 'guided' | 'explore' | 'campaign' | 'build' | 'roi' | 'role';
+export type LensType = 'marketing' | 'frontoffice';
 
 interface PresentationState {
   mode: AppMode;
+  lens: LensType;
   currentStepIndex: number;
   steps: PresentationStep[];
   isPlaying: boolean;
   isTransitioning: boolean;
 
   setMode: (mode: AppMode) => void;
+  setLens: (lens: LensType) => void;
   setSteps: (steps: PresentationStep[]) => void;
   nextStep: () => void;
   prevStep: () => void;
@@ -22,12 +25,14 @@ interface PresentationState {
 
 export const usePresentationStore = create<PresentationState>((set, get) => ({
   mode: 'guided',
+  lens: 'marketing',
   currentStepIndex: 0,
   steps: [],
   isPlaying: false,
   isTransitioning: false,
 
   setMode: (mode) => set({ mode, currentStepIndex: 0, isPlaying: false, isTransitioning: false }),
+  setLens: (lens) => set({ lens }),
   setSteps: (steps) => set({ steps }),
 
   nextStep: () => {

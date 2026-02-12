@@ -1,0 +1,2468 @@
+{
+  "nodes": [
+    {
+      "id": "mktg-campaign-planning",
+      "type": "step",
+      "label": "Campaign Planning",
+      "description": "Define campaign strategy, audience targets, channel mix, budget allocation, and success KPIs. Average enterprise campaign planning cycle: 2-4 weeks. Organizations with documented strategy are 538% more likely to report success.",
+      "group": "Marketing",
+      "val": 5,
+      "meta": {
+        "phase": "Marketing",
+        "owner": "human",
+        "estimatedTime": "2-4 weeks",
+        "inputs": [
+          "Content strategy",
+          "Customer journey map",
+          "Competitive intelligence",
+          "Budget allocation",
+          "Audience personas"
+        ],
+        "outputs": [
+          "Campaign plan",
+          "Budget breakdown",
+          "Channel allocation",
+          "KPI targets"
+        ]
+      }
+    },
+    {
+      "id": "mktg-content-creation",
+      "type": "step",
+      "label": "Content Creation",
+      "description": "Draft, design, and produce content assets across formats. Enterprise teams produce 30-50 assets per campaign. AI-assisted drafting reduces first-draft time by 50-70%, but human refinement remains essential for brand voice.",
+      "group": "Marketing",
+      "val": 6,
+      "meta": {
+        "phase": "Marketing",
+        "owner": "shared",
+        "agentName": "Content Agent",
+        "estimatedTime": "3-5 days",
+        "inputs": [
+          "Approved brief",
+          "Brand voice guide",
+          "Audience personas",
+          "Asset library"
+        ],
+        "outputs": [
+          "Draft assets",
+          "Creative variants",
+          "Supporting graphics"
+        ]
+      }
+    },
+    {
+      "id": "mktg-brand-compliance",
+      "type": "step",
+      "label": "Brand & Legal Compliance",
+      "description": "Validate assets against brand standards, legal requirements, and regulatory constraints. In regulated industries (financial services, healthcare, pharma), compliance review adds 3-7 days to production. AI pre-screening catches 80% of issues before human review.",
+      "group": "Marketing",
+      "val": 5,
+      "meta": {
+        "phase": "Marketing",
+        "owner": "shared",
+        "agentName": "Content Agent",
+        "estimatedTime": "1-3 days",
+        "inputs": [
+          "Draft assets",
+          "Brand voice guide",
+          "Compliance framework",
+          "Legal guidelines"
+        ],
+        "outputs": [
+          "Compliance report",
+          "Flagged issues",
+          "Remediation list"
+        ]
+      }
+    },
+    {
+      "id": "mktg-seo-optimization",
+      "type": "step",
+      "label": "SEO & Discoverability",
+      "description": "Optimize content for search and platform discoverability. Organic search drives 53% of all website traffic. AI-optimized content sees 30-50% improvement in rankings within 90 days. Meta description and title tag optimization alone can lift CTR 15-25%.",
+      "group": "Marketing",
+      "val": 5,
+      "meta": {
+        "phase": "Marketing",
+        "owner": "agent",
+        "agentName": "Content Agent",
+        "estimatedTime": "30 min",
+        "inputs": [
+          "Approved content",
+          "Keyword data",
+          "Competitive intelligence",
+          "Analytics data"
+        ],
+        "outputs": [
+          "SEO-optimized content",
+          "Meta tags",
+          "Internal link map"
+        ]
+      }
+    },
+    {
+      "id": "mktg-distribution",
+      "type": "step",
+      "label": "Multi-Channel Distribution",
+      "description": "Publish and distribute across owned, earned, and paid channels. Average enterprise uses 8-12 channels. Cross-channel orchestration increases engagement 2-3x over single-channel. Timing optimization alone lifts open rates 20%.",
+      "group": "Marketing",
+      "val": 5,
+      "meta": {
+        "phase": "Marketing",
+        "owner": "shared",
+        "agentName": "Content Agent",
+        "estimatedTime": "1-2 days",
+        "inputs": [
+          "Approved content",
+          "Channel benchmarks",
+          "Customer journey map",
+          "Audience segments"
+        ],
+        "outputs": [
+          "Published content",
+          "Distribution schedule",
+          "Channel-specific variants"
+        ]
+      }
+    },
+    {
+      "id": "mktg-performance-tracking",
+      "type": "step",
+      "label": "Performance Tracking",
+      "description": "Monitor campaign KPIs across channels in real time. Average B2B email open rate: 15.14%. Landing page conversion: 2.35% average, 5.31% top quartile. Social engagement rates vary 3-5x by platform. Real-time dashboards reduce response time to underperforming campaigns from days to hours.",
+      "group": "Marketing",
+      "val": 5,
+      "meta": {
+        "phase": "Marketing",
+        "owner": "agent",
+        "agentName": "Analytics Agent",
+        "estimatedTime": "Continuous",
+        "inputs": [
+          "Published content",
+          "Analytics data",
+          "KPI framework",
+          "Channel benchmarks"
+        ],
+        "outputs": [
+          "Performance dashboard",
+          "Alert triggers",
+          "Channel-level metrics"
+        ]
+      }
+    },
+    {
+      "id": "mktg-attribution",
+      "type": "step",
+      "label": "Attribution Modeling",
+      "description": "Model channel and touchpoint contribution to pipeline and revenue. Only 21% of marketers can accurately attribute revenue to specific campaigns. Multi-touch attribution models show 25-40% reallocation opportunity vs. last-touch. AI-driven attribution improves accuracy by 15-30%.",
+      "group": "Marketing",
+      "val": 5,
+      "meta": {
+        "phase": "Marketing",
+        "owner": "agent",
+        "agentName": "Analytics Agent",
+        "estimatedTime": "Weekly",
+        "inputs": [
+          "Performance data",
+          "Customer 360",
+          "Financial controls",
+          "KPI framework"
+        ],
+        "outputs": [
+          "Attribution report",
+          "ROI by channel",
+          "Spend efficiency scorecard"
+        ]
+      }
+    },
+    {
+      "id": "mktg-optimization",
+      "type": "step",
+      "label": "Spend & Creative Optimization",
+      "description": "Adjust spend allocation, creative elements, and targeting based on performance data. AI-driven budget optimization delivers 10-30% improvement in cost per acquisition. Automated creative testing scales variant evaluation 10x. Continuous optimization reduces wasted spend by 15-25%.",
+      "group": "Marketing",
+      "val": 5,
+      "meta": {
+        "phase": "Marketing",
+        "owner": "shared",
+        "agentName": "Analytics Agent",
+        "estimatedTime": "Ongoing",
+        "inputs": [
+          "Attribution report",
+          "Performance data",
+          "Competitive intelligence",
+          "Budget allocation"
+        ],
+        "outputs": [
+          "Reallocation plan",
+          "Creative refresh brief",
+          "Updated targeting parameters"
+        ]
+      }
+    },
+    {
+      "id": "mktg-brief-approval",
+      "type": "gate",
+      "label": "Brief Approval Gate",
+      "description": "Campaign brief sign-off validating objectives, budget, audience, and success metrics before production begins. Poorly scoped briefs cause 60% of downstream rework. Auto-pass criteria reduce approval cycle from 3 days to same-day for standard campaigns.",
+      "group": "Marketing",
+      "val": 6,
+      "meta": {
+        "gateType": "approval",
+        "reviewer": "Marketing Director",
+        "autoPassCriteria": "Standard campaign type, within budget authority, all required fields complete, audience segment validated against CDP",
+        "escalationTrigger": "Non-standard campaign type, budget exceeds authority threshold, or campaign targets regulated audience segment",
+        "decisions": [
+          "Approve",
+          "Revise scope",
+          "Escalate to CMO",
+          "Hold"
+        ]
+      }
+    },
+    {
+      "id": "mktg-creative-review",
+      "type": "gate",
+      "label": "Creative Review Gate",
+      "description": "Brand and creative quality review before distribution. Reviews average 2-3 revision cycles. AI pre-screening reduces human review load by 40% by catching mechanical issues (brand color, font, legal disclaimers) before the subjective review.",
+      "group": "Marketing",
+      "val": 6,
+      "meta": {
+        "gateType": "quality-check",
+        "reviewer": "Creative Director + Brand Manager",
+        "autoPassCriteria": "AI brand check passes, no regulated claims, standard template used, all mandatory elements present",
+        "escalationTrigger": "Executive-facing content, regulated industry claims, competitor mention, or brand voice deviation score above threshold",
+        "decisions": [
+          "Approve",
+          "Revise",
+          "Escalate",
+          "Kill"
+        ]
+      }
+    },
+    {
+      "id": "mktg-budget-gate",
+      "type": "gate",
+      "label": "Budget Authorization Gate",
+      "description": "Spend authorization check against budget allocation, ROI thresholds, and fiscal constraints. Unauthorized spend is the #2 cause of marketing-finance friction. Automated threshold checks reduce approval time from 48 hours to real-time for pre-authorized amounts.",
+      "group": "Marketing",
+      "val": 6,
+      "meta": {
+        "gateType": "approval",
+        "reviewer": "Marketing Ops + Finance",
+        "autoPassCriteria": "Within pre-approved budget, channel spend within quarterly allocation, ROI projection above minimum threshold",
+        "escalationTrigger": "Over-budget request, new channel not in media plan, or ROI projection below minimum threshold",
+        "decisions": [
+          "Approve",
+          "Reduce scope",
+          "Reallocate from another campaign",
+          "Reject"
+        ]
+      }
+    },
+    {
+      "id": "mktg-content-agent",
+      "type": "agent",
+      "label": "Content Production Agent",
+      "description": "Drafts content, generates creative variants, checks brand compliance, and optimizes for SEO. Reduces first-draft time 50-70%. Generates 5-10 headline variants per asset. AI-assisted content teams produce 3x volume with same headcount.",
+      "group": "AI Agents",
+      "val": 5,
+      "meta": {
+        "capability": "End-to-end content production from brief to optimized draft, including multi-format adaptation, brand compliance pre-check, and SEO optimization",
+        "autonomy": "supervised",
+        "tools": [
+          "LLM content generator",
+          "Brand voice checker",
+          "SEO analyzer",
+          "Image generator",
+          "Format adapter"
+        ]
+      }
+    },
+    {
+      "id": "mktg-analytics-agent",
+      "type": "agent",
+      "label": "Marketing Analytics Agent",
+      "description": "Tracks performance, runs attribution models, and generates optimization recommendations. Reduces reporting cycle from weekly to real-time. Identifies underperforming segments 3-5x faster than manual analysis. Generates reallocation recommendations with projected lift.",
+      "group": "AI Agents",
+      "val": 5,
+      "meta": {
+        "capability": "Real-time performance monitoring, multi-touch attribution modeling, spend optimization, and automated executive reporting across all marketing channels",
+        "autonomy": "supervised",
+        "tools": [
+          "Analytics aggregator",
+          "Attribution modeler",
+          "Spend optimizer",
+          "Dashboard generator",
+          "Anomaly detector"
+        ]
+      }
+    },
+    {
+      "id": "sales-lead-intake",
+      "type": "step",
+      "label": "Lead Intake & Scoring",
+      "description": "Receive, enrich, and score inbound/outbound leads against ICP. Average enterprise receives 5,000-50,000 MQLs per quarter. Only 27% are genuinely sales-ready. Lead response within 1 hour converts at 53% vs. 17% after 24 hours \u2014 yet average response time is 42 hours.",
+      "group": "Sales",
+      "val": 5,
+      "meta": {
+        "phase": "Sales",
+        "owner": "shared",
+        "agentName": "SDR Agent",
+        "estimatedTime": "5 min per lead",
+        "inputs": [
+          "Inbound leads",
+          "Ideal customer profile",
+          "Territory model",
+          "Customer 360"
+        ],
+        "outputs": [
+          "Scored lead",
+          "Enriched profile",
+          "Routing recommendation"
+        ]
+      }
+    },
+    {
+      "id": "sales-qualification",
+      "type": "step",
+      "label": "Qualification (MEDDIC/BANT)",
+      "description": "Structured qualification against ICP criteria using MEDDIC, BANT, or custom framework. MQL-to-SQL conversion: 13-21% average, 30%+ best-in-class. 98% of MQLs never close. Rigorous qualification improves win rates 2x by focusing effort on viable opportunities.",
+      "group": "Sales",
+      "val": 6,
+      "meta": {
+        "phase": "Sales",
+        "owner": "shared",
+        "agentName": "SDR Agent",
+        "estimatedTime": "15-30 min",
+        "inputs": [
+          "Scored lead",
+          "Ideal customer profile",
+          "Customer 360",
+          "Competitive intelligence"
+        ],
+        "outputs": [
+          "Qualification scorecard",
+          "Disqualification reasons",
+          "Opportunity record"
+        ]
+      }
+    },
+    {
+      "id": "sales-discovery",
+      "type": "step",
+      "label": "Discovery & Needs Analysis",
+      "description": "Deep needs analysis, stakeholder mapping, and decision process understanding. Top reps spend 2x more time in discovery than average performers. Average enterprise deal involves 6-10 stakeholders. Organizations that map the full buying committee close 15-20% more deals.",
+      "group": "Sales",
+      "val": 5,
+      "meta": {
+        "phase": "Sales",
+        "owner": "human",
+        "estimatedTime": "1-3 meetings",
+        "inputs": [
+          "Qualified opportunity",
+          "Customer 360",
+          "Product catalog",
+          "Competitive intelligence"
+        ],
+        "outputs": [
+          "Needs assessment",
+          "Stakeholder map",
+          "Decision criteria",
+          "Pain point documentation"
+        ]
+      }
+    },
+    {
+      "id": "sales-proposal",
+      "type": "step",
+      "label": "Solution Design & Proposal",
+      "description": "Configure solution, build pricing, and generate proposal. Average proposal cycle: 5-10 business days. AI-assisted proposal generation reduces cycle to 1-2 days. Win rate correlates 0.72 with proposal personalization depth. Deals with ROI-quantified proposals close 32% faster.",
+      "group": "Sales",
+      "val": 6,
+      "meta": {
+        "phase": "Sales",
+        "owner": "shared",
+        "agentName": "Proposal Agent",
+        "estimatedTime": "2-5 days",
+        "inputs": [
+          "Discovery findings",
+          "Product catalog",
+          "Pricing rules",
+          "Competitive intelligence",
+          "Customer 360"
+        ],
+        "outputs": [
+          "Solution configuration",
+          "Pricing proposal",
+          "ROI business case",
+          "Competitive differentiation"
+        ]
+      }
+    },
+    {
+      "id": "sales-negotiation",
+      "type": "step",
+      "label": "Negotiation & Legal",
+      "description": "Contract terms, procurement navigation, legal review, and security assessment. Average negotiation adds 30-45 days to sales cycle. Procurement involvement increases cycle by 40%. AI-assisted redlining reduces legal review from 2 weeks to 2-3 days.",
+      "group": "Sales",
+      "val": 5,
+      "meta": {
+        "phase": "Sales",
+        "owner": "human",
+        "estimatedTime": "2-6 weeks",
+        "inputs": [
+          "Approved proposal",
+          "Pricing rules",
+          "Compliance framework",
+          "Authority matrix"
+        ],
+        "outputs": [
+          "Redlined contract",
+          "Approved terms",
+          "Security attestation"
+        ]
+      }
+    },
+    {
+      "id": "sales-close",
+      "type": "step",
+      "label": "Close & Book",
+      "description": "Final agreement execution, signature, revenue booking, and handoff preparation. Average B2B win rate: 20-25% (down from 31-40% in 2024). Sales cycle: 106 days average. Only 58% of reps achieve 60-80% quota attainment. Close rate on forecasted deals: 47%.",
+      "group": "Sales",
+      "val": 7,
+      "meta": {
+        "phase": "Sales",
+        "owner": "human",
+        "estimatedTime": "1-2 weeks",
+        "inputs": [
+          "Negotiated contract",
+          "Compliance clearance",
+          "Revenue booking rules"
+        ],
+        "outputs": [
+          "Signed agreement",
+          "Booked revenue",
+          "Implementation handoff package"
+        ]
+      }
+    },
+    {
+      "id": "sales-forecast-update",
+      "type": "step",
+      "label": "Pipeline & Forecast",
+      "description": "Maintain pipeline accuracy, update stage probabilities, and contribute to revenue forecast. Forecast accuracy: 80-85% median, but 79% of organizations miss by >10%. AI-augmented forecasting achieves up to 96% accuracy. CRM data quality issues cause 15-25% revenue leakage.",
+      "group": "Sales",
+      "val": 5,
+      "meta": {
+        "phase": "Sales",
+        "owner": "shared",
+        "agentName": "Proposal Agent",
+        "estimatedTime": "Continuous",
+        "inputs": [
+          "Pipeline data",
+          "KPI framework",
+          "Historical close rates",
+          "Customer 360"
+        ],
+        "outputs": [
+          "Updated forecast",
+          "Pipeline health report",
+          "Risk-flagged deals"
+        ]
+      }
+    },
+    {
+      "id": "sales-account-planning",
+      "type": "step",
+      "label": "Account Planning & Expansion",
+      "description": "Strategic account plans, whitespace analysis, and expansion mapping. Best-in-class account planning yields 15-25% higher NRR. Only 30% of reps have formal account plans. Expansion revenue averages 40% of total SaaS revenue \u2014 most of it from accounts with active plans.",
+      "group": "Sales",
+      "val": 5,
+      "meta": {
+        "phase": "Sales",
+        "owner": "human",
+        "estimatedTime": "Quarterly",
+        "inputs": [
+          "Customer 360",
+          "Product roadmap",
+          "Product catalog",
+          "Competitive intelligence"
+        ],
+        "outputs": [
+          "Account plan",
+          "Whitespace map",
+          "Expansion targets",
+          "Risk assessment"
+        ]
+      }
+    },
+    {
+      "id": "sales-qualification-gate",
+      "type": "gate",
+      "label": "MQL\u2192SQL Gate",
+      "description": "Conversion decision from marketing-qualified to sales-qualified lead. This is the highest-leakage point in most revenue engines: 13-21% conversion average, meaning 79-87% of marketing-generated leads are rejected or abandoned. Misalignment between marketing and sales on lead quality is the #1 source of cross-functional friction.",
+      "group": "Sales",
+      "val": 7,
+      "meta": {
+        "gateType": "approval",
+        "reviewer": "Sales Development Manager",
+        "autoPassCriteria": "ICP score above threshold, engagement score above threshold, firmographic match confirmed, no duplicate in CRM",
+        "escalationTrigger": "High-value account below ICP threshold, conflicting signals between intent data and firmographics, or strategic account override request",
+        "decisions": [
+          "Accept as SQL",
+          "Return to nurture",
+          "Disqualify",
+          "Request more information"
+        ]
+      }
+    },
+    {
+      "id": "sales-deal-review",
+      "type": "gate",
+      "label": "Deal Review Gate",
+      "description": "Pipeline review and deal desk validation before proposal. Structured deal reviews increase win rates 15-20%. Deal desk involvement on complex deals adds 5-10% to average deal size through better packaging. Reviews catch 30% of deals with inaccurate stage assignment.",
+      "group": "Sales",
+      "val": 6,
+      "meta": {
+        "gateType": "quality-check",
+        "reviewer": "Sales Manager + Deal Desk",
+        "autoPassCriteria": "Standard deal size, standard terms, single product, MEDDIC score above threshold",
+        "escalationTrigger": "Non-standard pricing, multi-product bundle, competitive displacement, or deal above manager authority",
+        "decisions": [
+          "Advance to proposal",
+          "Return to discovery",
+          "Escalate to VP Sales",
+          "De-prioritize"
+        ]
+      }
+    },
+    {
+      "id": "sales-pricing-gate",
+      "type": "gate",
+      "label": "Pricing Approval Gate",
+      "description": "Non-standard pricing and discount authorization. Average discount: 15-25% off list. Uncontrolled discounting erodes 5-10% of total revenue annually. AI-guided pricing recommendations reduce unnecessary discounting by 8-15% while maintaining win rates.",
+      "group": "Sales",
+      "val": 6,
+      "meta": {
+        "gateType": "approval",
+        "reviewer": "Deal Desk + Finance",
+        "autoPassCriteria": "Discount within rep authority, standard terms, no custom SLA, margin above floor",
+        "escalationTrigger": "Discount above rep authority, custom payment terms, non-standard SLA, or margin below floor",
+        "decisions": [
+          "Approve pricing",
+          "Counter with alternative",
+          "Escalate to VP",
+          "Reject"
+        ]
+      }
+    },
+    {
+      "id": "sales-sdr-agent",
+      "type": "agent",
+      "label": "SDR / Lead Intelligence Agent",
+      "description": "Scores leads, researches accounts, sequences outreach, and books meetings. AI SDRs now handle 22% of initial outreach at early adopters. Best-in-class AI SDRs achieve meeting-set rates within 80% of human SDRs at 1/10th the cost. Gong-using teams see 77% more revenue.",
+      "group": "AI Agents",
+      "val": 5,
+      "meta": {
+        "capability": "Lead scoring, account research, multi-channel outreach sequencing, meeting scheduling, and initial qualification against ICP criteria",
+        "autonomy": "supervised",
+        "tools": [
+          "Lead scorer",
+          "Account enrichment API",
+          "Email sequencer",
+          "LinkedIn automation",
+          "Calendar scheduler",
+          "Intent data aggregator"
+        ]
+      }
+    },
+    {
+      "id": "sales-proposal-agent",
+      "type": "agent",
+      "label": "Proposal & Pricing Agent",
+      "description": "Assembles proposals, optimizes pricing, generates competitive positioning, and maintains forecast accuracy. Reduces proposal assembly from 5 days to same-day. AI-guided pricing lifts deal sizes 8-15%. Forecast AI achieves 96% accuracy vs. 80-85% manual.",
+      "group": "AI Agents",
+      "val": 5,
+      "meta": {
+        "capability": "Solution configuration, dynamic pricing optimization, proposal generation, competitive battle card assembly, and AI-augmented revenue forecasting",
+        "autonomy": "supervised",
+        "tools": [
+          "CPQ engine",
+          "Proposal builder",
+          "Pricing optimizer",
+          "Competitive intelligence feed",
+          "Forecast modeler"
+        ]
+      }
+    },
+    {
+      "id": "svc-case-intake",
+      "type": "step",
+      "label": "Case Intake & Logging",
+      "description": "Receive and log customer issue across all channels (phone, email, chat, social, self-service). Average enterprise handles 10,000-100,000+ cases/month. Omnichannel intake is now table stakes \u2014 72% of customers expect seamless channel switching. AI auto-classification accuracy: 85-92%.",
+      "group": "Service",
+      "val": 5,
+      "meta": {
+        "phase": "Service",
+        "owner": "shared",
+        "agentName": "Triage Agent",
+        "estimatedTime": "2-5 min",
+        "inputs": [
+          "Customer contact",
+          "Customer 360",
+          "SLA definitions",
+          "Product catalog"
+        ],
+        "outputs": [
+          "Logged case",
+          "Initial classification",
+          "Priority assignment",
+          "Customer context summary"
+        ]
+      }
+    },
+    {
+      "id": "svc-triage",
+      "type": "step",
+      "label": "Triage & Route",
+      "description": "Classify severity, determine routing, and assign to appropriate queue or resolver. AI triage reduces mis-routing by 40-60%. Self-service deflection: 20-40% basic, 60-90% with advanced AI. Proper initial routing reduces resolution time by 25-35%.",
+      "group": "Service",
+      "val": 5,
+      "meta": {
+        "phase": "Service",
+        "owner": "agent",
+        "agentName": "Triage Agent",
+        "estimatedTime": "1-3 min",
+        "inputs": [
+          "Logged case",
+          "SLA definitions",
+          "Knowledge base",
+          "Skills-based routing rules"
+        ],
+        "outputs": [
+          "Severity classification",
+          "Queue assignment",
+          "Suggested resolution path",
+          "Deflection opportunity flag"
+        ]
+      }
+    },
+    {
+      "id": "svc-investigation",
+      "type": "step",
+      "label": "Investigation & Diagnosis",
+      "description": "Diagnose root cause, gather additional context, and determine resolution path. Average investigation time: 15-45 minutes for Tier 1, 2-4 hours for Tier 2, 1-3 days for Tier 3. AI-assisted diagnostics reduce investigation time 30-50% by surfacing similar resolved cases.",
+      "group": "Service",
+      "val": 5,
+      "meta": {
+        "phase": "Service",
+        "owner": "shared",
+        "agentName": "Resolution Agent",
+        "estimatedTime": "15 min - 3 days",
+        "inputs": [
+          "Triaged case",
+          "Knowledge base",
+          "Product catalog",
+          "Integration map",
+          "Customer 360"
+        ],
+        "outputs": [
+          "Root cause analysis",
+          "Resolution recommendation",
+          "Additional context gathered"
+        ]
+      }
+    },
+    {
+      "id": "svc-resolution",
+      "type": "step",
+      "label": "Resolution & Action",
+      "description": "Implement fix, provide solution, or execute workaround. First contact resolution (FCR): 70% industry average, 80%+ world-class. Cost per resolution: $6-7 global average, $25-35 for B2B SaaS. AI resolution rates: Salesforce Agentforce 85%, Intercom Fin 65%, Zendesk 39-66%.",
+      "group": "Service",
+      "val": 6,
+      "meta": {
+        "phase": "Service",
+        "owner": "shared",
+        "agentName": "Resolution Agent",
+        "estimatedTime": "10-60 min",
+        "inputs": [
+          "Diagnosis",
+          "Knowledge base",
+          "Resolution playbooks",
+          "Customer 360"
+        ],
+        "outputs": [
+          "Resolution applied",
+          "Customer communication",
+          "Case update"
+        ]
+      }
+    },
+    {
+      "id": "svc-knowledge-capture",
+      "type": "step",
+      "label": "Knowledge Capture",
+      "description": "Document resolution for knowledge base, identify pattern for future deflection, and update resolution playbooks. Only 20-30% of resolutions are captured as knowledge articles. Organizations with systematic capture see 15-25% improvement in FCR over 12 months.",
+      "group": "Service",
+      "val": 5,
+      "meta": {
+        "phase": "Service",
+        "owner": "shared",
+        "agentName": "Resolution Agent",
+        "estimatedTime": "5-15 min",
+        "inputs": [
+          "Resolved case",
+          "Knowledge base",
+          "Resolution details"
+        ],
+        "outputs": [
+          "Knowledge article draft",
+          "Pattern tag",
+          "Playbook update"
+        ]
+      }
+    },
+    {
+      "id": "svc-follow-up",
+      "type": "step",
+      "label": "Follow-Up & Close",
+      "description": "Verify customer satisfaction, confirm resolution holds, and close the loop. CSAT follow-up response rates: 15-25%. Proactive follow-up on complex cases reduces reopen rate by 30%. NPS correlation: cases with follow-up score 15-20 points higher.",
+      "group": "Service",
+      "val": 5,
+      "meta": {
+        "phase": "Service",
+        "owner": "shared",
+        "agentName": "Resolution Agent",
+        "estimatedTime": "5-10 min",
+        "inputs": [
+          "Resolved case",
+          "Customer 360",
+          "Satisfaction survey"
+        ],
+        "outputs": [
+          "CSAT score",
+          "Reopen flag",
+          "Closed case record"
+        ]
+      }
+    },
+    {
+      "id": "svc-escalation-management",
+      "type": "step",
+      "label": "Escalation Management",
+      "description": "Manage P1/P2 escalation workflows, coordinate cross-functional response, and drive incident resolution. Escalation rate: 15-20% of cases at mature desks. P1 escalations cost 5-10x a standard case. Average P1 resolution: 4-8 hours. Agent burnout rate: 56%, annual turnover: 40-45%.",
+      "group": "Service",
+      "val": 6,
+      "meta": {
+        "phase": "Service",
+        "owner": "human",
+        "estimatedTime": "4-48 hours",
+        "inputs": [
+          "Escalated case",
+          "SLA definitions",
+          "Authority matrix",
+          "Technical resources"
+        ],
+        "outputs": [
+          "Incident resolution",
+          "Post-mortem",
+          "Process improvement recommendation"
+        ]
+      }
+    },
+    {
+      "id": "svc-severity-gate",
+      "type": "gate",
+      "label": "Severity Classification Gate",
+      "description": "P1/P2 escalation decision based on severity, customer tier, and business impact. Mis-classification of P1 issues as P2 is the #1 cause of SLA breaches. AI severity classification matches human accuracy at 89-93% and reduces classification time from 5 min to seconds.",
+      "group": "Service",
+      "val": 6,
+      "meta": {
+        "gateType": "escalation",
+        "reviewer": "Service Manager (auto for P3/P4)",
+        "autoPassCriteria": "Clear P3 or P4 classification, standard issue type, non-premium customer tier",
+        "escalationTrigger": "System outage, data loss, security incident, premium customer impact, or revenue-impacting issue",
+        "decisions": [
+          "Route to Tier 1",
+          "Route to Tier 2",
+          "Escalate to P1/P2 process",
+          "Deflect to self-service"
+        ]
+      }
+    },
+    {
+      "id": "svc-resolution-review",
+      "type": "gate",
+      "label": "Resolution Quality Gate",
+      "description": "Quality check before customer communication. AI QA catches 70% of incomplete resolutions. Human review reserved for complex cases, sensitive accounts, and cases with financial implications. QA'd resolutions have 40% lower reopen rate.",
+      "group": "Service",
+      "val": 6,
+      "meta": {
+        "gateType": "quality-check",
+        "reviewer": "Senior Agent / QA Lead (auto for standard cases)",
+        "autoPassCriteria": "Standard issue type, resolution matches knowledge base, customer tier is standard, no financial implications",
+        "escalationTrigger": "Novel issue type, premium customer, financial remediation required, or potential product defect pattern",
+        "decisions": [
+          "Approve",
+          "Revise resolution",
+          "Escalate for review",
+          "Escalate to engineering"
+        ]
+      }
+    },
+    {
+      "id": "svc-sla-gate",
+      "type": "gate",
+      "label": "SLA Compliance Gate",
+      "description": "SLA breach threshold monitoring and intervention trigger. SLA compliance target: 90%+. Enterprises average 85-92% SLA compliance. Each 1% SLA improvement correlates with 0.5% reduction in churn. Proactive SLA monitoring prevents 30-40% of potential breaches.",
+      "group": "Service",
+      "val": 6,
+      "meta": {
+        "gateType": "escalation",
+        "reviewer": "Automated + Service Ops Manager",
+        "autoPassCriteria": "Case within SLA window, no risk of breach within next 2 hours",
+        "escalationTrigger": "Case approaching SLA breach threshold, premium customer case aging beyond 50% of SLA, or pattern of SLA near-misses for a customer",
+        "decisions": [
+          "Continue normal process",
+          "Accelerate resolution",
+          "Reassign to senior agent",
+          "Notify customer proactively"
+        ]
+      }
+    },
+    {
+      "id": "svc-triage-agent",
+      "type": "agent",
+      "label": "Triage & Deflection Agent",
+      "description": "Auto-classifies cases, routes to optimal queue, suggests self-service deflection, and provides context summary. Intercom Fin resolves 50-65% of inquiries at $0.99 per resolution. Salesforce Agentforce achieves 85% resolution. Zendesk AI: 39-66% automated resolution.",
+      "group": "AI Agents",
+      "val": 5,
+      "meta": {
+        "capability": "Omnichannel case intake, AI severity classification, skills-based routing, self-service deflection, and agent context preparation",
+        "autonomy": "supervised",
+        "tools": [
+          "NLP classifier",
+          "Routing engine",
+          "Knowledge base search",
+          "Sentiment analyzer",
+          "Customer context assembler"
+        ]
+      }
+    },
+    {
+      "id": "svc-resolution-agent",
+      "type": "agent",
+      "label": "Resolution Assist Agent",
+      "description": "Drafts responses, surfaces relevant KB articles, suggests next actions, and captures knowledge. Reduces average handle time 20-35%. Increases FCR 10-15% by surfacing relevant historical resolutions. Auto-generates knowledge articles from resolved cases.",
+      "group": "AI Agents",
+      "val": 5,
+      "meta": {
+        "capability": "AI-assisted diagnosis, response drafting, knowledge base retrieval, resolution recommendation, and automated knowledge capture from resolved cases",
+        "autonomy": "supervised",
+        "tools": [
+          "KB retrieval engine",
+          "Response drafter",
+          "Similar case finder",
+          "Knowledge article generator",
+          "Resolution verifier"
+        ]
+      }
+    },
+    {
+      "id": "cs-onboarding",
+      "type": "step",
+      "label": "Onboarding & Implementation",
+      "description": "Implementation planning, configuration, training, and go-live support. Time to first value: 1-3 days for top performers vs. 30-90 days average. Customers who complete structured onboarding have 2.5x higher retention at 12 months. 23% of churn traces directly to poor onboarding.",
+      "group": "Customer Success",
+      "val": 6,
+      "meta": {
+        "phase": "Customer Success",
+        "owner": "human",
+        "estimatedTime": "2-12 weeks",
+        "inputs": [
+          "Implementation handoff package",
+          "Customer 360",
+          "Product catalog",
+          "Customer journey map"
+        ],
+        "outputs": [
+          "Configured environment",
+          "Trained users",
+          "Success plan",
+          "Adoption baseline metrics"
+        ]
+      }
+    },
+    {
+      "id": "cs-health-monitoring",
+      "type": "step",
+      "label": "Health Score Monitoring",
+      "description": "Track product adoption, engagement signals, support patterns, and relationship indicators. Product adoption: 17% median activation rate, 65% at 90th percentile. Health scoring predicts churn 60-90 days in advance with 75-85% accuracy. 70%+ of CS teams are reactive (ideal: 30-40%).",
+      "group": "Customer Success",
+      "val": 6,
+      "meta": {
+        "phase": "Customer Success",
+        "owner": "agent",
+        "agentName": "Health Score Agent",
+        "estimatedTime": "Continuous",
+        "inputs": [
+          "Product usage data",
+          "Customer 360",
+          "Support case patterns",
+          "KPI framework"
+        ],
+        "outputs": [
+          "Health score",
+          "Risk flags",
+          "Engagement trends",
+          "Intervention triggers"
+        ]
+      }
+    },
+    {
+      "id": "cs-qbr-preparation",
+      "type": "step",
+      "label": "QBR Preparation",
+      "description": "Quarterly business review assembly with value realization, adoption metrics, and strategic roadmap. Accounts with regular QBRs renew at 15-20% higher rates. AI-assembled QBR prep reduces preparation from 4-6 hours to 30 minutes per account.",
+      "group": "Customer Success",
+      "val": 5,
+      "meta": {
+        "phase": "Customer Success",
+        "owner": "shared",
+        "agentName": "Health Score Agent",
+        "estimatedTime": "30 min (AI-assisted)",
+        "inputs": [
+          "Health score data",
+          "Product usage analytics",
+          "KPI framework",
+          "Product roadmap"
+        ],
+        "outputs": [
+          "QBR deck",
+          "Value realization metrics",
+          "Adoption scorecard",
+          "Strategic recommendations"
+        ]
+      }
+    },
+    {
+      "id": "cs-expansion-identification",
+      "type": "step",
+      "label": "Expansion Signal Detection",
+      "description": "Identify upsell and cross-sell signals from usage patterns, org growth, and engagement data. Expansion revenue averages 40% of total SaaS revenue. Net revenue retention: 106% median, 115-125% enterprise, >130% best-in-class. Cost to expand existing customer: 5-7x less than new acquisition.",
+      "group": "Customer Success",
+      "val": 6,
+      "meta": {
+        "phase": "Customer Success",
+        "owner": "agent",
+        "agentName": "Expansion Agent",
+        "estimatedTime": "Continuous",
+        "inputs": [
+          "Health score",
+          "Product usage data",
+          "Product catalog",
+          "Pricing rules",
+          "Customer 360"
+        ],
+        "outputs": [
+          "Expansion opportunity",
+          "Signal strength score",
+          "Recommended offering",
+          "Timing recommendation"
+        ]
+      }
+    },
+    {
+      "id": "cs-renewal-management",
+      "type": "step",
+      "label": "Renewal Management",
+      "description": "Renewal timeline management, risk assessment, negotiation, and execution. Average B2B SaaS churn: 3.5% annual. Proactive renewal engagement starting 120 days before expiry increases renewal rate 10-15%. Multi-year renewals reduce cost-to-renew by 40%. LTV:CAC ratio target: 3:1 minimum, 5:1+ ideal.",
+      "group": "Customer Success",
+      "val": 6,
+      "meta": {
+        "phase": "Customer Success",
+        "owner": "shared",
+        "agentName": "Expansion Agent",
+        "estimatedTime": "2-6 weeks",
+        "inputs": [
+          "Health score",
+          "Customer 360",
+          "Pricing rules",
+          "Financial controls",
+          "Contract data"
+        ],
+        "outputs": [
+          "Renewal proposal",
+          "Risk mitigation plan",
+          "Negotiated terms",
+          "Renewed contract"
+        ]
+      }
+    },
+    {
+      "id": "cs-advocacy",
+      "type": "step",
+      "label": "Customer Advocacy",
+      "description": "Reference programs, case studies, NPS management, and community engagement. Referred customers have 16% higher LTV. NPS promoters expand at 2x the rate of passives. Customer advisory boards increase renewal rates 10-15%. Only 15% of happy customers actively participate in advocacy without prompting.",
+      "group": "Customer Success",
+      "val": 5,
+      "meta": {
+        "phase": "Customer Success",
+        "owner": "human",
+        "estimatedTime": "Ongoing",
+        "inputs": [
+          "Customer 360",
+          "Health score",
+          "NPS data",
+          "Reference program criteria"
+        ],
+        "outputs": [
+          "Case studies",
+          "References",
+          "NPS responses",
+          "Community contributions"
+        ]
+      }
+    },
+    {
+      "id": "cs-health-alert",
+      "type": "gate",
+      "label": "At-Risk Account Gate",
+      "description": "Intervention trigger when health score drops below threshold. Proactive intervention within 14 days of health score decline saves 60-70% of at-risk accounts. Average time from first risk signal to churn without intervention: 90-120 days. CSM-to-account ratio: 1:14 enterprise, 1:100 SMB.",
+      "group": "Customer Success",
+      "val": 7,
+      "meta": {
+        "gateType": "escalation",
+        "reviewer": "CS Manager + Account Executive",
+        "autoPassCriteria": "Health score above threshold, no declining trend, no support escalation pattern",
+        "escalationTrigger": "Health score drops below threshold, usage decline >20% over 30 days, executive sponsor change, support escalation spike, or renewal within 120 days with declining health",
+        "decisions": [
+          "No action needed",
+          "CSM proactive outreach",
+          "Executive intervention",
+          "Churn prevention campaign",
+          "Trigger cross-functional war room"
+        ]
+      }
+    },
+    {
+      "id": "cs-expansion-gate",
+      "type": "gate",
+      "label": "Expansion Qualification Gate",
+      "description": "Qualify expansion opportunity before engaging sales. Only 35-40% of identified expansion signals convert to qualified opportunities. Premature sales engagement on weak signals damages customer relationship. Health score above 80 + active expansion signal = 3x higher close rate.",
+      "group": "Customer Success",
+      "val": 6,
+      "meta": {
+        "gateType": "approval",
+        "reviewer": "CS Manager + Sales Manager",
+        "autoPassCriteria": "Health score above 80, clear usage-driven signal, budget cycle aligned, no open critical support cases",
+        "escalationTrigger": "Strategic account with mixed signals, competitive threat detected, or multi-product expansion opportunity",
+        "decisions": [
+          "Qualify and hand to sales",
+          "Nurture further",
+          "Defer \u2014 customer not ready",
+          "Reject \u2014 wrong signal"
+        ]
+      }
+    },
+    {
+      "id": "cs-health-agent",
+      "type": "agent",
+      "label": "Health Score & Insights Agent",
+      "description": "Monitors product usage, predicts churn risk, assembles QBR data, and generates proactive intervention recommendations. Composite health scores combining usage, support, engagement, and relationship data predict churn with 75-85% accuracy 60-90 days in advance.",
+      "group": "AI Agents",
+      "val": 5,
+      "meta": {
+        "capability": "Real-time health score computation, churn prediction modeling, QBR data assembly, proactive alert generation, and adoption trend analysis",
+        "autonomy": "supervised",
+        "tools": [
+          "Usage analytics engine",
+          "Churn prediction model",
+          "QBR assembler",
+          "Alert system",
+          "Adoption tracker"
+        ]
+      }
+    },
+    {
+      "id": "cs-expansion-agent",
+      "type": "agent",
+      "label": "Expansion Intelligence Agent",
+      "description": "Identifies upsell/cross-sell signals from usage patterns and generates expansion proposals. Best-in-class expansion agents surface 3-5x more qualified signals than manual CSM review. AI-identified expansion opportunities close at 25-35% higher rates due to signal quality.",
+      "group": "AI Agents",
+      "val": 5,
+      "meta": {
+        "capability": "Expansion signal detection from product usage, org growth, and engagement patterns. Generates qualified expansion proposals with timing and offering recommendations",
+        "autonomy": "supervised",
+        "tools": [
+          "Usage pattern analyzer",
+          "Expansion signal scorer",
+          "Proposal generator",
+          "Competitive intelligence feed",
+          "Pricing optimizer"
+        ]
+      }
+    },
+    {
+      "id": "handoff-mql-to-sql",
+      "type": "gate",
+      "label": "Marketing \u2192 Sales",
+      "description": "Lead handoff from marketing to sales. The highest-leakage junction in most revenue engines. MQL\u2192SQL conversion: 13-21%. 70% of prospects lost to inadequate follow-up. Marketing-sales misalignment costs companies an estimated 10% of annual revenue. Lead response time is the single highest-impact variable.",
+      "group": "Cross-Domain",
+      "val": 7,
+      "meta": {
+        "gateType": "approval",
+        "reviewer": "SDR Manager + Demand Gen Manager",
+        "autoPassCriteria": "ICP score above shared threshold, minimum engagement score, no CRM duplicate, territory assignment clear",
+        "escalationTrigger": "Strategic account, conflicting qualification criteria between marketing and sales scoring, or high-value lead with incomplete data",
+        "decisions": [
+          "Accept handoff",
+          "Request enrichment",
+          "Return to nurture",
+          "Override \u2014 strategic account"
+        ]
+      }
+    },
+    {
+      "id": "handoff-deal-to-onboard",
+      "type": "gate",
+      "label": "Sales \u2192 CS/Service",
+      "description": "Closed deal handoff to implementation and success. 23% of churn traces to poor post-sale transitions. Average handoff delay: 3-7 business days. Deals with structured handoff packages have 35% faster time-to-value. Information loss between sales and implementation is the #1 complaint from new customers.",
+      "group": "Cross-Domain",
+      "val": 7,
+      "meta": {
+        "gateType": "quality-check",
+        "reviewer": "CS Manager + Implementation Lead",
+        "autoPassCriteria": "Handoff package complete (requirements, stakeholders, timeline, expectations), CRM record accurate, success metrics defined",
+        "escalationTrigger": "Incomplete handoff package, custom implementation requirements, misaligned expectations between sales promise and product capability, or premium account",
+        "decisions": [
+          "Accept \u2014 begin onboarding",
+          "Request missing information",
+          "Flag misaligned expectations",
+          "Escalate to VP"
+        ]
+      }
+    },
+    {
+      "id": "handoff-service-to-product",
+      "type": "gate",
+      "label": "Service \u2192 Product/Engineering",
+      "description": "Repeated issue pattern escalation to product team. Only 10-15% of product-impacting issues get properly escalated. Average time from pattern detection to product fix: 60-120 days. Organizations with structured service-to-product feedback loops resolve root causes 3x faster.",
+      "group": "Cross-Domain",
+      "val": 6,
+      "meta": {
+        "gateType": "escalation",
+        "reviewer": "Service Ops Manager + Product Manager",
+        "autoPassCriteria": "Issue pattern confirmed (3+ occurrences), root cause identified as product defect, no existing JIRA ticket",
+        "escalationTrigger": "Customer-impacting bug affecting multiple accounts, security vulnerability, or data integrity issue",
+        "decisions": [
+          "Create product ticket",
+          "Request more data",
+          "Workaround sufficient",
+          "Emergency escalation"
+        ]
+      }
+    },
+    {
+      "id": "handoff-cs-to-sales",
+      "type": "gate",
+      "label": "CS \u2192 Sales",
+      "description": "Expansion opportunity handoff from customer success to sales. Expansion revenue is 40% of SaaS revenue. CS-identified expansion opportunities close at 2x the rate of cold outreach. But premature handoff (before the customer signals readiness) reduces close rates by 50%.",
+      "group": "Cross-Domain",
+      "val": 6,
+      "meta": {
+        "gateType": "approval",
+        "reviewer": "CS Manager + Account Executive",
+        "autoPassCriteria": "Health score above 80, clear expansion signal, customer has expressed interest, no open critical issues",
+        "escalationTrigger": "Strategic account expansion, competitive displacement opportunity, or multi-product bundle requiring solution architect",
+        "decisions": [
+          "Hand to sales",
+          "CS to continue nurturing",
+          "Joint CS-sales approach",
+          "Defer \u2014 timing not right"
+        ]
+      }
+    },
+    {
+      "id": "handoff-service-to-cs",
+      "type": "gate",
+      "label": "Service \u2192 CS",
+      "description": "Support pattern triggers CSM intervention. Repeat support contacts (3+ in 30 days) correlate with 4x higher churn risk. Service teams detect relationship deterioration before CSMs 60% of the time \u2014 but only 25% have formal handoff processes.",
+      "group": "Cross-Domain",
+      "val": 6,
+      "meta": {
+        "gateType": "escalation",
+        "reviewer": "Service Ops + CS Manager",
+        "autoPassCriteria": "Support frequency above threshold, escalation pattern detected, sentiment declining",
+        "escalationTrigger": "Premium account with support spike, executive complaint, or threat to churn mentioned in support interaction",
+        "decisions": [
+          "Notify CSM",
+          "Joint service-CS response",
+          "Trigger health score review",
+          "No action \u2014 isolated incident"
+        ]
+      }
+    },
+    {
+      "id": "handoff-churn-signal",
+      "type": "gate",
+      "label": "CS \u2192 Marketing",
+      "description": "At-risk account data feeds marketing suppression and win-back programs. Marketing to churning accounts wastes 5-10% of campaign spend and damages brand perception. Proactive suppression of at-risk accounts from promotional campaigns is standard at mature organizations but only 20% actually do it.",
+      "group": "Cross-Domain",
+      "val": 5,
+      "meta": {
+        "gateType": "escalation",
+        "reviewer": "CS Manager + Marketing Ops",
+        "autoPassCriteria": "Health score below churn threshold, account flagged at-risk in CRM",
+        "escalationTrigger": "High-value account entering churn risk, competitive displacement detected, or strategic account in jeopardy",
+        "decisions": [
+          "Suppress from campaigns",
+          "Trigger win-back sequence",
+          "Executive intervention",
+          "Monitor only"
+        ]
+      }
+    },
+    {
+      "id": "handoff-feedback-loop",
+      "type": "gate",
+      "label": "Service/CS \u2192 Marketing",
+      "description": "Voice-of-customer data feeds content strategy and product marketing. Customer feedback is the #1 underutilized content source. Service interactions contain 10x more actionable product insight than surveys. Organizations that systematize VOC-to-content see 25% higher content engagement.",
+      "group": "Cross-Domain",
+      "val": 5,
+      "meta": {
+        "gateType": "quality-check",
+        "reviewer": "Marketing Ops + Content Strategy",
+        "autoPassCriteria": "Feedback pattern confirmed, sufficient volume for statistical significance, no NDA-restricted content",
+        "escalationTrigger": "Emerging competitive threat identified through support patterns, or product messaging misalignment causing support volume",
+        "decisions": [
+          "Feed to content strategy",
+          "Feed to product marketing",
+          "Feed to competitive intelligence",
+          "Archive \u2014 insufficient signal"
+        ]
+      }
+    },
+    {
+      "id": "handoff-revenue-signal",
+      "type": "gate",
+      "label": "All \u2192 Revenue Operations",
+      "description": "Cross-functional revenue impact data aggregation. Companies with formal RevOps achieve 36% higher revenue growth and 28% higher profitability. Revenue leakage from cross-functional data gaps: estimated 5-15% of total revenue. 75% of RevOps leaders cite data inconsistency as their top challenge.",
+      "group": "Cross-Domain",
+      "val": 6,
+      "meta": {
+        "gateType": "quality-check",
+        "reviewer": "Revenue Operations Lead",
+        "autoPassCriteria": "Data passes validation rules, source system authoritative, no conflicting signals from other domains",
+        "escalationTrigger": "Cross-domain data conflict, forecast-impacting discrepancy, or revenue recognition issue",
+        "decisions": [
+          "Accept and propagate",
+          "Investigate discrepancy",
+          "Override with authoritative source",
+          "Flag for cross-functional review"
+        ]
+      }
+    },
+    {
+      "id": "agent-customer-360",
+      "type": "agent",
+      "label": "Customer 360 Agent",
+      "description": "Assembles and maintains unified customer view across all touchpoints and systems. Resolves identity across channels, enriches profiles from internal and external data, and surfaces actionable customer context to every domain. Foundation for all cross-domain intelligence.",
+      "group": "AI Agents",
+      "val": 6,
+      "meta": {
+        "capability": "Identity resolution, profile enrichment, cross-system data unification, and real-time customer context assembly for all front-office functions",
+        "autonomy": "full",
+        "tools": [
+          "Identity resolution engine",
+          "Data enrichment APIs",
+          "Profile unifier",
+          "Context assembler",
+          "Change detector"
+        ]
+      }
+    },
+    {
+      "id": "agent-compliance-checker",
+      "type": "agent",
+      "label": "Cross-Domain Compliance Agent",
+      "description": "Validates actions against regulatory and policy constraints across all departments. Compliance cost in financial services: $10K-$50K per violation. AI compliance checking reduces manual review load 60-80% while catching 95%+ of violations. Covers GDPR, CCPA, SOX, HIPAA, and industry-specific regulations.",
+      "group": "AI Agents",
+      "val": 5,
+      "meta": {
+        "capability": "Cross-domain regulatory compliance validation, policy enforcement, audit trail generation, and proactive risk flagging across marketing, sales, service, and CS actions",
+        "autonomy": "full",
+        "tools": [
+          "Regulatory rule engine",
+          "Policy validator",
+          "Audit trail logger",
+          "Risk scorer",
+          "Consent manager"
+        ]
+      }
+    },
+    {
+      "id": "agent-forecasting",
+      "type": "agent",
+      "label": "Revenue Forecasting Agent",
+      "description": "Unified revenue forecasting from pipeline, renewal, and expansion signals across all domains. AI-augmented forecasting achieves up to 96% accuracy vs. 80-85% manual. Incorporates pipeline velocity, renewal probability, expansion signals, and churn risk into a single forecast.",
+      "group": "AI Agents",
+      "val": 5,
+      "meta": {
+        "capability": "Multi-source revenue forecasting combining new business pipeline, renewal probability, expansion signals, and churn risk into unified revenue prediction",
+        "autonomy": "supervised",
+        "tools": [
+          "Pipeline analyzer",
+          "Renewal predictor",
+          "Expansion forecaster",
+          "Churn risk modeler",
+          "Scenario builder"
+        ]
+      }
+    },
+    {
+      "id": "agent-workflow-orchestrator",
+      "type": "agent",
+      "label": "Workflow Orchestrator Agent",
+      "description": "Routes work across domain boundaries, manages handoff completeness, and ensures cross-functional SLA compliance. Reduces handoff latency 50-70%. Catches incomplete handoffs before they cause downstream failures. Orchestrates the cross-domain gates that define the operating system.",
+      "group": "AI Agents",
+      "val": 6,
+      "meta": {
+        "capability": "Cross-domain workflow routing, handoff completeness validation, SLA monitoring across domain boundaries, and escalation orchestration",
+        "autonomy": "supervised",
+        "tools": [
+          "Routing engine",
+          "Handoff validator",
+          "SLA monitor",
+          "Escalation router",
+          "Process mining analyzer"
+        ]
+      }
+    },
+    {
+      "id": "agent-knowledge-graph-updater",
+      "type": "agent",
+      "label": "Knowledge Graph Agent",
+      "description": "Maintains the organizational knowledge graph with real-time data from all source systems. Detects knowledge decay, resolves conflicts between sources, and ensures graph currency. The graph is the shared memory that makes cross-domain intelligence possible.",
+      "group": "AI Agents",
+      "val": 5,
+      "meta": {
+        "capability": "Automated knowledge graph maintenance including entity extraction, relationship mapping, conflict resolution, decay detection, and source system synchronization",
+        "autonomy": "full",
+        "tools": [
+          "Entity extractor",
+          "Relationship mapper",
+          "Conflict resolver",
+          "Decay detector",
+          "Source connector"
+        ]
+      }
+    },
+    {
+      "id": "agent-reporting",
+      "type": "agent",
+      "label": "Executive Reporting Agent",
+      "description": "Cross-functional dashboards and executive reporting spanning all front-office domains. Reduces reporting cycle from weekly to real-time. Auto-generates narrative insights alongside metrics. Correlates cross-domain trends that manual reporting misses.",
+      "group": "AI Agents",
+      "val": 5,
+      "meta": {
+        "capability": "Cross-domain executive reporting, automated narrative generation, trend correlation across functions, and anomaly detection for leadership visibility",
+        "autonomy": "supervised",
+        "tools": [
+          "Dashboard builder",
+          "Narrative generator",
+          "Trend correlator",
+          "Anomaly detector",
+          "Executive brief formatter"
+        ]
+      }
+    },
+    {
+      "id": "input-customer-360",
+      "type": "input",
+      "label": "Customer 360 Profiles",
+      "description": "Unified customer profile spanning demographics, firmographics, interaction history, purchase history, support cases, product usage, and engagement scores. The single most referenced input across all domains. Only 23% of enterprises have achieved true single customer view.",
+      "group": "Shared Infrastructure",
+      "val": 5,
+      "meta": {
+        "inputType": "data",
+        "source": "CDP/CRM unification \u2014 Salesforce, HubSpot, Segment, or equivalent",
+        "refreshRate": "Real-time"
+      }
+    },
+    {
+      "id": "input-product-catalog",
+      "type": "input",
+      "label": "Product Catalog & Pricing",
+      "description": "Products, SKUs, pricing tiers, feature matrix, bundling rules, and competitive positioning. Referenced by sales (proposals), service (troubleshooting), CS (expansion), and marketing (messaging). Stale product data causes 20-30% of proposal errors.",
+      "group": "Shared Infrastructure",
+      "val": 4,
+      "meta": {
+        "inputType": "reference",
+        "source": "Product management + Revenue operations",
+        "refreshRate": "Weekly"
+      }
+    },
+    {
+      "id": "input-compliance-framework",
+      "type": "input",
+      "label": "Compliance & Regulatory Framework",
+      "description": "Regulatory requirements (GDPR, CCPA, SOX, HIPAA, industry-specific), policy constraints, consent management rules, and audit requirements. Non-compliance penalties: $10K-$50M per violation depending on regulation. Used by every domain for guardrails.",
+      "group": "Shared Infrastructure",
+      "val": 4,
+      "meta": {
+        "inputType": "reference",
+        "source": "Legal + Compliance team \u2014 regulatory documentation",
+        "refreshRate": "Quarterly"
+      }
+    },
+    {
+      "id": "input-brand-voice",
+      "type": "input",
+      "label": "Brand Voice & Guidelines",
+      "description": "Brand guidelines, messaging pillars, tone rules, visual identity, and approved terminology. Consistent brand presentation across all touchpoints increases revenue 10-20%. Referenced by marketing (content), sales (proposals), and service (communications).",
+      "group": "Shared Infrastructure",
+      "val": 4,
+      "meta": {
+        "inputType": "reference",
+        "source": "Brand team \u2014 brand governance documentation",
+        "refreshRate": "Quarterly"
+      }
+    },
+    {
+      "id": "input-sla-definitions",
+      "type": "input",
+      "label": "SLA Definitions",
+      "description": "Service levels by customer tier, response time commitments, resolution targets, and escalation triggers. SLA compliance target: 90%+. First response targets: <4 hours email, <2 minutes chat, 80% of calls in 20 seconds. Referenced by service and CS.",
+      "group": "Shared Infrastructure",
+      "val": 4,
+      "meta": {
+        "inputType": "reference",
+        "source": "Service operations \u2014 SLA governance",
+        "refreshRate": "Quarterly"
+      }
+    },
+    {
+      "id": "input-pricing-rules",
+      "type": "input",
+      "label": "Pricing & Discount Rules",
+      "description": "Discount authority matrix, bundling logic, competitive pricing guidelines, and margin floors. Average discount: 15-25% off list. Uncontrolled discounting erodes 5-10% of revenue. Referenced by sales (negotiation), CS (renewals), and RevOps (forecasting).",
+      "group": "Shared Infrastructure",
+      "val": 4,
+      "meta": {
+        "inputType": "reference",
+        "source": "Revenue operations + Finance \u2014 pricing governance",
+        "refreshRate": "Monthly"
+      }
+    },
+    {
+      "id": "input-territory-model",
+      "type": "input",
+      "label": "Territory & Routing Model",
+      "description": "Account assignments, territory definitions, routing rules, and capacity models. Misrouted leads lose 70% of their conversion potential. Territory optimization increases rep productivity 10-20%. Referenced by sales (assignment) and marketing (targeting).",
+      "group": "Shared Infrastructure",
+      "val": 4,
+      "meta": {
+        "inputType": "reference",
+        "source": "Sales operations \u2014 territory planning",
+        "refreshRate": "Quarterly"
+      }
+    },
+    {
+      "id": "input-ideal-customer-profile",
+      "type": "input",
+      "label": "Ideal Customer Profile (ICP)",
+      "description": "ICP definition, scoring criteria, segment definitions, and propensity models. 98% of MQLs never close \u2014 ICP alignment is the strongest predictor of conversion. Companies with documented ICP have 68% higher win rates. Referenced by marketing and sales.",
+      "group": "Shared Infrastructure",
+      "val": 5,
+      "meta": {
+        "inputType": "reference",
+        "source": "Revenue operations \u2014 ICP analysis and scoring",
+        "refreshRate": "Quarterly"
+      }
+    },
+    {
+      "id": "input-competitive-intelligence",
+      "type": "input",
+      "label": "Competitive Intelligence",
+      "description": "Competitor positioning, battlecards, win/loss analysis, pricing intelligence, and market share data. Deals with competitive intelligence have 15-25% higher win rates. 65% of sales reps report competitive encounters in every deal. Referenced by sales, marketing, and CS.",
+      "group": "Shared Infrastructure",
+      "val": 4,
+      "meta": {
+        "inputType": "data",
+        "source": "Product marketing + Sales enablement \u2014 competitive research",
+        "refreshRate": "Monthly"
+      }
+    },
+    {
+      "id": "input-product-roadmap",
+      "type": "input",
+      "label": "Product Roadmap",
+      "description": "Upcoming releases, feature deprecations, beta programs, and strategic direction. Referenced by sales (future capabilities), CS (adoption planning), and service (known issues). Misaligned roadmap expectations cause 15% of enterprise deal slippage.",
+      "group": "Shared Infrastructure",
+      "val": 4,
+      "meta": {
+        "inputType": "reference",
+        "source": "Product management \u2014 roadmap governance",
+        "refreshRate": "Monthly"
+      }
+    },
+    {
+      "id": "input-org-authority-matrix",
+      "type": "input",
+      "label": "Organizational Authority Matrix",
+      "description": "Approval thresholds, escalation paths, delegation rules, and decision authority by role and amount. Unclear authority causes 30-40% of deal delays. Automated authority routing reduces approval cycles by 60%. Referenced by sales, service, and all gate nodes.",
+      "group": "Shared Infrastructure",
+      "val": 4,
+      "meta": {
+        "inputType": "reference",
+        "source": "Operations + Finance \u2014 governance framework",
+        "refreshRate": "Semi-annual"
+      }
+    },
+    {
+      "id": "input-kpi-framework",
+      "type": "input",
+      "label": "KPI & Metrics Framework",
+      "description": "Cross-functional metrics, targets, measurement methodology, and reporting cadence. North star metrics: ARR growth, NRR, CAC payback, LTV:CAC ratio (3:1 minimum, 5:1+ ideal). Referenced by every domain for performance tracking and optimization.",
+      "group": "Shared Infrastructure",
+      "val": 5,
+      "meta": {
+        "inputType": "reference",
+        "source": "Revenue operations \u2014 metrics governance",
+        "refreshRate": "Monthly"
+      }
+    },
+    {
+      "id": "input-customer-journey-map",
+      "type": "input",
+      "label": "Customer Journey Map",
+      "description": "End-to-end journey stages, touchpoints, moments of truth, and experience standards. The journey spans all four domains. Only 30% of organizations have documented cross-functional journey maps. Those that do see 20-30% higher customer satisfaction scores.",
+      "group": "Shared Infrastructure",
+      "val": 4,
+      "meta": {
+        "inputType": "reference",
+        "source": "Customer experience + Marketing \u2014 journey research",
+        "refreshRate": "Semi-annual"
+      }
+    },
+    {
+      "id": "input-knowledge-base",
+      "type": "input",
+      "label": "Knowledge Base & Playbooks",
+      "description": "Institutional knowledge, SOPs, resolution playbooks, sales methodologies, and tribal knowledge. Knowledge workers spend 20% of their time searching for information. AI-powered KB retrieval reduces search time 70%. Referenced by service, sales, and CS.",
+      "group": "Shared Infrastructure",
+      "val": 4,
+      "meta": {
+        "inputType": "reference",
+        "source": "Cross-functional \u2014 knowledge management",
+        "refreshRate": "Continuous"
+      }
+    },
+    {
+      "id": "input-integration-map",
+      "type": "input",
+      "label": "System Integration Map",
+      "description": "System connections, data flows, API capabilities, and synchronization rules. Average enterprise has 90+ SaaS tools in the front office. Data flows between 12-20 systems per customer interaction. Broken integrations cause 20-30% of data quality issues.",
+      "group": "Shared Infrastructure",
+      "val": 4,
+      "meta": {
+        "inputType": "reference",
+        "source": "IT/Operations \u2014 integration architecture documentation",
+        "refreshRate": "Monthly"
+      }
+    },
+    {
+      "id": "input-financial-controls",
+      "type": "input",
+      "label": "Financial Controls & Budget",
+      "description": "Budget allocations, spend authority, fiscal constraints, and revenue recognition rules. Cross-functional budget visibility prevents 15-25% of duplicate spend. Real-time budget tracking reduces end-of-quarter surprises by 40%. Referenced by all domains for financial governance.",
+      "group": "Shared Infrastructure",
+      "val": 4,
+      "meta": {
+        "inputType": "data",
+        "source": "Finance \u2014 budget management and controls",
+        "refreshRate": "Monthly"
+      }
+    }
+  ],
+  "links": [
+    {
+      "source": "mktg-campaign-planning",
+      "target": "mktg-brief-approval",
+      "type": "flows-to"
+    },
+    {
+      "source": "mktg-brief-approval",
+      "target": "mktg-content-creation",
+      "type": "flows-to"
+    },
+    {
+      "source": "mktg-content-creation",
+      "target": "mktg-creative-review",
+      "type": "flows-to"
+    },
+    {
+      "source": "mktg-creative-review",
+      "target": "mktg-brand-compliance",
+      "type": "flows-to"
+    },
+    {
+      "source": "mktg-brand-compliance",
+      "target": "mktg-seo-optimization",
+      "type": "flows-to"
+    },
+    {
+      "source": "mktg-seo-optimization",
+      "target": "mktg-distribution",
+      "type": "flows-to"
+    },
+    {
+      "source": "mktg-distribution",
+      "target": "mktg-performance-tracking",
+      "type": "flows-to"
+    },
+    {
+      "source": "mktg-performance-tracking",
+      "target": "mktg-attribution",
+      "type": "flows-to"
+    },
+    {
+      "source": "mktg-attribution",
+      "target": "mktg-budget-gate",
+      "type": "flows-to"
+    },
+    {
+      "source": "mktg-budget-gate",
+      "target": "mktg-optimization",
+      "type": "flows-to"
+    },
+    {
+      "source": "mktg-optimization",
+      "target": "mktg-campaign-planning",
+      "type": "flows-to"
+    },
+    {
+      "source": "mktg-brief-approval",
+      "target": "mktg-campaign-planning",
+      "type": "reviews"
+    },
+    {
+      "source": "mktg-creative-review",
+      "target": "mktg-content-creation",
+      "type": "reviews"
+    },
+    {
+      "source": "mktg-budget-gate",
+      "target": "mktg-attribution",
+      "type": "reviews"
+    },
+    {
+      "source": "mktg-brief-approval",
+      "target": "mktg-campaign-planning",
+      "type": "returns-to"
+    },
+    {
+      "source": "mktg-creative-review",
+      "target": "mktg-content-creation",
+      "type": "returns-to"
+    },
+    {
+      "source": "mktg-content-agent",
+      "target": "mktg-content-creation",
+      "type": "performs"
+    },
+    {
+      "source": "mktg-content-agent",
+      "target": "mktg-brand-compliance",
+      "type": "performs"
+    },
+    {
+      "source": "mktg-content-agent",
+      "target": "mktg-seo-optimization",
+      "type": "performs"
+    },
+    {
+      "source": "mktg-content-agent",
+      "target": "mktg-distribution",
+      "type": "performs"
+    },
+    {
+      "source": "mktg-analytics-agent",
+      "target": "mktg-performance-tracking",
+      "type": "performs"
+    },
+    {
+      "source": "mktg-analytics-agent",
+      "target": "mktg-attribution",
+      "type": "performs"
+    },
+    {
+      "source": "mktg-analytics-agent",
+      "target": "mktg-optimization",
+      "type": "performs"
+    },
+    {
+      "source": "sales-lead-intake",
+      "target": "sales-qualification",
+      "type": "flows-to"
+    },
+    {
+      "source": "sales-qualification",
+      "target": "sales-qualification-gate",
+      "type": "flows-to"
+    },
+    {
+      "source": "sales-qualification-gate",
+      "target": "sales-discovery",
+      "type": "flows-to"
+    },
+    {
+      "source": "sales-discovery",
+      "target": "sales-proposal",
+      "type": "flows-to"
+    },
+    {
+      "source": "sales-proposal",
+      "target": "sales-deal-review",
+      "type": "flows-to"
+    },
+    {
+      "source": "sales-deal-review",
+      "target": "sales-negotiation",
+      "type": "flows-to"
+    },
+    {
+      "source": "sales-negotiation",
+      "target": "sales-pricing-gate",
+      "type": "flows-to"
+    },
+    {
+      "source": "sales-pricing-gate",
+      "target": "sales-close",
+      "type": "flows-to"
+    },
+    {
+      "source": "sales-close",
+      "target": "sales-forecast-update",
+      "type": "flows-to"
+    },
+    {
+      "source": "sales-forecast-update",
+      "target": "sales-account-planning",
+      "type": "flows-to"
+    },
+    {
+      "source": "sales-qualification-gate",
+      "target": "sales-qualification",
+      "type": "reviews"
+    },
+    {
+      "source": "sales-deal-review",
+      "target": "sales-proposal",
+      "type": "reviews"
+    },
+    {
+      "source": "sales-pricing-gate",
+      "target": "sales-negotiation",
+      "type": "reviews"
+    },
+    {
+      "source": "sales-qualification-gate",
+      "target": "sales-lead-intake",
+      "type": "returns-to"
+    },
+    {
+      "source": "sales-deal-review",
+      "target": "sales-discovery",
+      "type": "returns-to"
+    },
+    {
+      "source": "sales-pricing-gate",
+      "target": "sales-proposal",
+      "type": "returns-to"
+    },
+    {
+      "source": "sales-sdr-agent",
+      "target": "sales-lead-intake",
+      "type": "performs"
+    },
+    {
+      "source": "sales-sdr-agent",
+      "target": "sales-qualification",
+      "type": "performs"
+    },
+    {
+      "source": "sales-proposal-agent",
+      "target": "sales-proposal",
+      "type": "performs"
+    },
+    {
+      "source": "sales-proposal-agent",
+      "target": "sales-forecast-update",
+      "type": "performs"
+    },
+    {
+      "source": "svc-case-intake",
+      "target": "svc-triage",
+      "type": "flows-to"
+    },
+    {
+      "source": "svc-triage",
+      "target": "svc-severity-gate",
+      "type": "flows-to"
+    },
+    {
+      "source": "svc-severity-gate",
+      "target": "svc-investigation",
+      "type": "flows-to"
+    },
+    {
+      "source": "svc-investigation",
+      "target": "svc-resolution",
+      "type": "flows-to"
+    },
+    {
+      "source": "svc-resolution",
+      "target": "svc-resolution-review",
+      "type": "flows-to"
+    },
+    {
+      "source": "svc-resolution-review",
+      "target": "svc-follow-up",
+      "type": "flows-to"
+    },
+    {
+      "source": "svc-follow-up",
+      "target": "svc-knowledge-capture",
+      "type": "flows-to"
+    },
+    {
+      "source": "svc-severity-gate",
+      "target": "svc-escalation-management",
+      "type": "escalates-to"
+    },
+    {
+      "source": "svc-sla-gate",
+      "target": "svc-escalation-management",
+      "type": "escalates-to"
+    },
+    {
+      "source": "svc-severity-gate",
+      "target": "svc-triage",
+      "type": "reviews"
+    },
+    {
+      "source": "svc-resolution-review",
+      "target": "svc-resolution",
+      "type": "reviews"
+    },
+    {
+      "source": "svc-sla-gate",
+      "target": "svc-investigation",
+      "type": "reviews"
+    },
+    {
+      "source": "svc-resolution-review",
+      "target": "svc-investigation",
+      "type": "returns-to"
+    },
+    {
+      "source": "svc-triage-agent",
+      "target": "svc-case-intake",
+      "type": "performs"
+    },
+    {
+      "source": "svc-triage-agent",
+      "target": "svc-triage",
+      "type": "performs"
+    },
+    {
+      "source": "svc-resolution-agent",
+      "target": "svc-resolution",
+      "type": "performs"
+    },
+    {
+      "source": "svc-resolution-agent",
+      "target": "svc-knowledge-capture",
+      "type": "performs"
+    },
+    {
+      "source": "svc-resolution-agent",
+      "target": "svc-follow-up",
+      "type": "performs"
+    },
+    {
+      "source": "cs-onboarding",
+      "target": "cs-health-monitoring",
+      "type": "flows-to"
+    },
+    {
+      "source": "cs-health-monitoring",
+      "target": "cs-health-alert",
+      "type": "flows-to"
+    },
+    {
+      "source": "cs-health-alert",
+      "target": "cs-qbr-preparation",
+      "type": "flows-to"
+    },
+    {
+      "source": "cs-qbr-preparation",
+      "target": "cs-expansion-identification",
+      "type": "flows-to"
+    },
+    {
+      "source": "cs-expansion-identification",
+      "target": "cs-expansion-gate",
+      "type": "flows-to"
+    },
+    {
+      "source": "cs-expansion-gate",
+      "target": "cs-renewal-management",
+      "type": "flows-to"
+    },
+    {
+      "source": "cs-renewal-management",
+      "target": "cs-advocacy",
+      "type": "flows-to"
+    },
+    {
+      "source": "cs-advocacy",
+      "target": "cs-health-monitoring",
+      "type": "flows-to"
+    },
+    {
+      "source": "cs-health-alert",
+      "target": "cs-health-monitoring",
+      "type": "reviews"
+    },
+    {
+      "source": "cs-expansion-gate",
+      "target": "cs-expansion-identification",
+      "type": "reviews"
+    },
+    {
+      "source": "cs-health-alert",
+      "target": "cs-onboarding",
+      "type": "returns-to"
+    },
+    {
+      "source": "cs-health-agent",
+      "target": "cs-health-monitoring",
+      "type": "performs"
+    },
+    {
+      "source": "cs-health-agent",
+      "target": "cs-qbr-preparation",
+      "type": "performs"
+    },
+    {
+      "source": "cs-expansion-agent",
+      "target": "cs-expansion-identification",
+      "type": "performs"
+    },
+    {
+      "source": "cs-expansion-agent",
+      "target": "cs-renewal-management",
+      "type": "performs"
+    },
+    {
+      "source": "mktg-performance-tracking",
+      "target": "handoff-mql-to-sql",
+      "type": "flows-to"
+    },
+    {
+      "source": "handoff-mql-to-sql",
+      "target": "sales-lead-intake",
+      "type": "hands-off-to"
+    },
+    {
+      "source": "sales-close",
+      "target": "handoff-deal-to-onboard",
+      "type": "flows-to"
+    },
+    {
+      "source": "handoff-deal-to-onboard",
+      "target": "cs-onboarding",
+      "type": "hands-off-to"
+    },
+    {
+      "source": "svc-escalation-management",
+      "target": "handoff-service-to-product",
+      "type": "flows-to"
+    },
+    {
+      "source": "cs-expansion-gate",
+      "target": "handoff-cs-to-sales",
+      "type": "flows-to"
+    },
+    {
+      "source": "handoff-cs-to-sales",
+      "target": "sales-account-planning",
+      "type": "hands-off-to"
+    },
+    {
+      "source": "svc-follow-up",
+      "target": "handoff-service-to-cs",
+      "type": "flows-to"
+    },
+    {
+      "source": "handoff-service-to-cs",
+      "target": "cs-health-monitoring",
+      "type": "hands-off-to"
+    },
+    {
+      "source": "cs-health-alert",
+      "target": "handoff-churn-signal",
+      "type": "flows-to"
+    },
+    {
+      "source": "handoff-churn-signal",
+      "target": "mktg-campaign-planning",
+      "type": "hands-off-to"
+    },
+    {
+      "source": "svc-knowledge-capture",
+      "target": "handoff-feedback-loop",
+      "type": "flows-to"
+    },
+    {
+      "source": "handoff-feedback-loop",
+      "target": "mktg-content-creation",
+      "type": "hands-off-to"
+    },
+    {
+      "source": "sales-forecast-update",
+      "target": "handoff-revenue-signal",
+      "type": "flows-to"
+    },
+    {
+      "source": "cs-renewal-management",
+      "target": "handoff-revenue-signal",
+      "type": "flows-to"
+    },
+    {
+      "source": "mktg-attribution",
+      "target": "handoff-revenue-signal",
+      "type": "flows-to"
+    },
+    {
+      "source": "agent-customer-360",
+      "target": "input-customer-360",
+      "type": "uses"
+    },
+    {
+      "source": "agent-customer-360",
+      "target": "input-integration-map",
+      "type": "uses"
+    },
+    {
+      "source": "agent-compliance-checker",
+      "target": "input-compliance-framework",
+      "type": "uses"
+    },
+    {
+      "source": "agent-compliance-checker",
+      "target": "mktg-brand-compliance",
+      "type": "performs"
+    },
+    {
+      "source": "agent-compliance-checker",
+      "target": "sales-negotiation",
+      "type": "performs"
+    },
+    {
+      "source": "agent-forecasting",
+      "target": "input-kpi-framework",
+      "type": "uses"
+    },
+    {
+      "source": "agent-forecasting",
+      "target": "input-financial-controls",
+      "type": "uses"
+    },
+    {
+      "source": "agent-forecasting",
+      "target": "sales-forecast-update",
+      "type": "performs"
+    },
+    {
+      "source": "agent-forecasting",
+      "target": "cs-renewal-management",
+      "type": "performs"
+    },
+    {
+      "source": "agent-workflow-orchestrator",
+      "target": "input-org-authority-matrix",
+      "type": "uses"
+    },
+    {
+      "source": "agent-workflow-orchestrator",
+      "target": "input-customer-journey-map",
+      "type": "uses"
+    },
+    {
+      "source": "agent-workflow-orchestrator",
+      "target": "handoff-mql-to-sql",
+      "type": "performs"
+    },
+    {
+      "source": "agent-workflow-orchestrator",
+      "target": "handoff-deal-to-onboard",
+      "type": "performs"
+    },
+    {
+      "source": "agent-workflow-orchestrator",
+      "target": "handoff-cs-to-sales",
+      "type": "performs"
+    },
+    {
+      "source": "agent-workflow-orchestrator",
+      "target": "handoff-service-to-cs",
+      "type": "performs"
+    },
+    {
+      "source": "agent-workflow-orchestrator",
+      "target": "handoff-churn-signal",
+      "type": "performs"
+    },
+    {
+      "source": "agent-workflow-orchestrator",
+      "target": "handoff-feedback-loop",
+      "type": "performs"
+    },
+    {
+      "source": "agent-workflow-orchestrator",
+      "target": "handoff-revenue-signal",
+      "type": "performs"
+    },
+    {
+      "source": "agent-knowledge-graph-updater",
+      "target": "input-knowledge-base",
+      "type": "uses"
+    },
+    {
+      "source": "agent-knowledge-graph-updater",
+      "target": "input-integration-map",
+      "type": "uses"
+    },
+    {
+      "source": "agent-reporting",
+      "target": "input-kpi-framework",
+      "type": "uses"
+    },
+    {
+      "source": "agent-reporting",
+      "target": "input-financial-controls",
+      "type": "uses"
+    },
+    {
+      "source": "mktg-campaign-planning",
+      "target": "input-customer-journey-map",
+      "type": "uses"
+    },
+    {
+      "source": "mktg-campaign-planning",
+      "target": "input-competitive-intelligence",
+      "type": "uses"
+    },
+    {
+      "source": "mktg-campaign-planning",
+      "target": "input-kpi-framework",
+      "type": "uses"
+    },
+    {
+      "source": "mktg-campaign-planning",
+      "target": "input-financial-controls",
+      "type": "uses"
+    },
+    {
+      "source": "mktg-content-creation",
+      "target": "input-brand-voice",
+      "type": "uses"
+    },
+    {
+      "source": "mktg-content-creation",
+      "target": "input-customer-360",
+      "type": "uses"
+    },
+    {
+      "source": "mktg-brand-compliance",
+      "target": "input-brand-voice",
+      "type": "uses"
+    },
+    {
+      "source": "mktg-brand-compliance",
+      "target": "input-compliance-framework",
+      "type": "uses"
+    },
+    {
+      "source": "mktg-seo-optimization",
+      "target": "input-competitive-intelligence",
+      "type": "uses"
+    },
+    {
+      "source": "mktg-distribution",
+      "target": "input-customer-journey-map",
+      "type": "uses"
+    },
+    {
+      "source": "mktg-distribution",
+      "target": "input-customer-360",
+      "type": "uses"
+    },
+    {
+      "source": "mktg-performance-tracking",
+      "target": "input-kpi-framework",
+      "type": "uses"
+    },
+    {
+      "source": "mktg-attribution",
+      "target": "input-kpi-framework",
+      "type": "uses"
+    },
+    {
+      "source": "mktg-attribution",
+      "target": "input-financial-controls",
+      "type": "uses"
+    },
+    {
+      "source": "mktg-optimization",
+      "target": "input-kpi-framework",
+      "type": "uses"
+    },
+    {
+      "source": "mktg-optimization",
+      "target": "input-competitive-intelligence",
+      "type": "uses"
+    },
+    {
+      "source": "sales-lead-intake",
+      "target": "input-ideal-customer-profile",
+      "type": "uses"
+    },
+    {
+      "source": "sales-lead-intake",
+      "target": "input-territory-model",
+      "type": "uses"
+    },
+    {
+      "source": "sales-lead-intake",
+      "target": "input-customer-360",
+      "type": "uses"
+    },
+    {
+      "source": "sales-qualification",
+      "target": "input-ideal-customer-profile",
+      "type": "uses"
+    },
+    {
+      "source": "sales-qualification",
+      "target": "input-customer-360",
+      "type": "uses"
+    },
+    {
+      "source": "sales-discovery",
+      "target": "input-customer-360",
+      "type": "uses"
+    },
+    {
+      "source": "sales-discovery",
+      "target": "input-product-catalog",
+      "type": "uses"
+    },
+    {
+      "source": "sales-discovery",
+      "target": "input-competitive-intelligence",
+      "type": "uses"
+    },
+    {
+      "source": "sales-proposal",
+      "target": "input-pricing-rules",
+      "type": "uses"
+    },
+    {
+      "source": "sales-proposal",
+      "target": "input-product-catalog",
+      "type": "uses"
+    },
+    {
+      "source": "sales-proposal",
+      "target": "input-competitive-intelligence",
+      "type": "uses"
+    },
+    {
+      "source": "sales-negotiation",
+      "target": "input-pricing-rules",
+      "type": "uses"
+    },
+    {
+      "source": "sales-negotiation",
+      "target": "input-org-authority-matrix",
+      "type": "uses"
+    },
+    {
+      "source": "sales-negotiation",
+      "target": "input-compliance-framework",
+      "type": "uses"
+    },
+    {
+      "source": "sales-close",
+      "target": "input-compliance-framework",
+      "type": "uses"
+    },
+    {
+      "source": "sales-forecast-update",
+      "target": "input-kpi-framework",
+      "type": "uses"
+    },
+    {
+      "source": "sales-account-planning",
+      "target": "input-customer-360",
+      "type": "uses"
+    },
+    {
+      "source": "sales-account-planning",
+      "target": "input-product-roadmap",
+      "type": "uses"
+    },
+    {
+      "source": "sales-account-planning",
+      "target": "input-competitive-intelligence",
+      "type": "uses"
+    },
+    {
+      "source": "svc-case-intake",
+      "target": "input-customer-360",
+      "type": "uses"
+    },
+    {
+      "source": "svc-case-intake",
+      "target": "input-sla-definitions",
+      "type": "uses"
+    },
+    {
+      "source": "svc-triage",
+      "target": "input-sla-definitions",
+      "type": "uses"
+    },
+    {
+      "source": "svc-triage",
+      "target": "input-knowledge-base",
+      "type": "uses"
+    },
+    {
+      "source": "svc-investigation",
+      "target": "input-knowledge-base",
+      "type": "uses"
+    },
+    {
+      "source": "svc-investigation",
+      "target": "input-product-catalog",
+      "type": "uses"
+    },
+    {
+      "source": "svc-investigation",
+      "target": "input-integration-map",
+      "type": "uses"
+    },
+    {
+      "source": "svc-resolution",
+      "target": "input-knowledge-base",
+      "type": "uses"
+    },
+    {
+      "source": "svc-knowledge-capture",
+      "target": "input-knowledge-base",
+      "type": "uses"
+    },
+    {
+      "source": "svc-follow-up",
+      "target": "input-customer-360",
+      "type": "uses"
+    },
+    {
+      "source": "svc-escalation-management",
+      "target": "input-sla-definitions",
+      "type": "uses"
+    },
+    {
+      "source": "svc-escalation-management",
+      "target": "input-org-authority-matrix",
+      "type": "uses"
+    },
+    {
+      "source": "cs-onboarding",
+      "target": "input-customer-360",
+      "type": "uses"
+    },
+    {
+      "source": "cs-onboarding",
+      "target": "input-product-catalog",
+      "type": "uses"
+    },
+    {
+      "source": "cs-onboarding",
+      "target": "input-customer-journey-map",
+      "type": "uses"
+    },
+    {
+      "source": "cs-health-monitoring",
+      "target": "input-customer-360",
+      "type": "uses"
+    },
+    {
+      "source": "cs-health-monitoring",
+      "target": "input-kpi-framework",
+      "type": "uses"
+    },
+    {
+      "source": "cs-qbr-preparation",
+      "target": "input-kpi-framework",
+      "type": "uses"
+    },
+    {
+      "source": "cs-qbr-preparation",
+      "target": "input-product-roadmap",
+      "type": "uses"
+    },
+    {
+      "source": "cs-expansion-identification",
+      "target": "input-product-catalog",
+      "type": "uses"
+    },
+    {
+      "source": "cs-expansion-identification",
+      "target": "input-pricing-rules",
+      "type": "uses"
+    },
+    {
+      "source": "cs-expansion-identification",
+      "target": "input-customer-360",
+      "type": "uses"
+    },
+    {
+      "source": "cs-renewal-management",
+      "target": "input-pricing-rules",
+      "type": "uses"
+    },
+    {
+      "source": "cs-renewal-management",
+      "target": "input-customer-360",
+      "type": "uses"
+    },
+    {
+      "source": "cs-renewal-management",
+      "target": "input-financial-controls",
+      "type": "uses"
+    },
+    {
+      "source": "cs-advocacy",
+      "target": "input-customer-360",
+      "type": "uses"
+    }
+  ]
+}

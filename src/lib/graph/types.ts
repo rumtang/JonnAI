@@ -17,7 +17,8 @@ export type LinkType =
   | 'uses'          // Step or Agent uses an input (thin dotted line)
   | 'performs'       // Agent performs a step (purple solid arrow)
   | 'returns-to'    // Gate sends work back for revision (orange arrow, reverse)
-  | 'linear-flow';  // Presentation-mode linear pipeline connector
+  | 'linear-flow'   // Presentation-mode linear pipeline connector
+  | 'hands-off-to'; // Cross-domain handoff (thick orange, animated — front office lens)
 
 // ─── Node Metadata ────────────────────────────────────────────
 
