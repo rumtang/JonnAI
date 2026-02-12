@@ -6,6 +6,7 @@ import { ChevronLeft, ChevronRight, Compass, Network } from 'lucide-react';
 import { useBuildStore } from '@/lib/store/build-store';
 import { usePresentationStore } from '@/lib/store/presentation-store';
 import { useGraphStore } from '@/lib/store/graph-store';
+import { switchMode } from '@/lib/utils/mode-transitions';
 import { useIsMobile } from '@/lib/hooks/use-is-mobile';
 import { BUILD_STEPS } from '@/data/build-steps';
 import { BUILD_STEPS_FRONTOFFICE } from '@/data/build-steps-frontoffice';
@@ -36,11 +37,8 @@ export default function BuildController() {
   const toggleCard = useBuildStore(s => s.toggleCard);
   const setExpandedDomain = useBuildStore(s => s.setExpandedDomain);
 
-  const setMode = usePresentationStore(s => s.setMode);
-  const loadFullGraph = useGraphStore(s => s.loadFullGraph);
   const setHighlightedNodeIds = useGraphStore(s => s.setHighlightedNodeIds);
   const clearHighlights = useGraphStore(s => s.clearHighlights);
-  const resetFilters = useGraphStore(s => s.resetFilters);
 
   const lens = usePresentationStore(s => s.lens);
   const buildSteps = lens === 'frontoffice' ? BUILD_STEPS_FRONTOFFICE : BUILD_STEPS;
@@ -121,11 +119,8 @@ export default function BuildController() {
 
   // Exit to explore mode
   const exitToExplore = useCallback(() => {
-    clearHighlights();
-    resetFilters();
-    setMode('explore');
-    loadFullGraph();
-  }, [clearHighlights, resetFilters, setMode, loadFullGraph]);
+    switchMode('explore');
+  }, []);
 
   if (!step) return null;
 

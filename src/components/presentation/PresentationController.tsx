@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { usePresentationStore } from '@/lib/store/presentation-store';
 import { useGraphStore } from '@/lib/store/graph-store';
 import { useSessionStore } from '@/lib/store/session-store';
+import { switchMode } from '@/lib/utils/mode-transitions';
 import { getGraphRef } from '@/lib/graph/graph-ref';
 import { ChevronLeft, ChevronRight, Play, Pause, Compass, Mouse, Users, Layers } from 'lucide-react';
 import { GraphNode, GraphLink, StepMeta } from '@/lib/graph/types';
@@ -138,7 +139,6 @@ export default function PresentationController() {
       lens: s.lens,
     }))
   );
-  const setMode = usePresentationStore(s => s.setMode);
   const nextStep = usePresentationStore(s => s.nextStep);
   const prevStep = usePresentationStore(s => s.prevStep);
   const goToStep = usePresentationStore(s => s.goToStep);
@@ -159,7 +159,6 @@ export default function PresentationController() {
   const highlightLinksByTypes = useGraphStore(s => s.highlightLinksByTypes);
   const clearHighlights = useGraphStore(s => s.clearHighlights);
   const resetFilters = useGraphStore(s => s.resetFilters);
-  const loadFullGraph = useGraphStore(s => s.loadFullGraph);
   const setHighlightedNodeIds = useGraphStore(s => s.setHighlightedNodeIds);
 
   const currentStep = steps[currentStepIndex];
@@ -256,12 +255,9 @@ export default function PresentationController() {
   }, [currentStep?.id, flyingAgents]);
 
   const exitToExplore = useCallback(() => {
-    clearHighlights();
-    resetFilters();
-    setMode('explore');
-    loadFullGraph();
+    switchMode('explore');
     useSessionStore.getState().setGuidedTourCompleted();
-  }, [clearHighlights, resetFilters, setMode, loadFullGraph]);
+  }, []);
 
   // Fly camera to the position defined in the current presentation step
   const moveCamera = useCallback((step: typeof currentStep) => {

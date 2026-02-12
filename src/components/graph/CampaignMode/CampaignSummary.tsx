@@ -7,6 +7,7 @@ import { useCampaignStore } from '@/lib/store/campaign-store';
 import { usePresentationStore } from '@/lib/store/presentation-store';
 import { useGraphStore } from '@/lib/store/graph-store';
 import { useSessionStore } from '@/lib/store/session-store';
+import { switchMode } from '@/lib/utils/mode-transitions';
 import { StepMeta } from '@/lib/graph/types';
 
 export default function CampaignSummary() {
@@ -32,11 +33,9 @@ export default function CampaignSummary() {
   const resetCampaign = useCampaignStore(s => s.resetCampaign);
   const startCampaign = useCampaignStore(s => s.startCampaign);
 
-  const setMode = usePresentationStore(s => s.setMode);
   const lens = usePresentationStore(s => s.lens);
   const isFrontOffice = lens === 'frontoffice';
 
-  const loadFullGraph = useGraphStore(s => s.loadFullGraph);
   const selectNode = useGraphStore(s => s.selectNode);
   const clearHighlights = useGraphStore(s => s.clearHighlights);
   const graphData = useGraphStore(s => s.graphData);
@@ -97,11 +96,7 @@ export default function CampaignSummary() {
   };
 
   const handleExplore = () => {
-    selectNode(null);
-    clearHighlights();
-    resetCampaign();
-    setMode('explore');
-    loadFullGraph();
+    switchMode('explore');
   };
 
   return (

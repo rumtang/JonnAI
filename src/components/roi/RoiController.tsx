@@ -8,6 +8,7 @@ import { useRoiStore } from '@/lib/store/roi-store';
 import { buildShareUrl } from '@/lib/utils/roi-share';
 import { usePresentationStore } from '@/lib/store/presentation-store';
 import { useGraphStore } from '@/lib/store/graph-store';
+import { switchMode } from '@/lib/utils/mode-transitions';
 import { useIsMobile } from '@/lib/hooks/use-is-mobile';
 import { ROI_STEPS } from '@/data/roi-steps';
 import { ROI_STEPS_FRONTOFFICE } from '@/data/roi-steps-frontoffice';
@@ -50,10 +51,6 @@ export default function RoiController() {
   const prevStep = useRoiStore(s => s.prevStep);
   const goToStep = useRoiStore(s => s.goToStep);
 
-  const setMode = usePresentationStore(s => s.setMode);
-  const loadFullGraph = useGraphStore(s => s.loadFullGraph);
-  const clearHighlights = useGraphStore(s => s.clearHighlights);
-  const resetFilters = useGraphStore(s => s.resetFilters);
 
   const exportConfig = useRoiStore(s => s.exportConfig);
   const viewMode = useRoiStore(s => s.viewMode);
@@ -88,11 +85,8 @@ export default function RoiController() {
 
   // Exit to explore mode
   const exitToExplore = useCallback(() => {
-    clearHighlights();
-    resetFilters();
-    setMode('explore');
-    loadFullGraph();
-  }, [clearHighlights, resetFilters, setMode, loadFullGraph]);
+    switchMode('explore');
+  }, []);
 
   if (!step) return null;
 

@@ -5,8 +5,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight, Compass, RefreshCw, Users } from 'lucide-react';
 import { useRoleInsightStore } from '@/lib/store/role-insight-store';
 import { useGraphStore } from '@/lib/store/graph-store';
-import { usePresentationStore } from '@/lib/store/presentation-store';
 import { useRoleInsight } from '@/lib/roles/use-role-insight';
+import { switchMode } from '@/lib/utils/mode-transitions';
 import { useIsMobile } from '@/lib/hooks/use-is-mobile';
 import RoleSlide from './RoleSlide';
 
@@ -30,11 +30,6 @@ export default function RoleController({ onChangeRole }: RoleControllerProps) {
 
   const { goToNextSlide, goToPrevSlide, goToSlide } = useRoleInsight();
 
-  const setMode = usePresentationStore(s => s.setMode);
-  const loadFullGraph = useGraphStore(s => s.loadFullGraph);
-  const clearHighlights = useGraphStore(s => s.clearHighlights);
-  const resetFilters = useGraphStore(s => s.resetFilters);
-
   const isMobile = useIsMobile();
 
   const isFirst = currentSlideIndex === 0;
@@ -57,12 +52,8 @@ export default function RoleController({ onChangeRole }: RoleControllerProps) {
 
   // Exit to explore mode
   const exitToExplore = useCallback(() => {
-    clearHighlights();
-    resetFilters();
-    useRoleInsightStore.getState().clearRole();
-    setMode('explore');
-    loadFullGraph();
-  }, [clearHighlights, resetFilters, setMode, loadFullGraph]);
+    switchMode('explore');
+  }, []);
 
   // Current slide label for header
   const currentSlideName = SLIDE_META[currentSlideIndex]?.label ?? '';

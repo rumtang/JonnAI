@@ -109,7 +109,15 @@ These were toggled back and forth multiple times. The current state is final:
 ### Mode System
 7 modes: `guided` | `explore` | `campaign` | `build` | `roi` | `role` | (landing page)
 - The mode lives in `presentation-store.ts` as `mode`
-- When switching modes: reset presentation step index, campaign state, and graph selection
+- **`ModeToggle.handleModeChange()` is the canonical mode transition.** It does ~12 steps
+  of cleanup (selectNode, clearHighlights, resetFilters, clearNavigation, clearRole,
+  resetCampaign, resetBuild, resetRoi, load graph, set progressiveReveal, camera fly).
+- **Every other code path that switches modes must match it exactly.** If you add an
+  "Explore" button, a CTA, or any UI that calls `setMode()`, it must do the same cleanup.
+  The bug pattern: someone writes `setMode('explore'); loadFullGraph()` and skips 10 other
+  steps — the graph loads but the camera stays at the old position, old state leaks through.
+- If you're adding a new mode transition entry point, call the same logic or extract a
+  shared function. Don't write a simpler shortcut.
 - Physics (`d3AlphaDecay`) is 0.08 in explore/guided, 0.5 in other modes (freezes layout fast)
   - Guided mode needs 0.08 because the full graph (83 nodes) loads fresh at step 6 and needs ~100 ticks to spread
 - Node drag is only enabled in explore mode when campaign is not active
