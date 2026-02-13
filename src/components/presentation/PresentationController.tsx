@@ -51,7 +51,7 @@ const PROCESS_CHART_LINKS: Array<[string, string]> = [
 ];
 
 // Lifecycle stages shown on slides 1-3 as the "map everyone draws"
-const PIPELINE_STAGES = [
+const PIPELINE_STAGES_MARKETING = [
   { label: 'Plan', icon: '\uD83C\uDFAF' },
   { label: 'Create', icon: '\u270F\uFE0F' },
   { label: 'Review', icon: '\u2714\uFE0F' },
@@ -60,8 +60,19 @@ const PIPELINE_STAGES = [
   { label: 'Optimize', icon: '\uD83D\uDD04' },
 ];
 
+const PIPELINE_STAGES_FRONTOFFICE = [
+  { label: 'Attract', icon: '\uD83D\uDCE3' },
+  { label: 'Qualify', icon: '\uD83C\uDFAF' },
+  { label: 'Discover', icon: '\uD83D\uDD0D' },
+  { label: 'Propose', icon: '\uD83D\uDCCB' },
+  { label: 'Close', icon: '\uD83E\uDD1D' },
+  { label: 'Onboard', icon: '\uD83D\uDE80' },
+  { label: 'Grow', icon: '\uD83D\uDCC8' },
+  { label: 'Support', icon: '\uD83D\uDEE0\uFE0F' },
+];
+
 // Agents mapped to their primary pipeline stage for the 2D overlay on slide 3
-const PIPELINE_AGENTS = [
+const PIPELINE_AGENTS_MARKETING = [
   // Plan
   { id: 'research-agent', label: 'Research', stageIndex: 0 },
   { id: 'social-listening-agent', label: 'Social Listening', stageIndex: 0 },
@@ -84,6 +95,24 @@ const PIPELINE_AGENTS = [
   // Optimize
   { id: 'optimization-agent', label: 'Optimization', stageIndex: 5 },
   { id: 'repurposing-agent', label: 'Repurposing', stageIndex: 5 },
+];
+
+const PIPELINE_AGENTS_FRONTOFFICE = [
+  // Attract
+  { id: 'la-campaign', label: 'Campaign Planner', stageIndex: 0 },
+  // Qualify
+  { id: 'la-scoring', label: 'Lead Scoring', stageIndex: 1 },
+  // Discover
+  { id: 'la-sales-intel', label: 'Sales Intelligence', stageIndex: 2 },
+  // Propose
+  { id: 'la-proposal', label: 'Proposal Generator', stageIndex: 3 },
+  // Close (no agent)
+  // Onboard
+  { id: 'la-onboard', label: 'Onboarding Agent', stageIndex: 5 },
+  // Grow
+  { id: 'la-health', label: 'Health Monitor', stageIndex: 6 },
+  // Support
+  { id: 'la-triage', label: 'Triage Agent', stageIndex: 7 },
 ];
 
 interface FlyingAgent {
@@ -161,11 +190,16 @@ export default function PresentationController() {
   const resetFilters = useGraphStore(s => s.resetFilters);
   const setHighlightedNodeIds = useGraphStore(s => s.setHighlightedNodeIds);
 
+  // Select pipeline data based on lens
+  const pipelineStages = lens === 'frontoffice' ? PIPELINE_STAGES_FRONTOFFICE : PIPELINE_STAGES_MARKETING;
+  const pipelineAgents = lens === 'frontoffice' ? PIPELINE_AGENTS_FRONTOFFICE : PIPELINE_AGENTS_MARKETING;
+
   const currentStep = steps[currentStepIndex];
   const isIntroSlide = currentStep?.action === 'show-intro-slide';
   const isTitleSlide = currentStep?.action === 'show-title-slide';
-  const isPipelineSlide = currentStep?.id === 'act1-lifecycle';
-  const isTransitionSlide = currentStep?.id === 'act2-agents-and-context' || currentStep?.id === 'act1-pain-points';
+  const isPipelineSlide = currentStep?.id === 'act1-lifecycle' || currentStep?.id === 'fo-act2-departmental-pipelines';
+  const isTransitionSlide = currentStep?.id === 'act2-agents-and-context' || currentStep?.id === 'act1-pain-points' ||
+    currentStep?.id === 'fo-act3-agents-per-department' || currentStep?.id === 'fo-act4-handoff-problem';
   const showPipelineOverlay = isTitleSlide || isPipelineSlide || isTransitionSlide;
   // Scrim stays high on pipeline slides so the 2D overlay is the primary visual
   const scrimOpacity = isTitleSlide ? 0.95 : isIntroSlide ? 0.97 : 0.90;
@@ -199,8 +233,8 @@ export default function PresentationController() {
     prevStepIdRef.current = currentStep?.id ?? null;
 
     if (
-      prev === 'act1-pain-points' &&
-      currentStep?.id === 'act3-graph-reveal' &&
+      ((prev === 'act1-pain-points' && currentStep?.id === 'act3-graph-reveal') ||
+       (prev === 'fo-act4-handoff-problem' && currentStep?.id === 'fo-act5-graph-reveal')) &&
       !flyingAgents
     ) {
       // Calculate approximate screen position for each agent badge.
@@ -209,10 +243,10 @@ export default function PresentationController() {
       const vh = window.innerHeight;
 
       // Each stage column is ~80px wide (w-16 md:w-20) + gap spacer (~24px)
-      // Total width ≈ 6 * 80 + 5 * 24 = 600px, centered
+      const stageCount = pipelineStages.length;
       const colWidth = vw < 768 ? 56 : 64;
       const gapWidth = vw < 768 ? 30 : 52;
-      const totalWidth = 6 * colWidth + 5 * gapWidth;
+      const totalWidth = stageCount * colWidth + (stageCount - 1) * gapWidth;
       const startX = (vw - totalWidth) / 2;
 
       // The pipeline sits roughly at vertical center minus the y-offset
@@ -222,8 +256,8 @@ export default function PresentationController() {
       const pipelineCenterY = vh / 2 - 40;
       const badgeStartY = pipelineCenterY + 70; // below stage label
 
-      const agents: FlyingAgent[] = PIPELINE_AGENTS.map((agent) => {
-        const stageAgentsBefore = PIPELINE_AGENTS.filter(
+      const agents: FlyingAgent[] = pipelineAgents.map((agent) => {
+        const stageAgentsBefore = pipelineAgents.filter(
           (a) => a.stageIndex === agent.stageIndex
         );
         const indexInStack = stageAgentsBefore.indexOf(agent);
@@ -252,7 +286,7 @@ export default function PresentationController() {
 
       return () => clearTimeout(clearTimer);
     }
-  }, [currentStep?.id, flyingAgents]);
+  }, [currentStep?.id, flyingAgents, pipelineStages, pipelineAgents]);
 
   const exitToExplore = useCallback(() => {
     switchMode('explore');
@@ -329,8 +363,14 @@ export default function PresentationController() {
         // Going back to pipeline slides means next forward visit should re-explode
         hasExplodedRef.current = false;
         clearHighlights();
-        const chart = buildProcessChart();
-        if (chart) setGraphData(chart);
+        if (lens === 'frontoffice') {
+          // Frontoffice: keep linear pipeline data (already correctly positioned)
+          if (linearGraphData) setGraphData({ ...linearGraphData });
+        } else {
+          // Marketing: build manually-positioned process chart from full graph
+          const chart = buildProcessChart();
+          if (chart) setGraphData(chart);
+        }
         highlightLinksByTypes(['flows-to']);
         break;
       }
@@ -386,7 +426,7 @@ export default function PresentationController() {
         break;
       }
     }
-  }, [mode, linearGraphData, fullGraphData, setGraphData, clearHighlights, resetFilters, highlightByTypes, highlightLinksByTypes, setHighlightedNodeIds, buildProcessChart, loadExplodedGraph]);
+  }, [mode, lens, linearGraphData, fullGraphData, setGraphData, clearHighlights, resetFilters, highlightByTypes, highlightLinksByTypes, setHighlightedNodeIds, buildProcessChart, loadExplodedGraph]);
 
   // Execute step action + camera when step changes
   useEffect(() => {
@@ -465,7 +505,7 @@ export default function PresentationController() {
             <div className="flex flex-col items-center">
               {/* Lifecycle stages */}
               <div className="flex items-center justify-center gap-0">
-                {PIPELINE_STAGES.map((stage, i, arr) => (
+                {pipelineStages.map((stage, i, arr) => (
                   <div key={stage.label} className="flex items-center">
                     <div className="flex flex-col items-center gap-2">
                       <div className="w-14 h-14 md:w-16 md:h-16 rounded-2xl glass-panel flex items-center justify-center text-xl md:text-2xl">
@@ -495,8 +535,8 @@ export default function PresentationController() {
                     exit={{ opacity: 0, y: -5 }}
                     transition={{ delay: 0.3, duration: 0.5 }}
                   >
-                    {PIPELINE_STAGES.map((_, i, arr) => {
-                      const stageAgents = PIPELINE_AGENTS.filter(a => a.stageIndex === i);
+                    {pipelineStages.map((_, i, arr) => {
+                      const stageAgents = pipelineAgents.filter(a => a.stageIndex === i);
                       return (
                         <div key={`ac-${i}`} className="flex items-start">
                           <div className="w-16 md:w-20 flex flex-col items-center overflow-visible">
