@@ -27,6 +27,7 @@ import { useRoiStore } from '@/lib/store/roi-store';
 import { usePresentationStore, type AppMode, type LensType } from '@/lib/store/presentation-store';
 import { useCampaignStore } from '@/lib/store/campaign-store';
 import { navigateToNode } from '@/lib/utils/camera-navigation';
+import { switchMode } from '@/lib/utils/mode-transitions';
 import { decodeRoiConfig } from '@/lib/utils/roi-share';
 import seedGraphData from '@/data/seed-graph.json';
 import seedGraphFrontofficeData from '@/data/seed-graph-frontoffice.json';
@@ -68,11 +69,12 @@ function buildLinearGraphData(
 
 export default function GraphPage() {
   // Use selectors to avoid re-rendering on every store change (e.g. flashingLinkKey, navigationHistory)
-  const setGraphData = useGraphStore(s => s.setGraphData);
   const setFullGraphData = useGraphStore(s => s.setFullGraphData);
   const setLinearGraphData = useGraphStore(s => s.setLinearGraphData);
   const selectNode = useGraphStore(s => s.selectNode);
-  const { setSteps, mode, setMode, lens } = usePresentationStore();
+  const mode = usePresentationStore(s => s.mode);
+  const lens = usePresentationStore(s => s.lens);
+  const setSteps = usePresentationStore(s => s.setSteps);
   const campaignActive = useCampaignStore(s => s.isActive);
   const [rolePickerOpen, setRolePickerOpen] = useState(false);
   const prevModeRef = useRef(mode);
@@ -82,7 +84,6 @@ export default function GraphPage() {
   const journeyRef = useRef<string[] | null>(null);
   const [journeyIndex, setJourneyIndex] = useState(0);
   const currentNodeId = useCampaignStore(s => s.currentNodeId);
-  const startCampaign = useCampaignStore(s => s.startCampaign);
 
   useEffect(() => {
     // Read initial mode from sessionStorage (set by landing page)
@@ -127,7 +128,6 @@ export default function GraphPage() {
     } catch { /* ignore invalid roi param */ }
 
     if (savedMode) {
-      setMode(savedMode);
       try { sessionStorage.removeItem('initialMode'); } catch { /* ignore */ }
     }
     // Persist lens to store
@@ -146,21 +146,17 @@ export default function GraphPage() {
       ? (presentationStepsFrontofficeData as PresentationStep[])
       : (presentationStepsData as PresentationStep[]);
 
+    // Seed graph data into stores before switching mode
     setFullGraphData(fullData);
     setLinearGraphData(linearData);
     setSteps(steps);
 
-    // Start with linear view in guided/roi mode, full graph in explore/campaign/build/role mode
-    if (activeMode === 'guided' || activeMode === 'roi') {
-      setGraphData(linearData);
-    } else {
-      setGraphData(fullData);
-      if (activeMode === 'campaign') {
-        startCampaign();
-      }
-      if (activeMode === 'role') {
-        setRolePickerOpen(true);
-      }
+    // Initialize mode with full cleanup (camera calls no-op since graphRef isn't ready)
+    switchMode(activeMode as AppMode, { force: true });
+
+    // Role picker still needs manual open
+    if (activeMode === 'role') {
+      setRolePickerOpen(true);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -200,11 +196,8 @@ export default function GraphPage() {
     const nextIdx = journeyIndex + 1;
     if (nextIdx < journey.length) {
       setJourneyIndex(nextIdx);
-      // Use ModeToggle's logic by directly changing mode via presentation store
-      // The ModeToggle handleModeChange takes care of camera/graph resets
-      // But we need to trigger it — simplest approach: set mode and let the mode effect handle it
-      const nextMode = journey[nextIdx] as AppMode;
-      setMode(nextMode);
+      // Full cleanup via canonical switchMode (graph data reload, camera fly, state reset)
+      switchMode(journey[nextIdx] as AppMode);
     } else {
       // Journey complete — clear it
       journeyRef.current = null;
@@ -213,10 +206,7 @@ export default function GraphPage() {
 
   // Floating "Run a Campaign" CTA for explore mode
   const handleStartCampaign = () => {
-    setMode('campaign');
-    const { loadFullGraph } = useGraphStore.getState();
-    loadFullGraph();
-    startCampaign();
+    switchMode('campaign');
   };
 
   return (

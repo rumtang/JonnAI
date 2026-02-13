@@ -150,7 +150,7 @@
       "uses",
       "performs"
     ],
-    "duration": 20000
+    "duration": 25000
   },
   {
     "id": "act5-human-roles",
@@ -207,6 +207,6 @@
     "cameraTransitionMs": 2000,
     "graphState": "full-graph",
     "action": "show-operating-model",
-    "duration": 12000
+    "duration": 15000
   }
 ]

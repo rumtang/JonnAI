@@ -7,10 +7,10 @@ import { useBuildStore } from '@/lib/store/build-store';
 import { usePresentationStore } from '@/lib/store/presentation-store';
 import { useGraphStore } from '@/lib/store/graph-store';
 import { switchMode } from '@/lib/utils/mode-transitions';
+import { navigateToCentroid } from '@/lib/utils/camera-navigation';
 import { useIsMobile } from '@/lib/hooks/use-is-mobile';
 import { BUILD_STEPS } from '@/data/build-steps';
 import { BUILD_STEPS_FRONTOFFICE } from '@/data/build-steps-frontoffice';
-import { getGraphRef } from '@/lib/graph/graph-ref';
 import TitleSlide from './slides/TitleSlide';
 import TimelineSlide from './slides/TimelineSlide';
 import LayerCardsSlide from './slides/LayerCardsSlide';
@@ -70,9 +70,6 @@ export default function BuildController() {
     // Ensure full graph is loaded — build mode may have started with linear view
     useGraphStore.getState().loadFullGraph();
 
-    const graphInstance = getGraphRef();
-    if (!graphInstance) return;
-
     const currentStep = buildSteps[currentStepIndex];
     if (!currentStep?.relatedNodeIds?.length) return;
 
@@ -81,25 +78,7 @@ export default function BuildController() {
       currentStep.relatedNodeIds!.includes(n.id)
     );
 
-    // Compute centroid of highlighted nodes
-    let cx = 0, cy = 0, cz = 0, count = 0;
-    for (const node of relatedNodes) {
-      if (node.x !== undefined && node.y !== undefined && node.z !== undefined) {
-        cx += node.x;
-        cy += node.y;
-        cz += node.z;
-        count++;
-      }
-    }
-    if (count === 0) return;
-    cx /= count;
-    cy /= count;
-    cz /= count;
-
-    // Fly camera to show highlighted nodes
-    const lookAt = { x: cx, y: cy, z: cz };
-    const cameraPos = { x: cx, y: cy + 40, z: cz + 220 };
-    graphInstance.cameraPosition(cameraPos, lookAt, 800);
+    navigateToCentroid(relatedNodes, { yOffset: 40, zOffset: 220, duration: 800 });
   }, [graphPeek, currentStepIndex]);
 
   // Keyboard navigation

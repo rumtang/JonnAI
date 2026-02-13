@@ -11,6 +11,7 @@ import { NODE_STYLES } from '@/lib/graph/node-styles';
 import { LINK_STYLES, getLinkColor } from '@/lib/graph/link-styles';
 import { getNeighborIds, applyFilters } from '@/lib/graph/filters';
 import { setGraphRef } from '@/lib/graph/graph-ref';
+import { navigateToNode } from '@/lib/utils/camera-navigation';
 import { GraphNode, GraphLink, StepMeta } from '@/lib/graph/types';
 import * as THREE from 'three';
 import SpriteText from 'three-spritetext';
@@ -652,16 +653,7 @@ export default function GraphScene() {
     selectNode(node);
     setDetailPanelOpen(true);
 
-    if (fgRef.current && node.x !== undefined && node.y !== undefined && node.z !== undefined) {
-      // Fixed offset from the node — avoids the ratio-based calculation that
-      // sends the camera to infinity when a node is near the origin
-      const distance = 120;
-      fgRef.current.cameraPosition(
-        { x: node.x, y: node.y, z: node.z + distance },
-        { x: node.x, y: node.y, z: node.z },
-        2500
-      );
-    }
+    navigateToNode(node, { duration: 2500 });
   }, [selectNode, setDetailPanelOpen, progressiveReveal, expandNode, markInteracting]);
 
   // Handle node hover
