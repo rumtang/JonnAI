@@ -159,52 +159,52 @@ export default function Home() {
           </motion.p>
         </AnimatePresence>
 
-        {/* Mode buttons */}
+        {/* Anchor line — what is this */}
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.35 }}
+          className="text-xs text-muted-foreground/40 mt-1 mb-8"
+        >
+          Strategic advisory for enterprises building organizational intelligence
+        </motion.p>
+
+        {/* Primary CTA — Guided Tour */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4 }}
+          className="mb-6"
+        >
+          <button
+            onClick={() => handleStart('guided')}
+            className="w-full max-w-md mx-auto block px-6 py-3 rounded-xl text-sm font-semibold transition-all duration-200 bg-[#D4AF37]/15 border-2 border-[#D4AF37]/50 text-[#D4AF37] hover:bg-[#D4AF37]/25 hover:border-[#D4AF37]/70 shadow-[0_0_30px_rgba(212,175,55,0.2)]"
+          >
+            Start the Guided Tour
+          </button>
+        </motion.div>
+
+        {/* Secondary exploration modes */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.45 }}
-          className="max-w-3xl mx-auto mt-10"
+          transition={{ delay: 0.55 }}
+          className="max-w-3xl mx-auto"
         >
-          <p className="text-[10px] text-muted-foreground/40 uppercase tracking-wider mb-3">
-            How do you want to explore?
+          <p className="text-[10px] text-muted-foreground/30 uppercase tracking-wider mb-2">
+            Or explore directly
           </p>
-          <div className="flex flex-wrap justify-center gap-2 relative">
-            {modes.map(({ key, label, color }) => {
-              const isGuided = key === 'guided';
-              return (
-                <div key={key} className={isGuided ? 'relative' : ''}>
-                  {/* "start here" annotation anchored above Guided Tour */}
-                  {isGuided && (
-                    <motion.div
-                      initial={{ opacity: 0, rotate: -3 }}
-                      animate={{ opacity: 1, rotate: -3 }}
-                      transition={{ delay: 1.0, duration: 0.5 }}
-                      className="absolute -top-14 left-1/2 -translate-x-1/2 whitespace-nowrap"
-                    >
-                      <span
-                        className="text-[#D4AF37] text-lg font-[family-name:var(--font-caveat)]"
-                        style={{ fontWeight: 600 }}
-                      >
-                        start here
-                      </span>
-                      <HandDrawnArrow />
-                    </motion.div>
-                  )}
-                  <button
-                    onClick={() => handleStart(key)}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200
-                      ${isGuided
-                        ? 'bg-[#D4AF37]/20 border-2 border-[#D4AF37]/60 text-[#D4AF37] hover:bg-[#D4AF37]/30 hover:border-[#D4AF37]/80 shadow-[0_0_20px_rgba(212,175,55,0.25)] scale-110'
-                        : 'glass-panel text-muted-foreground hover:text-foreground'
-                      }`}
-                    style={isGuided ? undefined : { borderColor: `${color}20` }}
-                  >
-                    <span style={isGuided ? undefined : { color }}>{label}</span>
-                  </button>
-                </div>
-              );
-            })}
+          <div className="flex flex-wrap justify-center gap-2">
+            {modes.filter(m => m.key !== 'guided').map(({ key, label, color }) => (
+              <button
+                key={key}
+                onClick={() => handleStart(key)}
+                className="px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 glass-panel text-muted-foreground hover:text-foreground"
+                style={{ borderColor: `${color}20` }}
+              >
+                <span style={{ color }}>{label}</span>
+              </button>
+            ))}
           </div>
         </motion.div>
       </motion.div>

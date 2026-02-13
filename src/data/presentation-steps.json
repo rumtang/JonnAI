@@ -16,7 +16,7 @@
     "cameraTransitionMs": 2000,
     "graphState": "linear",
     "action": "show-intro-slide",
-    "duration": 20000
+    "duration": 24000
   },
   {
     "id": "act1-title",
@@ -104,7 +104,7 @@
     "cameraTransitionMs": 2000,
     "graphState": "linear",
     "action": "show-process-chart",
-    "duration": 8000
+    "duration": 20000
   },
   {
     "id": "act3-graph-reveal",
@@ -123,7 +123,7 @@
     "cameraTransitionMs": 4000,
     "graphState": "full-graph",
     "action": "explode-to-graph",
-    "duration": 12000
+    "duration": 20000
   },
   {
     "id": "act4-intelligence-layer",
@@ -150,7 +150,7 @@
       "uses",
       "performs"
     ],
-    "duration": 25000
+    "duration": 19000
   },
   {
     "id": "act5-human-roles",
@@ -169,7 +169,7 @@
     "cameraTransitionMs": 2000,
     "graphState": "full-graph",
     "action": "show-human-roles",
-    "duration": 10000
+    "duration": 14000
   },
   {
     "id": "act5-operating-model",
@@ -188,7 +188,7 @@
     "cameraTransitionMs": 2000,
     "graphState": "full-graph",
     "action": "show-role-overview",
-    "duration": 8000
+    "duration": 12000
   },
   {
     "id": "act6-close",
@@ -207,6 +207,6 @@
     "cameraTransitionMs": 2000,
     "graphState": "full-graph",
     "action": "show-operating-model",
-    "duration": 15000
+    "duration": 19000
   }
 ]

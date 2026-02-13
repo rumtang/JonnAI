@@ -293,6 +293,11 @@ export default function PresentationController() {
     useSessionStore.getState().setGuidedTourCompleted();
   }, []);
 
+  const exitToRole = useCallback(() => {
+    switchMode('role');
+    useSessionStore.getState().setGuidedTourCompleted();
+  }, []);
+
   // Fly camera to the position defined in the current presentation step
   const moveCamera = useCallback((step: typeof currentStep) => {
     if (!step?.cameraPosition) return;
@@ -475,6 +480,16 @@ export default function PresentationController() {
 
   return (
     <>
+      {/* ─── Progress Bar (top of viewport) ──────────────────── */}
+      <div className="fixed top-0 left-0 right-0 z-[70] h-0.5 bg-muted-foreground/10">
+        <motion.div
+          className="h-full bg-[#C9A04E]"
+          initial={{ width: 0 }}
+          animate={{ width: `${((currentStepIndex + 1) / steps.length) * 100}%` }}
+          transition={{ duration: 0.5, ease: 'easeOut' }}
+        />
+      </div>
+
       {/* ─── Background Scrim + Pipeline Diagram (slides 1-3) ─ */}
       <AnimatePresence>
         {showPipelineOverlay && (
@@ -661,9 +676,9 @@ export default function PresentationController() {
                     Structure your strategy, brand, and governance as operational intelligence.
                   </p>
                   <p className="text-sm text-muted-foreground/70">
-                    So agents can execute with the same judgment
+                    So every agent, across every function,
                     <br />
-                    your best people bring.
+                    operates with institutional judgment at scale.
                   </p>
                 </motion.div>
               </div>
@@ -675,7 +690,7 @@ export default function PresentationController() {
                 transition={{ delay: 1.2 }}
                 className="absolute bottom-32 text-sm text-muted-foreground/60"
               >
-                Press {'\u2192'} to see this in action
+                See how it works {'\u2192'}
               </motion.p>
             </motion.div>
           </>
@@ -777,9 +792,14 @@ export default function PresentationController() {
                   transition={{ delay: 1.2, duration: 0.5 }}
                   className="mt-4 pt-4 border-t border-muted-foreground/10"
                 >
-                  <p className="text-xs text-muted-foreground/70 mb-3">
-                    Explore the organizational intelligence layer and see the impact per role
-                  </p>
+                  {/* Primary conversion CTA */}
+                  <a
+                    href="mailto:jon@jonn.ai?subject=Organizational%20Intelligence%20Layer%20—%20Working%20Session&body=I%20just%20went%20through%20the%20guided%20tour%20on%20jonn.ai%20and%20I%27d%20like%20to%20explore%20what%20this%20looks%20like%20for%20our%20organization."
+                    className="flex items-center justify-center gap-2 w-full px-4 py-2.5 mb-3 rounded-full text-xs font-semibold transition-all hover:shadow-lg bg-[#C9A04E]/15 border border-[#C9A04E]/40 text-[#C9A04E] hover:bg-[#C9A04E]/25 hover:border-[#C9A04E]/60"
+                  >
+                    See This Built for Your Organization
+                  </a>
+                  {/* Secondary exploration CTAs */}
                   <div className="flex items-center gap-3">
                     <button
                       onClick={exitToExplore}
@@ -789,8 +809,8 @@ export default function PresentationController() {
                       Explore the Graph
                     </button>
                     <button
-                      onClick={exitToExplore}
-                      className="flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold transition-all hover:shadow-lg bg-[#C9A04E]/10 text-[#C9A04E] hover:bg-[#C9A04E]/20"
+                      onClick={exitToRole}
+                      className="flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold transition-all hover:shadow-lg bg-[#5B9ECF]/10 text-[#5B9ECF] hover:bg-[#5B9ECF]/20"
                     >
                       <Users className="w-3.5 h-3.5" />
                       Impact Per Role
@@ -891,8 +911,8 @@ export default function PresentationController() {
       </motion.div>
 
       {/* Step counter */}
-      <div className="fixed bottom-6 right-4 z-50 text-xs text-muted-foreground font-mono">
-        {currentStepIndex + 1} / {steps.length}
+      <div className="fixed bottom-6 right-4 z-50 text-xs text-muted-foreground/60">
+        {currentStepIndex + 1} of {steps.length}
       </div>
     </>
   );

@@ -319,6 +319,10 @@ export default function GraphScene() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // Track structural data reference so the nodeThreeObject callback can detect
+  // when ForceGraph3D will dispose all existing objects (callback ref changed).
+  const prevFilteredDataRef = useRef(filteredGraphData);
+
   // Clean up stale cache entries when the visible node set changes
   useEffect(() => {
     const visibleIds = new Set(filteredGraphData.nodes.map(n => n.id));
@@ -362,6 +366,16 @@ export default function GraphScene() {
   // Custom node rendering with crystalline materials — uses object cache
   // to avoid recreating THREE.Group/Mesh/Sprite on every hover change
   const nodeThreeObject = useCallback((node: GraphNode) => {
+    // When filteredGraphData changes, this callback gets a new reference.
+    // ForceGraph3D disposes ALL existing THREE objects (emptyObject removes
+    // children + disposes geometries/materials). Our cache entries now point
+    // to empty, disposed Groups. Clear the cache on the FIRST call after a
+    // structural change so every node takes the fresh create path below.
+    if (prevFilteredDataRef.current !== filteredGraphData) {
+      nodeGroupCache.clear();
+      prevFilteredDataRef.current = filteredGraphData;
+    }
+
     const style = NODE_STYLES[node.type] || NODE_STYLES.step;
     const size = (node.val || style.baseSize) * 0.8;
 
