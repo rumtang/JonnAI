@@ -13,7 +13,7 @@
   {
     "id": "fo-act1-title",
     "title": "Every Function Runs Its Own Pipeline",
-    "narration": "",
+    "narration": "Each function owns a piece of this pipeline. None of them see the whole thing.",
     "cameraPosition": { "x": 0, "y": 0, "z": 800 },
     "cameraLookAt": { "x": 0, "y": 0, "z": 0 },
     "cameraTransitionMs": 2000,
@@ -23,8 +23,8 @@
   },
   {
     "id": "fo-act2-departmental-pipelines",
-    "title": "Familiar Pipelines, Familiar Silos",
-    "narration": "Marketing plans and publishes. Sales qualifies and closes. Service triages and resolves. Customer success monitors and expands. Each workflow is well-understood within its domain. The problem is between them.",
+    "title": "Every Department Runs Fine. Together, They Don't.",
+    "narration": "Marketing plans and publishes. Sales qualifies and closes. Service triages and resolves. Customer success monitors and expands. Each workflow is well-understood within its domain. The problem is between them — handoff failures, lost context, inconsistent customer experience.",
     "cameraPosition": { "x": -60, "y": 30, "z": 380 },
     "cameraLookAt": { "x": -60, "y": 30, "z": 0 },
     "cameraTransitionMs": 2000,
@@ -36,7 +36,7 @@
   },
   {
     "id": "fo-act3-agents-per-department",
-    "title": "Each Department Adds Its Own AI",
+    "title": "More AI. Same Silos.",
     "narration": "SDR agents in sales. Chatbots in service. Content generators in marketing. Health-score models in customer success. Each agent accelerates its own function. None of them share context. The sales agent doesn't know about the open support ticket. The marketing agent keeps targeting a churning account.",
     "cameraPosition": { "x": -100, "y": -80, "z": 700 },
     "cameraLookAt": { "x": 0, "y": 0, "z": 0 },
@@ -50,7 +50,7 @@
   {
     "id": "fo-act4-handoff-problem",
     "title": "The Customer Doesn't Experience Departments",
-    "narration": "A lead that marketing qualified gets ignored by sales — 87% of MQLs never convert. A deal closes but service has no context on what was promised. A customer escalates through support while their CSM doesn't know. Seventy percent of prospects are lost to inadequate follow-up. Every handoff between functions is a potential failure point.",
+    "narration": "87% of MQLs never convert. 70% of prospects are lost to inadequate follow-up. Then the deal closes — and service has no context on what was promised. A customer escalates while their CSM is unaware. Every cross-functional handoff is where revenue leaks.",
     "cameraPosition": { "x": 0, "y": 200, "z": 800 },
     "cameraLookAt": { "x": 0, "y": 0, "z": 0 },
     "cameraTransitionMs": 2000,
@@ -61,7 +61,7 @@
   {
     "id": "fo-act5-graph-reveal",
     "title": "This Is What the Front Office Actually Navigates",
-    "narration": "Four departments. Fourteen AI agents. Sixteen shared knowledge sources. Eight cross-functional handoff gates. The complexity isn't accidental — it reflects how enterprise revenue actually works. Seventy-eight nodes and 175 connections. Building intelligence to work within this is what separates an operating system from departmental automation.",
+    "narration": "Four departments. Fourteen agents. Sixteen knowledge sources. Eight cross-functional gates — 78 nodes and 175 connections. This complexity isn't accidental. It's what enterprise revenue actually looks like when you map it.",
     "cameraPosition": { "x": 0, "y": 0, "z": 500 },
     "cameraLookAt": { "x": 0, "y": 0, "z": 0 },
     "cameraTransitionMs": 4000,
@@ -72,7 +72,7 @@
   {
     "id": "fo-act6-intelligence-layer",
     "title": "Shared Knowledge Connects Everything",
-    "narration": "Customer 360 profiles. Product catalogs. Compliance frameworks. Pricing rules. Territory models. Sixteen shared inputs feed agents across every function. A service agent that knows the customer's purchase history. A sales agent that knows the open support cases. A marketing agent that suppresses at-risk accounts. The intelligence layer is what turns departmental agents into a coordinated system.",
+    "narration": "What your organization knows about customers, products, compliance, pricing, and territories becomes shared intelligence that feeds every agent across every function. A service agent that knows purchase history. A sales agent aware of open support cases. A marketing agent that suppresses at-risk accounts. The customer experiences one company, not four.",
     "cameraPosition": { "x": 60, "y": 0, "z": 500 },
     "cameraLookAt": { "x": 60, "y": 0, "z": 0 },
     "cameraTransitionMs": 2000,
@@ -85,7 +85,7 @@
   {
     "id": "fo-act7-cross-functional-gates",
     "title": "Human Judgment at the Boundaries",
-    "narration": "Agents handle volume and velocity within departments. Humans add the most value at the boundaries — where a marketing-qualified lead becomes a sales opportunity, where a closed deal becomes a service engagement, where a support pattern triggers a CSM intervention. These cross-functional gates are where organizational judgment matters most.",
+    "narration": "Agents handle volume and velocity within departments. The boundaries require something different — approval, escalation, judgment. A qualified lead becoming a pipeline opportunity, a closed deal becoming a service engagement, a support pattern triggering proactive outreach. These gates are where human judgment matters most and where most organizations have the least structure.",
     "cameraPosition": { "x": 0, "y": -60, "z": 480 },
     "cameraLookAt": { "x": 0, "y": 0, "z": 0 },
     "cameraTransitionMs": 2000,
@@ -96,7 +96,7 @@
   {
     "id": "fo-act8-operating-model",
     "title": "Roles Shift from Execution to Orchestration",
-    "narration": "Revenue operations moves from reporting to orchestrating. Sales ops moves from CRM administration to pipeline intelligence. Marketing ops moves from campaign execution to demand system design. The operating model doesn't eliminate roles — it elevates them from departmental execution to cross-functional orchestration.",
+    "narration": "RevOps moves from reporting to orchestrating cross-functional handoffs. Sales ops moves from CRM administration to pipeline intelligence. Marketing ops moves from campaign execution to demand architecture. The shift doesn't eliminate roles — it gives the CRO something new: a single view of how revenue flows across functions, and the ability to optimize it.",
     "cameraPosition": { "x": 100, "y": -50, "z": 600 },
     "cameraLookAt": { "x": 0, "y": 0, "z": 0 },
     "cameraTransitionMs": 2000,
@@ -107,7 +107,7 @@
   {
     "id": "fo-act9-close",
     "title": "Build the Operating System, Then Let Agents Perform",
-    "narration": "Map the domains. Build the knowledge graph. Connect the handoffs. Then let agents operate with shared context and human governance at the gates that matter. Better models keep arriving. They work best when they have better knowledge to draw on — and when that knowledge spans the entire front office.",
+    "narration": "Map the domains. Build the knowledge graph. Connect the handoffs. Then let agents operate with shared context and governance at the gates that matter. Better models will keep arriving — your advantage isn't which model you deploy, but the organizational intelligence you give it to work with.",
     "cameraPosition": { "x": 0, "y": 0, "z": 520 },
     "cameraLookAt": { "x": 0, "y": 0, "z": 0 },
     "cameraTransitionMs": 2000,

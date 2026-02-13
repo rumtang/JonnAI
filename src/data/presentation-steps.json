@@ -2,7 +2,7 @@
   {
     "id": "act0-strategic-context",
     "title": "From Agents, to Agentic, to Autonomous",
-    "narration": "Most organizations have deployed AI agents. But agents alone don't create the ability to drive more revenue while cutting production and governance costs. That requires agentic thinking: structuring your strategy, brand standards, and rules of engagement so agents execute with the same judgment your best people bring. Without that structure, you're handing execution to systems that don't understand your brand or your boundaries.",
+    "narration": "Most organizations have deployed AI agents, but agents alone don't drive more revenue while cutting costs. That requires structuring your strategy, brand standards, and governance as operational intelligence — so every agent, across every function, operates with institutional judgment at scale. Without that structure, you're handing execution to systems that don't understand your brand or your boundaries.",
     "cameraPosition": {
       "x": 0,
       "y": 0,
@@ -193,7 +193,7 @@
   {
     "id": "act6-close",
     "title": "Your Path to Agentic Operations",
-    "narration": "The practical path: map the process, build the organizational intelligence layer, then let agents perform. Better models keep arriving — they work best when they have better knowledge to draw on.",
+    "narration": "The practical path: map the process, build the intelligence layer, then let agents perform with shared context and governance. Better models will keep arriving — your advantage isn't which model you deploy, but the knowledge architecture you give it.",
     "cameraPosition": {
       "x": 0,
       "y": 0,

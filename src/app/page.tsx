@@ -19,7 +19,7 @@ const BASE_MODES: { key: AppMode; label: string; foLabel?: string; color: string
 const LENS_CONFIG: Record<LensType, { label: string; subtitle: string }> = {
   marketing: {
     label: 'Marketing Operations',
-    subtitle: 'Explore how organizational knowledge graphs, human-in-the-loop governance, and AI agents work together in enterprise content production.',
+    subtitle: 'Six production stages. Sixteen AI agents. Twenty-two shared knowledge sources. See how an organizational intelligence layer turns enterprise content production into a governed operating system.',
   },
   frontoffice: {
     label: 'Front Office',
@@ -102,7 +102,7 @@ export default function Home() {
           className="mb-6"
         >
           <span className="px-4 py-1.5 rounded-full text-xs font-medium glass-panel text-primary">
-            Interactive Knowledge Graph Visualization
+            For Revenue &amp; Operations Leaders
           </span>
         </motion.div>
 
@@ -167,7 +167,7 @@ export default function Home() {
           className="max-w-3xl mx-auto mt-10"
         >
           <p className="text-[10px] text-muted-foreground/40 uppercase tracking-wider mb-3">
-            Choose your experience
+            How do you want to explore?
           </p>
           <div className="flex flex-wrap justify-center gap-2 relative">
             {modes.map(({ key, label, color }) => {
